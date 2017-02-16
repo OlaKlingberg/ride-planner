@@ -5,10 +5,13 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
+import { Sec7NodeApiCallComponent } from './sec7-node-api-call/sec7-node-api-call.component';
+import { Sec7NodeApiCallService } from "./sec7-node-api-call/sec7-node-api-call.service";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    Sec7NodeApiCallComponent
   ],
   imports: [
     BrowserModule,
@@ -16,7 +19,9 @@ import { AppComponent } from './app.component';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    Sec7NodeApiCallService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

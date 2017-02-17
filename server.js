@@ -6,7 +6,7 @@ const path = require('path');
 const http = require('http');
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
-server.listen(8000);
+server.listen(process.env.PORT || 8000);
 io.set("origins", "*:*");
 
 let currentPrice = 99;

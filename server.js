@@ -2,25 +2,6 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-// Socket.io stuff
-const http = require('http');
-const server = http.createServer(app);
-const io = require('socket.io').listen(server);
-server.listen(process.env.PORT || 8000);
-io.set("origins", "*:*");
-
-let currentPrice = 99;
-
-io.on('connection', function (socket) {
-  socket.emit('priceUpdate',currentPrice);
-  socket.on('bid', function (data) {
-    currentPrice = parseInt(data);
-    socket.emit('priceUpdate',currentPrice);
-    socket.broadcast.emit('priceUpdate',currentPrice);
-  });
-});
-
-
 // If an incoming request uses a protocol other than HTTPS, redirect that request to the same url but with HTTPS
 // const forceSSL = function() {
 //   return function (req, res, next) {
@@ -48,7 +29,7 @@ app.get('/*', function(req, res) {
 
 // Start the app by listening on the default
 // Heroku port
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 3050;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });

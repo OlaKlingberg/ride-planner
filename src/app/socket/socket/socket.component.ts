@@ -12,7 +12,7 @@ export class SocketComponent {
   bidValue = '';
 
   constructor(){
-    this.socket = io('http://localhost:8000');
+    this.socket = io('http://localhost:3051');
     this.socket.on('priceUpdate', function(data){
       this.price = data;
     }.bind(this));

@@ -12,7 +12,8 @@ export class SocketComponent {
   bidValue = '';
 
   constructor(){
-    this.socket = io('http://localhost:3051');
+    // this.socket = io('http://localhost:3051');
+    this.socket = io('https://ride-planner2-backend.herokuapp.com');
     this.socket.on('priceUpdate', function(data){
       this.price = data;
     }.bind(this));

@@ -13,6 +13,7 @@ export class Sec7NodeApiCallComponent implements OnInit {
   buttonClicked: boolean = false;
   x: string = "This is x.";
   todo: string = "This is where the todo will be shown.";
+  dummy: string = "I added this just to enable me to deploy a new version to Heroku."
 
   constructor(private http: Http, private sec7NodeApiCallService: Sec7NodeApiCallService) {}
 

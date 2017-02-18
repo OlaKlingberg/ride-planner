@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  api: "https://ride-planner2-backend.herokuapp.com"
 };

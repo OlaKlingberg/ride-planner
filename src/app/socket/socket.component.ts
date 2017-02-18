@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'ride-socket',
-  templateUrl: './socket.component.html',
-  styleUrls: ['./socket.component.scss']
+  templateUrl: 'socket.component.html',
+  styleUrls: ['socket.component.scss']
 })
 export class SocketComponent {
 
@@ -12,8 +13,7 @@ export class SocketComponent {
   bidValue = '';
 
   constructor(){
-    // this.socket = io('http://localhost:3051');
-    this.socket = io('https://ride-planner2-backend.herokuapp.com');
+    this.socket = io(environment.api);
     this.socket.on('priceUpdate', function(data){
       this.price = data;
     }.bind(this));

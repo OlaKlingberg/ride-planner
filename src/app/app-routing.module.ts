@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { Sec7NodeApiCallComponent } from "./sec7-node-api-call/sec7-node-api-call.component";
-import { SocketComponent } from "./socket/socket/socket.component";
+import { SocketComponent } from "./socket/socket.component";
 
 const routes: Routes = [
   {

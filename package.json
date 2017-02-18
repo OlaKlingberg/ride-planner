@@ -5,7 +5,7 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "build:prod": "ng build --aot prod",
+    "build:prod": "ng build --aot -prod",
     "start": "node server.js",
     "test": "ng test",
     "lint": "ng lint",

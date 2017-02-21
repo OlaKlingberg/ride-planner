@@ -1,3 +1,34 @@
-<p>
-  riders-map works!
-</p>
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="map">
+        <sebm-google-map
+            [latitude]="lat"
+            [longitude]="lng"
+            [zoom]="zoom"
+            [disableDefaultUI]=false
+            [zoomControl]="false"
+            (mapClick)="mapClicked($event)">
+
+          <sebm-google-map-marker
+              *ngFor="let m of markers; let i = index"
+              (markerClick)="clickedMarker(m, i)"
+              [latitude]="m.lat"
+              [longitude]="m.lng"
+              [markerDraggable]="m.draggable"
+              (dragEnd)="markerDragEnd(m, $event)">
+
+            <sebm-google-map-info-window>
+              <strong>{{m.name}}</strong>
+              <a class="delete" (click)="removeMarker(m)">Delete</a>
+            </sebm-google-map-info-window>
+          </sebm-google-map-marker>
+        </sebm-google-map>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.container -->
+
+

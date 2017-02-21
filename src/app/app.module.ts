@@ -9,6 +9,7 @@ import { Sec7NodeApiCallComponent } from './sec7-node-api-call/sec7-node-api-cal
 import { Sec7NodeApiCallService } from "./sec7-node-api-call/sec7-node-api-call.service";
 import { SocketComponent } from './socket/socket.component';
 import { RidersMapComponent } from './riders-map/riders-map.component';
+import { AgmCoreModule } from "angular2-google-maps/core";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,10 @@ import { RidersMapComponent } from './riders-map/riders-map.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok'
+    })
   ],
   providers: [
     Sec7NodeApiCallService

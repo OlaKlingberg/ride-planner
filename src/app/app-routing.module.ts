@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { Sec7NodeApiCallComponent } from "./sec7-node-api-call/sec7-node-api-call.component";
 import { SocketComponent } from "./socket/socket.component";
+import { RidersMapComponent } from "./riders-map/riders-map.component";
 
 const routes: Routes = [
   {
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'socket',
     component: SocketComponent
+  },
+  {
+    path: 'riders-map',
+    component: RidersMapComponent
   }
 ];
 

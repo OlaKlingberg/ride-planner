@@ -20,7 +20,7 @@ export class SocketComponent {
   }
 
   bid(){
-    this.socket.emit('bid', this.bidValue);
+    this.socket.emit('newBid', this.bidValue);
     this.bidValue = '';
   }
 

@@ -12,8 +12,7 @@ import { Sec7NodeApiCallService } from "./sec7-node-api-call.service";
 export class Sec7NodeApiCallComponent implements OnInit {
   buttonClicked: boolean = false;
   x: string = "This is x.";
-  todo: string = "This is where the todo will be shown.";
-  dummy: string = "I added this just to enable me to deploy a new version to Heroku."
+  todo: string = "This string should be replaced by the todos when the button is clicked.";
 
   constructor(private http: Http, private sec7NodeApiCallService: Sec7NodeApiCallService) {}
 

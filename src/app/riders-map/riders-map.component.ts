@@ -10,7 +10,7 @@ export class RidersMapComponent implements OnInit {
   // Zoom level
   zoom: number = 16;
 
-  // Start position
+  // Map position
   lat: number = 40.742706;
   lng: number = -73.998786;
 

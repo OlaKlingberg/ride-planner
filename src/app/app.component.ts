@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Ride Planner 2';
+  title = 'RidePlanner2';
 
   ngOnInit() {
     console.log(environment);

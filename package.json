@@ -2,7 +2,7 @@
   "name": "ride-planner2",
   "version": "0.0.0",
   "license": "MIT",
-  "angular-cli": {},
+  "@angular-cli": {},
   "scripts": {
     "ng": "ng",
     "build:prod": "ng build --aot -prod",
@@ -15,7 +15,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cli": "1.0.0-beta.31",
     "@angular/common": "^2.4.0",
     "@angular/compiler": "^2.4.0",
     "@angular/compiler-cli": "^2.4.0",
@@ -41,6 +40,7 @@
     "zone.js": "^0.7.2"
   },
   "devDependencies": {
+    "@angular/cli": "^1.0.0-rc.0",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.42",
     "codelyzer": "~2.0.0-beta.1",
@@ -49,8 +49,8 @@
     "karma": "1.2.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-cli": "^1.0.1",
-    "karma-jasmine": "^1.0.2",
     "karma-coverage-istanbul-reporter": "^0.2.0",
+    "karma-jasmine": "^1.0.2",
     "protractor": "~5.1.0",
     "ts-node": "1.2.1",
     "tslint": "^4.3.0",

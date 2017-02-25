@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -6,21 +6,22 @@ import { environment } from '../../environments/environment';
   templateUrl: 'socket.component.html',
   styleUrls: ['socket.component.scss']
 })
-export class SocketComponent {
-
+export class SocketComponent implements OnInit {
   price: number = 0.0;
   socket = null;
   bidValue = '';
 
-  constructor(){
-    this.socket = io(environment.api);
-    this.socket.on('priceUpdate', function(data){
+  constructor(){}
+
+  ngOnInit() {
+    this.socket = io(environment.api);  // io is made available through import into index.html.
+    this.socket.on('priceUpdate', data => {
       this.price = data;
-    }.bind(this));
+    });
   }
 
   bid(){
-    this.socket.emit('newBid', this.bidValue);
+    this.socket.emit('bid', this.bidValue);
     this.bidValue = '';
   }
 

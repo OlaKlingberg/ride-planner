@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { marker } from "../../interfaces/marker";
+import { riderMarker } from "../../interfaces/rider-marker";
+
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'ride-riders-map',
@@ -20,30 +22,40 @@ export class RidersMapComponent implements OnInit {
   markerLng: string;
   markerDraggable: string;
 
-  // Markers
-  newMarker: marker;
-  markers: marker[] = [];
+  // Riders
+  newRiderMarker: riderMarker;
+  riderMarkers: riderMarker[] = [];
   url: string;
 
-  constructor() {
-  }
+  // socket.io
+  socket = null;
+
+  constructor() {}
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition(position => {
-
-      this.newMarker = {
+      this.newRiderMarker = {
         name: 'Ola',
         lat: position.coords.latitude,
         lng: position.coords.longitude,
         draggable: true
       };
+      this.riderMarkers.push(this.newRiderMarker);
+    });
 
-      this.markers.push(this.newMarker);
-
-
+    this.socket = io(environment.api);  // io is made available through import into index.html.
+    this.socket.on('connect', () => {
+      this.socket.emit('newRider', this.newRiderMarker, function (err) {
+        if (err) {
+          alert(err);
+        } else {
+          console.log('newRider. No error!');
+        }
+      })
 
 
     });
+
 
   }
 

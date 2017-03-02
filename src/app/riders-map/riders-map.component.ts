@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { riderMarker } from "../../interfaces/rider-marker";
+import { rider } from "../../interfaces/rider";
 
 import { environment } from '../../environments/environment';
 
@@ -17,14 +17,14 @@ export class RidersMapComponent implements OnInit {
   lng: number = -73.998786;
 
   // Values
-  markerName: string;
-  markerLat: string;
-  markerLng: string;
-  markerDraggable: string;
+  riderName: string;
+  riderLat: string;
+  riderLng: string;
+  riderDraggable: string;
 
   // Riders
-  newRiderMarker: riderMarker;
-  riderMarkers: riderMarker[] = [];
+  newRider: rider;
+  riders: rider[] = [];
   url: string;
 
   // socket.io
@@ -33,29 +33,37 @@ export class RidersMapComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.socket = io(environment.api);  // io is made available through import into index.html.
+
     navigator.geolocation.getCurrentPosition(position => {
-      this.newRiderMarker = {
+      console.log(position.coords);
+      this.newRider = {
         name: 'Ola',
         lat: position.coords.latitude,
         lng: position.coords.longitude,
         draggable: true
       };
-      this.riderMarkers.push(this.newRiderMarker);
-    });
+      console.log(this.newRider);
 
-    this.socket = io(environment.api);  // io is made available through import into index.html.
-    this.socket.on('connect', () => {
-      this.socket.emit('newRider', this.newRiderMarker, function (err) {
+      this.socket.emit('newRider', this.newRider, (err) => {
         if (err) {
           alert(err);
         } else {
           console.log('newRider. No error!');
         }
-      })
+      });
 
 
     });
 
+    this.socket.on('ridersUpdate', (riders) => {
+      console.log("this.socket.on('ridersUpdate') ...");
+      this.riders = riders;
+    });
+
+  }
+
+  riderDragEnd() {
 
   }
 

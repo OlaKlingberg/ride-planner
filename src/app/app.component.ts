@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title = 'RidePlanner2';
 
   ngOnInit() {
-    console.log(environment);
+    // console.log(environment);
   }
 
 }

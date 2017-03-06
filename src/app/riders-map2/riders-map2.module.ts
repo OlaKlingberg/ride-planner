@@ -7,9 +7,7 @@ import { RidersMap2Component } from './riders-map2.component';
 import { AgmCoreModule } from "angular2-google-maps/core";
 
 @NgModule({
-  declarations: [
-    RidersMap2Component
-  ],
+
   imports: [
     BrowserModule,
     FormsModule,
@@ -17,6 +15,9 @@ import { AgmCoreModule } from "angular2-google-maps/core";
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok'
     })
+  ],
+  declarations: [
+    RidersMap2Component
   ],
   providers: [ ],
   bootstrap: [ ]

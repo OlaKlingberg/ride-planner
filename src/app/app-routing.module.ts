@@ -4,6 +4,7 @@ import { Sec7NodeApiCallComponent } from "./sec7-node-api-call/sec7-node-api-cal
 import { SocketComponent } from "./socket/socket.component";
 import { RidersMapComponent } from "./riders-map/riders-map.component";
 import { RidersMap2Component } from "./riders-map2/riders-map2.component";
+import { RidersMap3Component } from "./riders-map3/riders-map3.component";
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'riders-map2',
     component: RidersMap2Component
+  },
+  {
+    path: 'riders-map3',
+    component: RidersMap3Component
   }
 ];
 

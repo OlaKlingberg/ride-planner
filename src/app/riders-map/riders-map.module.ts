@@ -8,14 +8,14 @@ import { Ng2MapModule } from 'ng2-map';
 import { RidersMapComponent } from './riders-map.component';
 
 @NgModule({
-  declarations: [
-    RidersMapComponent
-  ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     Ng2MapModule.forRoot({ apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCq7FfviO3Hm-wCU6K0NhrV8iPEx8u8ywU' })
+  ],
+  declarations: [
+    RidersMapComponent
   ],
   providers: [ ],
   bootstrap: [ ]

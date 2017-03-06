@@ -18,10 +18,10 @@ const routes: Routes = [
     path: 'socket',
     component: SocketComponent
   },
-  // {
-  //   path: 'riders-map',
-  //   component: RidersMapComponent
-  // },
+  {
+    path: 'riders-map',
+    component: RidersMapComponent
+  },
   {
     path: 'riders-map2',
     component: RidersMap2Component

@@ -36,14 +36,12 @@ export class RidersMapComponent implements OnInit {
     this.socket = io(environment.api);  // io is made available through import into index.html.
 
     navigator.geolocation.getCurrentPosition(position => {
-      console.log(position.coords);
       this.newRider = {
         name: 'Ola',
         lat: position.coords.latitude,
         lng: position.coords.longitude,
         draggable: true
       };
-      console.log(this.newRider);
 
       this.socket.emit('newRider', this.newRider, (err) => {
         if (err) {

@@ -19,7 +19,7 @@ import { RidersMap2Component } from './riders-map2/riders-map2.component';
     AppComponent,
     Sec7NodeApiCallComponent,
     SocketComponent,
-    // RidersMapComponent,
+    RidersMapComponent,
     RidersMap2Component
   ],
   imports: [
@@ -27,14 +27,15 @@ import { RidersMap2Component } from './riders-map2/riders-map2.component';
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    // AgmCoreModule.forRoot({
-    //   apiKey: 'AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok'
-    // }),
-      Ng2MapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCq7FfviO3Hm-wCU6K0NhrV8iPEx8u8ywU'})
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok'
+    }),
+    Ng2MapModule.forRoot({ apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCq7FfviO3Hm-wCU6K0NhrV8iPEx8u8ywU' })
   ],
   providers: [
     Sec7NodeApiCallService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
-export class AppModule { }
+export class AppModule {
+}

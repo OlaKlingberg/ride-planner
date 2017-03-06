@@ -1,34 +1,6 @@
-<div class="container">
-
-  <div class="row">
-    <div class="col-md-12">
-      <div class="map">
-        <sebm-google-map
-            [latitude]="lat"
-            [longitude]="lng"
-            [zoom]="zoom"
-            [disableDefaultUI]=false
-            [zoomControl]="false"
-            (mapClick)="mapClicked($event)">
-
-          <sebm-google-map-marker
-              *ngFor="let rider of riders; let i = index"
-              (markerClick)="clickedRider(rider, i)"
-              [latitude]="rider.lat"
-              [longitude]="rider.lng"
-              [markerDraggable]="rider.draggable"
-              (dragEnd)="riderDragEnd(rider, $event)">
-
-            <sebm-google-map-info-window>
-              <strong>{{rider.name}}</strong>
-              <a class="delete" (click)="removeRider(rider)">Delete</a>
-            </sebm-google-map-info-window>
-          </sebm-google-map-marker>
-        </sebm-google-map>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /.container -->
-
+<p>Above map</p>
+<ng2-map center="Asbury Park, NJ"
+         (mapReady$)="onMapReady($event)">
+</ng2-map>
+<p>Below map</p>
 

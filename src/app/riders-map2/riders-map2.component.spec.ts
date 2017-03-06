@@ -1,4 +1,7 @@
+/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
 
 import { RidersMap2Component } from './riders-map2.component';
 
@@ -10,7 +13,7 @@ describe('RidersMap2Component', () => {
     TestBed.configureTestingModule({
       declarations: [ RidersMap2Component ]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {

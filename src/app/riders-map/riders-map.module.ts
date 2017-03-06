@@ -3,8 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { RidersMapComponent } from '../riders-map/riders-map.component';
-import { AgmCoreModule } from "angular2-google-maps/core";
+import { Ng2MapModule } from 'ng2-map';
+
+import { RidersMapComponent } from './riders-map.component';
 
 @NgModule({
   declarations: [
@@ -14,12 +15,14 @@ import { AgmCoreModule } from "angular2-google-maps/core";
     BrowserModule,
     FormsModule,
     HttpModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok'
-    })
+    Ng2MapModule.forRoot({ apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCq7FfviO3Hm-wCU6K0NhrV8iPEx8u8ywU' })
   ],
   providers: [ ],
   bootstrap: [ ]
 })
 export class RidersMapModule {
 }
+
+
+
+

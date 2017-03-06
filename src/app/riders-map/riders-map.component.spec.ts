@@ -1,11 +1,8 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 
 import { RidersMapComponent } from './riders-map.component';
 
-describe('RidersMapComponent', () => {
+describe('RidersMap2Component', () => {
   let component: RidersMapComponent;
   let fixture: ComponentFixture<RidersMapComponent>;
 
@@ -13,7 +10,7 @@ describe('RidersMapComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ RidersMapComponent ]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {
@@ -26,3 +23,8 @@ describe('RidersMapComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+

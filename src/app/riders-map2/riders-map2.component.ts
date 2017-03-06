@@ -1,46 +1,68 @@
 import { Component, OnInit } from '@angular/core';
+import { rider } from "../../interfaces/rider";
+
+import { environment } from '../../environments/environment';
 
 @Component({
-  selector: 'app-riders-map2',
+  selector: 'ride-riders-map2',
   templateUrl: './riders-map2.component.html',
-  styleUrls: ['./riders-map2.component.scss']
+  styleUrls: [ './riders-map2.component.scss' ]
 })
 export class RidersMap2Component implements OnInit {
-  lat: number = 40.22;
-  lng: number = -74.01;
-  pos: string = `${this.lat},${this.lng}`;
-  animation: any;
+  // Zoom level
+  zoom: number = 16;
 
+  // Map position
+  lat: number = 40.742706;
+  lng: number = -73.998786;
 
-  constructor() { }
+  // Values
+  riderName: string;
+  riderLat: string;
+  riderLng: string;
+  riderDraggable: string;
+
+  // Riders
+  newRider: rider;
+  riders: rider[] = [];
+  url: string;
+
+  // socket.io
+  socket = null;
+
+  constructor() {}
 
   ngOnInit() {
+    this.socket = io(environment.api);  // io is made available through import into index.html.
 
-  }
+    navigator.geolocation.getCurrentPosition(position => {
+      this.newRider = {
+        name: 'Ola',
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        draggable: true
+      };
 
-  onMapReady(map) {
-    console.log('onMapReady');
-    console.log('map', map);
-    console.log(google);
-    // this.animation = google.maps.Animation.DROP;
+      this.socket.emit('newRider', this.newRider, (err) => {
+        if (err) {
+          alert(err);
+        } else {
+          console.log('newRider. No error!');
+        }
+      });
 
-    let marker = new google.maps.Marker({
-      position: {
-        lat: this.lat,
-        lng: this.lng
-      },
-      title: 'Whatever',
-      animation: google.maps.Animation.DROP,
-      map
+
     });
 
+    this.socket.on('ridersUpdate', (riders) => {
+      console.log("this.socket.on('ridersUpdate') ...");
+      this.riders = riders;
+    });
 
   }
 
-  onMarkerInit(marker) {
-    console.log('onMarkerInit');
-    console.log(google);
-    console.log('marker', marker);
+  riderDragEnd() {
+
   }
 
 }

@@ -38,8 +38,10 @@ export class RidersMap2Component implements OnInit {
     navigator.geolocation.getCurrentPosition(position => {
       this.newRider = {
         name: 'Ola',
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
+        position: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
         draggable: true
       };
 

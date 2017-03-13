@@ -11,11 +11,12 @@ export class AuthenticationService {
 
     return this.http.post(`${environment.api}/users/login`, { email, password })
         .map((response: Response) => {
-          console.log(response.headers.get('x-auth'));
           let user = response.json();
           if ( user ) {
             localStorage.setItem('currentUser', JSON.stringify(user));
-            console.log('currentUser', user);
+            localStorage.setItem('currentToken', response.headers.get('x-auth'));
+            // console.log(localStorage.getItem('currentUser'));
+            // console.log(localStorage.getItem('currentToken'));
           }
         })
   }

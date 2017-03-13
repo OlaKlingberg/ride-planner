@@ -5,11 +5,12 @@ import { environment } from "../../environments/environment";
 
 @Injectable()
 export class UserService {
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+  }
 
-create(user: User) {
-    return this.http.post(environment.api + '/users', user );
-}
+  create(user: User) {
+    return this.http.post(environment.api + '/users', user);
+  }
 
 
 }

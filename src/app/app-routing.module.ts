@@ -5,6 +5,8 @@ import { SocketComponent } from "./socket/socket.component";
 import { RidersMapComponent } from "./riders-map/riders-map.component";
 import { RidersMap2Component } from "./riders-map2/riders-map2.component";
 import { RidersMap3Component } from "./riders-map3/riders-map3.component";
+import { LoginComponent } from "./login/login.component";
+import { RegisterComponent } from "./register/register.component";
 
 const routes: Routes = [
   {
@@ -30,6 +32,14 @@ const routes: Routes = [
   {
     path: 'riders-map3',
     component: RidersMap3Component
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   }
 ];
 

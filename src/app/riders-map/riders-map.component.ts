@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-riders-map',
+  selector: 'rp-riders-map',
   templateUrl: './riders-map.component.html',
   styleUrls: ['./riders-map.component.scss']
 })

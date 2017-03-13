@@ -4,7 +4,7 @@ import { rider } from "../../interfaces/rider";
 import { environment } from '../../environments/environment';
 
 @Component({
-  selector: 'ride-riders-map2',
+  selector: 'rp-riders-map2',
   templateUrl: './riders-map2.component.html',
   styleUrls: [ './riders-map2.component.scss' ]
 })

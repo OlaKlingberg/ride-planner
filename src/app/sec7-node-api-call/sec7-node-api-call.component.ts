@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { Sec7NodeApiCallService } from "./sec7-node-api-call.service";
 
 @Component({
-  selector: 'app-sec7-node-api-call',
+  selector: 'rp-sec7-node-api-call',
   templateUrl: './sec7-node-api-call.component.html',
   styleUrls: ['./sec7-node-api-call.component.scss']
 })

@@ -11,12 +11,18 @@ import { SocketComponent } from './socket/socket.component';
 import { RidersMapModule } from './riders-map/riders-map.module';
 import { RidersMap2Module } from "./riders-map2/riders-map2.module";
 import { RidersMap3Module } from './riders-map3/riders-map3.module';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { UserService } from "./_services/user.service";
+import { AuthenticationService } from "./_services/authentication.service";
 
 @NgModule({
   declarations: [
     AppComponent,
     Sec7NodeApiCallComponent,
     SocketComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +34,9 @@ import { RidersMap3Module } from './riders-map3/riders-map3.module';
     RidersMap3Module
   ],
   providers: [
-    Sec7NodeApiCallService
+    Sec7NodeApiCallService,
+    UserService,
+    AuthenticationService
   ],
   bootstrap: [ AppComponent ]
 })

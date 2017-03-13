@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 
 
 @Component({
-  selector: 'app-riders-map3',
+  selector: 'rp-riders-map3',
   templateUrl: './riders-map3.component.html',
   styleUrls: [ './riders-map3.component.scss' ]
 })

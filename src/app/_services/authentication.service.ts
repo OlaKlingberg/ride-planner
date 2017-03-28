@@ -7,7 +7,7 @@ import { environment } from "../../environments/environment";
 
 @Injectable()
 export class AuthenticationService {
-  loggedIn$ = new Rx.BehaviorSubject( false );
+  loggedIn$ = new Rx.BehaviorSubject( null );
 
   constructor(private http: Http,) {
   }
@@ -20,17 +20,16 @@ export class AuthenticationService {
           let token = response.headers.get('x-auth');
 
           if ( user && token ) {
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            localStorage.setItem('currentToken', token);
-            this.loggedIn$.next( true );
+            user.token = token;
+            this.loggedIn$.next( {
+              currentUser: user
+            });
           }
         })
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('currentToken');
-    this.loggedIn$.next( false );
+    this.loggedIn$.next( null );
   }
 
 

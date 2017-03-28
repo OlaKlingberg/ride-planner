@@ -7,18 +7,14 @@ import { AuthenticationService } from "../_services/authentication.service";
   styleUrls: [ './header.component.scss' ]
 })
 export class HeaderComponent implements OnInit {
-  loggedIn: boolean = false;
+  loggedInUser: Object = {};
 
   constructor(private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
-    console.log("HeaderComponent.ngOnInit");
     this.authenticationService.loggedIn$.subscribe(
-        loggedIn => {
-          this.loggedIn = loggedIn;
-          console.log(`HeaderComponent.loggedIn: ${this.loggedIn}`);
-        }
+        user => this.loggedInUser = user
     );
   }
 

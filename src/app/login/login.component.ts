@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.model.email, this.model.password)
         .subscribe(
             data => {
+              // Todo: set the user as logged in.
               this.router.navigate([ this.returnUrl ])
             },
             error => {

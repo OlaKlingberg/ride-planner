@@ -9,7 +9,8 @@
             [zoom]="zoom"
             [disableDefaultUI]=false
             [zoomControl]="false"
-            (mapClick)="mapClicked($event)">
+            (mapClick)="mapClicked($event)"
+        >
 
           <sebm-google-map-marker
               *ngFor="let rider of riders; let i = index"

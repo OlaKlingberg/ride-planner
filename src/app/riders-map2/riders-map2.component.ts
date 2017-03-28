@@ -67,4 +67,8 @@ export class RidersMap2Component implements OnInit {
 
   }
 
+  mapClicked($event) {
+
+  }
+
 }

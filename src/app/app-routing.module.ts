@@ -7,11 +7,13 @@ import { RidersMap2Component } from "./riders-map2/riders-map2.component";
 import { RidersMap3Component } from "./riders-map3/riders-map3.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
+import { HomeComponent } from "./home/home.component";
+import { LogoutComponent } from "./logout/logout.component";
 
 const routes: Routes = [
   {
     path: '',
-    children: []
+    component: HomeComponent
   },
   {
     path: 'sec7-node-api-call',
@@ -36,6 +38,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent
   },
   {
     path: 'register',

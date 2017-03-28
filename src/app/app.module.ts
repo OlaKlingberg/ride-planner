@@ -15,6 +15,9 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserService } from "./_services/user.service";
 import { AuthenticationService } from "./_services/authentication.service";
+import { HeaderComponent } from './header/header.component';
+import { HomeComponent } from './home/home.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { AuthenticationService } from "./_services/authentication.service";
     SocketComponent,
     LoginComponent,
     RegisterComponent,
+    HeaderComponent,
+    HomeComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,

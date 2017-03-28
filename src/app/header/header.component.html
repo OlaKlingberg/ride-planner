@@ -20,6 +20,7 @@
         <li *ngIf="!loggedIn"><a routerLink='/login'>Login</a></li>
         <li *ngIf="loggedIn"><a routerLink='/logout'>Logout</a></li>
         <li><a routerLink='/register'>Register</a></li>
+        <li *ngIf="loggedIn"><a routerLink='/protected'>Protected</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

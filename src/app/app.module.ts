@@ -18,6 +18,8 @@ import { AuthenticationService } from "./_services/authentication.service";
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { LogoutComponent } from './logout/logout.component';
+import { ProtectedComponent } from './protected/protected.component';
+import { AuthGuard } from "./_guards/auth.guard";
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { LogoutComponent } from './logout/logout.component';
     HeaderComponent,
     HomeComponent,
     LogoutComponent,
+    ProtectedComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,8 @@ import { LogoutComponent } from './logout/logout.component';
   providers: [
     Sec7NodeApiCallService,
     UserService,
-    AuthenticationService
+    AuthenticationService,
+    AuthGuard
   ],
   bootstrap: [ AppComponent ]
 })

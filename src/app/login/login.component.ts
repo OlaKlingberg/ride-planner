@@ -29,16 +29,16 @@ export class LoginComponent implements OnInit {
   login() {
     this.loading = true;
     this.authenticationService.login(this.model.email, this.model.password)
-        .subscribe(
-            data => {
-              // Todo: set the user as logged in.
-              this.router.navigate([ this.returnUrl ])
-            },
-            error => {
-              // this.alertService.error(error._body);
-              this.loading = false;
-            }
-        )
+        .subscribe({
+          next: data => {
+            this.router.navigate([ this.returnUrl ])
+          },
+          error: error => {
+            // this.alertService.error(error._body);
+            this.loading = false;
+          },
+          complete: () => {}
+        })
 
   }
 

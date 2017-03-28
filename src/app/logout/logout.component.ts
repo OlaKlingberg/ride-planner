@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+import { AuthenticationService } from "../_services/authentication.service";
 
 @Component({
   selector: 'pr-logout',
@@ -7,12 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LogoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router,
+              private authenticationService: AuthenticationService) {
+  }
 
   ngOnInit() {
-    // Todo: Set the user as logged out.
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentToken');
+    this.authenticationService.logout();
+
+    this.router.navigate(['/']);
   }
 
 }

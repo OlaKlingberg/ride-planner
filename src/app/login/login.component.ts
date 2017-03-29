@@ -28,17 +28,17 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loading = true;
+    // this.authenticationService.login(this.model.email, this.model.password)
     this.authenticationService.login(this.model.email, this.model.password)
-        .subscribe({
-          next: data => {
+        .subscribe(data => {
             this.router.navigate([ this.returnUrl ])
           },
-          error: error => {
+          error => {
             // this.alertService.error(error._body);
             this.loading = false;
           },
-          complete: () => {}
-        })
+          () => {}
+        )
 
   }
 

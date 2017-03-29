@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter, Output } from "@angular/core";
-import { Http, Response } from "@angular/http";
+import { Http, Response, Headers, RequestOptions } from "@angular/http";
 
 import * as Rx from "rxjs/Rx";
 
@@ -7,7 +7,7 @@ import { environment } from "../../environments/environment";
 
 @Injectable()
 export class AuthenticationService {
-  loggedIn$ = new Rx.BehaviorSubject( null );
+  loggedIn$ = new Rx.BehaviorSubject(null);
 
   constructor(private http: Http,) {
   }
@@ -21,15 +21,28 @@ export class AuthenticationService {
 
           if ( user && token ) {
             user.token = token;
-            this.loggedIn$.next( {
-              currentUser: user
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            this.loggedIn$.next({
+              loggedInUser: user
             });
           }
-        })
+        });
   }
 
+  authenticateByToken(loggedInUser) {
+    const headers = new Headers({ 'x-auth': loggedInUser.token });
+    const requestOptions = new RequestOptions({ headers });
+
+    this.http.get(`${environment.api}/users/authenticate-by-token`, requestOptions)
+        .subscribe(response => {
+          if (response.status === 200) this.loggedIn$.next({ loggedInUser: loggedInUser })
+        });
+  }
+
+
   logout() {
-    this.loggedIn$.next( null );
+    localStorage.removeItem('loggedInUser');
+    this.loggedIn$.next(null);
   }
 
 

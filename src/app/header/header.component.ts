@@ -7,7 +7,7 @@ import { AuthenticationService } from "../_services/authentication.service";
   styleUrls: [ './header.component.scss' ]
 })
 export class HeaderComponent implements OnInit {
-  loggedInUser: Object = {};
+  loggedInUser: Object;
 
   constructor(private authenticationService: AuthenticationService) {
   }

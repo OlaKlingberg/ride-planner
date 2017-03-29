@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     // Log out (if logged in).
-    this.authenticationService.logout();
+    // this.authenticationService.logout();
 
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loading = true;
-    // this.authenticationService.login(this.model.email, this.model.password)
+    console.log('LoginComponent.login');
+    console.log(this.model.email, this.model.password);
     this.authenticationService.login(this.model.email, this.model.password)
         .subscribe(data => {
             this.router.navigate([ this.returnUrl ])

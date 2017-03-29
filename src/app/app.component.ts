@@ -23,7 +23,4 @@ export class AppComponent implements OnInit {
       this.authenticationService.authenticateByToken(loggedInUser);
     }
   }
-
-
-
 }

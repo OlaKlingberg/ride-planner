@@ -20,7 +20,7 @@ export class LogoutComponent implements OnInit {
         .subscribe(
             data => {
               this.alertService.success('You have been logged out', true)
-              this.router.navigate([ '/' ]);
+              this.router.navigate([ '/login' ]);
             },
             error => {
 

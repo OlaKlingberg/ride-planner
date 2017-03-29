@@ -37,7 +37,7 @@ export class AuthenticationService {
 
     this.http.get(`${environment.api}/users/authenticate-by-token`, requestOptions)
         .subscribe(response => {
-          if (response.status === 200) this.loggedIn$.next({ loggedInUser: loggedInUser })
+          if (response.status === 200) this.loggedIn$.next({ loggedInUser })
         });
   }
 

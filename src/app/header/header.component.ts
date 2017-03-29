@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from "../_services/authentication.service";
 
 @Component({
-  selector: 'pr-header',
+  selector: 'rp-header',
   templateUrl: './header.component.html',
   styleUrls: [ './header.component.scss' ]
 })

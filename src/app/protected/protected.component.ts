@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-protected',
+  selector: 'rp-protected',
   templateUrl: './protected.component.html',
   styleUrls: ['./protected.component.scss']
 })

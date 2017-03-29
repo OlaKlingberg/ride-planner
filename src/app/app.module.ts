@@ -20,6 +20,8 @@ import { HomeComponent } from './home/home.component';
 import { LogoutComponent } from './logout/logout.component';
 import { ProtectedComponent } from './protected/protected.component';
 import { AuthGuard } from "./_guards/auth.guard";
+import { AlertComponent } from './alert/alert.component';
+import { AlertService } from "./_services/alert.service";
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { AuthGuard } from "./_guards/auth.guard";
     HomeComponent,
     LogoutComponent,
     ProtectedComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +49,8 @@ import { AuthGuard } from "./_guards/auth.guard";
     Sec7NodeApiCallService,
     UserService,
     AuthenticationService,
-    AuthGuard
+    AuthGuard,
+    AlertService
   ],
   bootstrap: [ AppComponent ]
 })

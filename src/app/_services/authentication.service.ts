@@ -51,8 +51,7 @@ export class AuthenticationService {
     localStorage.removeItem('loggedInUser');
     this.loggedIn$.next(null);
 
-    return this.http.delete(`${environment.api}/users/logout`, requestOptions)
-        .subscribe();
+    return this.http.delete(`${environment.api}/users/logout`, requestOptions);
   }
 
 

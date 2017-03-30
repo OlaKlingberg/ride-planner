@@ -12,7 +12,8 @@ export class MapService {
   position$: BehaviorSubject<any>;
 
   constructor(private mapsAPILoader: MapsAPILoader) {
-    this.mapsAPILoader.load().then(() => { });
+    this.mapsAPILoader.load().then(() => {
+    });
     this.position$ = new BehaviorSubject(null);
   }
 
@@ -41,8 +42,11 @@ export class MapService {
   }
 
   createRiderMarker(ridersMap, position, rider) {
+    // console.log(rider);
     const markerOptions = {
-      name: rider.fname,
+      map: ridersMap,
+      title: rider.fname,
+      label: rider.fname.substr(0, 1) + rider.lname.substr(0, 1),
       position: {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -50,12 +54,15 @@ export class MapService {
       draggable: true
     };
 
-    console.log(markerOptions);
     const riderMarker = new google.maps.Marker(markerOptions);
 
-    riderMarker.setMap(ridersMap);
+    const infoWindow = new google.maps.InfoWindow;
 
+    infoWindow.setContent(`<div class="rider-marker-info-window">${rider.fname} ${rider.lname}</div>`)
 
+    riderMarker.addListener('click', function () {
+      infoWindow.open(ridersMap, riderMarker);
+    });
 
 
   }

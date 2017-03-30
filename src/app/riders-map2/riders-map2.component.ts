@@ -56,9 +56,10 @@ export class RidersMap2Component implements OnInit {
 
     });
 
-    this.socket.on('ridersUpdate', (riders) => {
-      console.log("this.socket.on('ridersUpdate') ...");
+    this.socket.on('updateRiders', (riders) => {
+      console.log('updateRiders');
       this.riders = riders;
+      console.log(this.riders);
     });
 
   }

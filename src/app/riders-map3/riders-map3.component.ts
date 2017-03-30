@@ -64,9 +64,9 @@ export class RidersMap3Component implements OnInit, OnDestroy {
     this.positionSubscriptionForRiderMarker = this.position$.subscribe(
         position => {
           this.authenticationService.loggedIn$.subscribe(
-              loggedInUser => {
-                if ( position && loggedInUser ) {
-                  this.mapService.createRiderMarker(this.ridersMap, position, loggedInUser);
+              data => {
+                if ( position && data.loggedInUser ) {
+                  this.mapService.createRiderMarker(this.ridersMap, position, data.loggedInUser);
                 }
               },
               err => {
@@ -77,7 +77,10 @@ export class RidersMap3Component implements OnInit, OnDestroy {
         }
     );
 
+
   }
+
+
 
 
   ngOnDestroy() {

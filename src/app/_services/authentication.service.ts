@@ -1,15 +1,18 @@
 import { Injectable, EventEmitter, Output } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 
-import * as Rx from "rxjs/Rx";
+// import * as Rx from "rxjs/Rx";
+import { BehaviorSubject } from "rxjs/Rx";
 
 import { environment } from "../../environments/environment";
+import { User } from "../_models/user";
 
 @Injectable()
 export class AuthenticationService {
-  loggedIn$ = new Rx.BehaviorSubject(null);
+  loggedIn$: BehaviorSubject<any>;
 
   constructor(private http: Http,) {
+    this.loggedIn$ = new BehaviorSubject(null);
   }
 
   login(email: string, password: string) {
@@ -18,7 +21,7 @@ export class AuthenticationService {
 
     return this.http.post(`${environment.api}/users/login`, { email, password })
         .map((response: Response) => {
-          let user = response.json();
+          let user: User = response.json();
           let token = response.headers.get('x-auth');
 
           if ( user && token ) {

@@ -1,9 +1,12 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 
 import { MapsAPILoader } from "angular2-google-maps/core"
 import { rider } from "../../interfaces/rider";
 
 import { environment } from '../../environments/environment';
+import { MapService } from "../_services/map.service";
+import { Observable } from "rxjs";
+import { AuthenticationService } from "../_services/authentication.service";
 
 
 @Component({
@@ -11,88 +14,75 @@ import { environment } from '../../environments/environment';
   templateUrl: './riders-map3.component.html',
   styleUrls: [ './riders-map3.component.scss' ]
 })
-export class RidersMap3Component implements OnInit {
+export class RidersMap3Component implements OnInit, OnDestroy {
   private socket;
+  public ridersMap;
+  public position$;
+  public positionSubscriptionForMap;
+  public positionSubscriptionForRiderMarker;
 
-  private lat;
-  private lng;
-
-  private myMap;
-
-  private rider: rider;
-  private riders: rider[];
-
-  private marker;
-  private markers = [];
 
   @ViewChild("mapDiv")
   public mapElementRef: ElementRef;
 
-  constructor(private mapsAPILoader: MapsAPILoader) {
+  constructor(private mapService: MapService,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
+    console.log("RidersMap3Component.ngOnInit");
     this.socket = io(environment.api);  // io is made available through import into index.html.
 
-    this.mapsAPILoader.load().then(() => {
-      this.createMap();
-    })
+    this.watchPosition();
+    this.createMap();
+    this.createRiderMarker();
+  }
+
+
+  watchPosition() {
+    this.position$ = this.mapService.watchPosition();
   }
 
   createMap() {
-    navigator.geolocation.getCurrentPosition(position => {
-      this.lat = position.coords.latitude;
-      this.lng = position.coords.longitude;
-
-      this.myMap = new google.maps.Map(this.mapElementRef.nativeElement, {
-        center: {
-          lat: this.lat,
-          lng: this.lng
+    this.positionSubscriptionForMap = this.position$.subscribe(
+        position => {
+          if ( position ) {
+            console.log(position.coords.latitude, position.coords.longitude);
+            this.ridersMap = this.mapService.createMap(this.mapElementRef, position);
+          }
         },
-        zoom: 15
-      });
+        err => {
+          console.log(err);
+        },
+        () => console.log('Completed')
+    );
 
-      this.addRiderToRiders();
 
-    })
   }
 
-  addRiderToRiders() {
-    this.rider = {
-      name: "Ola",
-      position: {
-        lat: this.lat,
-        lng: this.lng,
-      },
-      draggable: true
-    };
-
-    this.socket.emit('newRider', this.rider, (err) => {
-      if (err) {
-        alert(err);
-      } else {
-        console.log('newRider. No error!');
-      }
-    });
-
-    this.socket.on('updateRidersArray', (riders) => {
-      this.riders = riders;
-
-      for (let i = 0; i < this.riders.length; i++) {
-        if (this.riders[i]) {
-
-          let marker = new google.maps.Marker(this.riders[i]);
-          marker.setMap(this.myMap);
-          marker.setAnimation(google.maps.Animation.DROP);
-
+  createRiderMarker() {
+    this.positionSubscriptionForRiderMarker = this.position$.subscribe(
+        position => {
+          this.authenticationService.loggedIn$.subscribe(
+              loggedInUser => {
+                if ( position && loggedInUser ) {
+                  this.mapService.createRiderMarker(this.ridersMap, position, loggedInUser);
+                }
+              },
+              err => {
+                console.log(err);
+              },
+              () => console.log('Completed')
+          )
         }
-
-      }
-    });
+    );
 
   }
 
 
-
+  ngOnDestroy() {
+    this.positionSubscriptionForMap.unsubscribe();
+    this.positionSubscriptionForRiderMarker.unsubscribe();
+  }
 
 }

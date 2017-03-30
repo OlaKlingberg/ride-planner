@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { RidersMap3Component } from './riders-map3.component';
 import { AgmCoreModule } from "angular2-google-maps/core";
 
+import { environment } from "../../environments/environment";
+
 @NgModule({
   imports: [
     CommonModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok'
+      apiKey: environment.googleMapsKey
     })
   ],
   declarations: [

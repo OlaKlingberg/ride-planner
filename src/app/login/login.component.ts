@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "../_services/authentication.service";
 import { AlertService } from "../_services/alert.service";
 import { User } from "../_models/user";
+import { MapService } from "../_services/map.service";
 
 
 @Component({
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private authenticationService: AuthenticationService,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private mapService: MapService) {
   }
 
   ngOnInit() {
@@ -28,7 +30,7 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.loggedIn$.subscribe(
         data => {
-          if (data) this.loggedInUser = data.loggedInUser
+          if ( data ) this.loggedInUser = data.loggedInUser
         }
     );
   }
@@ -38,6 +40,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.model.email, this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true)
+              // this.mapService.createMarker();
               this.router.navigate([ this.returnUrl ])
             },
             error => {

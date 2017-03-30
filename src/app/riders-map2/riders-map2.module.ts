@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { RidersMap2Component } from './riders-map2.component';
 import { AgmCoreModule } from "angular2-google-maps/core";
+import { environment } from "../../environments/environment";
 
 @NgModule({
 
@@ -13,7 +14,7 @@ import { AgmCoreModule } from "angular2-google-maps/core";
     FormsModule,
     HttpModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok'
+      apiKey: environment.googleMapsKey
     })
   ],
   declarations: [

@@ -17,10 +17,10 @@
         <li><a routerLink='/riders-map3'>Riders3</a></li>
         <li><a routerLink='/sec7-node-api-call'>Api Call</a></li>
         <li><a routerLink='/socket'>Socket</a></li>
-        <li *ngIf="!loggedInUser"><a routerLink='/login'>Login</a></li>
-        <li *ngIf="loggedInUser"><a routerLink='/logout'>Logout</a></li>
+        <li *ngIf="!user"><a routerLink='/login'>Login</a></li>
+        <li *ngIf="user"><a routerLink='/logout'>Logout</a></li>
         <li><a routerLink='/register'>Register</a></li>
-        <li *ngIf="loggedInUser"><a routerLink='/protected'>Protected</a></li>
+        <li *ngIf="user"><a routerLink='/protected'>Protected</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

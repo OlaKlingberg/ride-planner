@@ -19,8 +19,8 @@ export class MapService {
 
   watchPosition(geolocationOptions = null) {
     const watchId = navigator.geolocation.watchPosition(
-        loc => {
-          this.position$.next(loc);
+        position => {
+          this.position$.next(position);
         },
         err => {
           this.position$.error(err);
@@ -58,7 +58,7 @@ export class MapService {
 
     const infoWindow = new google.maps.InfoWindow;
 
-    infoWindow.setContent(`<div class="rider-marker-info-window">${rider.fname} ${rider.lname}</div>`)
+    infoWindow.setContent(`<div class="olas-style">${rider.fname} ${rider.lname}</div>`)
 
     riderMarker.addListener('click', function () {
       infoWindow.open(ridersMap, riderMarker);

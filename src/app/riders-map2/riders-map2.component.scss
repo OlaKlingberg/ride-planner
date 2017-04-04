@@ -1,3 +1,22 @@
 .sebm-google-map-container {
   height: 300px;
+  //height: 100%;
 }
+
+.info-window {
+  color: navy;
+}
+
+.hide-till-coords-found {
+  visibility: hidden;
+}
+
+.while-waiting-for-coords {
+  position: relative;
+  top: -150px;
+  text-align: center;
+  color: chartreuse;
+  display: block !important;
+}
+
+

@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   model: any = {};
   loading = false;
   returnUrl: string;
-  loggedInUser: User;
+  user: User;
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -28,9 +28,9 @@ export class LoginComponent implements OnInit {
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
-    this.authenticationService.loggedIn$.subscribe(
+    this.authenticationService.user$.subscribe(
         data => {
-          if ( data ) this.loggedInUser = data.loggedInUser
+          if ( data ) this.user = data.user
         }
     );
   }
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.authenticationService.login(this.model.email, this.model.password)
         .subscribe(() => {
-              this.alertService.success("You have been successfully logged in!", true)
+              this.alertService.success("You have been successfully logged in!", true);
               // this.mapService.createMarker();
               this.router.navigate([ this.returnUrl ])
             },

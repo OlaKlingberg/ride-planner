@@ -20,12 +20,13 @@ export class LogoutComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.logout()
         .subscribe(
-            data => {
+            () => {
               this.alertService.success('You have been logged out', true);
               // this.mapService.removeMarker();
               this.router.navigate([ '/login' ]);
             },
             error => {
+              console.log(error);
             }
         );
   }

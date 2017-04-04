@@ -30,7 +30,6 @@ export class RidersMap3Component implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("RidersMap3Component.ngOnInit");
     this.socket = io(environment.api);  // io is made available through import into index.html.
 
     this.watchPosition();
@@ -56,17 +55,15 @@ export class RidersMap3Component implements OnInit, OnDestroy {
         },
         () => console.log('Completed')
     );
-
-
   }
 
   createRiderMarker() {
     this.positionSubscriptionForRiderMarker = this.position$.subscribe(
         position => {
-          this.authenticationService.loggedIn$.subscribe(
+          this.authenticationService.user$.subscribe(
               data => {
-                if ( position && data.loggedInUser ) {
-                  this.mapService.createRiderMarker(this.ridersMap, position, data.loggedInUser);
+                if ( position && data.user ) {
+                  this.mapService.createRiderMarker(this.ridersMap, position, data.user);
                 }
               },
               err => {

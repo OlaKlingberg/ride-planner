@@ -9,15 +9,13 @@ import { User } from "../_models/user";
 
 @Injectable()
 export class AuthenticationService {
-  loggedIn$: BehaviorSubject<any>;
+  user$: BehaviorSubject<any>;
 
   constructor(private http: Http,) {
-    this.loggedIn$ = new BehaviorSubject(null);
+    this.user$ = new BehaviorSubject(null);
   }
 
   login(email: string, password: string) {
-
-    console.log(email, password);
 
     return this.http.post(`${environment.api}/users/login`, { email, password })
         .map((response: Response) => {
@@ -26,33 +24,32 @@ export class AuthenticationService {
 
           if ( user && token ) {
             user.token = token;
-            localStorage.setItem('loggedInUser', JSON.stringify(user));
-            this.loggedIn$.next({
-              loggedInUser: user
-            });
+            localStorage.setItem('currentToken', JSON.stringify(token));
+            this.user$.next(user);
           }
         });
   }
 
-  authenticateByToken(loggedInUser) {
-    const headers = new Headers({ 'x-auth': loggedInUser.token });
+  authenticateByToken(currentToken) {
+    const headers = new Headers({ 'x-auth': currentToken });
     const requestOptions = new RequestOptions({ headers });
 
     this.http.get(`${environment.api}/users/authenticate-by-token`, requestOptions)
         .subscribe(response => {
-          if (response.status === 200) this.loggedIn$.next({ loggedInUser })
+          let user: User = response.json();
+          if (response.status === 200) this.user$.next(user)
         });
   }
 
 
   logout() {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    const headers = new Headers({ 'x-auth': loggedInUser.token });
+    const currentToken = JSON.parse(localStorage.getItem('currentToken'));
+    const headers = new Headers({ 'x-auth': currentToken });
     const requestOptions = new RequestOptions({ headers });
 
     // I remove the user from localStorage and the observable before I even try to remove the token from the backend -- so the user will be removed from the front end, even if the api call to remove the token fails. Is that the behavior I want?
-    localStorage.removeItem('loggedInUser');
-    this.loggedIn$.next(null);
+    localStorage.removeItem('currentToken');
+    this.user$.next(null);
 
     return this.http.delete(`${environment.api}/users/logout`, requestOptions);
   }

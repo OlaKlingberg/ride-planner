@@ -17,10 +17,10 @@ export class AppComponent implements OnInit {
   }
 
   logInUserFromLocalStorage() {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    const currentToken = JSON.parse(localStorage.getItem('currentToken'));
 
-    if (loggedInUser) {
-      this.authenticationService.authenticateByToken(loggedInUser);
+    if (currentToken) {
+      this.authenticationService.authenticateByToken(currentToken);
     }
   }
 }

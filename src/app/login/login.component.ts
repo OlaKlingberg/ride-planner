@@ -5,7 +5,6 @@ import { AlertService } from "../_services/alert.service";
 import { User } from "../_models/user";
 import { MapService } from "../_services/map.service";
 
-
 @Component({
   selector: 'rp-login',
   templateUrl: './login.component.html',

@@ -1,7 +1,6 @@
-import { Injectable, EventEmitter, Output } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 
-// import * as Rx from "rxjs/Rx";
 import { BehaviorSubject } from "rxjs/Rx";
 
 import { environment } from "../../environments/environment";

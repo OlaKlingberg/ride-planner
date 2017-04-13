@@ -5,14 +5,18 @@ export class User {
   fname: string;
   lname: string;
   token?: string;
-  // _initials: string = "default";
-  //
-  // public get initials() {
-  //   return this._initials;
-  // }
-  //
-  // public set initials(user) {
-  //   this._initials = "Per";
-  // }
+  initials: string;
+
+  constructor(model: any) {
+    this.fname = model.fname;
+    this.lname = model.lname;
+    this.initials = this.getInitials(model);
+    console.log("User initialized!");
+  }
+
+  private getInitials(model: any) {
+    return this.initials = this.fname.substr(0, 1) + this.lname.substr(0, 1);
+  }
+
 
 }

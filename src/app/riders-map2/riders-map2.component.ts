@@ -72,14 +72,13 @@ export class RidersMap2Component implements OnInit {
 
   }
 
-
   getUser() {
     this.user$ = this.authenticationService.user$;
     this.user$.subscribe(user => {
       if ( user ) {
         this.user = user as User;
-        this.label = user.fname.substr(0, 1) + user.lname.substr(0, 1);
-        // console.log("initials:", this.user.initials);
+        // this.label = user.fname.substr(0, 1) + user.lname.substr(0, 1);
+        this.label = this.user.initials;
       }
 
     });

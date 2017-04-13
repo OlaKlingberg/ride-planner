@@ -12,11 +12,11 @@ import { User } from "../_models/user";
 export class RegisterComponent {
   model: any = {};
   loading = false;
+  user: User;
 
   constructor(private router: Router,
               private userService: UserService,
-              private alertService: AlertService,
-              private user: User) {
+              private alertService: AlertService) {
   }
 
   register() {

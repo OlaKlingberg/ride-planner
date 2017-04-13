@@ -18,11 +18,10 @@ export class AuthenticationService {
 
     return this.http.post(`${environment.api}/users/login`, { email, password })
         .map((response: Response) => {
-          let user: User = response.json();
+          let user: User = new User(response.json()); // By creating a new User, I get access to accessor methods.
           let token = response.headers.get('x-auth');
 
           if ( user && token ) {
-            user.token = token;
             localStorage.setItem('currentToken', JSON.stringify(token));
             this.user$.next(user);
           }
@@ -35,7 +34,7 @@ export class AuthenticationService {
 
     this.http.get(`${environment.api}/users/authenticate-by-token`, requestOptions)
         .subscribe(response => {
-          let user: User = response.json();
+          let user: User = new User(response.json());
           if (response.status === 200) this.user$.next(user)
         });
   }

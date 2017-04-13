@@ -69,7 +69,6 @@ export class RidersMap2Component implements OnInit {
     //   this.riders = riders;
     //   console.log(this.riders);
     // });
-
   }
 
   getUser() {
@@ -77,8 +76,7 @@ export class RidersMap2Component implements OnInit {
     this.user$.subscribe(user => {
       if ( user ) {
         this.user = user as User;
-        // this.label = user.fname.substr(0, 1) + user.lname.substr(0, 1);
-        this.label = this.user.initials;
+        this.label = user.initials;
       }
 
     });

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { Sec7NodeApiCallComponent } from "./sec7-node-api-call/sec7-node-api-call.component";
-import { SocketComponent } from "./socket/socket.component";
+import { AuctionComponent } from "./auction/auction.component";
 import { RidersMapComponent } from "./riders-map/riders-map.component";
 import { RidersMap2Component } from "./riders-map2/riders-map2.component";
 import { RidersMap3Component } from "./riders-map3/riders-map3.component";
@@ -11,6 +11,7 @@ import { HomeComponent } from "./home/home.component";
 import { LogoutComponent } from "./logout/logout.component";
 import { ProtectedComponent } from "./protected/protected.component";
 import { AuthGuard } from "./_guards/auth.guard";
+import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 
 const routes: Routes = [
   {
@@ -22,8 +23,8 @@ const routes: Routes = [
     component: Sec7NodeApiCallComponent
   },
   {
-    path: 'socket',
-    component: SocketComponent
+    path: 'auction',
+    component: AuctionComponent
   },
   {
     path: 'riders-map',
@@ -53,6 +54,11 @@ const routes: Routes = [
     path: 'protected',
     canActivate: [AuthGuard],
     component: ProtectedComponent
+  },
+  {
+    path: 'ride-selector',
+    canActivate: [AuthGuard],
+    component: RideSelectorComponent
   }
 ];
 

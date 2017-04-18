@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { SocketComponent } from './socket.component';
+import { SocketComponent } from './auction.component';
 
-describe('SocketComponent', () => {
+describe('AuctionComponent', () => {
   let component: SocketComponent;
   let fixture: ComponentFixture<SocketComponent>;
 

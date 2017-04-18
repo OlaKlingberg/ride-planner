@@ -16,11 +16,12 @@
         <li><a routerLink='/riders-map2'>Riders2</a></li>
         <li><a routerLink='/riders-map3'>Riders3</a></li>
         <li><a routerLink='/sec7-node-api-call'>Api Call</a></li>
-        <li><a routerLink='/socket'>Socket</a></li>
+        <li><a routerLink='/auction'>Auction</a></li>
         <li *ngIf="!user"><a routerLink='/login'>Login</a></li>
         <li *ngIf="user"><a routerLink='/logout'>Logout</a></li>
         <li><a routerLink='/register'>Register</a></li>
         <li *ngIf="user"><a routerLink='/protected'>Protected</a></li>
+        <li *ngIf="user"><a routerLink='/ride-selector'>Ride Selector</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

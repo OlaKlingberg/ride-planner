@@ -5,6 +5,7 @@ import { BehaviorSubject } from "rxjs/Rx";
 
 import { environment } from "../../environments/environment";
 import { User } from "../_models/user";
+import Socket = SocketIOClient.Socket;
 
 @Injectable()
 export class AuthenticationService {
@@ -34,11 +35,12 @@ export class AuthenticationService {
 
     this.http.get(`${environment.api}/users/authenticate-by-token`, requestOptions)
         .subscribe(response => {
-          let user: User = new User(response.json());
-          if (response.status === 200) this.user$.next(user)
+          if (response.status === 200) {
+            let user: User = new User(response.json());
+            this.user$.next(user)
+          }
         });
   }
-
 
   logout() {
     const currentToken = JSON.parse(localStorage.getItem('currentToken'));
@@ -51,7 +53,6 @@ export class AuthenticationService {
 
     return this.http.delete(`${environment.api}/users/logout`, requestOptions);
   }
-
 
 }
 

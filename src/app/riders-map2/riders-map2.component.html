@@ -1,26 +1,24 @@
-<div
-    class="container"
->
+<div class="container">
   <div class="row">
     <div class="col-md-12">
       <div
           class="map"
-          [ngClass]="{'hide-till-coords-found': !lat}"
-      >
+          [ngClass]="{'hide-till-coords-found': !lat}">
+
         <sebm-google-map
             [latitude]="lat"
             [longitude]="lng"
-            [zoom]="zoom"
-        >
+            [zoom]="zoom">
 
           <sebm-google-map-marker
+              *ngFor="let rider of riders"
               [latitude]="lat"
               [longitude]="lng"
-              [label]="label"
-          >
+              [label]="rider.initials"
+              [markerDraggable]="true">
 
             <sebm-google-map-info-window>
-                <div class="info-window">{{user?.fname}} {{user?.lname}}</div>
+              <div class="info-window">{{rider?.fname}} {{rider?.lname}}</div>
             </sebm-google-map-info-window>
 
           </sebm-google-map-marker>
@@ -30,8 +28,7 @@
 
       <div
           style="display: none"
-          [ngClass]="{'while-waiting-for-coords': !lat}"
-      >
+          [ngClass]="{'while-waiting-for-coords': !lat}">
         <p>Launching satellites ...</p>
       </div>
 

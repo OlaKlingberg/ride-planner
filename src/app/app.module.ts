@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { Sec7NodeApiCallComponent } from './sec7-node-api-call/sec7-node-api-call.component';
 import { Sec7NodeApiCallService } from "./sec7-node-api-call/sec7-node-api-call.service";
-import { SocketComponent } from './socket/socket.component';
+import { AuctionComponent } from './auction/auction.component';
 import { RidersMapModule } from './riders-map/riders-map.module';
 import { RidersMap2Module } from "./riders-map2/riders-map2.module";
 import { RidersMap3Module } from './riders-map3/riders-map3.module';
@@ -23,12 +23,14 @@ import { AuthGuard } from "./_guards/auth.guard";
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from "./_services/alert.service";
 import { MapService } from "./_services/map.service";
+import { SocketService } from './_services/socket.service';
+import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     Sec7NodeApiCallComponent,
-    SocketComponent,
+    AuctionComponent,
     LoginComponent,
     RegisterComponent,
     HeaderComponent,
@@ -36,6 +38,7 @@ import { MapService } from "./_services/map.service";
     LogoutComponent,
     ProtectedComponent,
     AlertComponent,
+    RideSelectorComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,8 @@ import { MapService } from "./_services/map.service";
     AuthenticationService,
     AuthGuard,
     AlertService,
-    MapService
+    MapService,
+    SocketService
   ],
   bootstrap: [ AppComponent ]
 })

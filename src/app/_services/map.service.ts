@@ -12,8 +12,8 @@ export class MapService {
   position$: BehaviorSubject<any>;
 
   constructor(private mapsAPILoader: MapsAPILoader) {
-    this.mapsAPILoader.load().then(() => {
-    });
+    // this.mapsAPILoader.load().then(() => {
+    // });
     this.position$ = new BehaviorSubject(null);
   }
 
@@ -63,13 +63,8 @@ export class MapService {
     riderMarker.addListener('click', function () {
       infoWindow.open(ridersMap, riderMarker);
     });
-
-
   }
 
-  // removeMarker() {
-  //
-  // }
 
 }
 

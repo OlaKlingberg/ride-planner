@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
+import Socket = SocketIOClient.Socket;
 
 @Component({
   selector: 'rp-socket',
-  templateUrl: 'socket.component.html',
-  styleUrls: ['socket.component.scss']
+  templateUrl: 'auction.component.html',
+  styleUrls: ['auction.component.scss']
 })
-export class SocketComponent implements OnInit {
+export class AuctionComponent implements OnInit {
   price: number = 0.0;
-  socket = null;
+  socket: Socket;
   bidValue = '';
 
   constructor(){}

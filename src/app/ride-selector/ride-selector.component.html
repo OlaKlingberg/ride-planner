@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+      <form (ngSubmit)="onSubmit()" #selectRideForm="ngForm">
+        <div class="form-group">
+          <label for="ride">Select a ride</label>
+          <select name="ride"
+                  id="ride"
+                  class="form-control"
+                  [(ngModel)]="model.ride">
+            <option *ngFor="let ride of availableRides" [value]="ride">{{ride}}</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign in to ride</button>
+
+      </form>
+
+    </div>
+  </div>
+</div>

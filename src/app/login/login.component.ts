@@ -26,10 +26,14 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
+    // this.returnUrl = '/ride-selector';
 
     this.authenticationService.user$.subscribe(
         data => {
-          if ( data ) this.user = data.user
+          if ( data ) {
+            this.user = data.user;
+            this.router.navigate([ this.returnUrl ]);
+          }
         }
     );
   }
@@ -40,7 +44,7 @@ export class LoginComponent implements OnInit {
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true);
               // this.mapService.createMarker();
-              this.router.navigate([ this.returnUrl ])
+              this.router.navigate([ '/ride-selector' ])
             },
             error => {
               console.log(error);

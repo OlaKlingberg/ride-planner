@@ -8,9 +8,7 @@ import { AppComponent } from './app.component';
 import { Sec7NodeApiCallComponent } from './sec7-node-api-call/sec7-node-api-call.component';
 import { Sec7NodeApiCallService } from "./sec7-node-api-call/sec7-node-api-call.service";
 import { AuctionComponent } from './auction/auction.component';
-import { RidersMapModule } from './riders-map/riders-map.module';
 import { RidersMap2Module } from "./riders-map2/riders-map2.module";
-import { RidersMap3Module } from './riders-map3/riders-map3.module';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserService } from "./_services/user.service";
@@ -45,9 +43,7 @@ import { RideSelectorComponent } from './ride-selector/ride-selector.component';
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    RidersMapModule,
-    RidersMap2Module,
-    RidersMap3Module
+    RidersMap2Module
   ],
   providers: [
     Sec7NodeApiCallService,

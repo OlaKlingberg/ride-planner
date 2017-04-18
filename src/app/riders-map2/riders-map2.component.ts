@@ -55,17 +55,19 @@ export class RidersMap2Component implements OnInit {
     });
   }
 
-  emitRider() {
-    this.user$.subscribe(user => {
-      if ( user ) {
-        this.socketService.emitRider(this.user);
-      }
-    });
-  }
+  // emitRider() {
+  //   this.user$.subscribe(user => {
+  //     if ( user ) {
+  //       this.socketService.emitRider(this.user);
+  //     }
+  //   });
+  // }
 
   listenForRiders() {
+    // console.log("RidersMap2Component.listenForRiders");
     this.socketService.riders$.subscribe((riders) => {
-      if ( riders.length > 0 ) {
+      // console.log("RidersMap2Component.listenForRiders. riders", riders);
+      if ( riders ) {
         this.riders = riders.map(rider => new User(rider)
         );
       }

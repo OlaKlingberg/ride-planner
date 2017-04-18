@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SocketService } from '../_services/socket.service';
 import { AuthenticationService } from '../_services/authentication.service';
@@ -8,10 +8,10 @@ import { AuthenticationService } from '../_services/authentication.service';
   templateUrl: './ride-selector.component.html',
   styleUrls: [ './ride-selector.component.scss' ]
 })
-export class RideSelectorComponent implements OnInit {
+export class RideSelectorComponent implements OnInit, OnDestroy {
   private availableRides: Array<string> = [];
   private ride: string;
-  private
+  private user$;
 
   public model: any = [];
 
@@ -21,7 +21,7 @@ export class RideSelectorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCurrentRides()
+    this.getCurrentRides();
   }
 
   getCurrentRides() {
@@ -32,7 +32,9 @@ export class RideSelectorComponent implements OnInit {
   }
 
   onSubmit() {
-    this.authenticationService.user$.subscribe((user) => {
+    this.user$ = this.authenticationService.user$.subscribe((user) => {
+      console.log("RideSelectorComponent.onSubmit()", user);
+      console.log(typeof this.user$);
       this.socketService.emitRider(user);
     });
 
@@ -40,4 +42,10 @@ export class RideSelectorComponent implements OnInit {
     this.router.navigate([ '/riders-map2' ]);
   }
 
+  ngOnDestroy() {
+    console.log(typeof this.user$);
+    this.user$.unsubscribe();
+  }
+
 }
+

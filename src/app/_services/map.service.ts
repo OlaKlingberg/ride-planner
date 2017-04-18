@@ -29,42 +29,6 @@ export class MapService {
     return this.position$;
   }
 
-  createMap(mapElementRef, position) {
-    const riderMap = new google.maps.Map(mapElementRef.nativeElement, {
-      center: {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      },
-      zoom: 15
-    });
-
-    return riderMap;
-  }
-
-  createRiderMarker(ridersMap, position, rider) {
-    // console.log(rider);
-    const markerOptions = {
-      map: ridersMap,
-      title: rider.fname,
-      label: rider.fname.substr(0, 1) + rider.lname.substr(0, 1),
-      position: {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      },
-      draggable: true
-    };
-
-    const riderMarker = new google.maps.Marker(markerOptions);
-
-    const infoWindow = new google.maps.InfoWindow;
-
-    infoWindow.setContent(`<div class="olas-style">${rider.fname} ${rider.lname}</div>`)
-
-    riderMarker.addListener('click', function () {
-      infoWindow.open(ridersMap, riderMarker);
-    });
-  }
-
 
 }
 

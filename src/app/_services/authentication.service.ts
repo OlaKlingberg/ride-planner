@@ -9,10 +9,9 @@ import Socket = SocketIOClient.Socket;
 
 @Injectable()
 export class AuthenticationService {
-  user$: BehaviorSubject<any>;
+  public user$: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(private http: Http,) {
-    this.user$ = new BehaviorSubject(null);
   }
 
   login(email: string, password: string) {

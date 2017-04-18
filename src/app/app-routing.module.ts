@@ -27,16 +27,8 @@ const routes: Routes = [
     component: AuctionComponent
   },
   {
-    path: 'riders-map',
-    component: RidersMapComponent
-  },
-  {
     path: 'riders-map2',
     component: RidersMap2Component
-  },
-  {
-    path: 'riders-map3',
-    component: RidersMap3Component
   },
   {
     path: 'login',

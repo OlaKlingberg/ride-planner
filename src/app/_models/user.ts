@@ -1,9 +1,9 @@
 export class User {
-  _id: string;
+  _id?: string;
   fname: string;
   lname: string;
   email: string;
-  password: string;
+  password?: string;
 
   constructor(model: any) {
     this.fname = model.fname;

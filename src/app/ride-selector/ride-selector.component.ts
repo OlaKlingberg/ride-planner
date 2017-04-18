@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SocketService } from '../_services/socket.service';
 import { AuthenticationService } from '../_services/authentication.service';
+import { MapService } from '../_services/map.service';
 
 @Component({
   selector: 'app-ride-selector',
@@ -16,7 +16,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   public model: any = [];
 
   constructor(private router: Router,
-              private socketService: SocketService,
+              private mapService: MapService,
               private authenticationService: AuthenticationService) {
   }
 
@@ -33,17 +33,13 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.user$ = this.authenticationService.user$.subscribe((user) => {
-      console.log("RideSelectorComponent.onSubmit()", user);
-      console.log(typeof this.user$);
-      this.socketService.emitRider(user);
+      this.mapService.emitRider(user);
     });
 
-
-    this.router.navigate([ '/riders-map2' ]);
+    return this.router.navigate([ '/riders-map2' ]);
   }
 
   ngOnDestroy() {
-    console.log(typeof this.user$);
     this.user$.unsubscribe();
   }
 

@@ -21,7 +21,7 @@ import { AuthGuard } from "./_guards/auth.guard";
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from "./_services/alert.service";
 import { MapService } from "./_services/map.service";
-import { SocketService } from './_services/socket.service';
+// import { SocketService } from './_services/socket.service';
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 
 @NgModule({
@@ -51,8 +51,8 @@ import { RideSelectorComponent } from './ride-selector/ride-selector.component';
     AuthenticationService,
     AuthGuard,
     AlertService,
-    MapService,
-    SocketService
+    MapService
+    // SocketService
   ],
   bootstrap: [ AppComponent ]
 })

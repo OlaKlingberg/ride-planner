@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>Members</h3>
+      <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Emergency Contact</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.fname }} {{ user.lname }}</td>
+          <td>To be added</td>
+          <td>{{ user.email }}</td>
+          <td>To be added</td>
+          <td>To be added</td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

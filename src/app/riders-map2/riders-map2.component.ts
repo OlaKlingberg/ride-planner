@@ -37,7 +37,7 @@ export class RidersMap2Component implements OnInit {
 
   listenForRiders() {
     this.mapService.riders$.subscribe((riders) => {
-      if ( riders ) {
+      if ( riders && riders.length > 0 ) {
         this.riders = riders.map(rider => new Rider(rider));
       }
     });

@@ -23,6 +23,8 @@ import { AlertService } from "./_services/alert.service";
 import { MapService } from "./_services/map.service";
 // import { SocketService } from './_services/socket.service';
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { RiderListComponent } from './rider-list/rider-list.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { RideSelectorComponent } from './ride-selector/ride-selector.component';
     ProtectedComponent,
     AlertComponent,
     RideSelectorComponent,
+    UserListComponent,
+    RiderListComponent,
   ],
   imports: [
     BrowserModule,

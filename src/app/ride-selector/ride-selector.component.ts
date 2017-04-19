@@ -8,10 +8,10 @@ import { MapService } from '../_services/map.service';
   templateUrl: './ride-selector.component.html',
   styleUrls: [ './ride-selector.component.scss' ]
 })
-export class RideSelectorComponent implements OnInit, OnDestroy {
+export class RideSelectorComponent implements OnInit {
   private availableRides: Array<string> = [];
   private ride: string;
-  private user$;
+  // private user$;
 
   public model: any = [];
 
@@ -32,15 +32,10 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.user$ = this.authenticationService.user$.subscribe((user) => {
-      this.mapService.emitRider(user);
-    });
+    let user = this.authenticationService.user$.value;
+    this.mapService.emitRider(user);
 
     return this.router.navigate([ '/riders-map2' ]);
-  }
-
-  ngOnDestroy() {
-    this.user$.unsubscribe();
   }
 
 }

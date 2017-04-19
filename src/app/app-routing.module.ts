@@ -10,6 +10,8 @@ import { LogoutComponent } from "./logout/logout.component";
 import { ProtectedComponent } from "./protected/protected.component";
 import { AuthGuard } from "./_guards/auth.guard";
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { RiderListComponent } from './rider-list/rider-list.component';
 
 const routes: Routes = [
   {
@@ -49,6 +51,16 @@ const routes: Routes = [
     path: 'ride-selector',
     canActivate: [AuthGuard],
     component: RideSelectorComponent
+  },
+  {
+    path: 'members',
+    canActivate: [AuthGuard],
+    component: UserListComponent
+  },
+  {
+    path: 'riders',
+    canActivate: [AuthGuard],
+    component: RiderListComponent
   }
 ];
 

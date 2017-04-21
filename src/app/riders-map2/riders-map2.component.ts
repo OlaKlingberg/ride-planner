@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 // import { SebmGoogleMap } from "angular2-google-maps/core";
 import { Observable } from "rxjs";
 import { User } from "../_models/user";
-import { MapService } from '../_services/map.service';
+import { RiderService } from '../_services/rider.service';
 import { Rider } from '../_models/rider';
 
 @Component({
@@ -21,7 +21,7 @@ export class RidersMap2Component implements OnInit {
   private markerUrl: string = "assets/img/";
   private colors: Array<string> = ['blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'red', 'yellow'];
 
-  constructor(private mapService: MapService) {
+  constructor(private riderService: RiderService) {
   }
 
   ngOnInit() {
@@ -30,7 +30,7 @@ export class RidersMap2Component implements OnInit {
   }
 
   watchCoords() {
-    this.mapService.coords$.subscribe((coords) => {
+    this.riderService.coords$.subscribe((coords) => {
       if ( coords ) {
         this.lat = coords.latitude;
         this.lng = coords.longitude;
@@ -39,7 +39,7 @@ export class RidersMap2Component implements OnInit {
   }
 
   listenForRiders() {
-    this.mapService.riders$.subscribe((riders) => {
+    this.riderService.riders$.subscribe((riders) => {
       if ( riders && riders.length > 0 ) {
         this.riders = riders.map(rider => new Rider(rider));
         this.riders.forEach(rider => {

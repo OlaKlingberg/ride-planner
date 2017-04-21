@@ -11,7 +11,7 @@
                     id="ride"
                     class="form-control"
                     [(ngModel)]="model.ride">
-              <option *ngFor="let ride of availableRides" [value]="ride">{{ride}}</option>
+              <option *ngFor="let ride of riderService.rides$ | async" [value]="ride">{{ride}}</option>
             </select>
           </div>
 

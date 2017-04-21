@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Http, RequestOptions, Headers } from "@angular/http";
 import { User } from "../_models/user";
 import { environment } from "../../environments/environment";
-import { MapService } from './map.service';
+import { RiderService } from './rider.service';
 
 @Injectable()
 export class UserService {
@@ -11,7 +11,7 @@ export class UserService {
   requestOptions;
 
   constructor(private http: Http,
-              private mapService: MapService) {
+              private riderService: RiderService) {
   }
 
   create(user: User) {
@@ -26,13 +26,6 @@ export class UserService {
     return this.http.get(`${environment.api}/users`, this.requestOptions);
   }
 
-  getAllRiders() {
-    this.currentToken = JSON.parse(localStorage.getItem('currentToken'));
-    this.headers = new Headers({ 'x-auth': this.currentToken });
-    this.requestOptions = new RequestOptions({ headers: this.headers });
-
-    return this.http.get(`${environment.api}/users/riders`, this.requestOptions);
-  }
 
 
 }

@@ -11,11 +11,14 @@
             [zoom]="zoom">
 
           <sebm-google-map-marker
-              *ngFor="let rider of riders"
+              *ngFor="let rider of riders; index as i"
               [latitude]="rider.lat"
               [longitude]="rider.lng"
-              [label]="rider.initials"
-              [markerDraggable]="true">
+              [label]="{text: rider.initials, color: 'black'}"
+              [markerDraggable]="true"
+              [iconUrl]="markerUrl + colors[rider.color] + '.png'"
+              [zIndex]="rider.color"
+          >
 
             <sebm-google-map-info-window>
               <div class="info-window">{{rider.fname}} {{rider.lname}}</div>

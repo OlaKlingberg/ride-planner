@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../_services/user.service';
+import { nameSort } from '../_lib/util';
 
 @Component({
   selector: 'app-user-list',
@@ -16,6 +17,7 @@ export class UserListComponent implements OnInit {
     this.userService.getAllUsers()
         .subscribe((response) => {
           this.users = response.json();
+          this.users.sort(nameSort);
         });
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../_services/user.service';
-import { MapService } from '../_services/map.service';
+import { nameSort } from '../_lib/util';
 
 @Component({
   selector: 'app-rider-list',
@@ -19,9 +19,8 @@ export class RiderListComponent implements OnInit {
 
     this.userService.getAllRiders()
         .subscribe(response => {
-          console.log("response", response);
-          console.log("response.json()", response.json());
           this.riders = response.json();
+          this.riders.sort(nameSort);
         });
 
   }

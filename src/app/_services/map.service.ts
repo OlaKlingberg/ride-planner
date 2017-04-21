@@ -8,15 +8,18 @@ import Socket = SocketIOClient.Socket;
 import { environment } from '../../environments/environment';
 import { AuthenticationService } from './authentication.service';
 import { Rider } from '../_models/rider';
+import { Subscription } from 'rxjs/Subscription';
 
 
 @Injectable()
 export class MapService {
   private socket: Socket;
 
-  // public position$: BehaviorSubject<any> = new BehaviorSubject(null);
+  private geoWatchId: number;
   public coords$: BehaviorSubject<any> = new BehaviorSubject(null);
+  private coordsSub: Subscription;
   public riders$: BehaviorSubject<Rider[]> = new BehaviorSubject(null);
+  public selectedRide$: BehaviorSubject<string> = new BehaviorSubject(null);
 
 
   constructor(private mapsAPILoader: MapsAPILoader,
@@ -29,7 +32,7 @@ export class MapService {
   }
 
   watchPosition(geolocationOptions = null) {
-    const watchId = navigator.geolocation.watchPosition(
+    this.geoWatchId = navigator.geolocation.watchPosition(
         position => {
           this.coords$.next(position.coords);
         },
@@ -39,9 +42,8 @@ export class MapService {
   }
 
   emitRider(user) {
-    this.coords$.subscribe((coords) => {
+    this.coordsSub = this.coords$.subscribe((coords) => {
       if (coords) {
-        console.log(coords);
 
         let rider = new Rider(user);
         rider.lat = coords.latitude;
@@ -62,6 +64,9 @@ export class MapService {
   }
 
   removeRider() {
+    if (this.coordsSub) this.coordsSub.unsubscribe();
+    if (this.geoWatchId) navigator.geolocation.clearWatch(this.geoWatchId);
+
     const user = this.authenticationService.user$.value;
     console.log("MapService.removeRider", user);
 

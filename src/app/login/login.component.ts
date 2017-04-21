@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.model.email, this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true);
-              // this.mapService.createMarker();
               this.router.navigate([ '/ride-selector' ])
             },
             error => {

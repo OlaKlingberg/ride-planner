@@ -18,6 +18,9 @@ export class RidersMap2Component implements OnInit {
   private zoom: number = 15;
   private riders: Rider[];
 
+  private markerUrl: string = "assets/img/";
+  private colors: Array<string> = ['blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'red', 'yellow'];
+
   constructor(private mapService: MapService) {
   }
 
@@ -39,8 +42,13 @@ export class RidersMap2Component implements OnInit {
     this.mapService.riders$.subscribe((riders) => {
       if ( riders && riders.length > 0 ) {
         this.riders = riders.map(rider => new Rider(rider));
+        this.riders.forEach(rider => {
+          rider.color = ( rider.initials.charCodeAt(0) + rider.initials.charCodeAt(1) ) % 8;
+        });
+
       }
     });
   }
+
 
 }

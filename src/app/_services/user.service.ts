@@ -31,17 +31,7 @@ export class UserService {
     this.headers = new Headers({ 'x-auth': this.currentToken });
     this.requestOptions = new RequestOptions({ headers: this.headers });
 
-    // let riders = this.mapService.riders$.value;
-    // console.log("UserService.getAllRiders: riders:", riders);
-
     return this.http.get(`${environment.api}/users/riders`, this.requestOptions);
-
-
-    // this.mapService.riders$
-    //     .subscribe(riders => {
-    //       console.log("UserService.getAllRiders", riders);
-    //       return riders;
-    //     });
   }
 
 

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { environment } from '../../environments/environment';
-// import { SebmGoogleMap } from "angular2-google-maps/core";
-import { Observable } from "rxjs";
-import { User } from "../_models/user";
 import { RiderService } from '../_services/rider.service';
 import { Rider } from '../_models/rider';
+import { StatusService } from '../_services/status.service';
 
 @Component({
   selector: 'rp-riders-map2',
@@ -19,9 +17,10 @@ export class RidersMap2Component implements OnInit {
   private riders: Rider[];
 
   private markerUrl: string = "assets/img/";
-  private colors: Array<string> = ['blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'red', 'yellow'];
+  private colors: Array<string> = [ 'blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'red', 'yellow' ];
 
-  constructor(private riderService: RiderService) {
+  constructor(private riderService: RiderService,
+              private statusService: StatusService) {
   }
 
   ngOnInit() {
@@ -32,7 +31,6 @@ export class RidersMap2Component implements OnInit {
   watchCoords() {
     this.riderService.coords$.subscribe((coords) => {
       if ( coords ) {
-        // console.log("coords");
         this.lat = coords.latitude;
         this.lng = coords.longitude;
       }
@@ -40,7 +38,9 @@ export class RidersMap2Component implements OnInit {
   }
 
   listenForRiders() {
-    this.riderService.riders$.subscribe((riders) => {
+    console.log("RidersMap2Component.listenForRiders()");
+    this.statusService.riders$.subscribe((riders) => {
+      console.log("RidersMap2Component.listenForRiders() riders", riders);
       if ( riders && riders.length > 0 ) {
         this.riders = riders.map(rider => new Rider(rider));
         this.riders.forEach(rider => {

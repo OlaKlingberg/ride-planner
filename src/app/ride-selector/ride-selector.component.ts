@@ -4,6 +4,7 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { RideService } from "../_services/ride.service";
 import { RiderService } from '../_services/rider.service';
 import { AlertService } from '../_services/alert.service';
+import { StatusService } from '../_services/status.service';
 
 @Component({
   selector: 'app-ride-selector',
@@ -19,8 +20,8 @@ export class RideSelectorComponent implements OnInit {
               private rideService: RideService,
               private riderService: RiderService,
               private authenticationService: AuthenticationService,
-              private alertService: AlertService
-  ) {
+              private alertService: AlertService,
+              private statusService: StatusService) {
   }
 
   ngOnInit() {
@@ -29,22 +30,21 @@ export class RideSelectorComponent implements OnInit {
   }
 
   getAvailableRides() {
-    this.riderService.availableRides$.subscribe((availableRides) => {
+    this.statusService.availableRides$.subscribe((availableRides) => {
       this.availableRides = availableRides;
     });
   };
 
   getCurrentRide() {
-    this.rideService.currentRide$.subscribe((currentRide) => {
+    this.statusService.currentRide$.subscribe((currentRide) => {
       this.currentRide = currentRide;
     });
   };
 
   onSubmit() {
-    // let user = this.authenticationService.user$.value;
     let ride = this.model.ride;
 
-    this.rideService.currentRide$.next(ride);
+    this.statusService.currentRide$.next(ride);
 
     // this.riderService.emitRider(user, ride);
     this.alertService.success(`You have been logged in to ride ${this.model.ride}`, true);
@@ -53,7 +53,7 @@ export class RideSelectorComponent implements OnInit {
   }
 
   logOutFromRide() {
-    this.rideService.currentRide$.next(null);
+    this.statusService.currentRide$.next(null);
     // this.riderService.removeRider();
     this.alertService.success("You have been logged out from the ride.");
   }

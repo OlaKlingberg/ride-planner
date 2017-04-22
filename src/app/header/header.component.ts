@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from "../_services/authentication.service";
+import { StatusService } from '../_services/status.service';
 
 @Component({
   selector: 'rp-header',
@@ -9,11 +10,11 @@ import { AuthenticationService } from "../_services/authentication.service";
 export class HeaderComponent implements OnInit {
   user: Object;
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(private statusService: StatusService) {
   }
 
   ngOnInit() {
-    this.authenticationService.user$.subscribe(
+    this.statusService.user$.subscribe(
         user => this.user = user
     );
   }

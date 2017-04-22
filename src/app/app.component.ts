@@ -3,6 +3,7 @@ import { environment } from '../environments/environment';
 import { AuthenticationService } from "./_services/authentication.service";
 import { RiderService } from './_services/rider.service';
 import { RideService } from "app/_services/ride.service";
+import { StatusService } from './_services/status.service';
 
 @Component({
   selector: 'rp-root',
@@ -15,7 +16,8 @@ export class AppComponent implements OnInit {
   private currentRide: string;
 
   constructor(private authenticationService: AuthenticationService,
-              private rideService: RideService) {
+              private rideService: RideService,
+              private statusService: StatusService) {
   }
 
   ngOnInit() {
@@ -34,7 +36,7 @@ export class AppComponent implements OnInit {
   }
 
   trackUser() {
-    this.authenticationService.user$.subscribe((user) => {
+    this.statusService.user$.subscribe((user) => {
       if ( user ) {
         this.userName = `${user.fname} ${user.lname}`;
       } else {
@@ -44,11 +46,11 @@ export class AppComponent implements OnInit {
   }
 
   getCurrentRide() {
-    this.rideService.currentRide$.next(localStorage.getItem('currentRide'));
+    this.statusService.currentRide$.next(localStorage.getItem('currentRide'));
   }
 
   trackCurrentRide() {
-    this.rideService.currentRide$.subscribe((currentRide) => {
+    this.statusService.currentRide$.subscribe((currentRide) => {
       this.currentRide = currentRide;
     });
   }

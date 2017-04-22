@@ -22,6 +22,7 @@ import { RiderService } from "./_services/rider.service";
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { RiderListComponent } from './rider-list/rider-list.component';
+import { StatusService } from './_services/status.service';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { RiderListComponent } from './rider-list/rider-list.component';
     AuthGuard,
     AlertService,
     RideService,
-    RiderService
+    RiderService,
+    StatusService
   ],
   bootstrap: [ AppComponent ]
 })

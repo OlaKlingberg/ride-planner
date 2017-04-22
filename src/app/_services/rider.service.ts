@@ -6,30 +6,27 @@ import { MapsAPILoader } from "angular2-google-maps/core";
 
 import Socket = SocketIOClient.Socket;
 import { environment } from '../../environments/environment';
-import { AuthenticationService } from './authentication.service';
 import { Rider } from '../_models/rider';
 import { Subscription } from 'rxjs/Subscription';
 import { Http, RequestOptions, Headers } from '@angular/http';
+import { StatusService } from './status.service';
 
 
 @Injectable()
 export class RiderService {
   private socket: Socket;
 
-  public availableRides$: BehaviorSubject<Array<string>> = new BehaviorSubject(null);
-
   private geoWatchId: number;
   public coords$: BehaviorSubject<any> = new BehaviorSubject(null);
   private coordsSub: Subscription;
-  public riders$: BehaviorSubject<Rider[]> = new BehaviorSubject(null);
 
   private currentToken: string;
   private headers: Headers;
   private requestOptions: RequestOptions;
 
   constructor(private mapsAPILoader: MapsAPILoader,
-              private authenticationService: AuthenticationService,
-              private http: Http) {
+              private http: Http,
+              private statusService: StatusService) {
     // this.mapsAPILoader.load().then(() => {
     // });
     this.socket = io(environment.api);  // io is made available through import into index.html.
@@ -40,7 +37,7 @@ export class RiderService {
 
   listenForAvailableRides() {
     this.socket.on('availableRides', (rides) => {
-      this.availableRides$.next(rides);
+      this.statusService.availableRides$.next(rides);
     });
 
   }
@@ -48,7 +45,7 @@ export class RiderService {
   listenForRiderList() {
     this.socket.on('riderList', (riders) => {
       console.log("on riderList", riders);
-      this.riders$.next(riders);
+      this.statusService.riders$.next(riders);
     });
   }
 
@@ -70,7 +67,7 @@ export class RiderService {
         rider.lat = coords.latitude;
         rider.lng = coords.longitude;
 
-        this.socket.emit('rider', { rider, ride}, () => {
+        this.socket.emit('rider', { rider, ride }, () => {
           // Todo: Do I have any use for this callback function?
         });
       }

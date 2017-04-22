@@ -4,6 +4,7 @@ import { AuthenticationService } from "../_services/authentication.service";
 import { AlertService } from "../_services/alert.service";
 import { User } from "../_models/user";
 import { RiderService } from "../_services/rider.service";
+import { StatusService } from '../_services/status.service';
 
 @Component({
   selector: 'rp-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private authenticationService: AuthenticationService,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private statusService: StatusService) {
   }
 
   ngOnInit() {
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
     // this.returnUrl = '/ride-selector';
 
-    this.authenticationService.user$.subscribe(
+    this.statusService.user$.subscribe(
         data => {
           if ( data ) {
             this.user = data.user;

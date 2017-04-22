@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { AuthenticationService } from "../_services/authentication.service";
 import { AlertService } from "../_services/alert.service";
-import { RideService } from '../_services/ride.service';
+import { StatusService } from '../_services/status.service';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
   selector: 'rp-logout',
@@ -14,12 +14,12 @@ export class LogoutComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private alertService: AlertService,
-              private rideService: RideService) {
+              private statusService: StatusService) {
   }
 
   ngOnInit() {
     // this.riderService.removeRider();
-    this.rideService.currentRide$.next(null);
+    this.statusService.currentRide$.next(null);
     this.authenticationService.logout()
         .subscribe(
             () => {

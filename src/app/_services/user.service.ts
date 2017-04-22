@@ -6,12 +6,11 @@ import { RiderService } from './rider.service';
 
 @Injectable()
 export class UserService {
-  currentToken;
-  headers;
-  requestOptions;
+  currentToken: string;
+  headers: Headers;
+  requestOptions: RequestOptions;
 
-  constructor(private http: Http,
-              private riderService: RiderService) {
+  constructor(private http: Http) {
   }
 
   create(user: User) {

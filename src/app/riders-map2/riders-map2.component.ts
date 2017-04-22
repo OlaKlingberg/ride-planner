@@ -32,6 +32,7 @@ export class RidersMap2Component implements OnInit {
   watchCoords() {
     this.riderService.coords$.subscribe((coords) => {
       if ( coords ) {
+        // console.log("coords");
         this.lat = coords.latitude;
         this.lng = coords.longitude;
       }
@@ -52,3 +53,4 @@ export class RidersMap2Component implements OnInit {
 
 
 }
+

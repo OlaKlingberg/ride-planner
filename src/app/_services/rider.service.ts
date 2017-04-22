@@ -16,7 +16,7 @@ import { Http, RequestOptions, Headers } from '@angular/http';
 export class RiderService {
   private socket: Socket;
 
-  public rides$: BehaviorSubject<Array<string>> = new BehaviorSubject(null);
+  public availableRides$: BehaviorSubject<Array<string>> = new BehaviorSubject(null);
 
   private geoWatchId: number;
   public coords$: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -33,21 +33,21 @@ export class RiderService {
     // this.mapsAPILoader.load().then(() => {
     // });
     this.socket = io(environment.api);  // io is made available through import into index.html.
-    this.listenForRides();
+    this.listenForAvailableRides();
     this.listenForRiderList();
     this.watchPosition();
   }
 
-  listenForRides() {
-    this.socket.on('rides', (rides) => {
-      this.rides$.next(rides);
+  listenForAvailableRides() {
+    this.socket.on('availableRides', (rides) => {
+      this.availableRides$.next(rides);
     });
 
   }
 
   listenForRiderList() {
     this.socket.on('riderList', (riders) => {
-      console.log("RiderService.listenForRiderList", riders);
+      console.log("on riderList", riders);
       this.riders$.next(riders);
     });
   }
@@ -62,7 +62,7 @@ export class RiderService {
         }, geolocationOptions);
   }
 
-  emitRider(user) {
+  emitRider(user, ride) {
     this.coordsSub = this.coords$.subscribe((coords) => {
       if ( coords ) {
 
@@ -70,7 +70,7 @@ export class RiderService {
         rider.lat = coords.latitude;
         rider.lng = coords.longitude;
 
-        this.socket.emit('rider', rider, () => {
+        this.socket.emit('rider', { rider, ride}, () => {
           // Todo: Do I have any use for this callback function?
         });
       }
@@ -91,9 +91,6 @@ export class RiderService {
     return this.http.get(`${environment.api}/users/riders`, this.requestOptions);
   }
 }
-
-
-
 
 
 

@@ -6,6 +6,7 @@ import { BehaviorSubject } from "rxjs/Rx";
 import { environment } from "../../environments/environment";
 import { User } from "../_models/user";
 import Socket = SocketIOClient.Socket;
+import { RideService } from './ride.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,7 +15,10 @@ export class AuthenticationService {
   private headers;
   private requestOptions;
 
-  constructor(private http: Http,) { }
+  constructor(private http: Http,
+              // private rideService: RideService
+  ) {
+  }
 
   login(email: string, password: string) {
 
@@ -37,7 +41,7 @@ export class AuthenticationService {
 
     this.http.get(`${environment.api}/users/authenticate-by-token`, this.requestOptions)
         .subscribe(response => {
-          if (response.status === 200) {
+          if ( response.status === 200 ) {
             let user: User = new User(response.json());
             this.user$.next(user)
           }
@@ -52,6 +56,7 @@ export class AuthenticationService {
     // I remove the user from localStorage and the observable before I even try to remove the token from the backend -- so the user will be removed from the front end, even if the api call to remove the token fails. Is that the behavior I want?
     localStorage.removeItem('currentToken');
     this.user$.next(null);
+    // this.rideService.currentRide$.next(null);
 
     return this.http.delete(`${environment.api}/users/logout`, this.requestOptions);
   }

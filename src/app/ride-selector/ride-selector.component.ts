@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
+import { RideService } from "../_services/ride.service";
 import { RiderService } from '../_services/rider.service';
 import { AlertService } from '../_services/alert.service';
 
@@ -10,32 +11,50 @@ import { AlertService } from '../_services/alert.service';
   styleUrls: [ './ride-selector.component.scss' ]
 })
 export class RideSelectorComponent implements OnInit {
-  public model: any = [];
-  private selectedRide: string;
+  private model: any = [];
+  private availableRides: Array<string>;
+  private currentRide: string;
 
   constructor(private router: Router,
+              private rideService: RideService,
               private riderService: RiderService,
               private authenticationService: AuthenticationService,
-              private alertService: AlertService) {
+              private alertService: AlertService
+  ) {
   }
 
   ngOnInit() {
-    this.selectedRide = localStorage.getItem('selectedRide');
+    this.getAvailableRides();
+    this.getCurrentRide();
   }
 
+  getAvailableRides() {
+    this.riderService.availableRides$.subscribe((availableRides) => {
+      this.availableRides = availableRides;
+    });
+  };
+
+  getCurrentRide() {
+    this.rideService.currentRide$.subscribe((currentRide) => {
+      this.currentRide = currentRide;
+    });
+  };
+
   onSubmit() {
-    let user = this.authenticationService.user$.value;
-    this.riderService.emitRider(user);
-    localStorage.setItem('selectedRide', this.model.ride);
+    // let user = this.authenticationService.user$.value;
+    let ride = this.model.ride;
+
+    this.rideService.currentRide$.next(ride);
+
+    // this.riderService.emitRider(user, ride);
     this.alertService.success(`You have been logged in to ride ${this.model.ride}`, true);
 
     return this.router.navigate([ '/riders-map2' ]);
   }
 
   logOutFromRide() {
-    localStorage.removeItem('selectedRide');
-    this.selectedRide = '';
-    this.riderService.removeRider();
+    this.rideService.currentRide$.next(null);
+    // this.riderService.removeRider();
     this.alertService.success("You have been logged out from the ride.");
   }
 

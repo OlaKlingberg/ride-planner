@@ -1,5 +1,18 @@
-<h1>{{title}}</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>{{title}}</h1>
+      <div class="user-info">
+        <h5 *ngIf="userName">You are logged in as {{ userName }}</h5>
+        <h5 *ngIf="currentRide">You are logged in to ride {{ currentRide }}</h5>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <rp-header></rp-header>
+
 <div class="jumbotron">
   <div class="container">
     <div class="col-sm-8 col-sm-offset-2">

@@ -17,6 +17,7 @@ import { ProtectedComponent } from './protected/protected.component';
 import { AuthGuard } from "./_guards/auth.guard";
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from "./_services/alert.service";
+import { RideService } from './_services/ride.service';
 import { RiderService } from "./_services/rider.service";
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 import { UserListComponent } from './user-list/user-list.component';
@@ -48,6 +49,7 @@ import { RiderListComponent } from './rider-list/rider-list.component';
     AuthenticationService,
     AuthGuard,
     AlertService,
+    RideService,
     RiderService
   ],
   bootstrap: [ AppComponent ]

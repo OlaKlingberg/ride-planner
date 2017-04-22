@@ -2,4 +2,9 @@ $myColor: #BBBBFF;
 
 h1 {
   color: $myColor;
+  float: left;
+}
+
+.user-info {
+  float: right;
 }

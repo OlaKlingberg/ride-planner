@@ -18,7 +18,9 @@ export class RideSelectorComponent implements OnInit {
 
   constructor(private router: Router,
               private alertService: AlertService,
-              private statusService: StatusService) {}
+              private riderService: RiderService,  // Needs to be injected, to be initiated.
+              private statusService: StatusService) {
+  }
 
   ngOnInit() {
     this.watchAvailableRides();

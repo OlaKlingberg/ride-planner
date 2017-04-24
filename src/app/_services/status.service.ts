@@ -10,8 +10,11 @@ export class StatusService {
   public currentRide$: BehaviorSubject<string> = new BehaviorSubject(null);
   public availableRides$: BehaviorSubject<Array<string>> = new BehaviorSubject(null);
   public coords$: Subject<any> = new Subject();
+  public coords: {lat: number, lng: number} = null;
   public riders$: BehaviorSubject<Rider[]> = new BehaviorSubject(null);
 
-  constructor() { }
+  constructor() {
+    this.coords$.subscribe(coords => this.coords = coords);
+  }
 
 }

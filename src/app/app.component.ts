@@ -19,7 +19,6 @@ export class AppComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initiated.
               private rideService: RideService,                     // Needs to be injected, to be initiated.
-              private riderService: RiderService,                   // Needs to be injected, to be initiated.
               private statusService: StatusService) {
   }
 
@@ -43,15 +42,7 @@ export class AppComponent implements OnInit {
 
   // For debugging.
   watchRiders() {
-    this.statusService.riders$.subscribe(riders => {
-      this.riders = riders;
-      console.log(this.riders);
-      // if (riders) {
-      //   this.riders = riders.map(rider => rider.fullName);
-      // } else {
-      //   this.riders = null;
-      // }
-    })
+    this.statusService.riders$.subscribe(riders => this.riders = riders);
   }
 
 

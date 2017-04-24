@@ -3,28 +3,33 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RiderService } from './rider.service';
 import { AuthenticationService } from './authentication.service';
 import { StatusService } from './status.service';
+import Socket = SocketIOClient.Socket;
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class RideService {
+  private socket: Socket;
 
-  constructor(private riderService: RiderService,
-              private statusService: StatusService) {
-    setTimeout(() => {
-      this.trackCurrentRide(); // Has to be postponed one tick, to let AppComponent retrieve currentRide from localStorage. Kind of an ugly solution ...
-    }, 0);
+  constructor(private statusService: StatusService) {
+    this.socket = io(environment.api);  // io is made available through import into index.html.
+    this.listenForAvailableRides();
+    this.watchCurrentRide();
   }
 
-  trackCurrentRide() {
-    // Save ride in localStorage, where it can be retrieved by AppComponent in case of a page refresh.
-    this.statusService.currentRide$.subscribe((ride) => {
-      if ( ride ) {
-        localStorage.setItem('currentRide', ride);
-        this.riderService.emitRider(this.statusService.user$.value, ride);
-      } else {
-        localStorage.removeItem('currentRide');
-        this.riderService.removeRider();
-      }
-
-    })
+  listenForAvailableRides() {
+    this.socket.on('availableRides', (rides) => {
+      this.statusService.availableRides$.next(rides);
+    });
   }
+
+  watchCurrentRide() {
+    // On page refresh, get currentRide from localStorage.
+    this.statusService.currentRide$.next(localStorage.getItem('currentRide'));
+
+    // Keep localStorage synced with currentRide$.
+    this.statusService.currentRide$.subscribe(ride => {
+      ride ? localStorage.setItem('currentRide', ride) : localStorage.removeItem('currentRide');
+    });
+  }
+
 }

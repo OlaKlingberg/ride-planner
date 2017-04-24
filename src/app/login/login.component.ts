@@ -29,10 +29,9 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
     // this.returnUrl = '/ride-selector';
 
-    this.statusService.user$.subscribe(
-        data => {
-          if ( data ) {
-            this.user = data.user;
+    this.statusService.user$.subscribe(user => {
+          if ( user ) {
+            this.user = user;
             this.router.navigate([ this.returnUrl ]);
           }
         }
@@ -40,13 +39,16 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    console.log("LoginComponent.login()");
     this.loading = true;
     this.authenticationService.login(this.model.email, this.model.password)
         .subscribe(() => {
+              console.log("LoginComponent.login() You have been logged in.");
               this.alertService.success("You have been successfully logged in!", true);
               this.router.navigate([ '/ride-selector' ])
             },
             error => {
+              console.log("LoginComponent.login(). There was an error logging in.");
               console.log(error);
               this.alertService.error(error._body);
               this.loading = false;

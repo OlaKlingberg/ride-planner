@@ -4,12 +4,24 @@ export class Rider extends User {
   lat?: number;
   lng?: number;
   color?: number;
+  ride?: string;
 
-  constructor(rider) {
-    super(rider);
+  constructor(user, coords = null, ride = null) {
+    super(user);
 
-    this.lat = rider.lat;
-    this.lng = rider.lng;
+    if (coords) {
+      this.lat = coords.latitude;
+      this.lng = coords.longitude;
+    } else if (user.lat && user.lng) {
+      this.lat = user.lat;
+      this.lng = user.lng;
+    }
+
+    this.ride = ride || user.ride;
+  }
+
+  get colorNumber() {
+    return ( this.initials.charCodeAt(0) + this.initials.charCodeAt(1) ) % 8
   }
 
 }

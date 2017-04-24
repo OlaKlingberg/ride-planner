@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
 import { AuthenticationService } from "./_services/authentication.service";
-import { RiderService } from './_services/rider.service';
-import { RideService } from "app/_services/ride.service";
 import { StatusService } from './_services/status.service';
+import { RideService } from './_services/ride.service';
+import { RiderService } from './_services/rider.service';
 
 @Component({
   selector: 'rp-root',
@@ -14,45 +14,41 @@ export class AppComponent implements OnInit {
   private title: string = 'RidePlanner2';
   private userName: string;
   private currentRide: string;
+  private riders: Array<string>;
 
-  constructor(private authenticationService: AuthenticationService,
-              private rideService: RideService,
+  constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initiated.
+              private rideService: RideService,                     // Needs to be injected, to be initiated.
+              private riderService: RiderService,                   // Needs to be injected, to be initiated.
               private statusService: StatusService) {
   }
 
   ngOnInit() {
-    this.logInWithToken();
-    this.trackUser();
-    this.getCurrentRide();
-    this.trackCurrentRide();
+    this.watchUser();
+    this.watchCurrentRide();
+    this.watchRiders(); // For debugging.
   }
 
-  logInWithToken() {
-    const currentToken = JSON.parse(localStorage.getItem('currentToken'));
-
-    if ( currentToken ) {
-      this.authenticationService.authenticateByToken(currentToken);
-    }
-  }
-
-  trackUser() {
-    this.statusService.user$.subscribe((user) => {
-      if ( user ) {
-        this.userName = `${user.fname} ${user.lname}`;
-      } else {
-        this.userName = null;
-      }
+  watchUser() {
+    this.statusService.user$.subscribe(user => {
+      this.userName = user ? user.fullName : null;
     });
   }
 
-  getCurrentRide() {
-    this.statusService.currentRide$.next(localStorage.getItem('currentRide'));
-  }
-
-  trackCurrentRide() {
-    this.statusService.currentRide$.subscribe((currentRide) => {
+  watchCurrentRide() {
+    this.statusService.currentRide$.subscribe(currentRide => {
       this.currentRide = currentRide;
     });
+  }
+
+  // For debugging.
+  watchRiders() {
+    this.statusService.riders$.subscribe(riders => {
+      if (riders) {
+        this.riders = riders.map(rider => ` ${rider.fname} ${rider.lname}`)
+      } else {
+        this.riders = null;
+      }
+    })
   }
 
 

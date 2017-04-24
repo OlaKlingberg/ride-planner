@@ -15,5 +15,9 @@ export class User {
     return this.fname.substr(0, 1) + this.lname.substr(0, 1);
   }
 
+  get fullName() {
+    return `${this.fname} ${this.lname}`;
+  }
+
 
 }

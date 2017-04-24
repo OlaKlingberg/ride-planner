@@ -1,24 +1,18 @@
 import { Injectable } from '@angular/core';
-
-import { BehaviorSubject } from "rxjs/Rx";
+import { Http, RequestOptions, Headers } from '@angular/http';
 
 import { MapsAPILoader } from "angular2-google-maps/core";
 
-import Socket = SocketIOClient.Socket;
 import { environment } from '../../environments/environment';
+
 import { Rider } from '../_models/rider';
-import { Subscription } from 'rxjs/Subscription';
-import { Http, RequestOptions, Headers } from '@angular/http';
 import { StatusService } from './status.service';
 
+import Socket = SocketIOClient.Socket;
 
 @Injectable()
 export class RiderService {
   private socket: Socket;
-
-  private geoWatchId: number;
-  public coords$: BehaviorSubject<any> = new BehaviorSubject(null);
-  private coordsSub: Subscription;
 
   private currentToken: string;
   private headers: Headers;
@@ -30,54 +24,48 @@ export class RiderService {
     // this.mapsAPILoader.load().then(() => {
     // });
     this.socket = io(environment.api);  // io is made available through import into index.html.
-    this.listenForAvailableRides();
-    this.listenForRiderList();
     this.watchPosition();
+    this.watchWhenToEmitRider();
+    this.watchWhenToRemoveRider();
+    this.listenForRiderList();
   }
 
-  listenForAvailableRides() {
-    this.socket.on('availableRides', (rides) => {
-      this.statusService.availableRides$.next(rides);
-    });
+  watchPosition(geolocationOptions = null) {
+    navigator.geolocation.watchPosition(
+        position => this.statusService.coords$.next(position.coords),
+        err => this.statusService.coords$.error(err),
+        geolocationOptions);
+  }
 
+  // Whenever coords, ride, or user changes, provided there are coords and user, emit the rider.
+  watchWhenToEmitRider() {
+    this.statusService.coords$
+        .combineLatest(this.statusService.currentRide$)
+        .combineLatest(this.statusService.user$)
+        .subscribe(([[coords, ride], user]) => {
+          if (coords && ride && user) {
+            console.log('watchWhenToEmitRider. About to create new Rider');
+            let rider = new Rider(user, coords, ride);
+            this.socket.emit('rider', rider, () => {
+              // Todo: Do I have any use for this callback?
+            });
+          }
+    });
+  }
+
+  watchWhenToRemoveRider() {
+    this.statusService.currentRide$
+        .withLatestFrom(this.statusService.user$)
+        .subscribe(([currentRide, user]) => {
+          console.log('watchWhenToRemoveRider. About to create new Rider');
+          if (user && !currentRide) this.socket.emit('removeRider', new Rider(user));
+        });
   }
 
   listenForRiderList() {
     this.socket.on('riderList', (riders) => {
-      console.log("on riderList", riders);
       this.statusService.riders$.next(riders);
     });
-  }
-
-  watchPosition(geolocationOptions = null) {
-    this.geoWatchId = navigator.geolocation.watchPosition(
-        position => {
-          this.coords$.next(position.coords);
-        },
-        err => {
-          this.coords$.error(err);
-        }, geolocationOptions);
-  }
-
-  emitRider(user, ride) {
-    this.coordsSub = this.coords$.subscribe((coords) => {
-      if ( coords ) {
-
-        let rider = new Rider(user);
-        rider.lat = coords.latitude;
-        rider.lng = coords.longitude;
-
-        this.socket.emit('rider', { rider, ride }, () => {
-          // Todo: Do I have any use for this callback function?
-        });
-      }
-    });
-  }
-
-  removeRider() {
-    if ( this.coordsSub ) this.coordsSub.unsubscribe();
-    if ( this.geoWatchId ) navigator.geolocation.clearWatch(this.geoWatchId);
-    this.socket.emit('removeRider');
   }
 
   getAllRiders() {

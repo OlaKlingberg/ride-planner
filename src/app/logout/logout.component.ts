@@ -18,7 +18,6 @@ export class LogoutComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.riderService.removeRider();
     this.statusService.currentRide$.next(null);
     this.authenticationService.logout()
         .subscribe(

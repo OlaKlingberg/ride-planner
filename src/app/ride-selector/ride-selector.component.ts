@@ -17,25 +17,21 @@ export class RideSelectorComponent implements OnInit {
   private currentRide: string;
 
   constructor(private router: Router,
-              private rideService: RideService,
-              private riderService: RiderService,
-              private authenticationService: AuthenticationService,
               private alertService: AlertService,
-              private statusService: StatusService) {
-  }
+              private statusService: StatusService) {}
 
   ngOnInit() {
-    this.getAvailableRides();
-    this.getCurrentRide();
+    this.watchAvailableRides();
+    this.watchCurrentRide();
   }
 
-  getAvailableRides() {
+  watchAvailableRides() {
     this.statusService.availableRides$.subscribe((availableRides) => {
       this.availableRides = availableRides;
     });
   };
 
-  getCurrentRide() {
+  watchCurrentRide() {
     this.statusService.currentRide$.subscribe((currentRide) => {
       this.currentRide = currentRide;
     });
@@ -47,15 +43,15 @@ export class RideSelectorComponent implements OnInit {
     this.statusService.currentRide$.next(ride);
 
     // this.riderService.emitRider(user, ride);
-    this.alertService.success(`You have been logged in to ride ${this.model.ride}`, true);
+    this.alertService.success(`You have been logged in to ride ${ride}`, true);
 
     return this.router.navigate([ '/riders-map2' ]);
   }
 
   logOutFromRide() {
-    this.statusService.currentRide$.next(null);
-    // this.riderService.removeRider();
     this.alertService.success("You have been logged out from the ride.");
+    console.log("You were logged out!");
+    this.statusService.currentRide$.next(null);
   }
 
 }

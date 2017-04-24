@@ -16,8 +16,8 @@
               [longitude]="rider.lng"
               [label]="{text: rider.initials, color: 'black'}"
               [markerDraggable]="true"
-              [iconUrl]="markerUrl + colors[rider.color] + '.png'"
-              [zIndex]="rider.color"
+              [iconUrl]="markerUrl + colors[rider.colorNumber] + '.png'"
+              [zIndex]="rider.colorNumber"
           >
 
             <sebm-google-map-info-window>

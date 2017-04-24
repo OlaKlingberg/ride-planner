@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { environment } from '../../environments/environment';
+// import { environment } from '../../environments/environment';
+import { StatusService } from '../_services/status.service';
 import { RiderService } from '../_services/rider.service';
 import { Rider } from '../_models/rider';
-import { StatusService } from '../_services/status.service';
 
 @Component({
   selector: 'rp-riders-map2',
@@ -25,11 +25,11 @@ export class RidersMap2Component implements OnInit {
 
   ngOnInit() {
     this.watchCoords();
-    this.listenForRiders();
+    this.watchRiders();
   }
 
   watchCoords() {
-    this.riderService.coords$.subscribe((coords) => {
+    this.statusService.coords$.subscribe((coords) => {
       if ( coords ) {
         this.lat = coords.latitude;
         this.lng = coords.longitude;
@@ -37,16 +37,12 @@ export class RidersMap2Component implements OnInit {
     });
   }
 
-  listenForRiders() {
-    console.log("RidersMap2Component.listenForRiders()");
-    this.statusService.riders$.subscribe((riders) => {
-      console.log("RidersMap2Component.listenForRiders() riders", riders);
+  watchRiders() {
+    this.statusService.riders$.subscribe(riders => {
       if ( riders && riders.length > 0 ) {
+      // if ( riders ) {
         this.riders = riders.map(rider => new Rider(rider));
-        this.riders.forEach(rider => {
-          rider.color = ( rider.initials.charCodeAt(0) + rider.initials.charCodeAt(1) ) % 8;
-        });
-
+        console.log(this.riders.map(rider => `${rider.fname} ${rider.lname}`));
       }
     });
   }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../_services/user.service';
 import { nameSort } from '../_lib/util';
-import { RiderService } from '../_services/rider.service';
 import { Router } from '@angular/router';
+import { StatusService } from '../_services/status.service';
+import { Rider } from '../_models/rider';
 
 @Component({
   selector: 'app-rider-list',
@@ -10,21 +10,26 @@ import { Router } from '@angular/router';
   styleUrls: [ './rider-list.component.scss' ]
 })
 export class RiderListComponent implements OnInit {
-  private riders: Array<object>;
-  private selectedRide: string;
+  private riders: Rider[];
+  private currentRide: string;
 
-  constructor(private riderService: RiderService,
+  constructor(private statusService: StatusService,
               private router: Router) {
   }
 
   ngOnInit() {
-    this.selectedRide = localStorage.getItem('selectedRide');
+    this.watchCurrentRide();
+    this.watchRiders();
+  }
 
-    this.riderService.getAllRiders()
-        .subscribe(response => {
-          this.riders = response.json();
-          this.riders.sort(nameSort);
-        });
+  watchCurrentRide() {
+    this.statusService.currentRide$.subscribe(currentRide => {
+      this.currentRide = currentRide;
+    });
+  }
+
+  watchRiders() {
+    this.statusService.riders$.subscribe(riders => this.riders = riders);
   }
 
   goToRideSelector() {

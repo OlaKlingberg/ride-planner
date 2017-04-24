@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-// import { environment } from '../../environments/environment';
 import { StatusService } from '../_services/status.service';
-import { RiderService } from '../_services/rider.service';
 import { Rider } from '../_models/rider';
+import { MapsAPILoader } from 'angular2-google-maps/core';
+// import { LatLngBounds } from 'angular2-google-maps/core';
+import LatLngBounds = google.maps.LatLngBounds;
+import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 
 @Component({
   selector: 'rp-riders-map2',
@@ -13,26 +15,34 @@ import { Rider } from '../_models/rider';
 export class RidersMap2Component implements OnInit {
   private lat: number;
   private lng: number;
-  private zoom: number = 15;
+  private maxZoom: number = 17;
   private riders: Rider[];
+
+  private google: any;
+  private bounds: LatLngBounds;
+  private latLng: LatLngBoundsLiteral;
 
   private markerUrl: string = "assets/img/";
   private colors: Array<string> = [ 'blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'red', 'yellow' ];
 
-  constructor(private riderService: RiderService,
-              private statusService: StatusService) {
+  constructor(private statusService: StatusService,
+              private mapsAPILoader: MapsAPILoader) {
   }
 
   ngOnInit() {
     this.watchCoords();
     this.watchRiders();
+    this.mapsAPILoader.load().then(() => {
+      this.google = google;
+      this.fitBounds();
+    });
   }
 
   watchCoords() {
     this.statusService.coords$.subscribe((coords) => {
       if ( coords ) {
-        this.lat = coords.latitude;
-        this.lng = coords.longitude;
+        this.lat = coords.lat;
+        this.lng = coords.lng;
       }
     });
   }
@@ -41,7 +51,18 @@ export class RidersMap2Component implements OnInit {
     this.statusService.riders$.subscribe(riders => {
       if ( riders && riders.length > 0 ) {
         this.riders = riders;
-        console.log(this.riders.map(rider => rider.fullName));
+        console.log(this.riders.map(rider => `${rider.fullName}. Lat: ${rider.lat}.`));
+      }
+    });
+  }
+
+  fitBounds() {
+    this.bounds = new this.google.maps.LatLngBounds();
+
+    this.statusService.riders$.subscribe(riders => {
+      if (riders) {
+        riders.forEach(rider => this.bounds.extend({lat: rider.lat, lng: rider.lng}));
+        this.latLng = this.bounds.toJSON();
       }
     });
   }

@@ -8,7 +8,9 @@
         <sebm-google-map
             [latitude]="lat"
             [longitude]="lng"
-            [zoom]="zoom">
+            [maxZoom]="maxZoom"
+            [fitBounds]="latLng"
+        >
 
           <sebm-google-map-marker
               *ngFor="let rider of riders; index as i"

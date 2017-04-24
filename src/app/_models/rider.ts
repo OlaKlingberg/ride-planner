@@ -10,8 +10,8 @@ export class Rider extends User {
     super(user);
 
     if (coords) {
-      this.lat = coords.latitude;
-      this.lng = coords.longitude;
+      this.lat = coords.lat;
+      this.lng = coords.lng;
     } else if (user.lat && user.lng) {
       this.lat = user.lat;
       this.lng = user.lng;
@@ -24,7 +24,4 @@ export class Rider extends User {
     return ( this.initials.charCodeAt(0) + this.initials.charCodeAt(1) ) % 8
   }
 
-  // get fullName() {
-  //   return `${this.fname} ${this.lname}`;
-  // }
 }

@@ -39,10 +39,7 @@ export class RideSelectorComponent implements OnInit {
 
   onSubmit() {
     let ride = this.model.ride;
-
     this.statusService.currentRide$.next(ride);
-
-    // this.riderService.emitRider(user, ride);
     this.alertService.success(`You have been logged in to ride ${ride}`, true);
 
     return this.router.navigate([ '/riders-map2' ]);
@@ -50,7 +47,6 @@ export class RideSelectorComponent implements OnInit {
 
   logOutFromRide() {
     this.alertService.success("You have been logged out from the ride.");
-    console.log("You were logged out!");
     this.statusService.currentRide$.next(null);
   }
 

@@ -3,7 +3,6 @@ import { User } from './user';
 export class Rider extends User {
   lat?: number;
   lng?: number;
-  color?: number;
   ride?: string;
 
   constructor(user, coords = null, ride = null) {
@@ -21,7 +20,11 @@ export class Rider extends User {
   }
 
   get colorNumber() {
-    return ( this.initials.charCodeAt(0) + this.initials.charCodeAt(1) ) % 8
+    return ( this.initials.charCodeAt(0) + this.initials.charCodeAt(1) ) % 8;
+  }
+
+  get zIndex() {
+    return ( this.initials.charCodeAt(0) + this.initials.charCodeAt(1) );
   }
 
 }

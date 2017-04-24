@@ -36,15 +36,14 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.watchCoords();
+    this.getCoords();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
-      this.bounds = new this.google.maps.LatLngBounds();
       this.watchRiders();
     });
   }
 
-  watchCoords() {
+  getCoords() {
     // Use saved coordinates, if there are any ...
     let coords = this.statusService.coords;
     if ( coords ) {
@@ -53,6 +52,10 @@ export class RidersMap2Component implements OnInit, OnDestroy {
       this.mapLng = coords.lng;
     }
 
+    this.watchCoords();
+  }
+
+  watchCoords() {
     // ... and then subscribe to updates, but throttle the update rate, so as not to use too man map loads.
     this.coordsSub = this.statusService.coords$
         .throttleTime(60000)
@@ -69,6 +72,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   watchRiders() {
     this.ridersSub = this.statusService.riders$.subscribe(riders => {
       if ( riders && riders.length > 0 ) {
+        this.bounds = new this.google.maps.LatLngBounds();
         this.riders = riders;
         this.riders.forEach(rider => this.bounds.extend({ lat: rider.lat, lng: rider.lng }));
         this.latLng = this.bounds.toJSON();

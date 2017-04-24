@@ -3,11 +3,11 @@
     <div class="col-md-12">
       <div
           class="map"
-          [ngClass]="{'visibility-hidden': !lat}">
+          [ngClass]="{'visibility-hidden': !mapLat}">
 
         <sebm-google-map
-            [latitude]="lat"
-            [longitude]="lng"
+            [latitude]="mapLat"
+            [longitude]="mapLng"
             [maxZoom]="maxZoom"
             [fitBounds]="latLng"
         >
@@ -32,7 +32,7 @@
       </div>
 
       <div
-          [ngClass]="{'display-none': lat,'while-waiting-for-coords': !lat}">
+          [ngClass]="{'display-none': mapLat,'while-waiting-for-coords': !mapLat}">
         <p>Launching satellites ...</p>
       </div>
 

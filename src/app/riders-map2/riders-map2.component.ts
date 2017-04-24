@@ -13,8 +13,10 @@ import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
   styleUrls: [ './riders-map2.component.scss' ]
 })
 export class RidersMap2Component implements OnInit {
-  private lat: number;
-  private lng: number;
+  private mapLat: number;
+  private mapLng: number;
+  // private riderLat: number;
+  // private riderLng: number;
   private maxZoom: number = 17;
   private riders: Rider[];
 
@@ -39,12 +41,18 @@ export class RidersMap2Component implements OnInit {
   }
 
   watchCoords() {
-    this.statusService.coords$.subscribe((coords) => {
-      if ( coords ) {
-        this.lat = coords.lat;
-        this.lng = coords.lng;
-      }
-    });
+
+
+    this.statusService.coords$
+        .throttleTime(10000)    // Save map loads by only updating the map so often.
+        .do(() => {console.log("coords$ fired!")})
+        .subscribe((coords) => {
+          if ( coords ) {
+            console.log("coords:", coords);
+            this.mapLat = coords.lat;
+            this.mapLng = coords.lng;
+          }
+        });
   }
 
   watchRiders() {
@@ -60,8 +68,8 @@ export class RidersMap2Component implements OnInit {
     this.bounds = new this.google.maps.LatLngBounds();
 
     this.statusService.riders$.subscribe(riders => {
-      if (riders) {
-        riders.forEach(rider => this.bounds.extend({lat: rider.lat, lng: rider.lng}));
+      if ( riders ) {
+        riders.forEach(rider => this.bounds.extend({ lat: rider.lat, lng: rider.lng }));
         this.latLng = this.bounds.toJSON();
       }
     });

@@ -29,7 +29,10 @@ export class RiderListComponent implements OnInit {
   }
 
   watchRiders() {
-    this.statusService.riders$.subscribe(riders => this.riders = riders);
+    this.statusService.riders$.subscribe(riders => {
+      this.riders = riders;
+      console.log(riders);
+    });
   }
 
   goToRideSelector() {

@@ -24,4 +24,7 @@ export class Rider extends User {
     return ( this.initials.charCodeAt(0) + this.initials.charCodeAt(1) ) % 8
   }
 
+  // get fullName() {
+  //   return `${this.fname} ${this.lname}`;
+  // }
 }

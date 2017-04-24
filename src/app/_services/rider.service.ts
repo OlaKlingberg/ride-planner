@@ -64,6 +64,7 @@ export class RiderService {
 
   listenForRiderList() {
     this.socket.on('riderList', (riders) => {
+      riders = riders.map(rider => new Rider(rider));
       this.statusService.riders$.next(riders);
     });
   }

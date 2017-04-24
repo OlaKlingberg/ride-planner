@@ -40,9 +40,8 @@ export class RidersMap2Component implements OnInit {
   watchRiders() {
     this.statusService.riders$.subscribe(riders => {
       if ( riders && riders.length > 0 ) {
-      // if ( riders ) {
-        this.riders = riders.map(rider => new Rider(rider));
-        console.log(this.riders.map(rider => `${rider.fname} ${rider.lname}`));
+        this.riders = riders;
+        console.log(this.riders.map(rider => rider.fullName));
       }
     });
   }

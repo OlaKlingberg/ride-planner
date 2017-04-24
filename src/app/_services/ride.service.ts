@@ -23,12 +23,12 @@ export class RideService {
   }
 
   watchCurrentRide() {
-    // On page refresh, get currentRide from localStorage.
-    this.statusService.currentRide$.next(localStorage.getItem('currentRide'));
+    // On page refresh, get currentRide from sessionStorage.
+    this.statusService.currentRide$.next(sessionStorage.getItem('currentRide'));
 
-    // Keep localStorage synced with currentRide$.
+    // Keep sessionStorage synced with currentRide$.
     this.statusService.currentRide$.subscribe(ride => {
-      ride ? localStorage.setItem('currentRide', ride) : localStorage.removeItem('currentRide');
+      ride ? sessionStorage.setItem('currentRide', ride) : sessionStorage.removeItem('currentRide');
     });
   }
 

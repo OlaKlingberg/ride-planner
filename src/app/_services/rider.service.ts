@@ -14,12 +14,7 @@ import Socket = SocketIOClient.Socket;
 export class RiderService {
   private socket: Socket;
 
-  private currentToken: string;
-  private headers: Headers;
-  private requestOptions: RequestOptions;
-
   constructor(private mapsAPILoader: MapsAPILoader,
-              private http: Http,
               private statusService: StatusService) {
     // this.mapsAPILoader.load().then(() => {
     // });
@@ -37,7 +32,7 @@ export class RiderService {
         geolocationOptions);
   }
 
-  // Whenever coords, ride, or user changes, provided there are coords and user, emit the rider.
+  // Whenever coords, ride, or user changes, provided all three values exist, emit the rider.
   watchWhenToEmitRider() {
     this.statusService.coords$
         .combineLatest(this.statusService.currentRide$)
@@ -64,17 +59,11 @@ export class RiderService {
 
   listenForRiderList() {
     this.socket.on('riderList', (riders) => {
-      riders = riders.map(rider => new Rider(rider));
+      if (riders) {
+        riders = riders.map(rider => new Rider(rider));
+      }
       this.statusService.riders$.next(riders);
     });
-  }
-
-  getAllRiders() {
-    this.currentToken = JSON.parse(localStorage.getItem('currentToken'));
-    this.headers = new Headers({ 'x-auth': this.currentToken });
-    this.requestOptions = new RequestOptions({ headers: this.headers });
-
-    return this.http.get(`${environment.api}/users/riders`, this.requestOptions);
   }
 }
 

@@ -21,9 +21,9 @@ export class AuthenticationService {
   }
 
   authenticateByToken() {
-    const currentToken = localStorage.getItem('currentToken');
+    const currentToken = sessionStorage.getItem('currentToken');
     if (currentToken) {
-      this.currentToken = JSON.parse(localStorage.getItem('currentToken'));
+      this.currentToken = JSON.parse(sessionStorage.getItem('currentToken'));
       this.headers = new Headers({ 'x-auth': this.currentToken });
       this.requestOptions = new RequestOptions({ headers: this.headers });
 
@@ -44,19 +44,19 @@ export class AuthenticationService {
           let token = response.headers.get('x-auth');
 
           if ( user && token ) {
-            localStorage.setItem('currentToken', JSON.stringify(token));
+            sessionStorage.setItem('currentToken', JSON.stringify(token));
             this.statusService.user$.next(user);
           }
         });
   }
 
   logout() {
-    this.currentToken = JSON.parse(localStorage.getItem('currentToken'));
+    this.currentToken = JSON.parse(sessionStorage.getItem('currentToken'));
     this.headers = new Headers({ 'x-auth': this.currentToken });
     this.requestOptions = new RequestOptions({ headers: this.headers });
 
-    // I remove the user from localStorage and the observable before I even try to remove the token from the backend -- so the user will be removed from the front end, even if the api call to remove the token fails. Is that the behavior I want?
-    localStorage.removeItem('currentToken');
+    // I remove the user from sessionStorage and the observable before I even try to remove the token from the backend -- so the user will be removed from the front end, even if the api call to remove the token fails. Is that the behavior I want?
+    sessionStorage.removeItem('currentToken');
     this.statusService.user$.next(null);
     this.statusService.currentRide$.next(null);
 

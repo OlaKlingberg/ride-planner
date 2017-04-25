@@ -15,14 +15,14 @@ import { RiderService } from '../_services/rider.service';
   styleUrls: [ './riders-map2.component.scss' ]
 })
 export class RidersMap2Component implements OnInit, OnDestroy {
-  private mapLat: number;
-  private mapLng: number;
-  private maxZoom: number = 17;
-  private riders: Rider[];
+  mapLat: number;
+  mapLng: number;
+  maxZoom: number = 17;
+  riders: Rider[];
 
   private google: any;
   private bounds: LatLngBounds;
-  private latLng: LatLngBoundsLiteral;
+  latLng: LatLngBoundsLiteral;
 
   private coordsSub: Subscription;
   private ridersSub: Subscription;

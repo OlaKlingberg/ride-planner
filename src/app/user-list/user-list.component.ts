@@ -8,7 +8,7 @@ import { nameSort } from '../_lib/util';
   styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent implements OnInit {
-  private users: Array<object>;
+  users: Array<object>;
 
   constructor(private userService: UserService) {
   }

@@ -10,8 +10,8 @@ import { Rider } from '../_models/rider';
   styleUrls: [ './rider-list.component.scss' ]
 })
 export class RiderListComponent implements OnInit {
-  private riders: Rider[];
-  private currentRide: string;
+  riders: Rider[];
+  currentRide: string;
 
   constructor(private statusService: StatusService,
               private router: Router) {

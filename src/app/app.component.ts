@@ -12,10 +12,10 @@ import { Rider } from './_models/rider';
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit {
-  private title: string = 'RidePlanner2';
-  private userName: string;
-  private currentRide: string;
-  private riders: Array<Rider>;
+  title: string = 'RidePlanner2';
+  userName: string;
+  currentRide: string;
+  riders: Array<Rider>;
 
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initiated.
               private rideService: RideService,                     // Needs to be injected, to be initiated.

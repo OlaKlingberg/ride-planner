@@ -14,7 +14,7 @@ import { StatusService } from '../_services/status.service';
 export class RideSelectorComponent implements OnInit {
   private model: any = [];
   private availableRides: Array<string>;
-  private currentRide: string;
+  currentRide: string;
 
   constructor(private router: Router,
               private alertService: AlertService,

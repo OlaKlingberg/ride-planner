@@ -36,33 +36,17 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getCoords();
+    this.watchCoords();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
       this.watchRiders();
     });
   }
 
-  getCoords() {
-    // Use saved coordinates, if there are any ...
-    let coords = this.statusService.coords;
-    if ( coords ) {
-      console.log("coords which should only be used when navigating the riders map:", coords);
-      this.mapLat = coords.lat;
-      this.mapLng = coords.lng;
-    }
-
-    this.watchCoords();
-  }
-
   watchCoords() {
-    // ... and then subscribe to updates, but throttle the update rate, so as not to use too man map loads.
     this.coordsSub = this.statusService.coords$
-        .throttleTime(60000)
         .subscribe((coords) => {
-          console.log("coords$ fired:", coords);
           if ( coords ) {
-            console.log("coords updated through the subscription:", coords);
             this.mapLat = coords.lat;
             this.mapLng = coords.lng;
           }

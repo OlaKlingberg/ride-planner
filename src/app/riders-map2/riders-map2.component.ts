@@ -76,7 +76,8 @@ export class RidersMap2Component implements OnInit, OnDestroy {
         this.riders = riders;
         this.riders.forEach(rider => this.bounds.extend({ lat: rider.lat, lng: rider.lng }));
         this.latLng = this.bounds.toJSON();
-        console.log(this.riders.map(rider => `${rider.fullName}. Lat: ${rider.lat}. Lng: ${rider.lng}`));
+        console.log(this.riders.forEach(rider => `${rider.fullName}. Lat: ${rider.lat}. Lng: ${rider.lng}`));
+
       }
     });
   }
@@ -85,7 +86,6 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     this.coordsSub.unsubscribe();
     this.ridersSub.unsubscribe();
   }
-
 
 }
 

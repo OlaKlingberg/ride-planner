@@ -14,6 +14,8 @@ export class UserService {
   }
 
   create(user: User) {
+    user.email = user.email.toLowerCase();
+
     return this.http.post(`${environment.api}/users`, user);
   }
 

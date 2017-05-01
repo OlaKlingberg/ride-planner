@@ -61,9 +61,24 @@ export class RidersMap2Component implements OnInit, OnDestroy {
         this.riders.forEach(rider => this.bounds.extend({ lat: rider.lat, lng: rider.lng }));
         this.latLng = this.bounds.toJSON();
         console.log(this.riders.forEach(rider => `${rider.fullName}. Lat: ${rider.lat}. Lng: ${rider.lng}`));
-
       }
     });
+
+    // this.statusService.riders$.take(10).subscribe(riders => {
+    //   if ( riders && riders.length > 0 ) {
+    //     this.bounds = new this.google.maps.LatLngBounds();
+    //     this.riders = riders;
+    //     this.riders.forEach(rider => this.bounds.extend({ lat: rider.lat, lng: rider.lng }));
+    //     this.latLng = this.bounds.toJSON();
+    //     console.log(this.riders.forEach(rider => `${rider.fullName}. Lat: ${rider.lat}. Lng: ${rider.lng}`));
+    //   }
+    // });
+
+    setInterval(() => {
+      this.riders[0].lat += .001;
+    }, 2000)
+
+
   }
 
   ngOnDestroy() {

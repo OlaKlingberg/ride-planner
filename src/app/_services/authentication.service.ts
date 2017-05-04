@@ -39,10 +39,6 @@ export class AuthenticationService {
   login(email: string, password: string) {
     return this.http.post(`${environment.api}/users/login`, { email, password })
         .map((response: Response) => {
-          // console.log("response");
-          // console.log(response);
-          // console.log("response.json()");
-          // console.log(response.json());
           let user: User = new User(response.json()); // By creating a new User, I get access to accessor methods.
           let token = response.headers.get('x-auth');
 

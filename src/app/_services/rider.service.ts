@@ -55,9 +55,12 @@ export class RiderService {
 
   addRider(rider) {
     let riders = this.statusService.riders$.value;
+    console.log("typeof riders:", typeof riders);
+    console.log("RiderService.addRider() Before adding:", riders, riders.length);
     riders.unshift(rider);
+    console.log("RiderService.addRider() After adding:", riders, riders.length);
     riders = _.uniqBy(riders, '_id');
-    console.log("RiderService.addRider()", riders);
+    console.log("RiderService.addRider() After applying uniq", riders, riders.length);
     this.statusService.riders$.next(riders);
   }
 

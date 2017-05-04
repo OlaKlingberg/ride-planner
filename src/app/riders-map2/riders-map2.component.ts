@@ -8,8 +8,6 @@ import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { Subscription } from 'rxjs/Subscription';
 import { RiderService } from '../_services/rider.service';
 
-import * as _ from 'lodash';
-
 @Component({
   selector: 'rp-riders-map2',
   templateUrl: './riders-map2.component.html',
@@ -19,7 +17,8 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   mapLat: number;
   mapLng: number;
   maxZoom: number = 17;
-  riders: Rider[] = [];
+  riders: Array<Rider> = [];
+  testArray: Array<any> = [];
 
   private google: any;
   private bounds: LatLngBounds;
@@ -43,6 +42,8 @@ export class RidersMap2Component implements OnInit, OnDestroy {
       this.bounds = new this.google.maps.LatLngBounds();
       this.watchRiders();
     });
+    console.log(".............. typeof this.riders:", typeof this.riders);
+    console.log("typeof this.testArray:", typeof this.testArray);
   }
 
   watchCoords() {
@@ -61,6 +62,8 @@ export class RidersMap2Component implements OnInit, OnDestroy {
           this.riders = riders;
           this.setMapBounds();
         });
+
+
   }
 
   setMapBounds() {

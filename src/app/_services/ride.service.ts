@@ -19,6 +19,8 @@ export class RideService {
   listenForAvailableRides() {
     this.socket.on('availableRides', (rides) => {
       console.log("on avaibleRides. socket.id", this.socket.id);
+      console.log(")))))))))))))) typeof availableRides:", typeof rides);
+      console.log("available riders:", rides);
       this.statusService.availableRides$.next(rides);
     });
   }
@@ -29,6 +31,7 @@ export class RideService {
 
     // Keep currentRide in sessionStorage synced with currentRide$
     this.statusService.currentRide$.subscribe(ride => {
+      console.log("/////////////////// typeof ride:", typeof ride);
       if (ride) {
         this.socket.emit('joinRide', ride);
         sessionStorage.setItem('currentRide', ride);

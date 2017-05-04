@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
-              // console.log("LoginComponent.login() You have been logged in.");
               this.alertService.success("You have been successfully logged in!", true);
               this.router.navigate([ '/ride-selector' ])
             },

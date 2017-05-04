@@ -57,12 +57,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
 
   watchRiders() {
     this.riderSub = this.statusService.riders$
-        .auditTime(5000)
         .subscribe(riders => {
-
-
-
-
           this.riders = riders;
           this.setMapBounds();
         });

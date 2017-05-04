@@ -11,7 +11,7 @@ export class StatusService {
   public currentRide$: BehaviorSubject<string> = new BehaviorSubject(null);
   public availableRides$: BehaviorSubject<Array<string>> = new BehaviorSubject(null);
   public coords$: BehaviorSubject<any> = new BehaviorSubject(null);
-  public riders$: BehaviorSubject<Array<Rider>> = new BehaviorSubject(null);
+  public riders$: BehaviorSubject<Array<Rider>> = new BehaviorSubject([]);
   public socket: Socket;
 
   constructor() {

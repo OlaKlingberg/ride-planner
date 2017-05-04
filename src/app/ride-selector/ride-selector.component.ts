@@ -39,7 +39,6 @@ export class RideSelectorComponent implements OnInit {
   watchCurrentRide() {
     this.currentRideSub = this.statusService.currentRide$.subscribe(currentRide => {
       this.currentRide = currentRide;
-      console.log(`currentRide: ${currentRide}`);
     });
   };
 

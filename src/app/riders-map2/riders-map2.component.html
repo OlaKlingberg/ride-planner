@@ -3,13 +3,11 @@
     <div class="col-md-12">
       <div
           class="map"
-          [ngClass]="{'visibility-hidden': !mapLat}">
+          [ngClass]="{'visibility-hidden': !latLng}">
 
         <sebm-google-map
             [fitBounds]="latLng"
             [maxZoom]="maxZoom"
-            [latitude]="mapLat"
-            [longitude]="mapLng"
         >
           <sebm-google-map-marker
               *ngFor="let rider of riders"
@@ -32,7 +30,7 @@
       </div>
 
       <div
-          [ngClass]="{'display-none': mapLat,'while-waiting-for-coords': !mapLat}">
+          [ngClass]="{'display-none': latLng,'while-waiting-for-coords': !latLng}">
         <p>Launching satellites ...</p>
       </div>
 

@@ -18,7 +18,6 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   mapLng: number;
   maxZoom: number = 17;
   riders: Array<Rider> = [];
-  testArray: Array<any> = [];
 
   private google: any;
   private bounds: LatLngBounds;
@@ -42,8 +41,6 @@ export class RidersMap2Component implements OnInit, OnDestroy {
       this.bounds = new this.google.maps.LatLngBounds();
       this.watchRiders();
     });
-    console.log(".............. typeof this.riders:", typeof this.riders);
-    console.log("typeof this.testArray:", typeof this.testArray);
   }
 
   watchCoords() {

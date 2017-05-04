@@ -39,8 +39,8 @@ export class RiderService {
     );
 
     if (environment.dummyMovement) {
-      let LatDummyMovement = Math.random() * .001 - .0005;
-      let LngDummyMovement = Math.random() * .001 - .0005;
+      let LatDummyMovement = Math.random() * .0006 - .0003;
+      let LngDummyMovement = Math.random() * .0006 - .0003;
 
       setTimeout(() => {
         setInterval(() => {
@@ -48,7 +48,7 @@ export class RiderService {
           coords.lat += LatDummyMovement;
           coords.lng += LngDummyMovement;
           this.statusService.coords$.next(coords);
-        }, Math.random() * 1000 + 1000);
+        }, Math.random() * 3000 + 2000);
       }, 5000);
     }
   }
@@ -100,9 +100,7 @@ export class RiderService {
   listenForRider() {
     this.socket.on('rider', rider => {
       // Todo: rider has email, which it should not.
-      console.log(`on:rider:`);
       let newOrUpdatedRider = new Rider(rider);
-      console.log(newOrUpdatedRider);
       this.addRider(newOrUpdatedRider);
     });
   }

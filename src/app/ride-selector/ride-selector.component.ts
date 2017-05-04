@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class RideSelectorComponent implements OnInit {
   private model: any = [];
   private availableRides: Array<string>;
-  private currentRide: string;
+  public currentRide: string;
   private availableRidesSub: Subscription;
   private currentRideSub: Subscription;
 

@@ -5,6 +5,7 @@ import { RideService } from "../_services/ride.service";
 import { RiderService } from '../_services/rider.service';
 import { AlertService } from '../_services/alert.service';
 import { StatusService } from '../_services/status.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-ride-selector',
@@ -14,7 +15,9 @@ import { StatusService } from '../_services/status.service';
 export class RideSelectorComponent implements OnInit {
   private model: any = [];
   private availableRides: Array<string>;
-  currentRide: string;
+  private currentRide: string;
+  private availableRidesSub: Subscription;
+  private currentRideSub: Subscription;
 
   constructor(private router: Router,
               private alertService: AlertService,
@@ -28,14 +31,15 @@ export class RideSelectorComponent implements OnInit {
   }
 
   watchAvailableRides() {
-    this.statusService.availableRides$.subscribe((availableRides) => {
+    this.availableRidesSub = this.statusService.availableRides$.subscribe((availableRides) => {
       this.availableRides = availableRides;
     });
   };
 
   watchCurrentRide() {
-    this.statusService.currentRide$.subscribe((currentRide) => {
+    this.currentRideSub = this.statusService.currentRide$.subscribe(currentRide => {
       this.currentRide = currentRide;
+      console.log(`currentRide: ${currentRide}`);
     });
   };
 
@@ -48,8 +52,12 @@ export class RideSelectorComponent implements OnInit {
   }
 
   logOutFromRide() {
-    this.alertService.success("You have been logged out from the ride.");
-    this.statusService.currentRide$.next(null);
+    this.riderService.removeRider();
+  }
+
+  ngOnDestroy() {
+    this.availableRidesSub.unsubscribe();
+    this.currentRideSub.unsubscribe();
   }
 
 }

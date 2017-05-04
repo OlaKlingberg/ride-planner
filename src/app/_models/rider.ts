@@ -4,6 +4,8 @@ export class Rider extends User {
   lat?: number;
   lng?: number;
   ride?: string;
+  socketId?: string;
+  disconnected: boolean;
 
   constructor(user, coords = null, ride = null) {
     super(user);
@@ -17,6 +19,8 @@ export class Rider extends User {
     }
 
     this.ride = ride || user.ride;
+    this.disconnected = false;
+    this.socketId = user.socketId || null;
   }
 
   get colorNumber() {

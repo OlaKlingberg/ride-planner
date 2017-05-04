@@ -31,6 +31,8 @@ export class AppComponent implements OnInit {
   watchUser() {
     this.statusService.user$.subscribe(user => {
       this.userName = user ? user.fullName : null;
+      // console.log(`AppComponent. user: ${user}`);
+      // console.log(user);
     });
   }
 

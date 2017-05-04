@@ -4,32 +4,38 @@ import { RiderService } from './rider.service';
 import { AuthenticationService } from './authentication.service';
 import { StatusService } from './status.service';
 import Socket = SocketIOClient.Socket;
-import { environment } from '../../environments/environment';
 
 @Injectable()
 export class RideService {
   private socket: Socket;
 
   constructor(private statusService: StatusService) {
-    this.socket = io(environment.api);  // io is made available through import into index.html.
+    this.socket = this.statusService.socket;
+
     this.listenForAvailableRides();
-    this.watchCurrentRide();
+    this.watchRide();
   }
 
   listenForAvailableRides() {
     this.socket.on('availableRides', (rides) => {
+      console.log("on avaibleRides. socket.id", this.socket.id);
       this.statusService.availableRides$.next(rides);
     });
   }
 
-  watchCurrentRide() {
+  watchRide() {
     // On page refresh, get currentRide from sessionStorage.
     this.statusService.currentRide$.next(sessionStorage.getItem('currentRide'));
 
-    // Keep sessionStorage synced with currentRide$.
+    // Keep currentRide in sessionStorage synced with currentRide$
     this.statusService.currentRide$.subscribe(ride => {
-      ride ? sessionStorage.setItem('currentRide', ride) : sessionStorage.removeItem('currentRide');
+      if (ride) {
+        this.socket.emit('joinRide', ride);
+        sessionStorage.setItem('currentRide', ride);
+      } else {
+        sessionStorage.removeItem('currentRide');
+      }
+
     });
   }
-
 }

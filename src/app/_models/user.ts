@@ -5,10 +5,11 @@ export class User {
   email: string;
   password?: string;
 
-  constructor(model: any) {
-    this.fname = model.fname;
-    this.lname = model.lname;
-    this.email = model.email;
+  constructor(obj) {
+    this._id = obj._id;
+    this.fname = obj.fname;
+    this.lname = obj.lname;
+    this.email = obj.email;
   }
 
   get initials() {

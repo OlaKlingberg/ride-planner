@@ -31,7 +31,7 @@ export class RiderListComponent implements OnInit {
   watchRiders() {
     this.statusService.riders$.subscribe(riders => {
       this.riders = riders;
-      console.log(riders);
+      // console.log(riders);
     });
   }
 

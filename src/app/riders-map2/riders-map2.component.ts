@@ -3,11 +3,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { StatusService } from '../_services/status.service';
 import { Rider } from '../_models/rider';
 import { MapsAPILoader } from 'angular2-google-maps/core';
-// import { LatLngBounds } from 'angular2-google-maps/core';
 import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { Subscription } from 'rxjs/Subscription';
 import { RiderService } from '../_services/rider.service';
+
+import * as _ from 'lodash';
 
 @Component({
   selector: 'rp-riders-map2',
@@ -18,14 +19,14 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   mapLat: number;
   mapLng: number;
   maxZoom: number = 17;
-  riders: Rider[];
+  riders: Rider[] = [];
 
   private google: any;
   private bounds: LatLngBounds;
   latLng: LatLngBoundsLiteral;
 
   private coordsSub: Subscription;
-  private ridersSub: Subscription;
+  private riderSub: Subscription;
 
   private markerUrl: string = "assets/img/";
   private colors: Array<string> = [ 'blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'red', 'yellow' ];
@@ -39,6 +40,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     this.watchCoords();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
+      this.bounds = new this.google.maps.LatLngBounds();
       this.watchRiders();
     });
   }
@@ -54,36 +56,28 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   }
 
   watchRiders() {
-    this.ridersSub = this.statusService.riders$.subscribe(riders => {
-      if ( riders && riders.length > 0 ) {
-        this.bounds = new this.google.maps.LatLngBounds();
-        this.riders = riders;
-        this.riders.forEach(rider => this.bounds.extend({ lat: rider.lat, lng: rider.lng }));
-        this.latLng = this.bounds.toJSON();
-        console.log(this.riders.forEach(rider => `${rider.fullName}. Lat: ${rider.lat}. Lng: ${rider.lng}`));
-      }
-    });
-
-    // this.statusService.riders$.take(10).subscribe(riders => {
-    //   if ( riders && riders.length > 0 ) {
-    //     this.bounds = new this.google.maps.LatLngBounds();
-    //     this.riders = riders;
-    //     this.riders.forEach(rider => this.bounds.extend({ lat: rider.lat, lng: rider.lng }));
-    //     this.latLng = this.bounds.toJSON();
-    //     console.log(this.riders.forEach(rider => `${rider.fullName}. Lat: ${rider.lat}. Lng: ${rider.lng}`));
-    //   }
-    // });
-
-    setInterval(() => {
-      this.riders[0].lat += .001;
-    }, 2000)
+    this.riderSub = this.statusService.riders$
+        .subscribe(riders => {
 
 
+
+
+          this.riders = riders;
+          this.setMapBounds();
+        });
   }
+
+  setMapBounds() {
+    this.riders.forEach(rider => {
+      if ( rider.lat && rider.lng ) this.bounds.extend({ lat: rider.lat, lng: rider.lng });
+    });
+    this.latLng = this.bounds.toJSON();
+  }
+
 
   ngOnDestroy() {
     this.coordsSub.unsubscribe();
-    this.ridersSub.unsubscribe();
+    this.riderSub.unsubscribe();
   }
 
 }

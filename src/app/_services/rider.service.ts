@@ -15,8 +15,6 @@ export class RiderService {
   private socket: Socket;
   private LatDummyAddition: number;
   private LngDummyAddition: number;
-  // private LatDummyMovement: number;
-  // private LngDummyMovement: number;
 
 
   constructor(private statusService: StatusService,
@@ -50,7 +48,7 @@ export class RiderService {
           coords.lat += LatDummyMovement;
           coords.lng += LngDummyMovement;
           this.statusService.coords$.next(coords);
-        }, Math.random() * 2000 + 100);
+        }, Math.random() * 1000 + 1000);
       }, 5000);
     }
   }

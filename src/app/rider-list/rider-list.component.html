@@ -4,6 +4,7 @@
 
       <div *ngIf="currentRide">
         <h3>{{ currentRide }} Ride</h3>
+        <button class="btn btn-danger" type="button" (click)="clearServerOfRiders()">Remove all riders from server</button>
         <table class="table table-striped table-bordered">
           <thead>
           <tr>
@@ -21,6 +22,7 @@
           </tr>
           </tbody>
         </table>
+
       </div>
 
       <div *ngIf="!currentRide">

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { nameSort } from '../_lib/util';
 import { Router } from '@angular/router';
 import { StatusService } from '../_services/status.service';
 import { Rider } from '../_models/rider';
+import Socket = SocketIOClient.Socket;
 
 @Component({
   selector: 'app-rider-list',
@@ -12,9 +12,11 @@ import { Rider } from '../_models/rider';
 export class RiderListComponent implements OnInit {
   riders: Rider[];
   currentRide: string;
+  private socket: Socket;
 
   constructor(private statusService: StatusService,
               private router: Router) {
+    this.socket = this.statusService.socket;
   }
 
   ngOnInit() {
@@ -31,12 +33,15 @@ export class RiderListComponent implements OnInit {
   watchRiders() {
     this.statusService.riders$.subscribe(riders => {
       this.riders = riders;
-      // console.log(riders);
     });
   }
 
   goToRideSelector() {
     this.router.navigate([ '/ride-selector' ])
+  }
+
+  clearServerOfRiders() {
+    this.socket.emit('clearServerOfRiders', this.statusService.currentRide$.value);
   }
 
 }

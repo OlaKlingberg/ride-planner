@@ -6,8 +6,10 @@
           [ngClass]="{'visibility-hidden': !mapLat}">
 
         <sebm-google-map
-            [maxZoom]="maxZoom"
             [fitBounds]="latLng"
+            [maxZoom]="maxZoom"
+            [latitude]="mapLat"
+            [longitude]="mapLng"
         >
           <sebm-google-map-marker
               *ngFor="let rider of riders"

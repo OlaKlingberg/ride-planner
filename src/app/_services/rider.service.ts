@@ -33,7 +33,7 @@ export class RiderService {
         position => {
           let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
           console.log("environment.dummyCoords:", environment.dummyCoords);
-          console.log("process.env.dummyCoords:", process.env.dummyCoords);
+          console.log("process.env.DUMMY_COORDS:", process.env.DUMMY_COORDS);
           if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
           this.statusService.coords$.next(coords);
         },

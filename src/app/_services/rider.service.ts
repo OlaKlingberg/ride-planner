@@ -32,14 +32,14 @@ export class RiderService {
     navigator.geolocation.watchPosition(
         position => {
           let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
-          console.log("dummyCoords:", environment.dummyCoords);
-          if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
+          console.log("dummyCoords:", process.env.dummyCoords);
+          if ( process.env.dummyCoords ) coords = this.getDummyCoords(coords);
           this.statusService.coords$.next(coords);
         },
         err => this.statusService.coords$.error(err), geolocationOptions
     );
 
-    if (environment.dummyMovement) {
+    if ( process.env.dummyMovement ) {
       let LatDummyMovement = Math.random() * .001 - .001;
       let LngDummyMovement = Math.random() * .001 - .001;
 

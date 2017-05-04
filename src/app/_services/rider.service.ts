@@ -50,7 +50,7 @@ export class RiderService {
           coords.lat += LatDummyMovement;
           coords.lng += LngDummyMovement;
           this.statusService.coords$.next(coords);
-        }, Math.random() * 2000);
+        }, Math.random() * 2000 + 100);
       }, 5000);
     }
   }

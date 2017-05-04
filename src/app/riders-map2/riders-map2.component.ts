@@ -70,7 +70,6 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     this.latLng = this.bounds.toJSON();
   }
 
-
   ngOnDestroy() {
     this.coordsSub.unsubscribe();
     this.riderSub.unsubscribe();

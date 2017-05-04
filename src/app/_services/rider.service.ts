@@ -39,8 +39,8 @@ export class RiderService {
     );
 
     if (environment.dummyMovement) {
-      let LatDummyMovement = Math.random() * .0006 - .0003;
-      let LngDummyMovement = Math.random() * .0006 - .0003;
+      let LatDummyMovement = Math.random() * .001 - .001;
+      let LngDummyMovement = Math.random() * .001 - .001;
 
       setTimeout(() => {
         setInterval(() => {
@@ -48,7 +48,7 @@ export class RiderService {
           coords.lat += LatDummyMovement;
           coords.lng += LngDummyMovement;
           this.statusService.coords$.next(coords);
-        }, Math.random() * 3000 + 2000);
+        }, Math.random() * 2000 + 1000);
       }, 5000);
     }
   }

@@ -27,7 +27,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   private riderSub: Subscription;
 
   private markerUrl: string = "assets/img/";
-  private colors: Array<string> = [ 'blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'red', 'yellow' ];
+  private colors: Array<string> = [ 'gray', 'white', 'red', 'brown', 'blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'yellow' ];
 
   constructor(private statusService: StatusService,
               private riderService: RiderService,  // Needs to be injected, to be initiated.
@@ -56,18 +56,51 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   watchRiders() {
     this.riderSub = this.statusService.riders$
         .subscribe(riders => {
+          riders = this.setMarkerColor(riders);
+          riders = this.setMapBounds(riders);
           this.riders = riders;
-          this.setMapBounds();
         });
-
-
   }
 
-  setMapBounds() {
-    this.riders.forEach(rider => {
+  setMarkerColor(riders) {
+    let user = this.statusService.user$.value;
+    riders = riders.map(rider => {
+      rider.color = rider.colorNumber + 3;
+      rider.zInd = rider.zIndex;
+
+      // Disconnected rider
+      if (rider.disconnected) {
+        rider.color = 0;
+        rider.opacity = .5;
+        rider.zInd = 0 - rider.zIndex;
+      }
+
+      // The user's own marker
+      if (rider._id === user._id) {
+        rider.color = 1;
+        rider.zInd = 302;
+      }
+
+      // Ride leader
+      if (user) {
+        if (rider.leader === true) {
+          rider.color = 2;
+          rider.zInd = 301;
+        }
+      }
+
+      return rider;
+    });
+    return riders;
+  }
+
+  setMapBounds(riders) {
+    riders.forEach(rider => {
       if ( rider.lat && rider.lng ) this.bounds.extend({ lat: rider.lat, lng: rider.lng });
     });
     this.latLng = this.bounds.toJSON();
+
+    return riders;
   }
 
   ngOnDestroy() {

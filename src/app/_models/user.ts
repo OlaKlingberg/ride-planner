@@ -4,12 +4,14 @@ export class User {
   lname: string;
   email: string;
   password?: string;
+  leader: boolean;
 
   constructor(obj) {
     this._id = obj._id;
     this.fname = obj.fname;
     this.lname = obj.lname;
     this.email = obj.email;
+    this.leader = obj.leader;
   }
 
   get initials() {

@@ -9,13 +9,15 @@ import Socket = SocketIOClient.Socket;
 import { AlertService } from './alert.service';
 
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs/Subscription';
+
+import { nameSort } from '../_lib/util';
 
 @Injectable()
 export class RiderService {
   private socket: Socket;
   private LatDummyAddition: number;
   private LngDummyAddition: number;
-
 
   constructor(private statusService: StatusService,
               private alertService: AlertService) {
@@ -39,30 +41,20 @@ export class RiderService {
         err => this.statusService.coords$.error(err), geolocationOptions
     );
 
-    if ( environment.dummyMovement ) {
-      let LatDummyMovement = Math.random() * .0006 - .0003;
-      let LngDummyMovement = Math.random() * .0006 - .0003;
+    if ( environment.dummyMovement ) this.setDummyMovements();
 
-      setTimeout(() => {
-        setInterval(() => {
-          let coords = this.statusService.coords$.value;
-          coords.lat += LatDummyMovement;
-          coords.lng += LngDummyMovement;
-          this.statusService.coords$.next(coords);
-        }, Math.random() * 3000 + 2000);
-      }, 5000);
-    }
   }
 
   addRider(rider) {
     let riders = this.statusService.riders$.value;
     riders.unshift(rider);
     riders = _.uniqBy(riders, '_id');
-    console.log("addRider. riders:", riders);
+    riders.sort(nameSort);
+    // console.log("addRider. riders:", riders);
     this.statusService.riders$.next(riders);
   }
 
-  // Whenever coords changes, provided all coords, ride, and user all exist, emit the rider.
+  // Whenever coords changes, provided coords, ride, and user all exist, emit the rider.
   createRider() {
     console.log("RiderService.emitRider()");
     this.statusService.coords$
@@ -70,7 +62,7 @@ export class RiderService {
         .subscribe(([ coords, ride, user ]) => {
           if ( coords && ride && user ) {
             let rider = new Rider(user, coords, ride);
-            console.log(`RiderService.emitRider. About to emit rider:, ${rider.fname} ${rider.lname}`);
+            // console.log(`RiderService.emitRider. About to emit rider:, ${rider.fname} ${rider.lname}`);
             this.socket.emit('rider', rider, () => {
               // Todo: Do I have any use for this callback?
             });
@@ -129,12 +121,28 @@ export class RiderService {
     this.LngDummyAddition = Math.random() * .006 - .003;
   }
 
+  setDummyMovements() {
+      let LatDummyMovement = Math.random() * .0006 - .0003;
+      let LngDummyMovement = Math.random() * .0006 - .0003;
+
+      setTimeout(() => {
+        setInterval(() => {
+          let coords = this.statusService.coords$.value;
+          coords.lat += LatDummyMovement;
+          coords.lng += LngDummyMovement;
+          this.statusService.coords$.next(coords);
+        }, Math.random() * 3000 + 4000);
+      }, 5000);
+  }
+
   getDummyCoords(coords) {
     coords.lat += this.LatDummyAddition;
     coords.lng += this.LngDummyAddition;
 
     return coords;
   }
+
+
 
 }
 

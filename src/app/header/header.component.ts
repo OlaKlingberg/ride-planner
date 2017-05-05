@@ -8,7 +8,8 @@ import { StatusService } from '../_services/status.service';
   styleUrls: [ './header.component.scss' ]
 })
 export class HeaderComponent implements OnInit {
-  user: Object;
+  public user: object;
+  public ride: string;
 
   constructor(private statusService: StatusService) {
   }
@@ -16,6 +17,10 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.statusService.user$.subscribe(
         user => this.user = user
+    );
+
+    this.statusService.currentRide$.subscribe(
+        ride => this.ride = ride
     );
   }
 

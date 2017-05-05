@@ -4,21 +4,22 @@
 
       <div *ngIf="currentRide">
         <h3>{{ currentRide }} Ride</h3>
-        <button class="btn btn-danger" type="button" (click)="clearServerOfRiders()">Remove all riders from server</button>
+        <button *ngIf="false" class="btn btn-danger" type="button" (click)="clearServerOfRiders()">Remove all riders from server</button>
         <table class="table table-striped table-bordered">
           <thead>
           <tr>
             <th>Name</th>
             <th>Phone</th>
             <th>Emergency Contact</th>
+            <th>Emergency Phone</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let rider of riders">
-            <td>{{ rider.fname }} {{ rider.lname }}</td>
-            <td>{{ rider.fullName }}</td>
-            <td>To be added</td>
-            <td>To be added</td>
+            <td>{{ rider.lname }}, {{ rider.fname }}</td>
+            <td>{{ rider.phone }}</td>
+            <td>{{ rider.ename }}</td>
+            <td>{{ rider.ephone }}</td>
           </tr>
           </tbody>
         </table>

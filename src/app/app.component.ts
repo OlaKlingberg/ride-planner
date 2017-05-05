@@ -31,8 +31,6 @@ export class AppComponent implements OnInit {
   watchUser() {
     this.statusService.user$.subscribe(user => {
       this.userName = user ? user.fullName : null;
-      // console.log(`AppComponent. user: ${user}`);
-      // console.log(user);
     });
   }
 
@@ -44,7 +42,7 @@ export class AppComponent implements OnInit {
 
   // For debugging.
   watchRiders() {
-    this.statusService.riders$.subscribe(riders => this.riders = riders);
+    // this.statusService.riders$.subscribe(riders => this.riders = riders);
   }
 
 

@@ -8,6 +8,7 @@
         <sebm-google-map
             [fitBounds]="latLng"
             [maxZoom]="maxZoom"
+            [zoomControl]="false"
         >
           <sebm-google-map-marker
               *ngFor="let rider of riders"
@@ -28,7 +29,10 @@
 
 
         </sebm-google-map>
+        <button class="btn btn-primary" type="button" (click)="fitAllRiders()">Show All Riders</button>
+        <button class="btn btn-info" (click)="focusOnUser()">Zoom In On Me</button>
       </div>
+
 
       <div
           [ngClass]="{'display-none': latLng,'while-waiting-for-coords': !latLng}">

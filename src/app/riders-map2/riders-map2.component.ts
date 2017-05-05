@@ -14,17 +14,16 @@ import { RiderService } from '../_services/rider.service';
   styleUrls: [ './riders-map2.component.scss' ]
 })
 export class RidersMap2Component implements OnInit, OnDestroy {
-  mapLat: number;
-  mapLng: number;
   maxZoom: number = 17;
   riders: Array<Rider> = [];
 
   private google: any;
   private bounds: LatLngBounds;
-  latLng: LatLngBoundsLiteral;
+  public latLng: LatLngBoundsLiteral;
 
-  private coordsSub: Subscription;
   private riderSub: Subscription;
+
+  // public focusedOnUser: boolean = true;
 
   private markerUrl: string = "assets/img/";
   private colors: Array<string> = [ 'gray', 'white', 'red', 'brown', 'blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'yellow' ];
@@ -35,29 +34,18 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.watchCoords();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
-      this.bounds = new this.google.maps.LatLngBounds();
+      // this.bounds = new this.google.maps.LatLngBounds();
+      this.focusOnUser();
       this.watchRiders();
     });
-  }
-
-  watchCoords() {
-    this.coordsSub = this.statusService.coords$
-        .subscribe((coords) => {
-          if ( coords ) {
-            this.mapLat = coords.lat;
-            this.mapLng = coords.lng;
-          }
-        });
   }
 
   watchRiders() {
     this.riderSub = this.statusService.riders$
         .subscribe(riders => {
           riders = this.setMarkerColor(riders);
-          riders = this.setMapBounds(riders);
           this.riders = riders;
         });
   }
@@ -94,17 +82,32 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     return riders;
   }
 
-  setMapBounds(riders) {
-    riders.forEach(rider => {
+  fitAllRiders() {
+    // this.focusedOnUser = false;
+    this.bounds = new this.google.maps.LatLngBounds();
+    this.riders.forEach(rider => {
       if ( rider.lat && rider.lng ) this.bounds.extend({ lat: rider.lat, lng: rider.lng });
     });
     this.latLng = this.bounds.toJSON();
+  }
 
-    return riders;
+  focusOnUser() {
+    // this.focusedOnUser = true;
+    this.bounds = new this.google.maps.LatLngBounds();
+    let coordsSub: Subscription = this.statusService.coords$.subscribe(coords => {
+      console.log("Subscribed to coords$");
+      if (coords) {
+        console.log("Coords has a value: ", coords);
+        this.bounds.extend({lat: coords.lat, lng: coords.lng});
+        this.latLng = this.bounds.toJSON();
+      }
+    });
+    setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
+      coordsSub.unsubscribe();
+    }, 5000);
   }
 
   ngOnDestroy() {
-    this.coordsSub.unsubscribe();
     this.riderSub.unsubscribe();
   }
 

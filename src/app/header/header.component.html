@@ -12,14 +12,14 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a routerLink='/riders-map2'>Map</a></li>
+        <li *ngIf="ride"><a routerLink='/riders-map2'>Map</a></li>
         <li *ngIf="!user"><a routerLink='/login'>Login</a></li>
         <li *ngIf="user"><a routerLink='/logout'>Logout</a></li>
         <li *ngIf="!user"><a routerLink='/register'>Register</a></li>
         <!--<li *ngIf="user"><a routerLink='/protected'>Protected</a></li>-->
         <li *ngIf="user"><a routerLink='/ride-selector'>Ride Selector</a></li>
-        <li *ngIf="user"><a routerLink='/members'>Members</a></li>
-        <li *ngIf="user"><a routerLink='/riders'>Riders</a></li>
+        <li *ngIf="user?.leader"><a routerLink='/members'>Members</a></li>
+        <li *ngIf="user?.leader"><a routerLink='/riders'>Riders</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

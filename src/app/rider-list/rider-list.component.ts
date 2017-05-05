@@ -1,20 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { StatusService } from '../_services/status.service';
 import { Rider } from '../_models/rider';
 import Socket = SocketIOClient.Socket;
+import { Subscription } from 'rxjs/Subscription';
+import { RiderService } from '../_services/rider.service';
 
 @Component({
   selector: 'app-rider-list',
   templateUrl: './rider-list.component.html',
   styleUrls: [ './rider-list.component.scss' ]
 })
-export class RiderListComponent implements OnInit {
+export class RiderListComponent implements OnInit, OnDestroy {
   riders: Rider[];
   currentRide: string;
   private socket: Socket;
+  private currentRideSub: Subscription;
+  private ridersSub: Subscription;
 
   constructor(private statusService: StatusService,
+              private riderService: RiderService,    // Needs to be injected, to be initiated.
               private router: Router) {
     this.socket = this.statusService.socket;
   }
@@ -25,13 +30,13 @@ export class RiderListComponent implements OnInit {
   }
 
   watchCurrentRide() {
-    this.statusService.currentRide$.subscribe(currentRide => {
+    this.currentRideSub = this.statusService.currentRide$.subscribe(currentRide => {
       this.currentRide = currentRide;
     });
   }
 
   watchRiders() {
-    this.statusService.riders$.subscribe(riders => {
+    this.ridersSub = this.statusService.riders$.subscribe(riders => {
       this.riders = riders;
     });
   }
@@ -42,6 +47,11 @@ export class RiderListComponent implements OnInit {
 
   clearServerOfRiders() {
     this.socket.emit('clearServerOfRiders', this.statusService.currentRide$.value);
+  }
+
+  ngOnDestroy() {
+    this.currentRideSub.unsubscribe();
+    this.ridersSub.unsubscribe();
   }
 
 }

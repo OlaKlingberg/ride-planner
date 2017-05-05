@@ -5,6 +5,9 @@ export class User {
   email: string;
   password?: string;
   leader: boolean;
+  phone: string;
+  ename: string;
+  ephone: string;
 
   constructor(obj) {
     this._id = obj._id;
@@ -12,6 +15,9 @@ export class User {
     this.lname = obj.lname;
     this.email = obj.email;
     this.leader = obj.leader;
+    this.phone = obj.phone;
+    this.ename = obj.ename;
+    this.ephone = obj.ephone;
   }
 
   get initials() {

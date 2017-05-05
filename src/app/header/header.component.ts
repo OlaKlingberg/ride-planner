@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from "../_services/authentication.service";
 import { StatusService } from '../_services/status.service';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'rp-header',
@@ -8,7 +9,7 @@ import { StatusService } from '../_services/status.service';
   styleUrls: [ './header.component.scss' ]
 })
 export class HeaderComponent implements OnInit {
-  public user: object;
+  public user: User;
   public ride: string;
 
   constructor(private statusService: StatusService) {

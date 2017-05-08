@@ -21,6 +21,8 @@ export class AuthenticationService {
               private statusService: StatusService) {
     this.authenticateByToken(); // If the user has a token, log them in automatically.
     this.socket = this.statusService.socket;
+    this.addAdminsToRoomAdmins();
+
   }
 
   authenticateByToken() {
@@ -78,6 +80,22 @@ export class AuthenticationService {
 
     return this.http.delete(`${environment.api}/users/logout`, this.requestOptions);
   }
+
+  addAdminsToRoomAdmins() {
+    this.statusService.user$.subscribe(user => {
+      if ( user ) {
+        if ( user.admin === true ) {
+          let token = sessionStorage.getItem('currentToken');
+          // user.token = token;
+          this.socket.emit('admin', JSON.parse(token), () => {
+            // Todo: Do I have any use for this callback?
+          });
+        }
+      }
+    });
+  }
+
+
 
 }
 

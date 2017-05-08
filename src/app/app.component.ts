@@ -5,6 +5,7 @@ import { StatusService } from './_services/status.service';
 import { RideService } from './_services/ride.service';
 import { RiderService } from './_services/rider.service';
 import { Rider } from './_models/rider';
+import { DebuggingService } from './_services/debugging.service';
 
 @Component({
   selector: 'rp-root',
@@ -16,9 +17,11 @@ export class AppComponent implements OnInit {
   userName: string;
   currentRide: string;
   riders: Array<Rider>;
+  debugMessages: Array<any> = [];
 
-  constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initiated.
-              private rideService: RideService,                     // Needs to be injected, to be initiated.
+  constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
+              private rideService: RideService,                     // Needs to be injected, to be initialized.
+              private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
               private statusService: StatusService) {
   }
 
@@ -44,6 +47,7 @@ export class AppComponent implements OnInit {
   watchRiders() {
     // this.statusService.riders$.subscribe(riders => this.riders = riders);
   }
+
 
 
 }

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Http, RequestOptions, Headers } from "@angular/http";
 import { User } from "../_models/user";
 import { environment } from "../../environments/environment";
-import { RiderService } from './rider.service';
+import Socket = SocketIOClient.Socket;
 
 @Injectable()
 export class UserService {
@@ -26,7 +26,6 @@ export class UserService {
 
     return this.http.get(`${environment.api}/users`, this.requestOptions);
   }
-
 
 
 }

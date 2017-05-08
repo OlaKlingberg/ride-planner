@@ -8,6 +8,8 @@ export class User {
   phone: string;
   ename: string;
   ephone: string;
+  admin: boolean;
+  token?: string;
 
   constructor(obj) {
     this._id = obj._id;
@@ -18,6 +20,7 @@ export class User {
     this.phone = obj.phone;
     this.ename = obj.ename;
     this.ephone = obj.ephone;
+    this.admin = obj.admin;
   }
 
   get initials() {

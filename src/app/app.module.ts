@@ -23,6 +23,10 @@ import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { RiderListComponent } from './rider-list/rider-list.component';
 import { StatusService } from './_services/status.service';
+import { DebuggerComponent } from './debugger/debugger.component';
+import { RideLeaderGuard } from './_guards/ride-leader.guard';
+import { AdminGuard } from './_guards/admin.guard';
+import { DebuggingService } from './_services/debugging.service';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,7 @@ import { StatusService } from './_services/status.service';
     RideSelectorComponent,
     UserListComponent,
     RiderListComponent,
+    DebuggerComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,10 +54,13 @@ import { StatusService } from './_services/status.service';
     UserService,
     AuthenticationService,
     AuthGuard,
+    AdminGuard,
+    RideLeaderGuard,
     AlertService,
     RideService,
     RiderService,
-    StatusService
+    StatusService,
+    DebuggingService
   ],
   bootstrap: [ AppComponent ]
 })

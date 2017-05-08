@@ -10,6 +10,9 @@ import { AuthGuard } from "./_guards/auth.guard";
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { RiderListComponent } from './rider-list/rider-list.component';
+import { DebuggerComponent } from './debugger/debugger.component';
+import { AdminGuard } from './_guards/admin.guard';
+import { RideLeaderGuard } from './_guards/ride-leader.guard';
 
 const routes: Routes = [
   {
@@ -44,13 +47,18 @@ const routes: Routes = [
   },
   {
     path: 'members',
-    canActivate: [AuthGuard],
+    canActivate: [RideLeaderGuard],
     component: UserListComponent
   },
   {
     path: 'riders',
-    canActivate: [AuthGuard],
+    canActivate: [RideLeaderGuard],
     component: RiderListComponent
+  },
+  {
+    path: 'debugger',
+    canActivate: [AdminGuard],
+    component: DebuggerComponent
   }
 ];
 

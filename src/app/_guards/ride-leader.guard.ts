@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { StatusService } from '../_services/status.service';
 import { User } from '../_models/user';
+import { StatusService } from '../_services/status.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class RideLeaderGuard implements CanActivate {
   user: User;
 
   constructor(private router: Router,
@@ -15,15 +15,13 @@ export class AuthGuard implements CanActivate {
         user => this.user = user
     );
   }
-
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if ( this.user ) return true;
+    if (this.user && this.user.leader === true) return true;
 
-    // User not logged in, so redirect to login page.
-    this.router.navigate([ './login' ], { queryParams: { returnUrl: state.url } });
+    // User not ride leader, so redirect to home page.
+    this.router.navigate([ './' ], { queryParams: { returnUrl: state.url } });
     return false;
   }
 }
-

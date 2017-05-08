@@ -4,6 +4,7 @@ import { Rider } from '../_models/rider';
 import { User } from '../_models/user';
 import { environment } from '../../environments/environment';
 import Socket = SocketIOClient.Socket;
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class StatusService {
@@ -12,6 +13,7 @@ export class StatusService {
   public availableRides$: BehaviorSubject<Array<string>> = new BehaviorSubject(null);
   public coords$: BehaviorSubject<any> = new BehaviorSubject(null);
   public riders$: BehaviorSubject<Array<Rider>> = new BehaviorSubject([]);
+  public debugMessages$: Subject<any> = new Subject();
   public socket: Socket;
 
   constructor() {

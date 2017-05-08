@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { StatusService } from '../_services/status.service';
 import { User } from '../_models/user';
+import { StatusService } from '../_services/status.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   user: User;
+
 
   constructor(private router: Router,
               private statusService: StatusService) {
@@ -19,11 +20,10 @@ export class AuthGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if ( this.user ) return true;
+    if (this.user && this.user.email === 'ola@olaklingberg.com') return true; // Todo: This shouldn't really be hardcoded.
 
-    // User not logged in, so redirect to login page.
-    this.router.navigate([ './login' ], { queryParams: { returnUrl: state.url } });
+    // User is not admin, so redirect to home page.
+    this.router.navigate(['./'], { queryParams: { returnUrl: state.url } });
     return false;
   }
 }
-

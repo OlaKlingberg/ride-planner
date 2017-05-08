@@ -7,6 +7,7 @@ import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { Subscription } from 'rxjs/Subscription';
 import { RiderService } from '../_services/rider.service';
+import Socket = SocketIOClient.Socket;
 
 @Component({
   selector: 'rp-riders-map2',
@@ -14,7 +15,7 @@ import { RiderService } from '../_services/rider.service';
   styleUrls: [ './riders-map2.component.scss' ]
 })
 export class RidersMap2Component implements OnInit, OnDestroy {
-  maxZoom: number = 17;
+  maxZoom: number = 15;
   riders: Array<Rider> = [];
 
   private google: any;
@@ -28,15 +29,20 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   private markerUrl: string = "assets/img/";
   private colors: Array<string> = [ 'gray', 'white', 'red', 'brown', 'blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'yellow' ];
 
+  private socket: Socket;
+  public debugMessages: Array<string> = [];
+
   constructor(private statusService: StatusService,
               private riderService: RiderService,  // Needs to be injected, to be initiated.
               private mapsAPILoader: MapsAPILoader) {
+    this.socket = this.statusService.socket;
   }
 
   ngOnInit() {
+    this.sendSocketDebugMessage("Initializing RidersMap2Component!");
     this.mapsAPILoader.load().then(() => {
       this.google = google;
-      // this.bounds = new this.google.maps.LatLngBounds();
+      this.sendSocketDebugMessage("mapsAPILoader loaded!");
       this.focusOnUser();
       this.watchRiders();
     });
@@ -57,21 +63,21 @@ export class RidersMap2Component implements OnInit, OnDestroy {
       rider.zInd = rider.zIndex;
 
       // Disconnected rider
-      if (rider.disconnected) {
+      if ( rider.disconnected ) {
         rider.color = 0;
         rider.opacity = .5;
         rider.zInd = 0 - rider.zIndex;
       }
 
       // The user's own marker
-      if (rider._id === user._id) {
+      if ( rider._id === user._id ) {
         rider.color = 1;
         rider.zInd = 302;
       }
 
       // Ride leader
-      if (user) {
-        if (rider.leader === true) {
+      if ( user ) {
+        if ( rider.leader === true ) {
           rider.color = 2;
           rider.zInd = 301;
         }
@@ -96,11 +102,14 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     this.bounds = new this.google.maps.LatLngBounds();
     let coordsSub: Subscription = this.statusService.coords$.subscribe(coords => {
       console.log("Subscribed to coords$");
-      if (coords) {
+      if ( coords ) {
         console.log("Coords has a value: ", coords);
-        this.bounds.extend({lat: coords.lat, lng: coords.lng});
+        this.bounds.extend({ lat: coords.lat, lng: coords.lng });
         this.latLng = this.bounds.toJSON();
       }
+    },
+    err => {
+      console.log("RidersMap2Component.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
     });
     setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
       coordsSub.unsubscribe();
@@ -110,6 +119,17 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.riderSub.unsubscribe();
   }
+
+  sendSocketDebugMessage(message) {
+      this.socket.emit("debugging", message, (response) => {
+        // console.log(response);
+        this.statusService.debugMessages$.next(response);
+      });
+
+  };
+
+
+
 
 }
 

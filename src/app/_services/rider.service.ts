@@ -9,7 +9,6 @@ import Socket = SocketIOClient.Socket;
 import { AlertService } from './alert.service';
 
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs/Subscription';
 
 import { nameSort } from '../_lib/util';
 
@@ -18,6 +17,7 @@ export class RiderService {
   private socket: Socket;
   private LatDummyAddition: number;
   private LngDummyAddition: number;
+
 
   constructor(private statusService: StatusService,
               private alertService: AlertService) {
@@ -31,14 +31,24 @@ export class RiderService {
     this.setDummyCoordAdjustments();
   }
 
-  watchPosition(geolocationOptions = null) {
+  watchPosition() {
     navigator.geolocation.watchPosition(
         position => {
           let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
           if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
           this.statusService.coords$.next(coords);
         },
-        err => this.statusService.coords$.error(err), geolocationOptions
+        err => {
+          // Sets a dummy position if watchPosition times out, just to test that the socket works.
+          this.statusService.debugMessages$.next(err);
+          let coords = { lat: 42, lng: -75};
+          this.statusService.coords$.next(coords);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 500,      // Todo: Figure out what value I want here, and what to do on timeout.
+          maximumAge: Infinity
+        }
     );
 
     if ( environment.dummyMovement ) this.setDummyMovements();
@@ -141,6 +151,9 @@ export class RiderService {
 
     return coords;
   }
+
+
+
 
 
 

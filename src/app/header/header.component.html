@@ -18,8 +18,10 @@
         <li *ngIf="!user"><a routerLink='/register'>Register</a></li>
         <!--<li *ngIf="user"><a routerLink='/protected'>Protected</a></li>-->
         <li *ngIf="user"><a routerLink='/ride-selector'>Ride Selector</a></li>
+        <li *ngIf="user"><a routerLink='/protected'>Protected</a></li>
         <li *ngIf="user?.leader"><a routerLink='/members'>Members</a></li>
         <li *ngIf="user?.leader"><a routerLink='/riders'>Riders</a></li>
+        <li *ngIf="user?.email === 'ola@olaklingberg.com'"><a routerLink='/debugger'>Debug</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

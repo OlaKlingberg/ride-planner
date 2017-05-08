@@ -101,16 +101,16 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     // this.focusedOnUser = true;
     this.bounds = new this.google.maps.LatLngBounds();
     let coordsSub: Subscription = this.statusService.coords$.subscribe(coords => {
-      console.log("Subscribed to coords$");
-      if ( coords ) {
-        console.log("Coords has a value: ", coords);
-        this.bounds.extend({ lat: coords.lat, lng: coords.lng });
-        this.latLng = this.bounds.toJSON();
-      }
-    },
-    err => {
-      console.log("RidersMap2Component.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
-    });
+          console.log("Subscribed to coords$");
+          if ( coords ) {
+            console.log("Coords has a value: ", coords);
+            this.bounds.extend({ lat: coords.lat, lng: coords.lng });
+            this.latLng = this.bounds.toJSON();
+          }
+        },
+        err => {
+          console.log("RidersMap2Component.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
+        });
     setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
       coordsSub.unsubscribe();
     }, 5000);
@@ -121,14 +121,9 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   }
 
   sendSocketDebugMessage(message) {
-      this.socket.emit("debugging", message, (response) => {
-        // console.log(response);
-        this.statusService.debugMessages$.next(response);
-      });
+    this.statusService.debugMessages$.next(message);
 
   };
-
-
 
 
 }

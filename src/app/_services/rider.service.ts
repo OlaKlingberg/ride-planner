@@ -35,9 +35,9 @@ export class RiderService {
     navigator.geolocation.watchPosition(
         position => {
           let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
-          this.statusService.debugMessages$.next(coords);
+          this.statusService.debugMessages$.next(`Lat: ${coords.lat}. Lng: ${coords.lng}`);
           if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
-          this.statusService.coords$.next(`Lat: ${coords.lat}. Lng: ${coords.lng}`);
+          this.statusService.coords$.next(coords);
         },
         err => {
           // Sets a dummy position if watchPosition times out, just to test that the socket works.

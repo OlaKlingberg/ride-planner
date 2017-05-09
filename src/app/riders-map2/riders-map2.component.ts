@@ -32,6 +32,8 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   private socket: Socket;
   public debugMessages: Array<string> = [];
 
+  coordsSub: Subscription;
+
   constructor(private statusService: StatusService,
               private riderService: RiderService,  // Needs to be injected, to be initiated.
               private mapsAPILoader: MapsAPILoader) {
@@ -45,7 +47,6 @@ export class RidersMap2Component implements OnInit, OnDestroy {
       this.sendSocketDebugMessage("mapsAPILoader loaded!");
       this.focusOnUser();
       this.watchRiders();
-      this.riderService.watchPosition();
     });
   }
 
@@ -101,7 +102,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   focusOnUser() {
     // this.focusedOnUser = true;
     this.bounds = new this.google.maps.LatLngBounds();
-    let coordsSub: Subscription = this.statusService.coords$.subscribe(coords => {
+    this.coordsSub = this.statusService.coords$.subscribe(coords => {
           console.log("Subscribed to coords$");
           if ( coords ) {
             console.log("Coords has a value: ", coords);
@@ -113,13 +114,14 @@ export class RidersMap2Component implements OnInit, OnDestroy {
           // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
           console.log("RidersMap2Component.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
         });
-    setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
-      coordsSub.unsubscribe();
-    }, 5000);
+    // setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
+    //   coordsSub.unsubscribe();
+    // }, 5000);
   }
 
   ngOnDestroy() {
     this.riderSub.unsubscribe();
+    this.coordsSub.unsubscribe();
   }
 
   sendSocketDebugMessage(message) {

@@ -37,27 +37,34 @@ export class RiderService {
     let i = 0;
     setInterval(() => {
       this.statusService.debugMessages$.next(`RiderService.watchPosition. Message sent using setInterval: ${i++}`);
-    }, 5000);
+    }, 9000);
 
-    navigator.geolocation.watchPosition(
-        position => {
-          let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
-          this.statusService.debugMessages$.next(`Lat: ${coords.lat}. Lng: ${coords.lng}`);
-          if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
-          this.statusService.coords$.next(coords);
-        },
-        err => {
-          // Sets a dummy position if watchPosition times out, just to test that the socket works.
-          this.statusService.debugMessages$.next(err);
-          let coords = { lat: 42, lng: -75};
-          this.statusService.coords$.next(coords);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,      // Todo: Figure out what value I want here, and what to do on timeout.
-          maximumAge: 10000
-        }
-    );
+
+
+
+    setInterval(() => {
+      navigator.geolocation.getCurrentPosition(
+          position => {
+            let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
+            this.statusService.debugMessages$.next(`Lat: ${coords.lat}. Lng: ${coords.lng}`);
+            if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
+            console.log("About to call .coords$.next(coords) with", coords);
+            this.statusService.coords$.next(coords);
+          },
+          err => {
+            // Sets a dummy position if watchPosition times out, just to test that the socket works.
+            this.statusService.debugMessages$.next(err);
+            let coords = { lat: 42, lng: -75};
+            this.statusService.coords$.next(coords);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 5000,      // Todo: Figure out what value I want here, and what to do on timeout.
+            maximumAge: 10000
+          }
+      );
+    }, 3000);
+
 
     if ( environment.dummyMovement ) this.setDummyMovements();
 

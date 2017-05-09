@@ -20,7 +20,7 @@ export class AdminGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if (this.user && this.user.email === 'ola@olaklingberg.com') return true; // Todo: This shouldn't really be hardcoded.
+    if (this.user && this.user.admin ) return true;
 
     // User is not admin, so redirect to home page.
     this.router.navigate(['./'], { queryParams: { returnUrl: state.url } });

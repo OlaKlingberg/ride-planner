@@ -7,6 +7,7 @@
       <input type="text" class="form-control" name="email" id="email" [(ngModel)]="model.email" #email="ngModel" required />
       <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
     </div>
+    <p>{{model.email}}</p>
 
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
       <label for="password">Password</label>

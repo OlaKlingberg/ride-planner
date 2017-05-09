@@ -4,7 +4,7 @@
 
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
       <label for="email">Email</label>
-      <input type="text" class="form-control" name="email" id="email" [(ngModel)]="model.email" #email="ngModel" required (blur)="syncModel()"/>
+      <input type="text" class="form-control" name="email" id="email" [(ngModel)]="model.email" #email="ngModel" required (blur)="syncModel()" (input)="inputListener()"/>
       <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
     </div>
     <p>{{model.email}}</p>
@@ -27,4 +27,9 @@
 <div *ngIf="user" class="col-md-6 col-md-offset-3">
   <h2>{{user.fname}}, you are already logged in!</h2>
   <a [routerLink]="['/logout']">Not {{user.fname}}?</a>
+</div>
+
+<div class="col-mmd6 col-md-offset-3">
+  <h3>Debugger</h3>
+  <ul id="debugger"></ul>
 </div>

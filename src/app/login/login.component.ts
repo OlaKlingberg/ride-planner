@@ -62,6 +62,8 @@ export class LoginComponent implements OnInit {
     $('input').trigger('input');
   }
 
-
+  inputListener() {
+    $('#debugger').append("<li>Input was fired!</li>");
+  }
 
 }

@@ -5,6 +5,8 @@ import { AlertService } from "../_services/alert.service";
 import { User } from "../_models/user";
 import { StatusService } from '../_services/status.service';
 
+import * as $ from 'jquery';
+
 @Component({
   selector: 'rp-login',
   templateUrl: './login.component.html',
@@ -35,6 +37,8 @@ export class LoginComponent implements OnInit {
           }
         }
     );
+
+    // this.syncModel();
   }
 
   login() {
@@ -52,7 +56,12 @@ export class LoginComponent implements OnInit {
               this.loading = false;
             }
         )
-
   }
+
+  syncModel() {
+    $('input').trigger('input');
+  }
+
+
 
 }

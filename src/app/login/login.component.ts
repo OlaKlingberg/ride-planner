@@ -18,9 +18,6 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
   user: User;
 
-  @ViewChild('email') emailField;
-  @ViewChild('testLine') testLine;
-
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private authenticationService: AuthenticationService,
@@ -31,7 +28,6 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
-    // this.returnUrl = '/ride-selector';
 
     this.statusService.user$.subscribe(user => {
           if ( user ) {
@@ -44,7 +40,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    // console.log("LoginComponent.login()");
     this.loading = true;
     console.log("About to send this to authentication:", this.model.email);
     this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
@@ -61,19 +56,9 @@ export class LoginComponent implements OnInit {
         )
   }
 
-  sync() {
-    console.log($('#email'));
-    console.log($('#email')[0].value);
-    console.log("---------");
-    console.log(this.emailField);
-    console.log("---------");
-    console.log(this.model);
-    console.log(this.model.email);
-    console.log("---------");
-    console.log($('#email2'));
-    console.log($('#email2')[0].value);
-
+  syncModel() {
     this.model.email = $('#email')[0].value;
+    this.model.password = $('#password')[0].value;
 
     return true;
   }

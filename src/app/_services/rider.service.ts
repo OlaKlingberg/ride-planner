@@ -32,6 +32,12 @@ export class RiderService {
   }
 
   watchPosition() {
+    this.statusService.debugMessages$.next("RiderService.watchPosition()");
+
+    setInterval(() => {
+      this.statusService.debugMessages$.next("RiderService.watchPosition. Message sent using setInterval.");
+    }, 5000);
+
     navigator.geolocation.watchPosition(
         position => {
           let coords = { lat: position.coords.latitude, lng: position.coords.longitude };

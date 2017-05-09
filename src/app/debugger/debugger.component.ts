@@ -27,4 +27,8 @@ export class DebuggerComponent implements OnInit {
     });
   }
 
+  clearMessageList() {
+    this.debugMessages = [];
+  }
+
 }

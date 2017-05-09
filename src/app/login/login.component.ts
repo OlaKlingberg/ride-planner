@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
   login() {
     // console.log("LoginComponent.login()");
     this.loading = true;
+    console.log("About to send this to authentication:", this.model.email);
     this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true);
@@ -58,6 +59,23 @@ export class LoginComponent implements OnInit {
               this.loading = false;
             }
         )
+  }
+
+  sync() {
+    console.log($('#email'));
+    console.log($('#email')[0].value);
+    console.log("---------");
+    console.log(this.emailField);
+    console.log("---------");
+    console.log(this.model);
+    console.log(this.model.email);
+    console.log("---------");
+    console.log($('#email2'));
+    console.log($('#email2')[0].value);
+
+    this.model.email = $('#email')[0].value;
+
+    return true;
   }
 
 }

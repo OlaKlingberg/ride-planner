@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
         }
     );
 
-    // this.syncModel();
   }
 
   login() {
@@ -59,19 +58,6 @@ export class LoginComponent implements OnInit {
               this.loading = false;
             }
         )
-  }
-
-  syncModel() {
-    console.log(this.emailField);
-    console.log($('#email'));
-    $('#email').trigger('change');
-    $('#testLine').css('color', 'chartreuse');
-    // this.emailField.dispatchEvent('input');
-    // this.testLine.css('color', 'chartreuse');
-  }
-
-  inputListener() {
-    $('#debugger').append("<li>Change or Input was fired!</li>");
   }
 
 }

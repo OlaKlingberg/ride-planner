@@ -4,14 +4,14 @@
 
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
       <label for="email">Email</label>
-      <input type="text" class="form-control" name="email" id="email" [(ngModel)]="model.email" #email="ngModel" required (blur)="syncModel()" (change)="inputListener()"/>
+      <input type="text" class="form-control" name="email" id="email" [(ngModel)]="model.email" #email="ngModel" required autocomplete="off"/>
       <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
     </div>
     <p>{{model.email}}</p>
 
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
       <label for="password">Password</label>
-      <input type="password" class="form-control" name="password" id="password" [(ngModel)]="model.password" #password="ngModel" required (blur)="syncModel()"/>
+      <input type="password" class="form-control" name="password" id="password" [(ngModel)]="model.password" #password="ngModel" required autocomplete="off"/>
       <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
     </div>
 

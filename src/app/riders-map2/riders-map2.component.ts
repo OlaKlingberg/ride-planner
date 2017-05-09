@@ -45,6 +45,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
       this.sendSocketDebugMessage("mapsAPILoader loaded!");
       this.focusOnUser();
       this.watchRiders();
+      this.riderService.watchPosition();
     });
   }
 

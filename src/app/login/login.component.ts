@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "../_services/authentication.service";
 import { AlertService } from "../_services/alert.service";
@@ -17,6 +17,9 @@ export class LoginComponent implements OnInit {
   loading = false;
   returnUrl: string;
   user: User;
+
+  @ViewChild('email') emailField;
+  @ViewChild('testLine') testLine;
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -59,11 +62,16 @@ export class LoginComponent implements OnInit {
   }
 
   syncModel() {
-    $('input').trigger('input');
+    console.log(this.emailField);
+    console.log($('#email'));
+    $('#email').trigger('change');
+    $('#testLine').css('color', 'chartreuse');
+    // this.emailField.dispatchEvent('input');
+    // this.testLine.css('color', 'chartreuse');
   }
 
   inputListener() {
-    $('#debugger').append("<li>Input was fired!</li>");
+    $('#debugger').append("<li>Change or Input was fired!</li>");
   }
 
 }

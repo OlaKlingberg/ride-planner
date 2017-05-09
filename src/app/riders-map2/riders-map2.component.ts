@@ -15,7 +15,7 @@ import Socket = SocketIOClient.Socket;
   styleUrls: [ './riders-map2.component.scss' ]
 })
 export class RidersMap2Component implements OnInit, OnDestroy {
-  maxZoom: number = 15;
+  maxZoom: number = 18;
   riders: Array<Rider> = [];
 
   private google: any;

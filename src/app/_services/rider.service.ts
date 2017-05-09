@@ -37,7 +37,7 @@ export class RiderService {
           let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
           this.statusService.debugMessages$.next(coords);
           if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
-          this.statusService.coords$.next(coords);
+          this.statusService.coords$.next(`Lat: ${coords.lat}. Lng: ${coords.lng}`);
         },
         err => {
           // Sets a dummy position if watchPosition times out, just to test that the socket works.
@@ -47,7 +47,7 @@ export class RiderService {
         },
         {
           enableHighAccuracy: true,
-          timeout: 1000,      // Todo: Figure out what value I want here, and what to do on timeout.
+          timeout: 5000,      // Todo: Figure out what value I want here, and what to do on timeout.
           maximumAge: Infinity
         }
     );

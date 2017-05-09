@@ -35,6 +35,7 @@ export class RiderService {
     navigator.geolocation.watchPosition(
         position => {
           let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
+          this.statusService.debugMessages$.next(coords);
           if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
           this.statusService.coords$.next(coords);
         },
@@ -46,7 +47,7 @@ export class RiderService {
         },
         {
           enableHighAccuracy: true,
-          timeout: 500,      // Todo: Figure out what value I want here, and what to do on timeout.
+          timeout: 1000,      // Todo: Figure out what value I want here, and what to do on timeout.
           maximumAge: Infinity
         }
     );

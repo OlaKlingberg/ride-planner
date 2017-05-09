@@ -109,6 +109,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
           }
         },
         err => {
+          // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
           console.log("RidersMap2Component.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
         });
     setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.

@@ -55,7 +55,7 @@ export class RiderService {
         {
           enableHighAccuracy: true,
           timeout: 5000,      // Todo: Figure out what value I want here, and what to do on timeout.
-          maximumAge: 20000
+          maximumAge: 10000
         }
     );
 

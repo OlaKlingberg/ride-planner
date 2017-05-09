@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "../_services/authentication.service";
 import { AlertService } from "../_services/alert.service";
@@ -25,9 +25,7 @@ export class LoginComponent implements OnInit {
               private router: Router,
               private authenticationService: AuthenticationService,
               private alertService: AlertService,
-              private statusService: StatusService,
-              private changeRef: ChangeDetectorRef) {
-    changeRef.detach();
+              private statusService: StatusService) {
   }
 
   ngOnInit() {
@@ -42,10 +40,6 @@ export class LoginComponent implements OnInit {
           }
         }
     );
-
-    setInterval(() => {
-      this.changeRef.detectChanges();
-    }, 3000);
 
   }
 

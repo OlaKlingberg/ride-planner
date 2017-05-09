@@ -59,11 +59,11 @@ export class RiderService {
           },
           {
             enableHighAccuracy: true,
-            timeout: 5000,      // Todo: Figure out what value I want here, and what to do on timeout.
+            timeout: 8000,      // Todo: Figure out what value I want here, and what to do on timeout.
             maximumAge: 10000
           }
       );
-    }, 3000);
+    }, 9000);
 
 
     if ( environment.dummyMovement ) this.setDummyMovements();

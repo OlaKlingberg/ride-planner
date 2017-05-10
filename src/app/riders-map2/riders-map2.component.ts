@@ -121,9 +121,9 @@ export class RidersMap2Component implements OnInit, OnDestroy {
           // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
           console.log("RidersMap2Component.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
         });
-    // setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
-    //   coordsSub.unsubscribe();
-    // }, 5000);
+    setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
+      this.coordsSub.unsubscribe();
+    }, 15000);
   }
 
   ngOnDestroy() {
@@ -132,9 +132,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   }
 
   sendSocketDebugMessage(message) {
-    let user = this.statusService.user$.value;
     this.statusService.debugMessages$.next(`${this.fullName}. ${message}`);
-
   };
 
 

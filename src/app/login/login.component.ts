@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loading = true;
-    console.log("About to send this to authentication:", this.model.email);
     this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true);

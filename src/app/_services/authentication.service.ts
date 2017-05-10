@@ -45,13 +45,10 @@ export class AuthenticationService {
   login(email: string, password: string) {
     return this.http.post(`${environment.api}/users/login`, { email, password })
         .map((response: Response) => {
-          console.log(response);
           let user: User = new User(response.json()); // By creating a new User, I get access to accessor methods.
           let token = response.headers.get('x-auth');
 
           if ( user && token ) {
-            console.log(`AuthenticationService.login. user: ${user}`);
-            console.log(user);
             sessionStorage.setItem('currentToken', JSON.stringify(token));
             this.statusService.user$.next(user);
           }
@@ -61,7 +58,6 @@ export class AuthenticationService {
   logout() {
     let user = this.statusService.user$.value;
     let ride = this.statusService.currentRide$.value;
-    console.log("Ride that the rider will be removed from: ", ride);
     let rider = new Rider(user, null, ride);
 
     this.currentToken = JSON.parse(sessionStorage.getItem('currentToken'));
@@ -73,7 +69,6 @@ export class AuthenticationService {
     this.statusService.user$.next(null);
     this.statusService.currentRide$.next(null);
 
-    console.log(`About to emit removeRider ${rider.fname} ${rider.lname} on ride ${rider.ride}`);
     this.socket.emit('removeRider', rider, () => {
       // Todo: Do I have any use for this callback?
     });

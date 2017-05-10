@@ -12,9 +12,7 @@ export class DebuggingService {
   }
 
   watchForDebugMessages() {
-    console.log("DebuggingService.watchForDebugMessages()");
     this.statusService.debugMessages$.subscribe(debugInfo => {
-      console.log("DebuggingService.watchForDebugMessages() debugInfo", debugInfo,);
       if (debugInfo.message) {
         this.socket.emit('debugging', debugInfo.message);
       } else {

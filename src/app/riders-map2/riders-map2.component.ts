@@ -103,9 +103,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     // this.focusedOnUser = true;
     this.bounds = new this.google.maps.LatLngBounds();
     this.coordsSub = this.statusService.coords$.subscribe(coords => {
-          console.log("Subscribed to coords$");
           if ( coords ) {
-            console.log("Coords has a value: ", coords);
             this.bounds.extend({ lat: coords.lat, lng: coords.lng });
             this.latLng = this.bounds.toJSON();
           }

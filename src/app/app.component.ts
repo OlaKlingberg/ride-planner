@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
     this.watchUser();
     this.watchCurrentRide();
     this.watchRiders(); // For debugging.
+    this.refreshAfterSleep();
   }
 
   watchUser() {
@@ -48,6 +49,15 @@ export class AppComponent implements OnInit {
     // this.statusService.riders$.subscribe(riders => this.riders = riders);
   }
 
+  refreshAfterSleep() {
+    let i = 0;
+    setInterval(() => {
+      console.log(i++);
+      let user = this.statusService.user$.value;
+      this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. Counter: ${i}`);
+    }, 2000);
+
+  }
 
 
 }

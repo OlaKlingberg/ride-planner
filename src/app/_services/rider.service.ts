@@ -49,7 +49,6 @@ export class RiderService {
             let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
             this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
             if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
-            console.log("About to call .coords$.next(coords) with", coords);
             this.statusService.coords$.next(coords);
           },
           err => {
@@ -76,19 +75,16 @@ export class RiderService {
     riders.unshift(rider);
     riders = _.uniqBy(riders, '_id');
     riders.sort(nameSort);
-    // console.log("addRider. riders:", riders);
     this.statusService.riders$.next(riders);
   }
 
   // Whenever coords changes, provided coords, ride, and user all exist, emit the rider.
   createRider() {
-    console.log("RiderService.emitRider()");
     this.statusService.coords$
         .combineLatest(this.statusService.currentRide$, this.statusService.user$)
         .subscribe(([ coords, ride, user ]) => {
           if ( coords && ride && user ) {
             let rider = new Rider(user, coords, ride);
-            // console.log(`RiderService.emitRider. About to emit rider:, ${rider.fname} ${rider.lname}`);
             this.socket.emit('rider', rider, () => {
               // Todo: Do I have any use for this callback?
             });
@@ -108,7 +104,6 @@ export class RiderService {
 
   listenForFullRiderList() {
     this.socket.on('fullRiderList', riders => {
-      console.log("RiderService.listenForFullRiderList. riders:", riders);
       if ( riders ) {
         riders = riders.map(rider => new Rider(rider));
       }
@@ -118,7 +113,6 @@ export class RiderService {
 
   listenForRider() {
     this.socket.on('rider', rider => {
-      console.log(`RiderService.listenForRider. rider: ${rider.fname} ${rider.lname}. disconnected: ${rider.disconnected}`);
       // Todo: rider has email, which it should not.
       let newOrUpdatedRider = new Rider(rider);
       this.addRider(newOrUpdatedRider);
@@ -127,7 +121,6 @@ export class RiderService {
 
   listenForRemoveRider() {
     this.socket.on('removeRider', riderToRemove => {
-      console.log("on:removeRider:", riderToRemove);
       let riders = this.statusService.riders$.value;
       riders = riders.filter(rider => rider._id !== riderToRemove._id);
       this.statusService.riders$.next(riders);
@@ -136,7 +129,6 @@ export class RiderService {
 
   listenForDisconnectedRider() {
     this.socket.on('disconnectedRider', (rider) => {
-      console.log("listenForDisconnectedRider. rider:", rider);
       let disconnectedRider = new Rider(rider);
       this.addRider(disconnectedRider);
     });

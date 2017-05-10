@@ -32,12 +32,13 @@ export class RiderService {
   }
 
   watchPosition() {
-    this.statusService.debugMessages$.next("RiderService.watchPosition()");
+    let user = this.statusService.user$.value;
+    this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. RiderService.watchPosition()`);
 
     let i = 0;
     setInterval(() => {
-      this.statusService.debugMessages$.next(`RiderService.watchPosition. Message sent using setInterval: ${i++}`);
-    }, 9000);
+      this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. RiderService.watchPosition. Message sent using setInterval: ${i++}`);
+    }, 10000);
 
 
 
@@ -46,14 +47,14 @@ export class RiderService {
       navigator.geolocation.getCurrentPosition(
           position => {
             let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
-            this.statusService.debugMessages$.next(`Lat: ${coords.lat}. Lng: ${coords.lng}`);
+            this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
             if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
             console.log("About to call .coords$.next(coords) with", coords);
             this.statusService.coords$.next(coords);
           },
           err => {
             // Sets a dummy position if watchPosition times out, just to test that the socket works.
-            this.statusService.debugMessages$.next(err);
+            this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. err`);
             let coords = { lat: 42, lng: -75};
             this.statusService.coords$.next(coords);
           },
@@ -63,7 +64,7 @@ export class RiderService {
             maximumAge: 10000
           }
       );
-    }, 9000);
+    }, 5000);
 
 
     if ( environment.dummyMovement ) this.setDummyMovements();

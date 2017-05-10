@@ -125,7 +125,8 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   }
 
   sendSocketDebugMessage(message) {
-    this.statusService.debugMessages$.next(message);
+    let user = this.statusService.user$.value;
+    this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. ${message}`);
 
   };
 

@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   debugMessages: Array<any> = [];
   lat: number = null;
   lng: number = null;
+  acc: number = null;
 
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
               private rideService: RideService,                     // Needs to be injected, to be initialized.
@@ -46,6 +47,7 @@ export class AppComponent implements OnInit {
       if (coords) {
         this.lat = coords.lat;
         this.lng = coords.lng;
+        this.acc = coords.acc;
       }
     });
   }

@@ -50,7 +50,12 @@ export class RiderService {
     setInterval(() => {
       navigator.geolocation.getCurrentPosition(
           position => {
-            let coords = { lat: position.coords.latitude, lng: position.coords.longitude };
+            console.log(position);
+            let coords = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              acc: position.coords.accuracy
+            };
             this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
             if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
             this.statusService.coords$.next(coords);

@@ -40,8 +40,8 @@ export class RiderService {
   }
 
   watchPosition() {
+    // For debugging
     this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition()`);
-
     let i = 0;
     setInterval(() => {
       this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition. Message sent using setInterval: ${i++}`);
@@ -70,35 +70,6 @@ export class RiderService {
           maximumAge: 10000
         }
     );
-
-
-    // setInterval(() => {
-    //   navigator.geolocation.getCurrentPosition(
-    //       position => {
-    //         console.log(position);
-    //         let coords = {
-    //           lat: position.coords.latitude,
-    //           lng: position.coords.longitude,
-    //           acc: position.coords.accuracy
-    //         };
-    //         this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
-    //         if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
-    //         this.statusService.coords$.next(coords);
-    //       },
-    //       err => {
-    //         // Sets a dummy position if watchPosition times out, just to test that the socket works.
-    //         this.statusService.debugMessages$.next(`${this.userName}. err`);
-    //         let coords = { lat: 42, lng: -75 };
-    //         this.statusService.coords$.next(coords);
-    //       },
-    //       {
-    //         enableHighAccuracy: true,
-    //         timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
-    //         maximumAge: 20000
-    //       }
-    //   );
-    // }, 5000);
-
 
     if ( environment.dummyMovement ) this.setDummyMovements();
 

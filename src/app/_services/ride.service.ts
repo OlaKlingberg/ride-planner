@@ -26,12 +26,13 @@ export class RideService {
     // On page refresh, get currentRide from localStorage.
     let ride = localStorage.getItem('currentRide');
     this.statusService.currentRide$.next(ride);
-    this.socket.emit('joinRide', ride);
+    this.socket.emit('giveMeFullRiderList', ride);
 
     // Keep currentRide in localStorage synced with currentRide$
     this.statusService.currentRide$.subscribe(ride => {
       if (ride) {
         this.socket.emit('joinRide', ride);
+        this.socket.emit('giveMeFullRiderList', ride);
         localStorage.setItem('currentRide', ride);
       } else {
         localStorage.removeItem('currentRide');

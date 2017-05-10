@@ -62,6 +62,7 @@ export class AppComponent implements OnInit {
 
 
       if (now - prev > 3000) {
+        this.statusService.debugMessages$.next(`${this.userName}. Counter: ${i++}. Time diff: ${now - prev}`);
         window.location.reload();
       }
 

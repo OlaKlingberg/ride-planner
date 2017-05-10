@@ -47,32 +47,57 @@ export class RiderService {
       this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition. Message sent using setInterval: ${i++}`);
     }, 10000);
 
-    setInterval(() => {
-      navigator.geolocation.getCurrentPosition(
-          position => {
-            console.log(position);
-            let coords = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              acc: position.coords.accuracy
-            };
-            this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
-            if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
-            this.statusService.coords$.next(coords);
-          },
-          err => {
-            // Sets a dummy position if watchPosition times out, just to test that the socket works.
-            this.statusService.debugMessages$.next(`${this.userName}. err`);
-            let coords = { lat: 42, lng: -75};
-            this.statusService.coords$.next(coords);
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
-            maximumAge: 20000
-          }
-      );
-    }, 5000);
+    navigator.geolocation.watchPosition(position => {
+          console.log(position);
+          let coords = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            acc: position.coords.accuracy
+          };
+          this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
+          if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
+          this.statusService.coords$.next(coords);
+        },
+        err => {
+          // Sets a dummy position if watchPosition times out, just to test that the socket works.
+          this.statusService.debugMessages$.next(`${this.userName}. err`);
+          let coords = { lat: 42, lng: -75 };
+          this.statusService.coords$.next(coords);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
+          maximumAge: 20000
+        }
+    );
+
+
+    // setInterval(() => {
+    //   navigator.geolocation.getCurrentPosition(
+    //       position => {
+    //         console.log(position);
+    //         let coords = {
+    //           lat: position.coords.latitude,
+    //           lng: position.coords.longitude,
+    //           acc: position.coords.accuracy
+    //         };
+    //         this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
+    //         if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
+    //         this.statusService.coords$.next(coords);
+    //       },
+    //       err => {
+    //         // Sets a dummy position if watchPosition times out, just to test that the socket works.
+    //         this.statusService.debugMessages$.next(`${this.userName}. err`);
+    //         let coords = { lat: 42, lng: -75 };
+    //         this.statusService.coords$.next(coords);
+    //       },
+    //       {
+    //         enableHighAccuracy: true,
+    //         timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
+    //         maximumAge: 20000
+    //       }
+    //   );
+    // }, 5000);
 
 
     if ( environment.dummyMovement ) this.setDummyMovements();
@@ -149,17 +174,17 @@ export class RiderService {
   }
 
   setDummyMovements() {
-      let LatDummyMovement = Math.random() * .0006 - .0003;
-      let LngDummyMovement = Math.random() * .0006 - .0003;
+    let LatDummyMovement = Math.random() * .0006 - .0003;
+    let LngDummyMovement = Math.random() * .0006 - .0003;
 
-      setTimeout(() => {
-        setInterval(() => {
-          let coords = this.statusService.coords$.value;
-          coords.lat += LatDummyMovement;
-          coords.lng += LngDummyMovement;
-          this.statusService.coords$.next(coords);
-        }, Math.random() * 3000 + 4000);
-      }, 5000);
+    setTimeout(() => {
+      setInterval(() => {
+        let coords = this.statusService.coords$.value;
+        coords.lat += LatDummyMovement;
+        coords.lng += LngDummyMovement;
+        this.statusService.coords$.next(coords);
+      }, Math.random() * 3000 + 4000);
+    }, 5000);
   }
 
   getDummyCoords(coords) {
@@ -168,10 +193,6 @@ export class RiderService {
 
     return coords;
   }
-
-
-
-
 
 
 }

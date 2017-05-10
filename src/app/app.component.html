@@ -5,7 +5,7 @@
       <div class="user-info">
         <h5 *ngIf="userName">You are logged in as {{ userName }}</h5>
         <h5 *ngIf="currentRide">You are logged in to ride {{ currentRide }}</h5>
-        <h5>Lat: {{ lat | number:'1.4-4' }}. Lng: {{ lng | number: '1.4-4' }}. Acc: {{ acc }}m</h5>
+        <h5>Lat: {{ lat | number:'1.4-4' }}. Lng: {{ lng | number: '1.4-4' }}. Acc: {{ acc | number: '1.0-0'}}m</h5>
         <h6 *ngIf="riders"><span *ngFor="let rider of riders">{{rider.fullName}}.</span></h6>
       </div>
     </div>

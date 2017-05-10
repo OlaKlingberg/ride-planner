@@ -61,7 +61,11 @@ export class RiderService {
               lng: position.coords.longitude,
               acc: position.coords.accuracy
             };
+
             if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
+
+            this.prevPos = coords;
+
             this.statusService.coords$.next(coords);
           }
         },

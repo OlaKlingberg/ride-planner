@@ -51,10 +51,27 @@ export class AppComponent implements OnInit {
 
   refreshAfterSleep() {
     let i = 0;
+    let prev: number = Date.now();
+    let now: number;
     setInterval(() => {
-      console.log(i++);
-      let user = this.statusService.user$.value;
-      this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. Counter: ${i}`);
+      now = Date.now();
+      console.log(now);
+      console.log("now - prev:", now - prev);
+      console.log("User:", this.userName);
+      this.statusService.debugMessages$.next(`${this.userName}. Counter: ${i++}. Time diff: ${now - prev}`);
+
+
+      if (now - prev > 3000) {
+        window.location.reload();
+      }
+
+      prev = now;
+      now = Date.now();
+
+
+
+
+
     }, 2000);
 
   }

@@ -8,6 +8,7 @@ import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { Subscription } from 'rxjs/Subscription';
 import { RiderService } from '../_services/rider.service';
 import Socket = SocketIOClient.Socket;
+import { User } from '../_models/user';
 
 @Component({
   selector: 'rp-riders-map2',
@@ -15,8 +16,9 @@ import Socket = SocketIOClient.Socket;
   styleUrls: [ './riders-map2.component.scss' ]
 })
 export class RidersMap2Component implements OnInit, OnDestroy {
-  maxZoom: number = 18;
-  riders: Array<Rider> = [];
+  private fullName: string = '';
+  public maxZoom: number = 18;
+  public riders: Array<Rider> = [];
 
   private google: any;
   private bounds: LatLngBounds;
@@ -41,12 +43,19 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.watchUser();
     this.sendSocketDebugMessage("Initializing RidersMap2Component!");
     this.mapsAPILoader.load().then(() => {
       this.google = google;
       this.sendSocketDebugMessage("mapsAPILoader loaded!");
       this.focusOnUser();
       this.watchRiders();
+    });
+  }
+
+  watchUser() {
+    this.statusService.user$.subscribe(user => {
+      this.fullName = user ? user.fullName : null;
     });
   }
 
@@ -124,7 +133,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
 
   sendSocketDebugMessage(message) {
     let user = this.statusService.user$.value;
-    this.statusService.debugMessages$.next(`${user.fname} ${user.lname}. ${message}`);
+    this.statusService.debugMessages$.next(`${this.fullName}. ${message}`);
 
   };
 

@@ -55,27 +55,16 @@ export class AppComponent implements OnInit {
     let now: number;
     setInterval(() => {
       now = Date.now();
-      console.log(now);
-      console.log("now - prev:", now - prev);
-      console.log("User:", this.userName);
-      this.statusService.debugMessages$.next(`${this.userName}. Counter: ${i++}. Time diff: ${now - prev}`);
-
 
       if (now - prev > 3000) {
-        this.statusService.debugMessages$.next(`${this.userName}. Counter: ${i++}. Time diff: ${now - prev}`);
         window.location.reload();
       }
 
       prev = now;
       now = Date.now();
-
-
-
-
-
     }, 2000);
-
   }
+
 
 
 }

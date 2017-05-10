@@ -18,6 +18,7 @@ export class RiderService {
   private LatDummyAddition: number;
   private LngDummyAddition: number;
   private userName: string = '';
+  private prevPos: { lat: number, lng: number, acc: number } = {lat: null, lng: null, acc: null};
 
 
   constructor(private statusService: StatusService,
@@ -49,19 +50,27 @@ export class RiderService {
 
     navigator.geolocation.watchPosition(position => {
           console.log(position);
-          let coords = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            acc: position.coords.accuracy
-          };
-          if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
-          this.statusService.coords$.next(coords);
+
+          if (
+              position.coords.latitude !== this.prevPos.lat ||
+              position.coords.longitude !== this.prevPos.lng ||
+              position.coords.accuracy !== this.prevPos.acc
+          ) {
+            let coords = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              acc: position.coords.accuracy
+            };
+            if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
+            this.statusService.coords$.next(coords);
+          }
         },
         err => {
           // Sets a dummy position if watchPosition times out, just to test that the socket works.
-          this.statusService.debugMessages$.next(`${this.userName}. err`);
-          let coords = { lat: 42, lng: -75 };
-          this.statusService.coords$.next(coords);
+          // this.statusService.debugMessages$.next(`${this.userName}. err`);
+          // let coords = { lat: 42, lng: -75 };
+          // this.statusService.coords$.next(coords);
+          this.statusService.debugMessages$.next(`${this.userName}. watchPosition error: ${err.message}`)
         },
         {
           enableHighAccuracy: true,

@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
   currentRide: string;
   riders: Array<Rider>;
   debugMessages: Array<any> = [];
+  lat: number = null;
+  lng: number = null;
 
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
               private rideService: RideService,                     // Needs to be injected, to be initialized.
@@ -27,14 +29,24 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.watchUser();
+    this.watchCoords();
     this.watchCurrentRide();
-    this.watchRiders(); // For debugging.
+    // this.watchRiders(); // For debugging.
     this.refreshAfterSleep();
   }
 
   watchUser() {
     this.statusService.user$.subscribe(user => {
       this.userName = user ? user.fullName : null;
+    });
+  }
+
+  watchCoords() {
+    this.statusService.coords$.subscribe(coords => {
+      if (coords) {
+        this.lat = coords.lat;
+        this.lng = coords.lng;
+      }
     });
   }
 
@@ -46,7 +58,7 @@ export class AppComponent implements OnInit {
 
   // For debugging.
   watchRiders() {
-    // this.statusService.riders$.subscribe(riders => this.riders = riders);
+    this.statusService.riders$.subscribe(riders => this.riders = riders);
   }
 
   refreshAfterSleep() {

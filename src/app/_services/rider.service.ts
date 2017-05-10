@@ -54,7 +54,6 @@ export class RiderService {
             lng: position.coords.longitude,
             acc: position.coords.accuracy
           };
-          this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
           if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
           this.statusService.coords$.next(coords);
         },
@@ -89,6 +88,7 @@ export class RiderService {
         .combineLatest(this.statusService.currentRide$, this.statusService.user$)
         .subscribe(([ coords, ride, user ]) => {
           if ( coords && ride && user ) {
+            this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
             let rider = new Rider(user, coords, ride);
             this.socket.emit('rider', rider, () => {
               // Todo: Do I have any use for this callback?

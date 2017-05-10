@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
               private rideService: RideService,                     // Needs to be injected, to be initialized.
+              private riderService: RiderService,                   // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
               private statusService: StatusService) {
   }

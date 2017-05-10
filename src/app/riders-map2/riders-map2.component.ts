@@ -37,7 +37,6 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   coordsSub: Subscription;
 
   constructor(private statusService: StatusService,
-              private riderService: RiderService,  // Needs to be injected, to be initiated.
               private mapsAPILoader: MapsAPILoader) {
     this.socket = this.statusService.socket;
   }

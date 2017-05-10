@@ -19,7 +19,6 @@ export class RiderListComponent implements OnInit, OnDestroy {
   private ridersSub: Subscription;
 
   constructor(private statusService: StatusService,
-              private riderService: RiderService,    // Needs to be injected, to be initiated.
               private router: Router) {
     this.socket = this.statusService.socket;
   }

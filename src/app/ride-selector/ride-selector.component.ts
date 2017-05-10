@@ -20,8 +20,7 @@ export class RideSelectorComponent implements OnInit {
   private currentRideSub: Subscription;
 
   constructor(private router: Router,
-              private alertService: AlertService,
-              private riderService: RiderService,  // Needs to be injected, to be initiated.
+              private riderService: RiderService,
               private statusService: StatusService) {
   }
 

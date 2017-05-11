@@ -12,6 +12,7 @@ export class DebuggerComponent implements OnInit {
   private user: User;
   private socket: Socket;
   public debugMessages: Array<any> = [];
+  public time;
 
   constructor(private statusService: StatusService) {
     this.socket = statusService.socket;
@@ -19,6 +20,13 @@ export class DebuggerComponent implements OnInit {
 
   ngOnInit() {
     this.listenForDebugMessages();
+    this.clock();
+  }
+
+  clock() {
+    setInterval(() => {
+      this.time = new Date().toLocaleTimeString('en-US', {hour12: false})
+    }, 1000);
   }
 
   listenForDebugMessages() {

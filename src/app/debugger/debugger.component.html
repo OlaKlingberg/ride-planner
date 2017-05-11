@@ -1,4 +1,4 @@
-<h3>Debug Messages</h3>
+<h3>Debug Messages {{ time }}</h3>
 <button type="button" class="btn btn-primary" (click)="clearMessageList()">Clear</button>
 <ul>
   <li *ngFor="let message of debugMessages; let i = index">{{i}}. {{ message }}</li>

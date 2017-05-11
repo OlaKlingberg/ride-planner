@@ -19,7 +19,7 @@ export class RiderService {
   private LngDummyAddition: number;
   private userName: string = '';
   private prevPos: { lat: number, lng: number, acc: number } = { lat: null, lng: null, acc: null };
-  // private timer = null;
+  private timer = null;
   private geoWatch = null;
 
 
@@ -44,6 +44,7 @@ export class RiderService {
   }
 
   watchPosition() {
+    this.statusService.debugMessages$.next(`${this.userName}. watchPosition()`);
     // For debugging
     // this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition()`);
     // let i = 0;
@@ -55,9 +56,9 @@ export class RiderService {
           console.log(position.coords.latitude, position.coords.longitude, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
           this.statusService.debugMessages$.next(`${this.userName}. New coords yielded! ${new Date().toLocaleTimeString('en-US', {hour12: false})}`);
 
-          // clearTimeout(this.timer);
+          clearTimeout(this.timer);
 
-          // this.timerForWatchPosition();
+          this.timerForWatchPosition();
 
           if (
               Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
@@ -93,24 +94,24 @@ export class RiderService {
 
   }
 
-  // timerForWatchPosition() {
-  //   console.log(`${this.userName}. About to set timer.`);
-  //   this.timer = setTimeout(() => {
-  //     this.statusService.debugMessages$.next(`${this.userName}. Timer expired!`);
-  //     let coords = this.statusService.coords$.value;
-  //     if ( coords && coords.timestamp ) {
-  //       this.statusService.debugMessages$.next(`${this.userName}. Are the latest coords too old: ${Date.now() - coords.timestamp}`);
-  //       if ( Date.now() - coords.timestamp > 10000 ) {
-  //         this.statusService.debugMessages$.next(`${this.userName}. About to call watchPosition() and timerForWatchPosition() again`);
-  //         navigator.geolocation.clearWatch(this.geoWatch);
-  //         this.watchPosition();
-  //         this.timerForWatchPosition();
-  //       }
-  //
-  //     }
-  //
-  //   }, 10000);
-  // }
+  timerForWatchPosition() {
+    this.statusService.debugMessages$.next(`${this.userName}. Timer started.`);
+    this.timer = setTimeout(() => {
+      this.statusService.debugMessages$.next(`${this.userName}. Timer expired!`);
+      let coords = this.statusService.coords$.value;
+      if ( coords && coords.timestamp ) {
+        this.statusService.debugMessages$.next(`${this.userName}. Age of last coords: ${Date.now() - coords.timestamp}`);
+        if ( Date.now() - coords.timestamp > 19000 ) {
+          this.statusService.debugMessages$.next(`${this.userName}. About to call watchPosition() and timerForWatchPosition() again`);
+          navigator.geolocation.clearWatch(this.geoWatch);
+          this.watchPosition();
+          this.timerForWatchPosition();
+        }
+
+      }
+
+    }, 20000);
+  }
 
   addRider(rider) {
     let riders = this.statusService.riders$.value;

@@ -20,6 +20,7 @@ export class RiderService {
   private userName: string = '';
   private prevPos: { lat: number, lng: number, acc: number } = { lat: null, lng: null, acc: null };
   private timer = null;
+  private geoWatch = null;
 
 
   constructor(private statusService: StatusService,
@@ -51,7 +52,7 @@ export class RiderService {
     // }, 10000);
 
     console.log("About to call navigator.geolocation.watchPosition()");
-    navigator.geolocation.watchPosition(position => {
+    this.geoWatch = navigator.geolocation.watchPosition(position => {
           console.log(position, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
           this.statusService.debugMessages$.next(`${this.userName}. New coords yielded! ${new Date().toLocaleTimeString('en-US', {hour12: false})}`);
 
@@ -105,6 +106,7 @@ export class RiderService {
         this.statusService.debugMessages$.next(`${this.userName}. Are the latest coords too old: ${Date.now() - coords.timestamp}`);
         if ( Date.now() - coords.timestamp > 10000 ) {
           this.statusService.debugMessages$.next(`${this.userName}. About to call watchPosition() and timerForWatchPosition() again`);
+          navigator.geolocation.clearWatch(this.geoWatch);
           this.watchPosition();
           this.timerForWatchPosition();
         }

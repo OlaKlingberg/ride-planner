@@ -18,7 +18,6 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.watchUser();
     this.watchRide();
-    // this.collapseOnNavigation();
   }
 
   watchUser() {
@@ -33,15 +32,10 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  // collapseOnNavigation() {
-  //   $('.navbar-collapse a').click(() => {
-  //     alert("You clicked!");
-  //     $(".navbar-collapse").collapse('hide');
-  //   });
-  // }
-
   collapseNav() {
-    $(".navbar-collapse").collapse('hide');
+    // $(".navbar-collapse").collapse('collapse');
+    $('.navbar-toggle').click() //bootstrap 3.x by Richard
+
   }
 
 }

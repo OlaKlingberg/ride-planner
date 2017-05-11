@@ -19,6 +19,7 @@ export class RiderService {
   private LngDummyAddition: number;
   private userName: string = '';
   private prevPos: { lat: number, lng: number, acc: number } = {lat: null, lng: null, acc: null};
+  private timer;
 
 
   constructor(private statusService: StatusService,
@@ -51,10 +52,18 @@ export class RiderService {
     navigator.geolocation.watchPosition(position => {
           console.log(position);
 
+          clearTimeout(this.timer);
+
+          this.timer = setTimeout(() => {
+            console.log("Timer expired! About to call watchPosition() recursively!");
+            clearTimeout(this.timer);
+            this.watchPosition();
+          }, 10000);
+
           if (
-              position.coords.latitude !== this.prevPos.lat ||
-              position.coords.longitude !== this.prevPos.lng ||
-              position.coords.accuracy !== this.prevPos.acc
+              Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
+              Math.abs(position.coords.longitude - this.prevPos.lng) > .0001 ||
+              Math.abs(1 - (position.coords.accuracy / this.prevPos.acc)) > .2
           ) {
             let coords = {
               lat: position.coords.latitude,

@@ -19,7 +19,7 @@ export class RiderService {
   private LngDummyAddition: number;
   private userName: string = '';
   private prevPos: { lat: number, lng: number, acc: number } = { lat: null, lng: null, acc: null };
-  private timer = null;
+  // private timer = null;
   private geoWatch = null;
 
 
@@ -51,14 +51,13 @@ export class RiderService {
     //   this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition. Message sent using setInterval: ${i++}`);
     // }, 10000);
 
-    console.log("About to call navigator.geolocation.watchPosition()");
     this.geoWatch = navigator.geolocation.watchPosition(position => {
-          console.log(position, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
+          console.log(position.coords.latitude, position.coords.longitude, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
           this.statusService.debugMessages$.next(`${this.userName}. New coords yielded! ${new Date().toLocaleTimeString('en-US', {hour12: false})}`);
 
-          clearTimeout(this.timer);
+          // clearTimeout(this.timer);
 
-          this.timerForWatchPosition();
+          // this.timerForWatchPosition();
 
           if (
               Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
@@ -80,16 +79,13 @@ export class RiderService {
           }
         },
         err => {
-          // Sets a dummy position if watchPosition times out, just to test that the socket works.
-          // this.statusService.debugMessages$.next(`${this.userName}. err`);
-          // let coords = { lat: 42, lng: -75 };
-          // this.statusService.coords$.next(coords);
+          console.log(`watchPosition error: ${err.message}`);
           this.statusService.debugMessages$.next(`${this.userName}. watchPosition error: ${err.message}`)
         },
         {
           enableHighAccuracy: true,
           timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
-          maximumAge: 10000
+          maximumAge: 5000
         }
     );
 
@@ -97,24 +93,24 @@ export class RiderService {
 
   }
 
-  timerForWatchPosition() {
-    console.log(`${this.userName}. About to set timer.`);
-    this.timer = setTimeout(() => {
-      this.statusService.debugMessages$.next(`${this.userName}. Timer expired!`);
-      let coords = this.statusService.coords$.value;
-      if ( coords && coords.timestamp ) {
-        this.statusService.debugMessages$.next(`${this.userName}. Are the latest coords too old: ${Date.now() - coords.timestamp}`);
-        if ( Date.now() - coords.timestamp > 10000 ) {
-          this.statusService.debugMessages$.next(`${this.userName}. About to call watchPosition() and timerForWatchPosition() again`);
-          navigator.geolocation.clearWatch(this.geoWatch);
-          this.watchPosition();
-          this.timerForWatchPosition();
-        }
-
-      }
-
-    }, 10000);
-  }
+  // timerForWatchPosition() {
+  //   console.log(`${this.userName}. About to set timer.`);
+  //   this.timer = setTimeout(() => {
+  //     this.statusService.debugMessages$.next(`${this.userName}. Timer expired!`);
+  //     let coords = this.statusService.coords$.value;
+  //     if ( coords && coords.timestamp ) {
+  //       this.statusService.debugMessages$.next(`${this.userName}. Are the latest coords too old: ${Date.now() - coords.timestamp}`);
+  //       if ( Date.now() - coords.timestamp > 10000 ) {
+  //         this.statusService.debugMessages$.next(`${this.userName}. About to call watchPosition() and timerForWatchPosition() again`);
+  //         navigator.geolocation.clearWatch(this.geoWatch);
+  //         this.watchPosition();
+  //         this.timerForWatchPosition();
+  //       }
+  //
+  //     }
+  //
+  //   }, 10000);
+  // }
 
   addRider(rider) {
     let riders = this.statusService.riders$.value;

@@ -65,9 +65,8 @@ export class AppComponent implements OnInit {
   }
 
   refreshAfterSleep() {
-    let i = 0;
-    let prev: number = Date.now();
     let now: number;
+    let prev: number = Date.now();
     setInterval(() => {
       now = Date.now();
 

@@ -11,7 +11,6 @@ import { AlertService } from './alert.service';
 import * as _ from 'lodash';
 
 import { nameSort } from '../_lib/util';
-import { clearTimeout } from 'timers';
 
 @Injectable()
 export class RiderService {
@@ -20,7 +19,7 @@ export class RiderService {
   private LngDummyAddition: number;
   private userName: string = '';
   private prevPos: { lat: number, lng: number, acc: number } = { lat: null, lng: null, acc: null };
-  private timer;
+  private timer = null;
 
 
   constructor(private statusService: StatusService,
@@ -54,8 +53,10 @@ export class RiderService {
     console.log("About to call navigator.geolocation.watchPosition()");
     navigator.geolocation.watchPosition(position => {
           console.log(position, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
+          this.statusService.debugMessages$.next(`${this.userName}. New coords yielded! ${new Date().toLocaleTimeString('en-US', {hour12: false})}`);
 
           clearTimeout(this.timer);
+
           this.timerForWatchPosition();
 
           if (

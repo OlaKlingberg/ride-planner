@@ -23,7 +23,11 @@ export class DebuggerComponent implements OnInit {
 
   listenForDebugMessages() {
     this.socket.on('debugging', message => {
-      this.debugMessages.push(message);
+      console.log("This is the message I got from debugger:", message);
+      if (message.substr(0, 3) === 'Ada') {
+        console.log("Now I will push that message to the array to be displayed.");
+        this.debugMessages.push(message);
+      }
     });
   }
 

@@ -96,14 +96,14 @@ export class RiderService {
   }
 
   timerForWatchPosition() {
-    console.log("About to set timer.");
+    console.log(`${this.userName}. About to set timer.`);
     this.timer = setTimeout(() => {
-      this.statusService.debugMessages$.next("Timer expired!");
+      this.statusService.debugMessages$.next(`${this.userName}. Timer expired!`);
       let coords = this.statusService.coords$.value;
       if ( coords && coords.timestamp ) {
-        this.statusService.debugMessages$.next(`Are the latest coords too old: ${Date.now() - coords.timestamp}`);
+        this.statusService.debugMessages$.next(`${this.userName}. Are the latest coords too old: ${Date.now() - coords.timestamp}`);
         if ( Date.now() - coords.timestamp > 10000 ) {
-          this.statusService.debugMessages$.next("About to call watchPosition() and timerForWatchPosition() again");
+          this.statusService.debugMessages$.next(`${this.userName}. About to call watchPosition() and timerForWatchPosition() again`);
           this.watchPosition();
           this.timerForWatchPosition();
         }

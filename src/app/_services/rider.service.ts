@@ -45,12 +45,7 @@ export class RiderService {
 
   watchPosition() {
     this.statusService.debugMessages$.next(`${this.userName}. watchPosition()`);
-    // For debugging
-    // this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition()`);
-    // let i = 0;
-    // setInterval(() => {
-    //   this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition. Message sent using setInterval: ${i++}`);
-    // }, 10000);
+
 
     this.geoWatch = navigator.geolocation.watchPosition(position => {
           console.log(position.coords.latitude, position.coords.longitude, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
@@ -63,7 +58,7 @@ export class RiderService {
           if (
               Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
               Math.abs(position.coords.longitude - this.prevPos.lng) > .0001 ||
-              Math.abs(1 - (position.coords.accuracy / this.prevPos.acc)) > .2
+              position.coords.accuracy < this.prevPos.acc
           ) {
             let coords = {
               lat: position.coords.latitude,

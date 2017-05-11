@@ -43,10 +43,10 @@ export class RidersMap2Component implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.watchUser();
-    this.sendSocketDebugMessage("Initializing RidersMap2Component!");
+    // this.sendSocketDebugMessage("Initializing RidersMap2Component!");
     this.mapsAPILoader.load().then(() => {
       this.google = google;
-      this.sendSocketDebugMessage("mapsAPILoader loaded!");
+      // this.sendSocketDebugMessage("mapsAPILoader loaded!");
       this.focusOnUser();
       this.watchRiders();
     });
@@ -130,9 +130,9 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     this.coordsSub.unsubscribe();
   }
 
-  sendSocketDebugMessage(message) {
-    this.statusService.debugMessages$.next(`${this.fullName}. ${message}`);
-  };
+  // sendSocketDebugMessage(message) {
+  //   this.statusService.debugMessages$.next(`${this.fullName}. ${message}`);
+  // };
 
 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from "../_services/authentication.service";
 import { StatusService } from '../_services/status.service';
 import { User } from '../_models/user';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'rp-header',
@@ -16,13 +16,32 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.watchUser();
+    this.watchRide();
+    // this.collapseOnNavigation();
+  }
+
+  watchUser() {
     this.statusService.user$.subscribe(
         user => this.user = user
     );
+  }
 
+  watchRide() {
     this.statusService.currentRide$.subscribe(
         ride => this.ride = ride
     );
+  }
+
+  // collapseOnNavigation() {
+  //   $('.navbar-collapse a').click(() => {
+  //     alert("You clicked!");
+  //     $(".navbar-collapse").collapse('hide');
+  //   });
+  // }
+
+  collapseNav() {
+    $(".navbar-collapse").collapse('hide');
   }
 
 }

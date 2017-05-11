@@ -11,6 +11,7 @@ import { AlertService } from './alert.service';
 import * as _ from 'lodash';
 
 import { nameSort } from '../_lib/util';
+import { clearTimeout } from 'timers';
 
 @Injectable()
 export class RiderService {
@@ -18,7 +19,7 @@ export class RiderService {
   private LatDummyAddition: number;
   private LngDummyAddition: number;
   private userName: string = '';
-  private prevPos: { lat: number, lng: number, acc: number } = {lat: null, lng: null, acc: null};
+  private prevPos: { lat: number, lng: number, acc: number } = { lat: null, lng: null, acc: null };
   private timer;
 
 
@@ -27,6 +28,7 @@ export class RiderService {
     this.socket = this.statusService.socket;
     this.watchUser();
     this.watchPosition();
+    // this.timerForWatchPosition();
     this.createRider();
     this.listenForFullRiderList();
     this.listenForRider();
@@ -43,22 +45,18 @@ export class RiderService {
 
   watchPosition() {
     // For debugging
-    this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition()`);
-    let i = 0;
-    setInterval(() => {
-      this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition. Message sent using setInterval: ${i++}`);
-    }, 10000);
+    // this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition()`);
+    // let i = 0;
+    // setInterval(() => {
+    //   this.statusService.debugMessages$.next(`${this.userName}. RiderService.watchPosition. Message sent using setInterval: ${i++}`);
+    // }, 10000);
 
+    console.log("About to call navigator.geolocation.watchPosition()");
     navigator.geolocation.watchPosition(position => {
-          console.log(position);
+          console.log(position, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
 
           clearTimeout(this.timer);
-
-          this.timer = setTimeout(() => {
-            console.log("Timer expired! About to call watchPosition() recursively!");
-            clearTimeout(this.timer);
-            this.watchPosition();
-          }, 10000);
+          this.timerForWatchPosition();
 
           if (
               Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
@@ -68,7 +66,8 @@ export class RiderService {
             let coords = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
-              acc: position.coords.accuracy
+              acc: position.coords.accuracy,
+              timestamp: position.timestamp
             };
 
             if ( environment.dummyCoords ) coords = this.getDummyCoords(coords);
@@ -94,6 +93,24 @@ export class RiderService {
 
     if ( environment.dummyMovement ) this.setDummyMovements();
 
+  }
+
+  timerForWatchPosition() {
+    console.log("About to set timer.");
+    this.timer = setTimeout(() => {
+      this.statusService.debugMessages$.next("Timer expired!");
+      let coords = this.statusService.coords$.value;
+      if ( coords && coords.timestamp ) {
+        this.statusService.debugMessages$.next(`Are the latest coords too old: ${Date.now() - coords.timestamp}`);
+        if ( Date.now() - coords.timestamp > 10000 ) {
+          this.statusService.debugMessages$.next("About to call watchPosition() and timerForWatchPosition() again");
+          this.watchPosition();
+          this.timerForWatchPosition();
+        }
+
+      }
+
+    }, 10000);
   }
 
   addRider(rider) {

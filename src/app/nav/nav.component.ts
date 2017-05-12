@@ -4,11 +4,11 @@ import { User } from '../_models/user';
 import * as $ from 'jquery';
 
 @Component({
-  selector: 'rp-header',
-  templateUrl: './header.component.html',
-  styleUrls: [ './header.component.scss' ]
+  selector: 'rp-nav',
+  templateUrl: './nav.component.html',
+  styleUrls: [ './nav.component.scss' ]
 })
-export class HeaderComponent implements OnInit {
+export class NavComponent implements OnInit {
   public user: User;
   public ride: string;
 
@@ -33,9 +33,7 @@ export class HeaderComponent implements OnInit {
   }
 
   collapseNav() {
-    // $(".navbar-collapse").collapse('collapse');
-    $('.navbar-toggle').click() //bootstrap 3.x by Richard
-
+    if ($(window).width() < 768) $('.navbar-toggle').click();
   }
 
 }

@@ -5,12 +5,12 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { RidersMap2Module } from "./riders-map2/riders-map2.module";
+import { MapModule } from "./map/map.module";
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserService } from "./_services/user.service";
 import { AuthenticationService } from "./_services/authentication.service";
-import { HeaderComponent } from './header/header.component';
+import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { LogoutComponent } from './logout/logout.component';
 import { ProtectedComponent } from './protected/protected.component';
@@ -33,7 +33,7 @@ import { DebuggingService } from './_services/debugging.service';
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    HeaderComponent,
+    NavComponent,
     HomeComponent,
     LogoutComponent,
     ProtectedComponent,
@@ -48,7 +48,7 @@ import { DebuggingService } from './_services/debugging.service';
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    RidersMap2Module
+    MapModule
   ],
   providers: [
     UserService,

@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+
+      <div
+          class="map"
+          [ngClass]="{'visibility-hidden': !latLng}">
+
+        <sebm-google-map
+            [fitBounds]="latLng"
+            [maxZoom]="maxZoom"
+            [zoomControl]="false"
+        >
+          <sebm-google-map-marker #markers
+                                  *ngFor="let rider of riders; let i = index"
+                                  [latitude]="rider.lat"
+                                  [longitude]="rider?.lng"
+                                  [label]="{text: rider?.initials, color: 'black'}"
+                                  [markerDraggable]="true"
+                                  [iconUrl]="markerUrl + colors[rider?.color] + '.png'"
+                                  [zIndex]="rider?.zInd"
+                                  [opacity]="rider?.opacity"
+                                  (markerClick)="closeInfoWindows(rider?._id)"
+          >
+
+            <sebm-google-map-info-window #infoWindows
+                                         attr.data-index={{rider?._id}}
+            >
+              <div class="info-window">{{rider?.fname}} {{ rider?.lname}}
+                <span *ngIf="rider?.phone"><br/>{{rider?.phone}}</span>
+                <span *ngIf="rider?.disconnected"><br/>Last heard from {{minutes[rider._id]}} minute<span *ngIf="minutes[rider._id] !== 1">s</span> ago.</span>
+                <span><br/></span>
+              </div>
+            </sebm-google-map-info-window>
+
+          </sebm-google-map-marker>
+
+
+        </sebm-google-map>
+        <button class="btn btn-primary" type="button" (click)="fitAllRiders()">Show All Riders</button>
+        <button class="btn btn-info" (click)="focusOnUser()">Zoom In On Me</button>
+      </div>
+
+
+      <div
+          [ngClass]="{'display-none': latLng,'while-waiting-for-coords': !latLng}">
+        <p>Launching satellites ...</p>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+

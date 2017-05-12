@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { RidersMap2Component } from './riders-map2.component';
+import { MapComponent } from './map.component';
 
-describe('RidersMap2Component', () => {
-  let component: RidersMap2Component;
-  let fixture: ComponentFixture<RidersMap2Component>;
+describe('MapComponent', () => {
+  let component: MapComponent;
+  let fixture: ComponentFixture<MapComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RidersMap2Component ]
+      declarations: [ MapComponent ]
     })
         .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RidersMap2Component);
+    fixture = TestBed.createComponent(MapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

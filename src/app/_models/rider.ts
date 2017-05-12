@@ -9,6 +9,7 @@ export class Rider extends User {
   opacity: number = 1;
   color?: number = null;
   zInd?: number;
+  disconnectTime?: number;
 
   constructor(obj, coords = null, ride = null) {
     super(obj);
@@ -23,16 +24,22 @@ export class Rider extends User {
 
     this.ride = ride || obj.ride;
     this.disconnected = obj.disconnected || false;
+    this.disconnectTime = obj.disconnectTime || null;
     this.opacity = 1;
     this.socketId = obj.socketId || null;
   }
 
   get colorNumber() {
-    return ( this.initials.charCodeAt(0) + this.initials.charCodeAt(1) ) % 8;
+    let colorNumber = this.fname.charCodeAt(0) + this.lname.charCodeAt(0);
+    if (this.lname.length >= 2) colorNumber += this.lname.charCodeAt(1);
+    return colorNumber % 8;
   }
 
   get zIndex() {
-    return ( this.initials.charCodeAt(0) + this.initials.charCodeAt(1) );
+    let zIndex = this.fname.charCodeAt(0) + this.fname.charCodeAt(1);
+    if (this.fname.length >= 2) zIndex += this.lname.charCodeAt(1);
+    return zIndex;
   }
+
 
 }

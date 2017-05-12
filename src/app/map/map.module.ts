@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { RidersMap2Component } from './riders-map2.component';
+import { MapComponent } from './map.component';
 import { AgmCoreModule } from "angular2-google-maps/core";
 import { environment } from "../../environments/environment";
 
@@ -18,10 +18,10 @@ import { environment } from "../../environments/environment";
     })
   ],
   declarations: [
-    RidersMap2Component
+    MapComponent
   ],
   providers: [ ],
   bootstrap: [ ]
 })
-export class RidersMap2Module {
+export class MapModule {
 }

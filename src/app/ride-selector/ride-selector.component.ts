@@ -46,7 +46,7 @@ export class RideSelectorComponent implements OnInit {
     this.statusService.currentRide$.next(ride);
     // this.alertService.success(`You have been logged in to ride ${ride}`, true);
 
-    return this.router.navigate([ '/riders-map2' ]);
+    return this.router.navigate([ '/map' ]);
   }
 
   logOutFromRide() {

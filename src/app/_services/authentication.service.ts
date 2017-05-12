@@ -51,6 +51,7 @@ export class AuthenticationService {
           if ( user && token ) {
             localStorage.setItem('currentToken', JSON.stringify(token));
             this.statusService.user$.next(user);
+            console.log(user);
           }
         });
   }

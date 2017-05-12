@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewChildren } from '@angular/core';
 
 import { StatusService } from '../_services/status.service';
 import { Rider } from '../_models/rider';
@@ -8,14 +8,14 @@ import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { Subscription } from 'rxjs/Subscription';
 import { RiderService } from '../_services/rider.service';
 import Socket = SocketIOClient.Socket;
-import { User } from '../_models/user';
+import * as _ from 'lodash';
 
 @Component({
-  selector: 'rp-riders-map2',
-  templateUrl: './riders-map2.component.html',
-  styleUrls: [ './riders-map2.component.scss' ]
+  selector: 'rp-map',
+  templateUrl: './map.component.html',
+  styleUrls: [ './map.component.scss' ]
 })
-export class RidersMap2Component implements OnInit, OnDestroy {
+export class MapComponent implements OnInit, OnDestroy {
   private fullName: string = '';
   public maxZoom: number = 18;
   public riders: Array<Rider> = [];
@@ -34,7 +34,15 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   private socket: Socket;
   public debugMessages: Array<string> = [];
 
+  private timer: Array<any> = [];
+  private timer2: any;
+
+  public minutes: Array<number> = [];
+
   coordsSub: Subscription;
+
+  @ViewChildren('markers') markers;
+  @ViewChildren('infoWindows') infoWindows;
 
   constructor(private statusService: StatusService,
               private mapsAPILoader: MapsAPILoader) {
@@ -43,13 +51,22 @@ export class RidersMap2Component implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.watchUser();
-    // this.sendSocketDebugMessage("Initializing RidersMap2Component!");
     this.mapsAPILoader.load().then(() => {
       this.google = google;
-      // this.sendSocketDebugMessage("mapsAPILoader loaded!");
       this.focusOnUser();
       this.watchRiders();
+      this.removeLongDisconnectedRiders();
     });
+  }
+
+  closeInfoWindows(riderId) {
+    // This actually works. Apparently, this executes, closing any open infoWindow, before a new one is opened.
+    this.infoWindows.forEach(infoWindow => infoWindow.close());
+
+    // If the above hadn't worked, this is how I would have done it.
+    // this.infoWindows.forEach(infoWindow => {
+    //   if (infoWindow._el.nativeElement.attributes['data-index'] !== riderId) infoWindow.close();
+    // });
   }
 
   watchUser() {
@@ -62,8 +79,17 @@ export class RidersMap2Component implements OnInit, OnDestroy {
     this.riderSub = this.statusService.riders$
         .subscribe(riders => {
           riders = this.setMarkerColor(riders);
+          riders = this.trackDisconnectedTime(riders);
           this.riders = riders;
         });
+  }
+
+  removeLongDisconnectedRiders() {
+    this.timer2 = setInterval(() => {
+      this.riders = _.filter(this.riders, (rider) => { // Todo: Use an environment variable? Or a variable that can be set through a UI?
+        return !rider.disconnected || (Date.now() - rider.disconnectTime) < 1800000;
+      });
+    }, 30000);
   }
 
   setMarkerColor(riders) {
@@ -79,22 +105,40 @@ export class RidersMap2Component implements OnInit, OnDestroy {
         rider.zInd = 0 - rider.zIndex;
       }
 
-      // The user's own marker
-      if ( rider._id === user._id ) {
-        rider.color = 1;
-        rider.zInd = 302;
+      // Ride leader
+      if ( rider.leader === true ) {
+        rider.color = 2;
+        rider.zInd = rider.zIndex + 1000;
       }
 
-      // Ride leader
-      if ( user ) {
-        if ( rider.leader === true ) {
-          rider.color = 2;
-          rider.zInd = 301;
-        }
+      // The user's own marker
+      if ( user && user._id === rider._id ) {
+        rider.color = 1;
+        rider.zInd = rider.zIndex + 2000;
       }
 
       return rider;
     });
+    return riders;
+  }
+
+  trackDisconnectedTime(riders) {
+    riders.forEach(rider => {
+      // console.log(`${rider.fname} ${rider.lname}. zInd:, ${rider.zInd}`);
+      if ( rider.disconnected ) {
+        clearInterval(this.timer[ rider._id ]);
+        this.timer[ rider._id ] = setInterval(() => {
+          // Todo: Show seconds up to a minute, and then minutes.
+          this.minutes[ rider._id ] = Math.round((Date.now() - rider.disconnectTime) / 1000);
+          // console.log(this.minutes[ rider._id ]);
+        }, 1000);
+      } else {
+        this.minutes[ rider._id ] = 0;
+        // console.log("About to clear timer:", this.timer[ rider._id ]);
+        clearInterval(this.timer[ rider._id ]);
+      }
+    });
+
     return riders;
   }
 
@@ -118,7 +162,7 @@ export class RidersMap2Component implements OnInit, OnDestroy {
         },
         err => {
           // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
-          console.log("RidersMap2Component.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
+          console.log("MapComponent.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
         });
     setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
       this.coordsSub.unsubscribe();
@@ -128,11 +172,9 @@ export class RidersMap2Component implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.riderSub.unsubscribe();
     this.coordsSub.unsubscribe();
+    this.riders.forEach(rider => clearInterval(this.timer[ rider._id ]));
+    clearInterval(this.timer2);
   }
-
-  // sendSocketDebugMessage(message) {
-  //   this.statusService.debugMessages$.next(`${this.fullName}. ${message}`);
-  // };
 
 
 }

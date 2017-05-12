@@ -32,16 +32,16 @@
       <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
     </div>
 
-    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ename.valid }">
-      <label for="ename">Emergency contact name</label>
-      <input type="text" class="form-control" name="ename" id="ename" [(ngModel)]="model.ename" #ename="ngModel" required />
-      <div *ngIf="f.submitted && !ename.valid" class="help-block">Emergency contact name is required</div>
+    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !emergencyName.valid }">
+      <label for="emergencyName">Emergency contact name</label>
+      <input type="text" class="form-control" name="emergencyName" id="emergencyName" [(ngModel)]="model.emergencyName" #emergencyName="ngModel" required />
+      <div *ngIf="f.submitted && !emergencyName.valid" class="help-block">Emergency contact name is required</div>
     </div>
 
-    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ephone.valid }">
-      <label for="ephone">Emergency phone number</label>
-      <input type="text" class="form-control" name="ephone" id="ephone" [(ngModel)]="model.ephone" #ephone="ngModel" required />
-      <div *ngIf="f.submitted && !ephone.valid" class="help-block">Emergency phone number is required</div>
+    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !emergencyPhone.valid }">
+      <label for="emergencyPhone">Emergency phone number</label>
+      <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" [(ngModel)]="model.emergencyPhone" #emergencyPhone="ngModel" required />
+      <div *ngIf="f.submitted && !emergencyPhone.valid" class="help-block">Emergency phone number is required</div>
     </div>
 
     <div class="form-group">

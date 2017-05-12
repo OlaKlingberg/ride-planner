@@ -6,8 +6,8 @@ export class User {
   password?: string;
   leader: boolean;
   phone: string;
-  ename: string;
-  ephone: string;
+  emergencyName: string;
+  emergencyPhone: string;
   admin: boolean;
   token?: string;
 
@@ -18,8 +18,8 @@ export class User {
     this.email = obj.email;
     this.leader = obj.leader;
     this.phone = obj.phone;
-    this.ename = obj.ename;
-    this.ephone = obj.ephone;
+    this.emergencyName = obj.emergencyName;
+    this.emergencyPhone = obj.emergencyPhone;
     this.admin = obj.admin;
   }
 

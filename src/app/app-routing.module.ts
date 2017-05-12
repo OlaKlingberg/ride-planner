@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { RidersMap2Component } from "./riders-map2/riders-map2.component";
+import { MapComponent } from "./map/map.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { HomeComponent } from "./home/home.component";
@@ -20,8 +20,8 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'riders-map2',
-    component: RidersMap2Component
+    path: 'map',
+    component: MapComponent
   },
   {
     path: 'login',

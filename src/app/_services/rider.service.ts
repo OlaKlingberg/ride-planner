@@ -49,7 +49,7 @@ export class RiderService {
 
     this.geoWatch = navigator.geolocation.watchPosition(position => {
           console.log(position.coords.latitude, position.coords.longitude, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
-          this.statusService.debugMessages$.next(`${this.userName}. New coords yielded! ${new Date().toLocaleTimeString('en-US', {hour12: false})}`);
+          this.statusService.debugMessages$.next(`${this.userName}. New coords yielded! ${new Date().toLocaleTimeString('en-US', { hour12: false })}`);
 
           clearTimeout(this.timer);
 
@@ -124,7 +124,9 @@ export class RiderService {
           if ( coords && ride && user ) {
             this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
             let rider = new Rider(user, coords, ride);
-            this.socket.emit('rider', rider, () => {
+            let token = localStorage.getItem('currentToken');
+            token = JSON.parse(token);
+            this.socket.emit('rider', { rider, token }, () => {
               // Todo: Do I have any use for this callback?
             });
           }
@@ -144,6 +146,8 @@ export class RiderService {
   listenForFullRiderList() {
     this.socket.on('fullRiderList', riders => {
       if ( riders ) {
+        riders.forEach(rider => console.log(`${rider.fname} ${rider.lname}. ${rider.phone}`));
+
         riders = riders.map(rider => new Rider(rider));
       }
       this.statusService.riders$.next(riders);
@@ -152,7 +156,7 @@ export class RiderService {
 
   listenForRider() {
     this.socket.on('rider', rider => {
-      // Todo: rider has email, which it should not.
+      console.log(`Received rider: ${rider.fname} ${rider.lname}. ${rider.phone}`);
       let newOrUpdatedRider = new Rider(rider);
       this.addRider(newOrUpdatedRider);
     });

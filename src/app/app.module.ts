@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { MapModule } from "./map/map.module";
@@ -27,6 +28,8 @@ import { DebuggerComponent } from './debugger/debugger.component';
 import { RideLeaderGuard } from './_guards/ride-leader.guard';
 import { AdminGuard } from './_guards/admin.guard';
 import { DebuggingService } from './_services/debugging.service';
+import { WindowRefService } from './_services/window-ref.service';
+import { EqualValidator } from './register/equal-validator.directive';
 
 @NgModule({
   declarations: [
@@ -42,13 +45,15 @@ import { DebuggingService } from './_services/debugging.service';
     UserListComponent,
     RiderListComponent,
     DebuggerComponent,
+    EqualValidator
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    MapModule
+    MapModule,
+    BrowserAnimationsModule
   ],
   providers: [
     UserService,
@@ -60,7 +65,8 @@ import { DebuggingService } from './_services/debugging.service';
     RideService,
     RiderService,
     StatusService,
-    DebuggingService
+    DebuggingService,
+    WindowRefService
   ],
   bootstrap: [ AppComponent ]
 })

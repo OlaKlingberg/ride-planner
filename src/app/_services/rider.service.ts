@@ -55,7 +55,7 @@ export class RiderService {
 
           this.timerForWatchPosition();
 
-          if (
+          if (  // Update the rider only if the coords or the accuracy have changed enough.
               Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
               Math.abs(position.coords.longitude - this.prevPos.lng) > .0001 ||
               position.coords.accuracy < this.prevPos.acc
@@ -90,7 +90,6 @@ export class RiderService {
   }
 
   timerForWatchPosition() {
-    this.statusService.debugMessages$.next(`${this.userName}. Timer started.`);
     this.timer = setTimeout(() => {
       this.statusService.debugMessages$.next(`${this.userName}. Timer expired!`);
       let coords = this.statusService.coords$.value;

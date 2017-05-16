@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { RideService } from "../_services/ride.service";
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './ride-selector.component.html',
   styleUrls: [ './ride-selector.component.scss' ]
 })
-export class RideSelectorComponent implements OnInit {
+export class RideSelectorComponent implements OnInit, OnDestroy {
   private model: any = [];
   private availableRides: Array<string>;
   public currentRide: string;

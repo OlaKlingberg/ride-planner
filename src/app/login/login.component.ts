@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "../_services/authentication.service";
 import { AlertService } from "../_services/alert.service";
@@ -6,17 +6,21 @@ import { User } from "../_models/user";
 import { StatusService } from '../_services/status.service';
 
 import * as $ from 'jquery';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'rp-login',
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   model: any = {};
   loading = false;
   returnUrl: string;
   user: User;
+
+  loginSub: Subscription;
+  userSub: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -29,7 +33,7 @@ export class LoginComponent implements OnInit {
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
-    this.statusService.user$.subscribe(user => {
+    this.userSub = this.statusService.user$.subscribe(user => {
           if ( user ) {
             this.user = user;
             this.router.navigate([ this.returnUrl ]);
@@ -41,7 +45,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loading = true;
-    this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
+    this.loginSub = this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true);
               this.router.navigate([ '/ride-selector' ])
@@ -60,6 +64,11 @@ export class LoginComponent implements OnInit {
     this.model.password = $('#password')[0].value;
 
     return true;
+  }
+
+  ngOnDestroy() {
+    if (this.loginSub) this.loginSub.unsubscribe();
+    this.userSub.unsubscribe();
   }
 
 }

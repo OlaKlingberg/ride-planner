@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { RiderService } from '../_services/rider.service';
 import Socket = SocketIOClient.Socket;
 import * as _ from 'lodash';
+import { WindowRefService } from '../_services/window-ref.service'
 
 @Component({
   selector: 'rp-map',
@@ -25,6 +26,7 @@ export class MapComponent implements OnInit, OnDestroy {
   public latLng: LatLngBoundsLiteral;
 
   private riderSub: Subscription;
+  private userSub: Subscription;
 
   // public focusedOnUser: boolean = true;
 
@@ -43,20 +45,38 @@ export class MapComponent implements OnInit, OnDestroy {
 
   @ViewChildren('markers') markers;
   @ViewChildren('infoWindows') infoWindows;
+  @ViewChild('sebmGoogleMap') sebmGoogleMap;
+  @ViewChild('window') window;
 
   constructor(private statusService: StatusService,
-              private mapsAPILoader: MapsAPILoader) {
+              private mapsAPILoader: MapsAPILoader,
+              private windowRefService: WindowRefService) {
     this.socket = this.statusService.socket;
+
+    console.log("Native window obj", this.windowRefService.nativeWindow);
   }
 
   ngOnInit() {
+
     this.watchUser();
-    this.mapsAPILoader.load().then(() => {
-      this.google = google;
-      this.focusOnUser();
-      this.watchRiders();
-      this.removeLongDisconnectedRiders();
-    });
+
+    // if (this.windowRefService.nativeWindow.riderMap) {
+    //   this.sebmGoogleMap = this.windowRefService.nativeWindow.riderMap;
+    //   this.google = this.windowRefService.nativeWindow.google;
+    //   console.log(this.google);
+    //   this.focusOnUser();
+    //   this.watchRiders();
+    //   this.removeLongDisconnectedRiders();
+    // } else {
+      this.mapsAPILoader.load().then(() => {
+        this.google = google;
+        this.focusOnUser();
+        this.watchRiders();
+        this.removeLongDisconnectedRiders();
+      });
+    // }
+
+
   }
 
   closeInfoWindows(riderId) {
@@ -70,7 +90,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   watchUser() {
-    this.statusService.user$.subscribe(user => {
+    this.userSub = this.statusService.user$.subscribe(user => {
       this.fullName = user ? user.fullName : null;
     });
   }
@@ -171,9 +191,19 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.riderSub.unsubscribe();
+    this.userSub.unsubscribe();
     this.coordsSub.unsubscribe();
     this.riders.forEach(rider => clearInterval(this.timer[ rider._id ]));
     clearInterval(this.timer2);
+
+    // Attempt to ameliorate memory leak.
+    google.maps.event.clearInstanceListeners(window);
+    google.maps.event.clearInstanceListeners(document);
+    google.maps.event.clearInstanceListeners(this.sebmGoogleMap);
+    google.maps.event.clearInstanceListeners(this.markers);
+    google.maps.event.clearInstanceListeners(this.infoWindows);
+
+    // this.windowRefService.nativeWindow.riderMap = this.sebmGoogleMap;
   }
 
 

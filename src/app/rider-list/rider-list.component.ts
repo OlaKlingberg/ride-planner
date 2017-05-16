@@ -4,7 +4,6 @@ import { StatusService } from '../_services/status.service';
 import { Rider } from '../_models/rider';
 import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
-import { RiderService } from '../_services/rider.service';
 
 @Component({
   selector: 'app-rider-list',

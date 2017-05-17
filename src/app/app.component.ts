@@ -79,6 +79,8 @@ export class AppComponent implements OnInit {
     }, 2000);
   }
 
-
+  showNavBar() {
+    this.statusService.navBarState$.next('show');
+  }
 
 }

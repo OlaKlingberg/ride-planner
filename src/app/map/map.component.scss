@@ -1,7 +1,12 @@
 .sebm-google-map-container {
   //height: 300px;
-  height: 300px;
-  width: 100%;
+  //width: 100%;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
 
 .info-window {
@@ -16,14 +21,31 @@
   display: none;
 }
 
-.while-waiting-for-coords {
-  position: relative;
-  top: -150px;
+.launching-satellites {
   text-align: center;
   color: chartreuse;
-  display: block !important;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  div {
+    position: absolute;
+    top: 45%;
+    width: 100%;
+    h3 {
+      position: relative;
+      margin: 0 auto;
+    }
+  }
 }
 
 .transparent {
   opacity: .3;
+}
+
+#map-buttons {
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
 }

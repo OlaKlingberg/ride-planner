@@ -1,4 +1,6 @@
-<div class="container">
+<div (click)="showNavBar()">
+
+<div class="container hidden-xs">
   <div class="row">
     <div class="col-sm-12">
       <h1>{{title}}</h1>
@@ -15,13 +17,14 @@
 
 <rp-nav></rp-nav>
 
-<div class="jumbotron">
-  <div class="container">
-    <div class="col-sm-8 col-sm-offset-2">
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
       <rp-alert></rp-alert>
       <router-outlet></router-outlet>
     </div>
   </div>
+
 </div>
 
 <div>
@@ -31,4 +34,4 @@
 
 </div>
 
-
+</div>

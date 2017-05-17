@@ -2,15 +2,20 @@
   <div class="row">
     <div class="col-md-12">
 
-      <div
-          class="map"
-          [ngClass]="{'visibility-hidden': !latLng}">
+      <div [ngClass]="{'visibility-hidden': !latLng}">
 
         <sebm-google-map
             #sebmGoogleMap
             [fitBounds]="latLng"
             [maxZoom]="maxZoom"
             [zoomControl]="false"
+            (swipeleft)="touch($event.type)"
+            (swiperight)="touch($event.type)"
+            (tap)="touch($event.type)"
+            (press)="touch($event.type)"
+            (pinch)="touch($event.type)"
+            (pinchstart)="touch($event.type)"
+            (pinchend)="touch($event.type)"
         >
           <sebm-google-map-marker #markers
                                   *ngFor="let rider of riders; let i = index"
@@ -29,7 +34,8 @@
             >
               <div class="info-window">{{rider?.fname}} {{ rider?.lname}}
                 <span *ngIf="rider?.phone"><br/>{{rider?.phone}}</span>
-                <span *ngIf="rider?.disconnected"><br/>Last heard from {{minutes[rider._id]}} minute<span *ngIf="minutes[rider._id] !== 1">s</span> ago.</span>
+                <span *ngIf="rider?.disconnected"><br/>Last heard from {{minutes[rider._id]}} minute<span
+                    *ngIf="minutes[rider._id] !== 1">s</span> ago.</span>
                 <span><br/></span>
               </div>
             </sebm-google-map-info-window>
@@ -38,14 +44,17 @@
 
 
         </sebm-google-map>
-        <button class="btn btn-primary" type="button" (click)="fitAllRiders()">Show All Riders</button>
-        <button class="btn btn-info" (click)="focusOnUser()">Zoom In On Me</button>
+
+        <div id="map-buttons">
+          <button class="btn btn-primary" type="button" (click)="fitAllRiders()">Show All Riders</button>
+          <button class="btn btn-info" (click)="focusOnUser()">Zoom In On Me</button>
+        </div>
       </div>
 
-
-      <div
-          [ngClass]="{'display-none': latLng,'while-waiting-for-coords': !latLng}">
-        <p>Launching satellites ...</p>
+      <div [ngClass]="{'display-none': latLng,'launching-satellites': !latLng}">
+        <div>
+          <h3>Launching satellites ...</h3>
+        </div>
       </div>
 
 

@@ -6,9 +6,9 @@ import { MapsAPILoader } from 'angular2-google-maps/core';
 import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { Subscription } from 'rxjs/Subscription';
-import { RiderService } from '../_services/rider.service';
 import Socket = SocketIOClient.Socket;
 import * as _ from 'lodash';
+import * as $ from 'jquery';
 import { WindowRefService } from '../_services/window-ref.service'
 
 @Component({
@@ -27,6 +27,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private riderSub: Subscription;
   private userSub: Subscription;
+  private coordsSub: Subscription;
+  private navBarStateSub: Subscription;
+
+  // private Hammer: Hammer = Hammer;
+
 
   // public focusedOnUser: boolean = true;
 
@@ -38,45 +43,36 @@ export class MapComponent implements OnInit, OnDestroy {
 
   private timer: Array<any> = [];
   private timer2: any;
+  public navBarStateTimer: any;
 
   public minutes: Array<number> = [];
 
-  coordsSub: Subscription;
 
   @ViewChildren('markers') markers;
   @ViewChildren('infoWindows') infoWindows;
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
-  @ViewChild('window') window;
+  // @ViewChild('window') window;
 
   constructor(private statusService: StatusService,
               private mapsAPILoader: MapsAPILoader,
               private windowRefService: WindowRefService) {
-    this.socket = this.statusService.socket;
+    this
+        .socket = this.statusService.socket;
 
-    console.log("Native window obj", this.windowRefService.nativeWindow);
   }
 
   ngOnInit() {
-
     this.watchUser();
+    this.mapsAPILoader.load().then(() => {
+      this.google = google;
+      this.focusOnUser();
+      this.watchRiders();
+      this.removeLongDisconnectedRiders();
+    });
+  }
 
-    // if (this.windowRefService.nativeWindow.riderMap) {
-    //   this.sebmGoogleMap = this.windowRefService.nativeWindow.riderMap;
-    //   this.google = this.windowRefService.nativeWindow.google;
-    //   console.log(this.google);
-    //   this.focusOnUser();
-    //   this.watchRiders();
-    //   this.removeLongDisconnectedRiders();
-    // } else {
-      this.mapsAPILoader.load().then(() => {
-        this.google = google;
-        this.focusOnUser();
-        this.watchRiders();
-        this.removeLongDisconnectedRiders();
-      });
-    // }
-
-
+  touch(idx, ev) {
+    console.log('touch:', ev, idx);
   }
 
   closeInfoWindows(riderId) {
@@ -102,6 +98,20 @@ export class MapComponent implements OnInit, OnDestroy {
           riders = this.trackDisconnectedTime(riders);
           this.riders = riders;
         });
+  }
+
+// When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
+  watchNavBarState() {
+    this.navBarStateSub = this.statusService.navBarState$.subscribe(navBarState => {
+      setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
+        let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
+        if ( navBarState === 'show' && !ariaExpanded ) {
+          this.navBarStateTimer = setTimeout(() => {
+            this.statusService.navBarState$.next('hide');
+          }, 150);
+        }
+      }, 0);
+    });
   }
 
   removeLongDisconnectedRiders() {
@@ -176,6 +186,9 @@ export class MapComponent implements OnInit, OnDestroy {
     this.bounds = new this.google.maps.LatLngBounds();
     this.coordsSub = this.statusService.coords$.subscribe(coords => {
           if ( coords ) {
+            if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
+            this.watchNavBarState();
+            this.statusService.navBarState$.next('hide');
             this.bounds.extend({ lat: coords.lat, lng: coords.lng });
             this.latLng = this.bounds.toJSON();
           }
@@ -189,12 +202,22 @@ export class MapComponent implements OnInit, OnDestroy {
     }, 15000);
   }
 
+  log(message) {
+    console.log(message);
+    this.statusService.debugMessages$.next(message);
+  }
+
   ngOnDestroy() {
     this.riderSub.unsubscribe();
     this.userSub.unsubscribe();
     this.coordsSub.unsubscribe();
+    this.navBarStateSub.unsubscribe();
     this.riders.forEach(rider => clearInterval(this.timer[ rider._id ]));
     clearInterval(this.timer2);
+    clearTimeout(this.navBarStateTimer);
+    setTimeout(() => {
+      this.statusService.navBarState$.next('show');
+    }, 200);
 
     // Attempt to ameliorate memory leak.
     google.maps.event.clearInstanceListeners(window);
@@ -203,7 +226,6 @@ export class MapComponent implements OnInit, OnDestroy {
     google.maps.event.clearInstanceListeners(this.markers);
     google.maps.event.clearInstanceListeners(this.infoWindows);
 
-    // this.windowRefService.nativeWindow.riderMap = this.sebmGoogleMap;
   }
 
 

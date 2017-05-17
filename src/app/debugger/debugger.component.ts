@@ -25,16 +25,14 @@ export class DebuggerComponent implements OnInit {
 
   clock() {
     setInterval(() => {
-      this.time = new Date().toLocaleTimeString('en-US', {hour12: false})
+      this.time = new Date().toLocaleTimeString('en-US', { hour12: false })
     }, 1000);
   }
 
   listenForDebugMessages() {
     this.socket.on('debugging', message => {
-      if (message.substr(0, 3) === 'Ada') {
-        this.debugMessages.push(message);
-
-      }
+      console.log(message);
+      this.debugMessages.push(message);
     });
   }
 

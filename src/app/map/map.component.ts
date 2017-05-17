@@ -71,8 +71,9 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  touch(idx, ev) {
-    console.log('touch:', ev, idx);
+  touch(ev) {
+    console.log('touch:', ev);
+    this.statusService.debugMessages$.next(`touch: ${ev}`);
   }
 
   closeInfoWindows(riderId) {

@@ -20,7 +20,7 @@ export class UserService {
   }
 
   getAllUsers() {
-    this.currentToken = JSON.parse(localStorage.getItem('currentToken'));
+    this.currentToken = JSON.parse(environment.storage.getItem('currentToken'));
     this.headers = new Headers({ 'x-auth': this.currentToken });
     this.requestOptions = new RequestOptions({ headers: this.headers });
 

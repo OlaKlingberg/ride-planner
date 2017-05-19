@@ -26,9 +26,9 @@ export class AuthenticationService {
   }
 
   authenticateByToken() {
-    const currentToken = localStorage.getItem('currentToken');
+    const currentToken = environment.storage.getItem('currentToken');
     if ( currentToken ) {
-      this.currentToken = JSON.parse(localStorage.getItem('currentToken'));
+      this.currentToken = JSON.parse(environment.storage.getItem('currentToken'));
       this.headers = new Headers({ 'x-auth': this.currentToken });
       this.requestOptions = new RequestOptions({ headers: this.headers });
 
@@ -49,9 +49,9 @@ export class AuthenticationService {
           let token = response.headers.get('x-auth');
 
           if ( user && token ) {
-            localStorage.setItem('currentToken', JSON.stringify(token));
+            environment.storage.setItem('currentToken', JSON.stringify(token));
             this.statusService.user$.next(user);
-            console.log(user);
+            // console.log(user);
           }
         });
   }
@@ -61,12 +61,12 @@ export class AuthenticationService {
     let ride = this.statusService.currentRide$.value;
     let rider = new Rider(user, null, ride);
 
-    this.currentToken = JSON.parse(localStorage.getItem('currentToken'));
+    this.currentToken = JSON.parse(environment.storage.getItem('currentToken'));
     this.headers = new Headers({ 'x-auth': this.currentToken });
     this.requestOptions = new RequestOptions({ headers: this.headers });
 
-    // Todo: I remove the user from localStorage and the observable before I even try to remove the token from the backend -- so the user will be removed from the front end, even if the api call to remove the token fails. Is that the behavior I want? Probably not. If the backend fails, then the user will think incorrectly that he has been logged out.
-    localStorage.removeItem('currentToken');
+    // Todo: I remove the user from environment.storage and the observable before I even try to remove the token from the backend -- so the user will be removed from the front end, even if the api call to remove the token fails. Is that the behavior I want? Probably not. If the backend fails, then the user will think incorrectly that he has been logged out.
+    environment.storage.removeItem('currentToken');
     this.statusService.user$.next(null);
     this.statusService.currentRide$.next(null);
 
@@ -81,7 +81,7 @@ export class AuthenticationService {
     this.statusService.user$.subscribe(user => {
       if ( user ) {
         if ( user.admin === true ) {
-          let token = localStorage.getItem('currentToken');
+          let token = environment.storage.getItem('currentToken');
           // user.token = token;
           this.socket.emit('admin', JSON.parse(token), () => {
             // Todo: Do I have any use for this callback?

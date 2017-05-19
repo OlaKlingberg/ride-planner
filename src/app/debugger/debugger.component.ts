@@ -31,7 +31,6 @@ export class DebuggerComponent implements OnInit {
 
   listenForDebugMessages() {
     this.socket.on('debugging', message => {
-      console.log(message);
       this.debugMessages.push(message);
     });
   }

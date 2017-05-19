@@ -9,13 +9,7 @@
             [fitBounds]="latLng"
             [maxZoom]="maxZoom"
             [zoomControl]="false"
-            (swipeleft)="touch($event.type)"
-            (swiperight)="touch($event.type)"
-            (tap)="touch($event.type)"
-            (press)="touch($event.type)"
-            (pinch)="touch($event.type)"
-            (pinchstart)="touch($event.type)"
-            (pinchend)="touch($event.type)"
+            (pinchstart)="setMapMode('stationary')"
         >
           <sebm-google-map-marker #markers
                                   *ngFor="let rider of riders; let i = index"
@@ -46,12 +40,13 @@
         </sebm-google-map>
 
         <div id="map-buttons">
-          <button class="btn btn-primary" type="button" (click)="fitAllRiders()">Show All Riders</button>
-          <button class="btn btn-info" (click)="focusOnUser()">Zoom In On Me</button>
+          <button class="btn btn-primary" type="button" *ngIf="mapMode === 'trackUser'" (click)="setMapMode('trackAllRiders')">Track All Riders</button>
+          <button class="btn btn-info" *ngIf="mapMode === 'trackAllRiders'" (click)="setMapMode('trackUser')">Track Me</button>
+          <button class="btn btn-danger" (click)="setMapMode('stationary')">Fake Pinch</button>
         </div>
       </div>
 
-      <div [ngClass]="{'display-none': latLng,'launching-satellites': !latLng}">
+      <div [ngClass]="{'launching-satellites': !latLng, 'display-none': latLng}">
         <div>
           <h3>Launching satellites ...</h3>
         </div>

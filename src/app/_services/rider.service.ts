@@ -28,7 +28,6 @@ export class RiderService {
     this.socket = this.statusService.socket;
     this.watchUser();
     this.watchPosition();
-    // this.timerForWatchPosition();
     this.createRider();
     this.listenForFullRiderList();
     this.listenForRider();
@@ -44,6 +43,8 @@ export class RiderService {
   }
 
   watchPosition() {
+    if ( environment.dummyMovement ) this.setDummyMovements();
+
     this.statusService.debugMessages$.next(`${this.userName}. watchPosition()`);
 
 
@@ -55,7 +56,7 @@ export class RiderService {
 
           this.timerForWatchPosition();
 
-          if (  // Update the rider only if the coords or the accuracy have changed enough.
+          if (  // Update the rider only if the coords have changed enough or the accuracy improved.
               Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
               Math.abs(position.coords.longitude - this.prevPos.lng) > .0001 ||
               position.coords.accuracy < this.prevPos.acc
@@ -84,9 +85,6 @@ export class RiderService {
           maximumAge: 5000
         }
     );
-
-    if ( environment.dummyMovement ) this.setDummyMovements();
-
   }
 
   timerForWatchPosition() {
@@ -123,7 +121,7 @@ export class RiderService {
           if ( coords && ride && user ) {
             this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
             let rider = new Rider(user, coords, ride);
-            let token = localStorage.getItem('currentToken');
+            let token = environment.storage.getItem('currentToken');
             token = JSON.parse(token);
             this.socket.emit('rider', { rider, token }, () => {
               // Todo: Do I have any use for this callback?
@@ -145,7 +143,7 @@ export class RiderService {
   listenForFullRiderList() {
     this.socket.on('fullRiderList', riders => {
       if ( riders ) {
-        riders.forEach(rider => console.log(`${rider.fname} ${rider.lname}. ${rider.phone}`));
+        // riders.forEach(rider => console.log(`${rider.fname} ${rider.lname}. ${rider.phone}`));
 
         riders = riders.map(rider => new Rider(rider));
       }
@@ -155,7 +153,7 @@ export class RiderService {
 
   listenForRider() {
     this.socket.on('rider', rider => {
-      console.log(`Received rider: ${rider.fname} ${rider.lname}. ${rider.phone}`);
+      // console.log(`Received rider: ${rider.fname} ${rider.lname}. ${rider.phone}`);
       let newOrUpdatedRider = new Rider(rider);
       this.addRider(newOrUpdatedRider);
     });
@@ -177,13 +175,13 @@ export class RiderService {
   }
 
   setDummyCoordAdjustments() {
-    this.LatDummyAddition = Math.random() * .006 - .003;
-    this.LngDummyAddition = Math.random() * .006 - .003;
+    this.LatDummyAddition = Math.random() * .002 - .001;
+    this.LngDummyAddition = Math.random() * .002 - .001;
   }
 
   setDummyMovements() {
-    let LatDummyMovement = Math.random() * .0006 - .0003;
-    let LngDummyMovement = Math.random() * .0006 - .0003;
+    let LatDummyMovement = Math.random() * .0004 - .0002;
+    let LngDummyMovement = Math.random() * .0004 - .0002;
 
     setTimeout(() => {
       setInterval(() => {
@@ -191,7 +189,7 @@ export class RiderService {
         coords.lat += LatDummyMovement;
         coords.lng += LngDummyMovement;
         this.statusService.coords$.next(coords);
-      }, Math.random() * 3000 + 4000);
+      }, Math.random() * 2000 + 1000);
     }, 5000);
   }
 

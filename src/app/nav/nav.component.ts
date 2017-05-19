@@ -66,7 +66,7 @@ export class NavComponent implements OnInit {
 
   // Make the nav bar visible again, if it's been hidden (currently only used on the map page).
   showNavBar() {
-    console.log("showNavBar");
+    // console.log("showNavBar");
     this.statusService.navBarState$.next('show');
   }
 

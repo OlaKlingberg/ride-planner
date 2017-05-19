@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs/Subscription';
 import Socket = SocketIOClient.Socket;
 import * as _ from 'lodash';
 import * as $ from 'jquery';
-import { WindowRefService } from '../_services/window-ref.service'
 
 @Component({
   selector: 'rp-map',
@@ -30,11 +29,6 @@ export class MapComponent implements OnInit, OnDestroy {
   private coordsSub: Subscription;
   private navBarStateSub: Subscription;
 
-  // private Hammer: Hammer = Hammer;
-
-
-  // public focusedOnUser: boolean = true;
-
   private markerUrl: string = "assets/img/";
   private colors: Array<string> = [ 'gray', 'white', 'red', 'brown', 'blue', 'green', 'lightblue', 'orange', 'pink', 'purple', 'yellow' ];
 
@@ -47,34 +41,33 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public minutes: Array<number> = [];
 
+  public mapMode: 'trackUser' | 'trackAllRiders' | 'stationary' = 'trackAllRiders';
+
 
   @ViewChildren('markers') markers;
   @ViewChildren('infoWindows') infoWindows;
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
-  // @ViewChild('window') window;
 
   constructor(private statusService: StatusService,
-              private mapsAPILoader: MapsAPILoader,
-              private windowRefService: WindowRefService) {
-    this
-        .socket = this.statusService.socket;
+              private mapsAPILoader: MapsAPILoader) {
+    this.socket = this.statusService.socket;
 
   }
 
   ngOnInit() {
-    this.watchUser();
+    this.subscribeToUser();
+    this.subscribeToNavBarState();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
-      this.focusOnUser();
-      this.watchRiders();
+      this.trackUser();
+      this.subscribeToRiders();
       this.removeLongDisconnectedRiders();
     });
   }
 
-  touch(ev) {
-    console.log('touch:', ev);
-    this.statusService.debugMessages$.next(`touch: ${ev}`);
-  }
+  // touch(ev) {
+  //   this.statusService.debugMessages$.next(`touch: ${ev}`);
+  // }
 
   closeInfoWindows(riderId) {
     // This actually works. Apparently, this executes, closing any open infoWindow, before a new one is opened.
@@ -86,33 +79,45 @@ export class MapComponent implements OnInit, OnDestroy {
     // });
   }
 
-  watchUser() {
+  subscribeToUser() {
     this.userSub = this.statusService.user$.subscribe(user => {
       this.fullName = user ? user.fullName : null;
     });
   }
 
-  watchRiders() {
+  subscribeToRiders() {
     this.riderSub = this.statusService.riders$
         .subscribe(riders => {
           riders = this.setMarkerColor(riders);
           riders = this.trackDisconnectedTime(riders);
           this.riders = riders;
+          if ( this.mapMode === 'trackAllRiders' ) this.trackAllRiders();
         });
   }
 
 // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
-  watchNavBarState() {
-    this.navBarStateSub = this.statusService.navBarState$.subscribe(navBarState => {
-      setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
-        let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
-        if ( navBarState === 'show' && !ariaExpanded ) {
-          this.navBarStateTimer = setTimeout(() => {
-            this.statusService.navBarState$.next('hide');
-          }, 150);
-        }
-      }, 0);
+  subscribeToNavBarState() {
+    this.statusService.navBarState$.subscribe(navBarState => {
+      console.log("Independent subscription of navBarState:", navBarState);
     });
+
+    this.navBarStateSub = this.statusService.navBarState$
+        .combineLatest(this.statusService.coords$)
+        .subscribe(([ navBarState, coords ]) => {
+          // Start the timer to hide the nav bar only when the map is shown, which happens when there are coords.
+          if ( coords ) {
+            setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
+              let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
+              if ( navBarState === 'show' && !ariaExpanded ) {
+                this.navBarStateTimer = setTimeout(() => {
+                  this.statusService.navBarState$.next('hide');
+                }, 150);
+              }
+            }, 0);
+          }
+
+
+        });
   }
 
   removeLongDisconnectedRiders() {
@@ -173,8 +178,25 @@ export class MapComponent implements OnInit, OnDestroy {
     return riders;
   }
 
-  fitAllRiders() {
-    // this.focusedOnUser = false;
+  setMapMode(mapMode) {
+    this.mapMode = mapMode;
+    switch ( mapMode ) {
+      case 'trackAllRiders':
+        this.trackAllRiders();
+        break;
+      case 'trackUser':
+        this.trackUser();
+        break;
+      case 'stationary':
+        if (this.coordsSub) this.coordsSub.unsubscribe();
+        break;
+      default:
+        // Todo: Do I need to handle this? This will never be reached if things work correctly.
+        break;
+    }
+  }
+
+  trackAllRiders() {
     this.bounds = new this.google.maps.LatLngBounds();
     this.riders.forEach(rider => {
       if ( rider.lat && rider.lng ) this.bounds.extend({ lat: rider.lat, lng: rider.lng });
@@ -182,37 +204,27 @@ export class MapComponent implements OnInit, OnDestroy {
     this.latLng = this.bounds.toJSON();
   }
 
-  focusOnUser() {
-    // this.focusedOnUser = true;
+  // Sets the map to the user's location. Doesn't assure that there will be a rider marker for the user.
+  trackUser() {
     this.bounds = new this.google.maps.LatLngBounds();
+    if ( this.coordsSub ) this.coordsSub.unsubscribe();
     this.coordsSub = this.statusService.coords$.subscribe(coords => {
           if ( coords ) {
-            if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
-            this.watchNavBarState();
-            this.statusService.navBarState$.next('hide');
             this.bounds.extend({ lat: coords.lat, lng: coords.lng });
             this.latLng = this.bounds.toJSON();
           }
         },
         err => {
           // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
-          console.log("MapComponent.focusOnUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
+          console.log("MapComponent.trackUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
         });
-    setTimeout(() => {  // Todo: This is a highly unsatisfactory workaround.
-      this.coordsSub.unsubscribe();
-    }, 15000);
-  }
-
-  log(message) {
-    console.log(message);
-    this.statusService.debugMessages$.next(message);
   }
 
   ngOnDestroy() {
-    this.riderSub.unsubscribe();
-    this.userSub.unsubscribe();
-    this.coordsSub.unsubscribe();
-    this.navBarStateSub.unsubscribe();
+    if ( this.riderSub ) this.riderSub.unsubscribe();
+    if ( this.userSub ) this.userSub.unsubscribe();
+    if ( this.coordsSub ) this.coordsSub.unsubscribe();
+    if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
     this.riders.forEach(rider => clearInterval(this.timer[ rider._id ]));
     clearInterval(this.timer2);
     clearTimeout(this.navBarStateTimer);

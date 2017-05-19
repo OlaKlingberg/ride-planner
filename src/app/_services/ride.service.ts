@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { RiderService } from './rider.service';
-import { AuthenticationService } from './authentication.service';
 import { StatusService } from './status.service';
+import { environment } from '../../environments/environment'
 import Socket = SocketIOClient.Socket;
 
 @Injectable()
@@ -23,23 +21,23 @@ export class RideService {
   }
 
   watchRide() {
-    // On page refresh, get currentRide from localStorage.
-    let ride = localStorage.getItem('currentRide');
-    let token = localStorage.getItem('currentToken');
+    // On page refresh, get currentRide from storage (session- och local-).
+    let ride = environment.storage.getItem('currentRide');
+    let token = environment.storage.getItem('currentToken');
     token = JSON.parse(token);
     this.statusService.currentRide$.next(ride);
     this.socket.emit('giveMeFullRiderList', { ride, token });
 
-    // Keep currentRide in localStorage synced with currentRide$
+    // Keep currentRide in storage synced with currentRide$
     this.statusService.currentRide$.subscribe(ride => {
       if ( ride ) {
-        let token = localStorage.getItem('currentToken');
+        let token = environment.storage.getItem('currentToken');
         token = JSON.parse(token);
         this.socket.emit('joinRide', ride);
         this.socket.emit('giveMeFullRiderList', { ride, token });
-        localStorage.setItem('currentRide', ride);
+        environment.storage.setItem('currentRide', ride);
       } else {
-        localStorage.removeItem('currentRide');
+        environment.storage.removeItem('currentRide');
       }
 
     });

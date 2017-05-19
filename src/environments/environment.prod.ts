@@ -4,5 +4,5 @@ export const environment = {
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   dummyCoords: true,
   dummyMovement: true,
-  storage: localStorage
+  storage: sessionStorage
 };

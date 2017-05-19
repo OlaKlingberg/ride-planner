@@ -92,7 +92,35 @@ export class MapComponent implements OnInit, OnDestroy {
         .subscribe(riders => {
           riders = this.setMarkerColor(riders);
           riders = this.trackDisconnectedTime(riders);
-          this.riders = riders;
+
+          // This, I believe, causes the markers to jump.
+          // this.riders = riders;
+
+          // 1. Remove riders from this.riders that are not in riders.
+            // Start by replacing removed riders with null.
+            // Then I will check if I can remove them entirely without making the markers jump.
+            // Removing riders won't happen several times a minute, so it might not be a big deal if it causes the markers to jump.
+
+
+
+
+          // 2. Add riders to this.riders that are not in this.riders.
+          let ridersToAdd = _.differenceBy(riders, this.riders, '_ic');
+          this.riders = _.concat(this.riders, ridersToAdd);
+
+          // 3. Update riders that have changed values.
+            // Loop through riders
+              // Update, if changed, in this.riders the rider's lat, lng, disconnected, disconnectedTime
+          for (let rider of riders) {
+            let indx = _.findIndex(this.riders, (r) => r._id === rider._id);
+            this.riders[indx].lat = rider.lat;
+            this.riders[indx].lng = rider.lng;
+            this.riders[indx].lat = rider.lat;
+            this.riders[indx].lat = rider.lat;
+          }
+
+
+
           if ( this.mapMode === 'trackAllRiders' ) this.trackAllRiders();
         });
   }
@@ -190,7 +218,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.trackUser();
         break;
       case 'stationary':
-        if (this.coordsSub) this.coordsSub.unsubscribe();
+        if ( this.coordsSub ) this.coordsSub.unsubscribe();
         break;
       default:
         // Todo: Do I need to handle this? This will never be reached if things work correctly.

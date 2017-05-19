@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 import Socket = SocketIOClient.Socket;
 import * as _ from 'lodash';
 import * as $ from 'jquery';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'rp-map',
@@ -16,6 +17,7 @@ import * as $ from 'jquery';
   styleUrls: [ './map.component.scss' ]
 })
 export class MapComponent implements OnInit, OnDestroy {
+  public production = environment.production;
   private fullName: string = '';
   public maxZoom: number = 18;
   public riders: Array<Rider> = [];

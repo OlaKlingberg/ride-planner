@@ -40,9 +40,16 @@
         </sebm-google-map>
 
         <div id="map-buttons">
-          <button class="btn btn-primary" type="button" *ngIf="mapMode === 'trackUser'" (click)="setMapMode('trackAllRiders')">Track All Riders</button>
-          <button class="btn btn-info" *ngIf="mapMode === 'trackAllRiders'" (click)="setMapMode('trackUser')">Track Me</button>
-          <button class="btn btn-danger" (click)="setMapMode('stationary')">Fake Pinch</button>
+          <button class="btn btn-primary"
+                  type="button"
+                  *ngIf="mapMode === 'trackUser' || mapMode === 'stationary'"
+                  (click)="setMapMode('trackAllRiders')">Track All Riders</button>
+          <button class="btn btn-info"
+                  *ngIf="mapMode === 'trackAllRiders' || mapMode === 'stationary'"
+                  (click)="setMapMode('trackUser')">Track Me</button>
+          <button class="btn btn-danger"
+                  *ngIf="!production"
+                  (click)="setMapMode('stationary')">Fake Pinch</button>
         </div>
       </div>
 

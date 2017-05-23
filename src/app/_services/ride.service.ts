@@ -38,7 +38,7 @@ export class RideService {
 
   joinOrLeaveRide() {
     this.statusService.currentRide$
-        .delay(100) // Todo: Not sure if this works. Kind of ugly, in any case.
+        // .delay(100) // Todo: Not sure if this works. Kind of ugly, in any case.
         .withLatestFrom(this.statusService.userRider$)
         .subscribe(([ ride, userRider ]) => {
           console.log("ride:", ride);
@@ -53,7 +53,7 @@ export class RideService {
 
   joinRide(userRider) {
     this.socket.emit('joinRide', userRider, () => {
-      console.log("userRider:", userRider);
+      console.log("joinRide() userRider:", userRider);
         this.socket.emit('giveMeFullRiderList', userRider);
         this.riderService.emitUpdatedRider();
 

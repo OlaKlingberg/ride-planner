@@ -21,6 +21,7 @@ export class User {
     this.emergencyName = obj.emergencyName;
     this.emergencyPhone = obj.emergencyPhone;
     this.admin = obj.admin;
+    this.token = obj.token;
   }
 
   get initials() {

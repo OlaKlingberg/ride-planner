@@ -32,7 +32,6 @@ export class StatusService {
           if ( user && ride && coords ) {
             let userRider = new Rider(user, coords, ride);
             this.userRider$.next(userRider);
-            console.log("userRider$.next(userRider):", userRider);
           } else {
             this.userRider$.next(null);
           }

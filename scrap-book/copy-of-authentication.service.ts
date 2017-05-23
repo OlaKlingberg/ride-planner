@@ -28,16 +28,14 @@ export class AuthenticationService {
   authenticateByToken() {
     const currentToken = environment.storage.getItem('currentToken');
     if ( currentToken ) {
-      this.currentToken = environment.storage.getItem('currentToken');
-      this.headers = new Headers({ 'x-auth': JSON.parse(this.currentToken) });
+      this.currentToken = JSON.parse(environment.storage.getItem('currentToken'));
+      this.headers = new Headers({ 'x-auth': this.currentToken });
       this.requestOptions = new RequestOptions({ headers: this.headers });
 
       this.http.get(`${environment.api}/users/authenticate-by-token`, this.requestOptions)
           .subscribe(response => {
             if ( response.status === 200 ) {
               let user: User = new User(response.json());
-              user.token = this.currentToken;
-              console.log("authenticateByToken(). user:", user);
               this.statusService.user$.next(user)
             }
           });
@@ -51,11 +49,9 @@ export class AuthenticationService {
           let token = response.headers.get('x-auth');
 
           if ( user && token ) {
-            console.log("About to set currentToken in storage.");
             environment.storage.setItem('currentToken', JSON.stringify(token));
-            user.token = token;
-            console.log("About to call user$.next(user)");
             this.statusService.user$.next(user);
+            // console.log(user);
           }
         });
   }

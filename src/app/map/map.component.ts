@@ -10,6 +10,7 @@ import Socket = SocketIOClient.Socket;
 import * as _ from 'lodash';
 import * as $ from 'jquery';
 import { environment } from '../../environments/environment';
+import { ValuesPipe } from '../_pipes/values.pipe';
 
 @Component({
   selector: 'rp-map',
@@ -21,6 +22,8 @@ export class MapComponent implements OnInit, OnDestroy {
   private fullName: string = '';
   public maxZoom: number = 18;
   public riders: Array<Rider> = [];
+  // public riders: Object = {};
+  // public riders: any = {};
 
   private google: any;
   private bounds: LatLngBounds;
@@ -43,7 +46,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public minutes: Array<number> = [];
 
-  public mapMode: 'trackUser' | 'trackAllRiders' | 'stationary' = 'trackAllRiders';
+  public mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'showAllRiders';
 
 
   @ViewChildren('markers') markers;
@@ -61,74 +64,20 @@ export class MapComponent implements OnInit, OnDestroy {
     this.subscribeToNavBarState();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
-      this.trackUser();
-      this.subscribeToRiders();
+      this.focusOnUser();
+      this.getRiders();
+      this.listenForNewRider();
+      this.listenForUpdateRiderPosition();
+      this.listenForDisconnectedRider();
+      this.listenForRemoveRider();
       this.removeLongDisconnectedRiders();
     });
   }
 
-  // touch(ev) {
-  //   this.statusService.debugMessages$.next(`touch: ${ev}`);
-  // }
-
-  closeInfoWindows(riderId) {
-    // This actually works. Apparently, this executes, closing any open infoWindow, before a new one is opened.
-    this.infoWindows.forEach(infoWindow => infoWindow.close());
-
-    // If the above hadn't worked, this is how I would have done it.
-    // this.infoWindows.forEach(infoWindow => {
-    //   if (infoWindow._el.nativeElement.attributes['data-index'] !== riderId) infoWindow.close();
-    // });
-  }
-
-  subscribeToUser() {
-    this.userSub = this.statusService.user$.subscribe(user => {
-      this.fullName = user ? user.fullName : null;
-    });
-  }
-
-  subscribeToRiders() {
-    this.riderSub = this.statusService.riders$
-        .subscribe(riders => {
-          riders = this.setMarkerColor(riders);
-          riders = this.trackDisconnectedTime(riders);
-
-          // This, I believe, causes the markers to jump.
-          // this.riders = riders;
-
-          // 1. Remove riders from this.riders that are not in riders.
-            // Start by replacing removed riders with null.
-            // Then I will check if I can remove them entirely without making the markers jump.
-            // Removing riders won't happen several times a minute, so it might not be a big deal if it causes the markers to jump.
-
-
-
-
-          // 2. Add riders to this.riders that are not in this.riders.
-          let ridersToAdd = _.differenceBy(riders, this.riders, '_ic');
-          this.riders = _.concat(this.riders, ridersToAdd);
-
-          // 3. Update riders that have changed values.
-            // Loop through riders
-              // Update, if changed, in this.riders the rider's lat, lng, disconnected, disconnectedTime
-          for (let rider of riders) {
-            let indx = _.findIndex(this.riders, (r) => r._id === rider._id);
-            this.riders[indx].lat = rider.lat;
-            this.riders[indx].lng = rider.lng;
-            this.riders[indx].lat = rider.lat;
-            this.riders[indx].lat = rider.lat;
-          }
-
-
-
-          if ( this.mapMode === 'trackAllRiders' ) this.trackAllRiders();
-        });
-  }
-
-// When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
+  // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
   subscribeToNavBarState() {
     this.statusService.navBarState$.subscribe(navBarState => {
-      console.log("Independent subscription of navBarState:", navBarState);
+      // console.log("Independent subscription of navBarState:", navBarState);
     });
 
     this.navBarStateSub = this.statusService.navBarState$
@@ -150,12 +99,26 @@ export class MapComponent implements OnInit, OnDestroy {
         });
   }
 
-  removeLongDisconnectedRiders() {
-    this.timer2 = setInterval(() => {
-      this.riders = _.filter(this.riders, (rider) => { // Todo: Use an environment variable? Or a variable that can be set through a UI?
-        return !rider.disconnected || (Date.now() - rider.disconnectTime) < 1800000;
-      });
-    }, 30000);
+  closeInfoWindows(riderId) {
+    // This actually works. Apparently, this executes, closing any open infoWindow, before a new one is opened.
+    this.infoWindows.forEach(infoWindow => infoWindow.close());
+
+    // If the above hadn't worked, this is how I would have done it.
+    // this.infoWindows.forEach(infoWindow => {
+    //   if (infoWindow._el.nativeElement.attributes['data-index'] !== riderId) infoWindow.close();
+    // });
+  }
+
+  subscribeToUser() {
+    this.userSub = this.statusService.user$.subscribe(user => {
+      this.fullName = user ? user.fullName : null;
+    });
+  }
+
+  getRiders() {
+    this.riders = this.statusService.riders$.value;
+    this.riders = this.setMarkerColor(this.riders);
+    this.riders = this.trackDisconnectedTime(this.riders);
   }
 
   setMarkerColor(riders) {
@@ -190,17 +153,14 @@ export class MapComponent implements OnInit, OnDestroy {
 
   trackDisconnectedTime(riders) {
     riders.forEach(rider => {
-      // console.log(`${rider.fname} ${rider.lname}. zInd:, ${rider.zInd}`);
       if ( rider.disconnected ) {
         clearInterval(this.timer[ rider._id ]);
         this.timer[ rider._id ] = setInterval(() => {
           // Todo: Show seconds up to a minute, and then minutes.
           this.minutes[ rider._id ] = Math.round((Date.now() - rider.disconnectTime) / 1000);
-          // console.log(this.minutes[ rider._id ]);
         }, 1000);
       } else {
         this.minutes[ rider._id ] = 0;
-        // console.log("About to clear timer:", this.timer[ rider._id ]);
         clearInterval(this.timer[ rider._id ]);
       }
     });
@@ -208,14 +168,23 @@ export class MapComponent implements OnInit, OnDestroy {
     return riders;
   }
 
+  removeLongDisconnectedRiders() {
+    this.timer2 = setInterval(() => {
+      this.riders = _.filter(this.riders, (rider) => {
+        // Todo: Use an environment variable for the time? Or a variable that can be set through a UI?
+        return !rider.disconnected || (Date.now() - rider.disconnectTime) < 1800000;
+      });
+    }, 30000);
+  }
+
   setMapMode(mapMode) {
     this.mapMode = mapMode;
     switch ( mapMode ) {
       case 'trackAllRiders':
-        this.trackAllRiders();
+        this.showAllRiders();
         break;
       case 'trackUser':
-        this.trackUser();
+        this.focusOnUser();
         break;
       case 'stationary':
         if ( this.coordsSub ) this.coordsSub.unsubscribe();
@@ -226,16 +195,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  trackAllRiders() {
-    this.bounds = new this.google.maps.LatLngBounds();
-    this.riders.forEach(rider => {
-      if ( rider.lat && rider.lng ) this.bounds.extend({ lat: rider.lat, lng: rider.lng });
-    });
-    this.latLng = this.bounds.toJSON();
-  }
-
-  // Sets the map to the user's location. Doesn't assure that there will be a rider marker for the user.
-  trackUser() {
+  focusOnUser() {
     this.bounds = new this.google.maps.LatLngBounds();
     if ( this.coordsSub ) this.coordsSub.unsubscribe();
     this.coordsSub = this.statusService.coords$.subscribe(coords => {
@@ -248,6 +208,43 @@ export class MapComponent implements OnInit, OnDestroy {
           // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
           console.log("MapComponent.trackUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
         });
+  }
+
+  showAllRiders() {
+    // Todo: This doesn't track the user; it only sets the bounds once.
+    this.bounds = new this.google.maps.LatLngBounds();
+    this.riders.forEach(rider => {
+      if ( rider.lat && rider.lng ) { // Just a safety precaution. Should not be needed.
+        this.bounds.extend({ lat: rider.lat, lng: rider.lng })
+      }
+    });
+    this.latLng = this.bounds.toJSON();
+  }
+
+  listenForNewRider() {
+    this.statusService.newRider$.subscribe(rider => this.riders.push(rider));
+  }
+
+  listenForUpdateRiderPosition() {
+    this.statusService.updatedRider$.subscribe(updatedRider => {
+      let index = _.findIndex(this.riders, rider => rider._id === updatedRider._id);
+      this.riders[index].lat = updatedRider.lat;
+      this.riders[index].lng = updatedRider.lng;
+    });
+  }
+
+  listenForDisconnectedRider() {
+    this.statusService.disconnectedRider$.subscribe(disconnectedRider => {
+      let index = _.findIndex(this.riders, rider => rider._id === disconnectedRider._id);
+        this.riders[index].disconnected = true;
+        this.riders[index].disconnectTime = disconnectedRider.disconnectTime;
+    });
+  }
+
+  listenForRemoveRider() {
+    this.statusService.removedRider$.subscribe(removedRider => {
+      this.riders = this.riders.filter(rider => rider._id !== removedRider._id);
+    });
   }
 
   ngOnDestroy() {
@@ -270,7 +267,6 @@ export class MapComponent implements OnInit, OnDestroy {
     google.maps.event.clearInstanceListeners(this.infoWindows);
 
   }
-
 
 }
 

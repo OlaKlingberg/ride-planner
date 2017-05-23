@@ -14,10 +14,12 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class RideSelectorComponent implements OnInit, OnDestroy {
   private model: any = [];
+  private coords: any = null;
   private availableRides: Array<string>;
   public currentRide: string;
   private availableRidesSub: Subscription;
   private currentRideSub: Subscription;
+  private coordsSub: Subscription;
 
   constructor(private router: Router,
               private riderService: RiderService,
@@ -25,8 +27,15 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.watchCoords();
     this.watchAvailableRides();
     this.watchCurrentRide();
+  }
+
+  watchCoords() {
+    this.coordsSub = this.statusService.coords$.subscribe(coords => {
+      this.coords = coords;
+    });
   }
 
   watchAvailableRides() {
@@ -44,18 +53,18 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   onSubmit() {
     let ride = this.model.ride;
     this.statusService.currentRide$.next(ride);
-    // this.alertService.success(`You have been logged in to ride ${ride}`, true);
 
     return this.router.navigate([ '/map' ]);
   }
 
   logOutFromRide() {
-    this.riderService.removeRider();
+    this.riderService.emitRemoveRider();
   }
 
   ngOnDestroy() {
     this.availableRidesSub.unsubscribe();
     this.currentRideSub.unsubscribe();
+    this.coordsSub.unsubscribe();
   }
 
 }

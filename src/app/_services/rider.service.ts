@@ -26,40 +26,40 @@ export class RiderService {
   constructor(private statusService: StatusService,
               private alertService: AlertService) {
     this.socket = this.statusService.socket;
-    this.watchUser();
-    this.watchPosition();
-    this.createRider();
+    this.subscribeToUser();
+    this.subscribeToCoords();
+    // this.emitUpdatedRider();
+    this.emitRemoveRider();
     this.listenForFullRiderList();
-    this.listenForRider();
+    this.listenForNewRider();
+    this.listenForUpdateRiderPosition();
     this.listenForRemoveRider();
     this.listenForDisconnectedRider();
     this.setDummyCoordAdjustments();
   }
 
-  watchUser() {
+  subscribeToUser() {
     this.statusService.user$.subscribe(user => {
       this.userName = user ? user.fullName : null;
     });
   }
 
-  watchPosition() {
+  subscribeToCoords() {
     if ( environment.dummyMovement ) this.setDummyMovements();
 
-    this.statusService.debugMessages$.next(`${this.userName}. watchPosition()`);
-
+    // this.statusService.debugMessages$.next(`${this.userName}. watchPosition()`);
 
     this.geoWatch = navigator.geolocation.watchPosition(position => {
-          console.log(position.coords.latitude, position.coords.longitude, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
-          this.statusService.debugMessages$.next(`${this.userName}. New coords yielded! ${new Date().toLocaleTimeString('en-US', { hour12: false })}`);
+          // console.log(position.coords.latitude, position.coords.longitude, new Date(position.timestamp).toLocaleTimeString('en-US', { hour12: false }));
+          // this.statusService.debugMessages$.next(`${this.userName}. New coords yielded! ${new Date().toLocaleTimeString('en-US', { hour12: false })}`);
 
           clearTimeout(this.timer);
-
-          this.timerForWatchPosition();
+          this.timerForSubscribeToCoords();
 
           if (  // Update the rider only if the coords have changed enough or the accuracy improved.
-              Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
-              Math.abs(position.coords.longitude - this.prevPos.lng) > .0001 ||
-              position.coords.accuracy < this.prevPos.acc
+          Math.abs(position.coords.latitude - this.prevPos.lat) > .0001 ||
+          Math.abs(position.coords.longitude - this.prevPos.lng) > .0001 ||
+          position.coords.accuracy < this.prevPos.acc
           ) {
             let coords = {
               lat: position.coords.latitude,
@@ -87,90 +87,67 @@ export class RiderService {
     );
   }
 
-  timerForWatchPosition() {
+  timerForSubscribeToCoords() {
     this.timer = setTimeout(() => {
-      this.statusService.debugMessages$.next(`${this.userName}. Timer expired!`);
+      // this.statusService.debugMessages$.next(`${this.userName}. Timer expired!`);
       let coords = this.statusService.coords$.value;
       if ( coords && coords.timestamp ) {
-        this.statusService.debugMessages$.next(`${this.userName}. Age of last coords: ${Date.now() - coords.timestamp}`);
+        // this.statusService.debugMessages$.next(`${this.userName}. Age of last coords: ${Date.now() - coords.timestamp}`);
         if ( Date.now() - coords.timestamp > 19000 ) {
-          this.statusService.debugMessages$.next(`${this.userName}. About to call watchPosition() and timerForWatchPosition() again`);
+          // this.statusService.debugMessages$.next(`${this.userName}. About to call watchPosition() and timerForWatchPosition() again`);
           navigator.geolocation.clearWatch(this.geoWatch);
-          this.watchPosition();
-          this.timerForWatchPosition();
+          this.subscribeToCoords();
+          this.timerForSubscribeToCoords();
         }
-
       }
-
     }, 20000);
   }
 
-  addRider(rider) {
-    let riders = this.statusService.riders$.value;
-    riders.unshift(rider);
-    riders = _.uniqBy(riders, '_id');
-    riders.sort(nameSort);
-    this.statusService.riders$.next(riders);
-  }
-
-  // Whenever coords changes, provided coords, ride, and user all exist, emit the rider.
-  createRider() {
-    this.statusService.coords$
-        .combineLatest(this.statusService.currentRide$, this.statusService.user$)
-        .subscribe(([ coords, ride, user ]) => {
-          if ( coords && ride && user ) {
-            this.statusService.debugMessages$.next(`${this.userName}. Lat: ${coords.lat}. Lng: ${coords.lng}`);
-            let rider = new Rider(user, coords, ride);
-            let token = environment.storage.getItem('currentToken');
-            token = JSON.parse(token);
-            this.socket.emit('rider', { rider, token }, () => {
-              // Todo: Do I have any use for this callback?
-            });
-          }
-        });
-  }
-
-  removeRider() {
-    let rider = new Rider(this.statusService.user$.value);
-    rider.ride = this.statusService.currentRide$.value;
-
-    this.socket.emit('removeRider', rider, () => {
-      this.alertService.success("You have been logged out from the ride.");
-      this.statusService.currentRide$.next(null);
+  emitUpdatedRider() {
+    this.statusService.userRider$.subscribe(userRider => {
+      if ( userRider ) this.socket.emit('updateRiderPosition', _.pick(userRider, '_id', 'token', 'lat', 'lng'));
     });
+  }
+
+  emitRemoveRider() {
+    this.statusService.currentRide$
+        .withLatestFrom(this.statusService.user$)
+        .subscribe(([ ride, user ]) => {
+          this.socket.emit('removeRider', _.pick(user, '_id', 'token'));
+        });
   }
 
   listenForFullRiderList() {
     this.socket.on('fullRiderList', riders => {
       if ( riders ) {
-        // riders.forEach(rider => console.log(`${rider.fname} ${rider.lname}. ${rider.phone}`));
-
         riders = riders.map(rider => new Rider(rider));
       }
       this.statusService.riders$.next(riders);
     });
   }
 
-  listenForRider() {
-    this.socket.on('rider', rider => {
-      // console.log(`Received rider: ${rider.fname} ${rider.lname}. ${rider.phone}`);
-      let newOrUpdatedRider = new Rider(rider);
-      this.addRider(newOrUpdatedRider);
+  listenForNewRider() {
+    this.socket.on('newRider', rider => {
+      rider = new Rider(rider);
+      this.statusService.newRider$.next(rider);
+    });
+  }
+
+  listenForUpdateRiderPosition() {
+    this.socket.on('updateRiderPosition', updatedRider => {
+      this.statusService.updatedRider$.next(updatedRider);
     });
   }
 
   listenForRemoveRider() {
-    this.socket.on('removeRider', riderToRemove => {
-      let riders = this.statusService.riders$.value;
-      riders = riders.filter(rider => rider._id !== riderToRemove._id);
-      this.statusService.riders$.next(riders);
+    this.socket.on('removeRider', rider => {
+      this.statusService.removedRider$.next(rider);
     });
   }
 
   listenForDisconnectedRider() {
     this.socket.on('disconnectedRider', (rider) => {
-      let disconnectedRider = new Rider(rider);
-      this.addRider(disconnectedRider);
+      this.statusService.disconnectedRider$.next(rider);
     });
   }
 

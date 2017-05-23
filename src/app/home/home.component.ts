@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
               private statusService: StatusService) {
   }
 
+
+
   ngOnInit() {
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';

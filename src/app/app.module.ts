@@ -30,6 +30,7 @@ import { AdminGuard } from './_guards/admin.guard';
 import { DebuggingService } from './_services/debugging.service';
 import { WindowRefService } from './_services/window-ref.service';
 import { EqualValidator } from './register/equal-validator.directive';
+import { ValuesPipe } from './_pipes/values.pipe';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { EqualValidator } from './register/equal-validator.directive';
     UserListComponent,
     RiderListComponent,
     DebuggerComponent,
-    EqualValidator
+    EqualValidator,
+    ValuesPipe
   ],
   imports: [
     BrowserModule,

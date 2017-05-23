@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StatusService } from '../_services/status.service';
+import { MiscService } from '../_services/misc.service';
 import { User } from '../_models/user';
 import * as $ from 'jquery';
 import {
@@ -9,6 +9,8 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { UserService } from '../_services/user.service';
+import { RiderService } from '../_services/rider.service';
 
 @Component({
   selector: 'rp-nav',
@@ -32,7 +34,9 @@ export class NavComponent implements OnInit {
   public ride: string;
   public navBarState: string;
 
-  constructor(private statusService: StatusService) {
+  constructor(private miscService: MiscService,
+              private userService: UserService,
+              private riderService: RiderService) {
   }
 
   ngOnInit() {
@@ -42,32 +46,31 @@ export class NavComponent implements OnInit {
   }
 
   watchUser() {
-    this.statusService.user$.subscribe(
+    this.userService.user$.subscribe(
         user => this.user = user
     );
   }
 
   watchRide() {
-    this.statusService.currentRide$.subscribe(
+    this.riderService.currentRide$.subscribe(
         ride => this.ride = ride
     );
   }
 
   watchNavBar() {
-    this.statusService.navBarState$.subscribe(navBarState => {
+    this.miscService.navBarState$.subscribe(navBarState => {
       this.navBarState = navBarState;
     });
   }
 
   closeAccordion() {
     if ( $(window).width() < 768 ) $('.navbar-toggle').click();
-    // this.statusService.navBarState$.next('hide');
   }
 
   // Make the nav bar visible again, if it's been hidden (currently only used on the map page).
   showNavBar() {
     // console.log("showNavBar");
-    this.statusService.navBarState$.next('show');
+    this.miscService.navBarState$.next('show');
   }
 
 }

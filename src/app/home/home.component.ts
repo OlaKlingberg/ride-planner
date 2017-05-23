@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { User } from '../_models/user';
-import { StatusService } from '../_services/status.service';
+import { UserService } from '../_services/user.service';
 
 @Component({
   selector: 'rp-home',
@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
-              private statusService: StatusService) {
+              private userService: UserService) {
   }
 
 
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
     // Todo: This looks complicated and messy. Can it be streamlined somehow?
-    this.statusService.user$.subscribe(user => {
+    this.userService.user$.subscribe(user => {
       if ((this.returnUrl === '/riders' || this.returnUrl === '/members') && (user && user.leader === true)) {
         this.router.navigate([ this.returnUrl ]);
       }

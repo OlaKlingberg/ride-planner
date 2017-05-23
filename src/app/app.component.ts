@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
 import { AuthenticationService } from "./_services/authentication.service";
-import { StatusService } from './_services/status.service';
-import { RideService } from './_services/ride.service';
+import { MiscService } from './_services/misc.service';
 import { RiderService } from './_services/rider.service';
 import { Rider } from './_models/rider';
 import { DebuggingService } from './_services/debugging.service';
+import { UserService } from './_services/user.service';
 
 @Component({
   selector: 'rp-root',
@@ -23,10 +23,10 @@ export class AppComponent implements OnInit {
   acc: number = null;
 
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
-              private rideService: RideService,                     // Needs to be injected, to be initialized.
               private riderService: RiderService,                   // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
-              private statusService: StatusService) {
+              private miscService: MiscService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
@@ -38,14 +38,14 @@ export class AppComponent implements OnInit {
   }
 
   watchUser() {
-    this.statusService.user$.subscribe(user => {
+    this.userService.user$.subscribe(user => {
       this.userName = user ? user.fullName : null;
     });
   }
 
   watchCoords() {
-    this.statusService.coords$.subscribe(coords => {
-      if (coords) {
+    this.riderService.coords$.subscribe(coords => {
+      if ( coords ) {
         this.lat = coords.lat;
         this.lng = coords.lng;
         this.acc = coords.acc;
@@ -54,14 +54,14 @@ export class AppComponent implements OnInit {
   }
 
   watchCurrentRide() {
-    this.statusService.currentRide$.subscribe(currentRide => {
+    this.riderService.currentRide$.subscribe(currentRide => {
       this.currentRide = currentRide;
     });
   }
 
   // For debugging.
   watchRiders() {
-    this.statusService.riders$.subscribe(riders => this.riders = riders);
+    this.riderService.riders$.subscribe(riders => this.riders = riders);
   }
 
   refreshAfterSleep() {
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
     setInterval(() => {
       now = Date.now();
 
-      if (now - prev > 3000) {
+      if ( now - prev > 3000 ) {
         window.location.reload();
       }
 
@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
   }
 
   showNavBar() {
-    this.statusService.navBarState$.next('show');
+    this.miscService.navBarState$.next('show');
   }
 
 }

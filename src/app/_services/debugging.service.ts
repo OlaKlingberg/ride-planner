@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
-import { StatusService } from './status.service';
+import { MiscService } from './misc.service';
 import Socket = SocketIOClient.Socket;
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class DebuggingService {
   private socket: Socket;
+  public debugMessages$: Subject<any> = new Subject();
 
-  constructor(private statusService: StatusService) {
-    this.socket = this.statusService.socket;
+
+  constructor(private miscService: MiscService) {
+    this.socket = this.miscService.socket;
     this.watchForDebugMessages();
   }
 
   watchForDebugMessages() {
-    this.statusService.debugMessages$.subscribe(debugInfo => {
+    this.debugMessages$.subscribe(debugInfo => {
       if (debugInfo.message) {
         this.socket.emit('debugging', debugInfo.message);
       } else {

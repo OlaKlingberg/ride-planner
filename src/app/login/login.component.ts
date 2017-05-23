@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "../_services/authentication.service";
 import { AlertService } from "../_services/alert.service";
 import { User } from "../_models/user";
-import { StatusService } from '../_services/status.service';
 
 import * as $ from 'jquery';
 import { Subscription } from 'rxjs/Subscription';
+import { UserService } from "app/_services/user.service";
 
 @Component({
   selector: 'rp-login',
@@ -26,14 +26,14 @@ export class LoginComponent implements OnInit, OnDestroy {
               private router: Router,
               private authenticationService: AuthenticationService,
               private alertService: AlertService,
-              private statusService: StatusService) {
+              private userService: UserService) {
   }
 
   ngOnInit() {
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
-    this.userSub = this.statusService.user$.subscribe(user => {
+    this.userSub = this.userService.user$.subscribe(user => {
           if ( user ) {
             this.user = user;
             this.router.navigate([ this.returnUrl ]);

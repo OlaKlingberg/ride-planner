@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewChildren } from '@angular/core';
 
-import { StatusService } from '../_services/status.service';
 import { Rider } from '../_models/rider';
 import { MapsAPILoader } from 'angular2-google-maps/core';
 import LatLngBounds = google.maps.LatLngBounds;
@@ -10,7 +9,9 @@ import Socket = SocketIOClient.Socket;
 import * as _ from 'lodash';
 import * as $ from 'jquery';
 import { environment } from '../../environments/environment';
-import { ValuesPipe } from '../_pipes/values.pipe';
+import { UserService } from '../_services/user.service';
+import { RiderService } from '../_services/rider.service';
+import { MiscService } from '../_services/misc.service';
 
 @Component({
   selector: 'rp-map',
@@ -53,9 +54,11 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('infoWindows') infoWindows;
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
 
-  constructor(private statusService: StatusService,
+  constructor(private riderService: RiderService,
+              private userService: UserService,
+              private miscService: MiscService,
               private mapsAPILoader: MapsAPILoader) {
-    this.socket = this.statusService.socket;
+    this.socket = this.miscService.socket;
 
   }
 
@@ -76,12 +79,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
   subscribeToNavBarState() {
-    this.statusService.navBarState$.subscribe(navBarState => {
+    this.miscService.navBarState$.subscribe(navBarState => {
       // console.log("Independent subscription of navBarState:", navBarState);
     });
 
-    this.navBarStateSub = this.statusService.navBarState$
-        .combineLatest(this.statusService.coords$)
+    this.navBarStateSub = this.miscService.navBarState$
+        .combineLatest(this.riderService.coords$)
         .subscribe(([ navBarState, coords ]) => {
           // Start the timer to hide the nav bar only when the map is shown, which happens when there are coords.
           if ( coords ) {
@@ -89,7 +92,7 @@ export class MapComponent implements OnInit, OnDestroy {
               let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
               if ( navBarState === 'show' && !ariaExpanded ) {
                 this.navBarStateTimer = setTimeout(() => {
-                  this.statusService.navBarState$.next('hide');
+                  this.miscService.navBarState$.next('hide');
                 }, 150);
               }
             }, 0);
@@ -110,19 +113,19 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   subscribeToUser() {
-    this.userSub = this.statusService.user$.subscribe(user => {
+    this.userSub = this.userService.user$.subscribe(user => {
       this.fullName = user ? user.fullName : null;
     });
   }
 
   getRiders() {
-    this.riders = this.statusService.riders$.value;
+    this.riders = this.riderService.riders$.value;
     this.riders = this.setMarkerColor(this.riders);
     this.riders = this.trackDisconnectedTime(this.riders);
   }
 
   setMarkerColor(riders) {
-    let user = this.statusService.user$.value;
+    let user = this.userService.user$.value;
     riders = riders.map(rider => {
       rider.color = rider.colorNumber + 3;
       rider.zInd = rider.zIndex;
@@ -198,7 +201,7 @@ export class MapComponent implements OnInit, OnDestroy {
   focusOnUser() {
     this.bounds = new this.google.maps.LatLngBounds();
     if ( this.coordsSub ) this.coordsSub.unsubscribe();
-    this.coordsSub = this.statusService.coords$.subscribe(coords => {
+    this.coordsSub = this.riderService.coords$.subscribe(coords => {
           if ( coords ) {
             this.bounds.extend({ lat: coords.lat, lng: coords.lng });
             this.latLng = this.bounds.toJSON();
@@ -222,11 +225,11 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   listenForNewRider() {
-    this.statusService.newRider$.subscribe(rider => this.riders.push(rider));
+    this.riderService.newRider$.subscribe(rider => this.riders.push(rider));
   }
 
   listenForUpdateRiderPosition() {
-    this.statusService.updatedRider$.subscribe(updatedRider => {
+    this.riderService.updatedRider$.subscribe(updatedRider => {
       let index = _.findIndex(this.riders, rider => rider._id === updatedRider._id);
       this.riders[index].lat = updatedRider.lat;
       this.riders[index].lng = updatedRider.lng;
@@ -234,7 +237,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   listenForDisconnectedRider() {
-    this.statusService.disconnectedRider$.subscribe(disconnectedRider => {
+    this.riderService.disconnectedRider$.subscribe(disconnectedRider => {
       let index = _.findIndex(this.riders, rider => rider._id === disconnectedRider._id);
         this.riders[index].disconnected = true;
         this.riders[index].disconnectTime = disconnectedRider.disconnectTime;
@@ -242,7 +245,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   listenForRemoveRider() {
-    this.statusService.removedRider$.subscribe(removedRider => {
+    this.riderService.removedRider$.subscribe(removedRider => {
       this.riders = this.riders.filter(rider => rider._id !== removedRider._id);
     });
   }
@@ -256,7 +259,7 @@ export class MapComponent implements OnInit, OnDestroy {
     clearInterval(this.timer2);
     clearTimeout(this.navBarStateTimer);
     setTimeout(() => {
-      this.statusService.navBarState$.next('show');
+      this.miscService.navBarState$.next('show');
     }, 200);
 
     // Attempt to ameliorate memory leak.

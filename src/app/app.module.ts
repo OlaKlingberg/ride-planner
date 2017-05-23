@@ -18,12 +18,11 @@ import { ProtectedComponent } from './protected/protected.component';
 import { AuthGuard } from "./_guards/auth.guard";
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from "./_services/alert.service";
-import { RideService } from './_services/ride.service';
 import { RiderService } from "./_services/rider.service";
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { RiderListComponent } from './rider-list/rider-list.component';
-import { StatusService } from './_services/status.service';
+import { MiscService } from './_services/misc.service';
 import { DebuggerComponent } from './debugger/debugger.component';
 import { RideLeaderGuard } from './_guards/ride-leader.guard';
 import { AdminGuard } from './_guards/admin.guard';
@@ -64,9 +63,8 @@ import { ValuesPipe } from './_pipes/values.pipe';
     AdminGuard,
     RideLeaderGuard,
     AlertService,
-    RideService,
     RiderService,
-    StatusService,
+    MiscService,
     DebuggingService,
     WindowRefService
   ],

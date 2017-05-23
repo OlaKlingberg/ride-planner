@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AlertService } from "../_services/alert.service";
-import { StatusService } from '../_services/status.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -16,8 +15,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
-              private alertService: AlertService,
-              private statusService: StatusService) {
+              private alertService: AlertService) {
   }
 
   ngOnInit() {

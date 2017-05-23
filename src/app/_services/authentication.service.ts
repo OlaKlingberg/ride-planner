@@ -6,8 +6,10 @@ import 'rxjs/Rx';
 import { environment } from "../../environments/environment";
 import { User } from "../_models/user";
 import Socket = SocketIOClient.Socket;
-import { StatusService } from './status.service';
+import { MiscService } from './misc.service';
 import { Rider } from '../_models/rider';
+import { RiderService } from './rider.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -18,9 +20,11 @@ export class AuthenticationService {
 
 
   constructor(private http: Http,
-              private statusService: StatusService) {
+              private miscService: MiscService,
+              private userService: UserService,
+              private riderService: RiderService) {
     this.authenticateByToken(); // If the user has a token, log them in automatically.
-    this.socket = this.statusService.socket;
+    this.socket = this.miscService.socket;
     this.addAdminsToRoomAdmins();
 
   }
@@ -38,7 +42,7 @@ export class AuthenticationService {
               let user: User = new User(response.json());
               user.token = this.currentToken;
               console.log("authenticateByToken(). user:", user);
-              this.statusService.user$.next(user)
+              this.userService.user$.next(user)
             }
           });
     }
@@ -55,14 +59,14 @@ export class AuthenticationService {
             environment.storage.setItem('currentToken', JSON.stringify(token));
             user.token = token;
             console.log("About to call user$.next(user)");
-            this.statusService.user$.next(user);
+            this.userService.user$.next(user);
           }
         });
   }
 
   logout() {
-    let user = this.statusService.user$.value;
-    let ride = this.statusService.currentRide$.value;
+    let user = this.userService.user$.value;
+    let ride = this.riderService.currentRide$.value;
     let rider = new Rider(user, null, ride);
 
     this.currentToken = JSON.parse(environment.storage.getItem('currentToken'));
@@ -71,8 +75,8 @@ export class AuthenticationService {
 
     // Todo: I remove the user from environment.storage and the observable before I even try to remove the token from the backend -- so the user will be removed from the front end, even if the api call to remove the token fails. Is that the behavior I want? Probably not. If the backend fails, then the user will think incorrectly that he has been logged out.
     environment.storage.removeItem('currentToken');
-    this.statusService.user$.next(null);
-    this.statusService.currentRide$.next(null);
+    this.userService.user$.next(null);
+    this.riderService.currentRide$.next(null);
 
     this.socket.emit('removeRider', rider, () => {
       // Todo: Do I have any use for this callback?
@@ -82,7 +86,7 @@ export class AuthenticationService {
   }
 
   addAdminsToRoomAdmins() {
-    this.statusService.user$.subscribe(user => {
+    this.userService.user$.subscribe(user => {
       if ( user ) {
         if ( user.admin === true ) {
           let token = environment.storage.getItem('currentToken');
@@ -94,7 +98,6 @@ export class AuthenticationService {
       }
     });
   }
-
 
 
 }

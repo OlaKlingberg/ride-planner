@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
-import { RideService } from "../_services/ride.service";
 import { RiderService } from '../_services/rider.service';
 import { AlertService } from '../_services/alert.service';
-import { StatusService } from '../_services/status.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -22,8 +20,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   private coordsSub: Subscription;
 
   constructor(private router: Router,
-              private riderService: RiderService,
-              private statusService: StatusService) {
+              private riderService: RiderService) {
   }
 
   ngOnInit() {
@@ -33,26 +30,26 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   watchCoords() {
-    this.coordsSub = this.statusService.coords$.subscribe(coords => {
+    this.coordsSub = this.riderService.coords$.subscribe(coords => {
       this.coords = coords;
     });
   }
 
   watchAvailableRides() {
-    this.availableRidesSub = this.statusService.availableRides$.subscribe((availableRides) => {
+    this.availableRidesSub = this.riderService.availableRides$.subscribe((availableRides) => {
       this.availableRides = availableRides;
     });
   };
 
   watchCurrentRide() {
-    this.currentRideSub = this.statusService.currentRide$.subscribe(currentRide => {
+    this.currentRideSub = this.riderService.currentRide$.subscribe(currentRide => {
       this.currentRide = currentRide;
     });
   };
 
   onSubmit() {
     let ride = this.model.ride;
-    this.statusService.currentRide$.next(ride);
+    this.riderService.currentRide$.next(ride);
 
     return this.router.navigate([ '/map' ]);
   }

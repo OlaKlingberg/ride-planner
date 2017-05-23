@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StatusService } from '../_services/status.service';
+import { MiscService } from '../_services/misc.service';
 import Socket = SocketIOClient.Socket;
 import { User } from '../_models/user';
 
@@ -14,8 +14,8 @@ export class DebuggerComponent implements OnInit {
   public debugMessages: Array<any> = [];
   public time;
 
-  constructor(private statusService: StatusService) {
-    this.socket = statusService.socket;
+  constructor(private miscService: MiscService) {
+    this.socket = miscService.socket;
   }
 
   ngOnInit() {

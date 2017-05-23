@@ -3,12 +3,14 @@ import { Http, RequestOptions, Headers } from "@angular/http";
 import { User } from "../_models/user";
 import { environment } from "../../environments/environment";
 import Socket = SocketIOClient.Socket;
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class UserService {
   currentToken: string;
   headers: Headers;
   requestOptions: RequestOptions;
+  public user$: BehaviorSubject<User> = new BehaviorSubject(null);
 
   constructor(private http: Http) {
   }

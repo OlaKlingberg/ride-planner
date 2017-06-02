@@ -54,6 +54,7 @@ export class NavComponent implements OnInit {
 
   watchNavBar() {
     this.miscService.navBarState$.subscribe(navBarState => {
+      if (this.user) console.log(`${this.user.fname} ${this.user.lname}. NavComponent.watchNavBar. navBarState: ${navBarState}`);
       this.navBarState = navBarState;
     });
   }

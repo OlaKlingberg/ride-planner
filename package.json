@@ -45,6 +45,7 @@
     "tether": "^1.4.0",
     "ts-helpers": "^1.1.1",
     "typescript": "^2.2.2",
+    "web-animations-js": "^2.2.5",
     "zone.js": "^0.7.2"
   },
   "devDependencies": {

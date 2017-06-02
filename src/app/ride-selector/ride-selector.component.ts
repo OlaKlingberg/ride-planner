@@ -44,6 +44,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   getAvailableRides() {
     this.socket.emit('giveMeAvailableRides');
     this.socket.on('availableRides', availableRides => {
+      console.log("availableRides:", availableRides);
       this.availableRides = availableRides;
     });
   }

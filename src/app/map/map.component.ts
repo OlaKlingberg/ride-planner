@@ -49,7 +49,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // public minutes: Array<number> = [];
 
-  public mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'showAllRiders';
+  public mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
 
   public riderList: Array<User> = [];
 
@@ -203,17 +203,13 @@ export class MapComponent implements OnInit, OnDestroy {
       case 'trackUser':
         this.focusOnUser();
         break;
-      case 'stationary':
-        if ( this.positionSub ) this.positionSub.unsubscribe();
-        break;
       default:
-        // Todo: Do I need to handle this? This will never be reached if things work correctly.
+        if ( this.positionSub ) this.positionSub.unsubscribe();
         break;
     }
   }
 
   focusOnUser() {
-    console.log("focusOnUser()");
     this.bounds = new this.google.maps.LatLngBounds();
     if ( this.positionSub ) this.positionSub.unsubscribe();
     this.positionSub = this.userService.position$.subscribe(position => {
@@ -221,7 +217,6 @@ export class MapComponent implements OnInit, OnDestroy {
             console.log("focusOnUser(). position$.subscribe(). position:", position);
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
             this.latLng = this.bounds.toJSON();
-            console.log("this.latLng:", this.latLng);
           }
         },
         err => {

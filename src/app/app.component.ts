@@ -68,7 +68,6 @@ export class AppComponent implements OnInit {
 
   showNavBar() {
     this.miscService.navBarState$.next('show');
-    this.debuggingService.debugMessages$.next(`user: ${this.userName} tapped to showNavBar`);
   }
 
 }

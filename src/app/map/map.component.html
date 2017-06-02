@@ -57,21 +57,24 @@
 
         </sebm-google-map>
 
-        <div id="map-buttons">
-          <button class="btn btn-primary"
-                  type="button"
-                  *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"
-                  (click)="setMapMode('showAllRiders')">Track All Riders
-          </button>
-          <button class="btn btn-info"
-                  *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
-                  (click)="setMapMode('focusOnUser')">Track Me
-          </button>
-          <button class="btn btn-danger"
-                  *ngIf="!production"
-                  (click)="setMapMode('stationary')">Fake Pinch
-          </button>
+        <div id="map-buttons-container">
+            <button class="btn btn-danger"
+                    *ngIf="!production"
+                    (click)="setMapMode('stationary')">Fake Pinch
+            </button>
+            <br>
+            <button class="btn btn-primary"
+                    type="button"
+                    *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"
+                    (click)="setMapMode('showAllRiders')">Track All Riders
+            </button>
+            <button class="btn btn-info"
+                    *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
+                    (click)="setMapMode('focusOnUser')">Track Me
+            </button>
+
         </div>
+
       </div>
 
       <div [ngClass]="{'launching-satellites': !latLng, 'display-none': latLng}">

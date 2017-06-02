@@ -42,10 +42,16 @@
   opacity: .3;
 }
 
-#map-buttons {
+#map-buttons-container {
   position: fixed;
   bottom: 0;
+  left: 0;
+  width: 100vw;
   z-index: 10;
+  text-align: center;
+  button {
+    margin-bottom: 14px;
+  }
 }
 
 #rider-list {

@@ -7,15 +7,11 @@ import { environment } from "../../environments/environment";
 import { User } from "../_models/user";
 import Socket = SocketIOClient.Socket;
 import { MiscService } from './misc.service';
-import { Rider } from '../_models/rider';
 import { RiderService } from './rider.service';
 import { UserService } from './user.service';
 
 @Injectable()
 export class AuthenticationService {
-  private currentToken;
-  private headers;
-  private requestOptions;
   private socket: Socket;
 
 
@@ -26,23 +22,20 @@ export class AuthenticationService {
     this.authenticateByToken(); // If the user has a token, log them in automatically.
     this.socket = this.miscService.socket;
     this.addAdminsToRoomAdmins();
-
   }
 
   authenticateByToken() {
-    const currentToken = environment.storage.getItem('currentToken');
-    if ( currentToken ) {
-      this.currentToken = environment.storage.getItem('currentToken');
-      this.headers = new Headers({ 'x-auth': JSON.parse(this.currentToken) });
-      this.requestOptions = new RequestOptions({ headers: this.headers });
+    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    if ( token ) {
+      const headers = new Headers({ 'x-auth': token });
+      const requestOptions = new RequestOptions({ headers });
 
-      this.http.get(`${environment.api}/users/authenticate-by-token`, this.requestOptions)
+      this.http.get(`${environment.api}/users/authenticate-by-token`, requestOptions)
           .subscribe(response => {
             if ( response.status === 200 ) {
               let user: User = new User(response.json());
-              user.token = this.currentToken;
-              console.log("authenticateByToken(). user:", user);
-              this.userService.user$.next(user)
+              console.log("AuthenticationService.authenticateByToken(). user:", user);
+              this.userService.user$.next(user);
             }
           });
     }
@@ -51,50 +44,46 @@ export class AuthenticationService {
   login(email: string, password: string) {
     return this.http.post(`${environment.api}/users/login`, { email, password })
         .map((response: Response) => {
-          let user: User = new User(response.json()); // By creating a new User, I get access to accessor methods.
           let token = response.headers.get('x-auth');
+          let user: User = new User(response.json());
 
           if ( user && token ) {
-            console.log("About to set currentToken in storage.");
-            environment.storage.setItem('currentToken', JSON.stringify(token));
-            user.token = token;
-            console.log("About to call user$.next(user)");
+            environment.storage.setItem('rpToken', JSON.stringify(token));
+
+            // Todo: This seems like a lot of repetition.
+            let position = this.userService.position$.value;
+            if (position) {
+              user.position = {
+                coords: {
+                  accuracy: position.coords.accuracy,
+                  latitude: position.coords.accuracy,
+                  longitude: position.coords.longitude
+                },
+                timestamp: position.timestamp
+              };
+            }
+
             this.userService.user$.next(user);
           }
         });
   }
 
   logout() {
-    let user = this.userService.user$.value;
-    let ride = this.riderService.currentRide$.value;
-    let rider = new Rider(user, null, ride);
+    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const headers = new Headers({ 'x-auth': token });
+    const requestOptions = new RequestOptions({ headers });
 
-    this.currentToken = JSON.parse(environment.storage.getItem('currentToken'));
-    this.headers = new Headers({ 'x-auth': this.currentToken });
-    this.requestOptions = new RequestOptions({ headers: this.headers });
+    return this.http.get(`${environment.api}/users/logout`, requestOptions);
 
-    // Todo: I remove the user from environment.storage and the observable before I even try to remove the token from the backend -- so the user will be removed from the front end, even if the api call to remove the token fails. Is that the behavior I want? Probably not. If the backend fails, then the user will think incorrectly that he has been logged out.
-    environment.storage.removeItem('currentToken');
-    this.userService.user$.next(null);
-    this.riderService.currentRide$.next(null);
-
-    this.socket.emit('removeRider', rider, () => {
-      // Todo: Do I have any use for this callback?
-    });
-
-    return this.http.delete(`${environment.api}/users/logout`, this.requestOptions);
   }
 
   addAdminsToRoomAdmins() {
     this.userService.user$.subscribe(user => {
-      if ( user ) {
-        if ( user.admin === true ) {
-          let token = environment.storage.getItem('currentToken');
-          // user.token = token;
-          this.socket.emit('admin', JSON.parse(token), () => {
-            // Todo: Do I have any use for this callback?
-          });
-        }
+      if ( user && user.admin ) {
+        let token = JSON.parse(environment.storage.getItem('rpToken'));
+        this.socket.emit('admin', token, () => {
+          // Todo: Do I have any use for this callback?
+        });
       }
     });
   }

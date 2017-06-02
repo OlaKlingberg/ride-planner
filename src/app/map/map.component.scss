@@ -1,6 +1,4 @@
 .sebm-google-map-container {
-  //height: 300px;
-  //width: 100%;
   height: 100vh;
   width: 100vw;
   position: fixed;
@@ -18,7 +16,7 @@
 }
 
 .display-none {
-  display: none;
+  display: none !important;
 }
 
 .launching-satellites {
@@ -48,4 +46,17 @@
   position: fixed;
   bottom: 0;
   z-index: 10;
+}
+
+#rider-list {
+  display: none;
+  width: 100%;
+  background-color: darkblue;
+  z-index: 500;
+  position: fixed;
+  bottom: 0;
+  p {
+    background-color: darkblue;
+    text: white;
+  }
 }

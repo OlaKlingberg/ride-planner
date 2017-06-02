@@ -1,11 +1,17 @@
 nav {
   z-index: 10;
-  //position: fixed;
-  //top: 0;
-  //width: 100%;
+  li a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
 }
 
-//nav-top {
-//  position: fixed;
-//  top: 0;
-//}
+.active {
+  background-color: saddlebrown !important;
+}
+
+.map-page {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}

@@ -12,26 +12,44 @@
             (pinchstart)="setMapMode('stationary')"
         >
           <sebm-google-map-marker #markers
-                                  *ngFor="let rider of riders; let i = index"
-                                  [latitude]="rider.lat"
-                                  [longitude]="rider?.lng"
-                                  [label]="{text: rider?.initials, color: 'black'}"
+                                  *ngFor="let rider of riderList"
+                                  [latitude]="rider.position.coords.latitude"
+                                  [longitude]="rider.position.coords.longitude"
+                                  [label]="{text: rider.initials, color: 'black'}"
                                   [markerDraggable]="true"
-                                  [iconUrl]="markerUrl + colors[rider?.color] + '.png'"
-                                  [zIndex]="rider?.zInd"
-                                  [opacity]="rider?.opacity"
-                                  (markerClick)="closeInfoWindows(rider?._id)"
+                                  [iconUrl]="markerUrl + colors[rider.colorNumber] + '.png'"
+                                  [zIndex]="rider.zIndex"
+                                  [opacity]="rider.opacity"
+                                  (markerClick)="closeInfoWindows(rider._id)"
           >
 
             <sebm-google-map-info-window #infoWindows
                                          attr.data-index={{rider?._id}}
             >
-              <div class="info-window">{{rider?.fname}} {{ rider?.lname}}
-                <span *ngIf="rider?.phone"><br/>{{rider?.phone}}</span>
-                <span *ngIf="rider?.disconnected"><br/>Last heard from {{minutes[rider._id]}} minute<span
-                    *ngIf="minutes[rider._id] !== 1">s</span> ago.</span>
+              <div class="info-window">{{rider.fname}} {{ rider.lname}}
+                <span *ngIf="rider.phone"><br/>{{rider.phone}}</span>
+                <span *ngIf="rider.disconnected"><br/>Last heard from {{ rider.minutesSinceDisconnected }} minute<span
+                    *ngIf="rider.minutesSinceDisconnected !== 1">s</span> ago.</span>
                 <span><br/></span>
               </div>
+            </sebm-google-map-info-window>
+
+          </sebm-google-map-marker>
+
+          <sebm-google-map-marker *ngIf="user && user.position"
+                                  [latitude]="user.position.coords.latitude"
+                                  [longitude]="user.position.coords.longitude"
+                                  [label]="{text: user.initials, color: 'white'}"
+                                  [markerDraggable]="true"
+                                  [iconUrl]="markerUrl + 'black.png'"
+                                  [zIndex]="1000"
+                                  [opacity]="user.opacity"
+                                  (markerClick)="closeInfoWindows(user._id)">
+
+            <sebm-google-map-info-window #userInfoWindow
+                                         attr.data-index={{user._id}}
+            >
+              <div class="info-window">This is you!</div>
             </sebm-google-map-info-window>
 
           </sebm-google-map-marker>
@@ -43,13 +61,16 @@
           <button class="btn btn-primary"
                   type="button"
                   *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"
-                  (click)="setMapMode('showAllRiders')">Track All Riders</button>
+                  (click)="setMapMode('showAllRiders')">Track All Riders
+          </button>
           <button class="btn btn-info"
                   *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
-                  (click)="setMapMode('focusOnUser')">Track Me</button>
+                  (click)="setMapMode('focusOnUser')">Track Me
+          </button>
           <button class="btn btn-danger"
                   *ngIf="!production"
-                  (click)="setMapMode('stationary')">Fake Pinch</button>
+                  (click)="setMapMode('stationary')">Fake Pinch
+          </button>
         </div>
       </div>
 
@@ -59,10 +80,14 @@
         </div>
       </div>
 
+      <div id="rider-list">
+        <p *ngFor="let rider of riderList">{{rider.fname}} {{rider.lname}}. zIndex: {{rider.zIndex}}. Opacity:
+          {{rider.opacity}}. colorNumber: {{rider.colorNumber}}. Leader: {{rider.leader}}</p>
+      </div>
+
 
     </div>
   </div>
 </div>
-
 
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { MiscService } from '../_services/misc.service';
 import { User } from '../_models/user';
 import * as $ from 'jquery';
@@ -11,6 +12,7 @@ import {
 } from '@angular/animations';
 import { UserService } from '../_services/user.service';
 import { RiderService } from '../_services/rider.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'rp-nav',
@@ -24,36 +26,29 @@ import { RiderService } from '../_services/rider.service';
       state('hide', style({
         opacity: 0
       })),
-      transition('show => hide', animate('500ms 2s')),
+      transition('show => hide', animate('500ms 4s')),
       transition('hide => show', animate('100ms'))
     ])
   ]
 })
 export class NavComponent implements OnInit {
-  public user: User;
+  public user: User = null;
   public ride: string;
   public navBarState: string;
 
   constructor(private miscService: MiscService,
               private userService: UserService,
-              private riderService: RiderService) {
+              public location: Location) {
   }
 
   ngOnInit() {
     this.watchUser();
-    this.watchRide();
     this.watchNavBar();
   }
 
   watchUser() {
     this.userService.user$.subscribe(
         user => this.user = user
-    );
-  }
-
-  watchRide() {
-    this.riderService.currentRide$.subscribe(
-        ride => this.ride = ride
     );
   }
 
@@ -65,12 +60,6 @@ export class NavComponent implements OnInit {
 
   closeAccordion() {
     if ( $(window).width() < 768 ) $('.navbar-toggle').click();
-  }
-
-  // Make the nav bar visible again, if it's been hidden (currently only used on the map page).
-  showNavBar() {
-    // console.log("showNavBar");
-    this.miscService.navBarState$.next('show');
   }
 
 }

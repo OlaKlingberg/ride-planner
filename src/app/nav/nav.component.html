@@ -1,5 +1,7 @@
 <nav class="navbar navbar-inverse"
-     [@navBarState]="navBarState">
+     [@navBarState]="navBarState"
+     [ngClass]="{'map-page': location.path() === '/map'}"
+>
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -13,16 +15,17 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav" (click)="closeAccordion()">
-        <li *ngIf="ride"><a routerLink='/map'>Map</a></li>
-        <li *ngIf="!user"><a routerLink='/login'>Login</a></li>
-        <li *ngIf="user"><a routerLink='/logout'>Logout</a></li>
-        <li *ngIf="!user"><a routerLink='/register'>Register</a></li>
-        <li *ngIf="user"><a routerLink='/ride-selector'>Ride Selector</a></li>
-        <li *ngIf="user"><a routerLink='/protected'>Protected</a></li>
-        <li *ngIf="user?.leader"><a routerLink='/members'>Members</a></li>
-        <li *ngIf="user?.leader"><a routerLink='/riders'>Riders</a></li>
-        <li *ngIf="user?.admin"><a routerLink='/debugger'>Debug</a></li>
+        <li *ngIf="user?.ride"><a routerLink='/map' [routerLinkActive]="['active']">Map</a></li>
+        <li *ngIf="!user"><a routerLink='/login' [routerLinkActive]="['active']">Login</a></li>
+        <li *ngIf="user"><a routerLink='/logout' [routerLinkActive]="['active']">Logout</a></li>
+        <li *ngIf="!user"><a routerLink='/register' [routerLinkActive]="['active']">Register</a></li>
+        <li *ngIf="user"><a routerLink='/ride-selector' [routerLinkActive]="['active']">Ride Selector</a></li>
+        <li *ngIf="user"><a routerLink='/protected' [routerLinkActive]="['active']">Protected</a></li>
+        <li *ngIf="user?.leader"><a routerLink='/members' [routerLinkActive]="['active']">Members</a></li>
+        <li *ngIf="user?.leader"><a routerLink='/riders' [routerLinkActive]="['active']">Riders</a></li>
+        <li *ngIf="user?.admin"><a routerLink='/debugger' [routerLinkActive]="['active']">Debug</a></li>
       </ul>
+      <h4 class="pull-right">{{user?.initials}}</h4>
     </div><!--/.nav-collapse -->
   </div>
 </nav>

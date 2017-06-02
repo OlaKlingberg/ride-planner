@@ -9,15 +9,16 @@
           <th>Phone</th>
           <th>Email</th>
           <th>Emergency Contact</th>
+          <th>Emergency Phone</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let user of users">
           <td>{{ user.fname }} {{ user.lname }}</td>
-          <td>To be added</td>
+          <td>{{ user.phone }}</td>
           <td>{{ user.email }}</td>
-          <td>To be added</td>
-          <td>To be added</td>
+          <td>{{ user.emergencyName }}</td>
+          <td>{{ user.emergencyPhone }}</td>
         </tr>
         </tbody>
       </table>

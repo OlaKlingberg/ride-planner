@@ -4,6 +4,11 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { RiderService } from '../_services/rider.service';
 import { AlertService } from '../_services/alert.service';
 import { Subscription } from 'rxjs/Subscription';
+import { UserService } from '../_services/user.service';
+import { User } from '../_models/user';
+import { MiscService } from '../_services/misc.service';
+import Socket = SocketIOClient.Socket;
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: 'app-ride-selector',
@@ -12,56 +17,56 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class RideSelectorComponent implements OnInit, OnDestroy {
   private model: any = [];
-  private coords: any = null;
+  private socket: Socket;
+  private user: User = null;
   private availableRides: Array<string>;
-  public currentRide: string;
-  private availableRidesSub: Subscription;
-  private currentRideSub: Subscription;
-  private coordsSub: Subscription;
+  private userSub: Subscription;
 
   constructor(private router: Router,
-              private riderService: RiderService) {
+              private userService: UserService,
+              private riderService: RiderService,
+              private miscService: MiscService) {
+    this.socket = this.miscService.socket;
   }
 
   ngOnInit() {
-    this.watchCoords();
-    this.watchAvailableRides();
-    this.watchCurrentRide();
+    this.subscribeToUser();
+    // this.subscribeToAvailableRides();
+    this.getAvailableRides();
   }
 
-  watchCoords() {
-    this.coordsSub = this.riderService.coords$.subscribe(coords => {
-      this.coords = coords;
+  subscribeToUser() {
+    this.userSub = this.userService.user$.subscribe(user => {
+      this.user = user;
     });
   }
 
-  watchAvailableRides() {
-    this.availableRidesSub = this.riderService.availableRides$.subscribe((availableRides) => {
+  getAvailableRides() {
+    this.socket.emit('giveMeAvailableRides');
+    this.socket.on('availableRides', availableRides => {
       this.availableRides = availableRides;
     });
-  };
-
-  watchCurrentRide() {
-    this.currentRideSub = this.riderService.currentRide$.subscribe(currentRide => {
-      this.currentRide = currentRide;
-    });
-  };
+  }
 
   onSubmit() {
-    let ride = this.model.ride;
-    this.riderService.currentRide$.next(ride);
-
-    return this.router.navigate([ '/map' ]);
+    this.userService.ride$.next(this.model.ride);
+    environment.storage.setItem('rpRide', this.model.ride);
+    this.router.navigate(['/map']);
   }
 
   logOutFromRide() {
-    this.riderService.emitRemoveRider();
+    environment.storage.removeItem('rpRide');
+    this.userService.ride$.next(null);
+    let user: User = this.userService.user$.value;
+    user.ride = null;
+    this.userService.user$.next(user);
+    this.userService.watchWhenToJoinRide();
+
+    this.socket.emit('leaveRide');
   }
 
   ngOnDestroy() {
-    this.availableRidesSub.unsubscribe();
-    this.currentRideSub.unsubscribe();
-    this.coordsSub.unsubscribe();
+    this.userSub.unsubscribe();
   }
 
 }

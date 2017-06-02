@@ -18,7 +18,7 @@ import { environment } from "../../environments/environment";
 export class RideSelectorComponent implements OnInit, OnDestroy {
   private model: any = [];
   private socket: Socket;
-  private user: User = null;
+  public user: User = null;
   private availableRides: Array<string>;
   private userSub: Subscription;
 

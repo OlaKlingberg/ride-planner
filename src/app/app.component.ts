@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   title: string = 'RidePlanner2';
   userName: string;
   ride: string;
-  // debugMessages: Array<any> = [];
+  debugMessages: Array<any> = [];
   latitude: number;
   longitude: number;
   accuracy: number;

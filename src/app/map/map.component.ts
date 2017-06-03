@@ -13,6 +13,7 @@ import { RiderService } from '../_services/rider.service';
 import { MiscService } from '../_services/misc.service';
 import { User } from '../_models/user';
 import { Router } from '@angular/router';
+import { DebuggingService } from '../_services/debugging.service';
 
 @Component({
   selector: 'rp-map',
@@ -39,7 +40,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
 
   private socket: Socket;
-  public debugMessages: Array<string> = [];
+  // public debugMessages: Array<string> = [];
 
   // private timer: Array<any> = [];
   private timer2: any;
@@ -62,7 +63,8 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(private riderService: RiderService,
               private userService: UserService,
               private miscService: MiscService,
-              private mapsAPILoader: MapsAPILoader) {
+              private mapsAPILoader: MapsAPILoader,
+              private debuggingService: DebuggingService) {
     this.socket = this.miscService.socket;
   }
 

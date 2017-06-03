@@ -6,6 +6,7 @@ import Socket = SocketIOClient.Socket;
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { MiscService } from './misc.service';
 import { Subscription } from 'rxjs/Subscription';
+import { DebuggingService } from './debugging.service';
 
 @Injectable()
 export class UserService {
@@ -27,7 +28,8 @@ export class UserService {
   private socket: Socket;
 
   constructor(private http: Http,
-              private miscService: MiscService) {
+              private miscService: MiscService,
+              private debuggingService: DebuggingService) {
     this.getRideFromStorage();
     this.watchPosition();
     this.watchWhenToJoinRide();
@@ -46,12 +48,14 @@ export class UserService {
     this.geoWatch = navigator.geolocation.watchPosition(position => {
           console.log("position:", position);
           this.position$.next(position);
+          this.debuggingService.debugMessages$.next(`${this.user$.value.fname} ${this.user$.value.lname}. geolocation.watchPosition: success: Latitude: ${position.coords.latitude}.`);
           // Set timer to up rerun watchPosition if it has not yielded results for a while. Logically, this should not be needed, but it often seems to yield a new position.
           clearTimeout(this.geoWatchTimer);
           this.startGeoWatchTimer(position);
         },
         err => {
           console.log(`watchPosition error: ${err.message}`);
+          this.debuggingService.debugMessages$.next(`${this.user$.value.fname} ${this.user$.value.lname}. geolocation.watchPosition: err: ${err}`);
         },
         {
           enableHighAccuracy: true,
@@ -83,7 +87,7 @@ export class UserService {
     let ridePromise = new Promise((resolve, reject) => {
       this.rideSub = this.ride$.subscribe(ride => {
         if ( ride ) resolve(ride);
-            })
+      })
     });
 
     // .. and then emit joinRide.

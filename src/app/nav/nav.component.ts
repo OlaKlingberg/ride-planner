@@ -11,20 +11,20 @@ import {
   transition
 } from '@angular/animations';
 import { UserService } from '../_services/user.service';
-import { RiderService } from '../_services/rider.service';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'rp-nav',
   templateUrl: './nav.component.html',
   styleUrls: [ './nav.component.scss' ],
   animations: [
-    trigger('navBarState', [
+    trigger('navBar', [
       state('show', style({
-        opacity: 1
+        opacity: 1,
+        display: "block"
       })),
       state('hide', style({
-        opacity: 0
+        opacity: 0,
+        display: "none"
       })),
       transition('show => hide', animate('500ms 4s')),
       transition('hide => show', animate('100ms'))
@@ -42,19 +42,19 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.watchUser();
-    this.watchNavBar();
+    this.subscribeToUser();
+    this.subscribeToNavBarState();
   }
 
-  watchUser() {
+  subscribeToUser() {
     this.userService.user$.subscribe(
         user => this.user = user
     );
   }
 
-  watchNavBar() {
+  subscribeToNavBarState() {
     this.miscService.navBarState$.subscribe(navBarState => {
-      if (this.user) console.log(`${this.user.fname} ${this.user.lname}. NavComponent.watchNavBar. navBarState: ${navBarState}`);
+      // if ( this.user ) console.log(`${this.user.fname} ${this.user.lname}. NavComponent.watchNavBar. navBarState: ${navBarState}`);
       this.navBarState = navBarState;
     });
   }

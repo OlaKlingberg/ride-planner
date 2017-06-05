@@ -9,16 +9,36 @@ import * as _ from 'lodash';
 import * as $ from 'jquery';
 import { environment } from '../../environments/environment';
 import { UserService } from '../_services/user.service';
-import { RiderService } from '../_services/rider.service';
 import { MiscService } from '../_services/misc.service';
 import { User } from '../_models/user';
-import { Router } from '@angular/router';
 import { DebuggingService } from '../_services/debugging.service';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'rp-map',
   templateUrl: './map.component.html',
-  styleUrls: [ './map.component.scss' ]
+  styleUrls: [ './map.component.scss' ],
+  animations: [
+    trigger('buttons', [
+      state('show', style({
+        opacity: 1,
+        display: "block"
+      })),
+      state('hide', style({
+        opacity: 0,
+        display: "none"
+      })),
+      transition('show => hide', animate('500ms 4s')),
+      transition('hide => show', animate('100ms'))
+    ])
+  ]
 })
 export class MapComponent implements OnInit, OnDestroy {
   public production = environment.production;
@@ -31,7 +51,6 @@ export class MapComponent implements OnInit, OnDestroy {
   private bounds: LatLngBounds;
   public latLng: LatLngBoundsLiteral;
 
-  private riderSub: Subscription;
   private userSub: Subscription;
   private positionSub: Subscription;
   private navBarStateSub: Subscription;
@@ -40,19 +59,18 @@ export class MapComponent implements OnInit, OnDestroy {
   private colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
 
   private socket: Socket;
-  // public debugMessages: Array<string> = [];
 
-  // private timer: Array<any> = [];
-  private timer2: any;
+  private timer: any;
   public navBarStateTimer: any;
 
   private zCounter: number = 0;
 
-  // public minutes: Array<number> = [];
-
   public mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
 
   public riderList: Array<User> = [];
+  private riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
+
+  public navBarState: string;
 
 
   @ViewChildren('markers') markers;
@@ -60,8 +78,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('userInfoWindow') userInfoWindow;
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
 
-  constructor(private riderService: RiderService,
-              private userService: UserService,
+  constructor(private userService: UserService,
               private miscService: MiscService,
               private mapsAPILoader: MapsAPILoader,
               private debuggingService: DebuggingService) {
@@ -86,7 +103,7 @@ export class MapComponent implements OnInit, OnDestroy {
   subscribeToUser() {
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
-      this.fullName = user ? user.fullName : null;  // This actually seems to be necessary!
+      // this.fullName = user ? user.fullName : null;  // This actually seems to be necessary!
       if ( user && user.ride ) this.getRiderList();
     });
   }
@@ -98,10 +115,11 @@ export class MapComponent implements OnInit, OnDestroy {
         .subscribe(([ navBarState, position ]) => {
           // Start the timer to hide the nav bar only when the map is shown, which happens when there are coords.
           if ( position ) {
+            this.navBarState = navBarState;
             setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
               let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
               if ( navBarState === 'show' && !ariaExpanded ) {
-                this.navBarStateTimer = setTimeout(() => {
+                this.navBarStateTimer = setTimeout(() => {  // Don't remember why the setTimeout is needed, but it is.
                   this.miscService.navBarState$.next('hide');
                 }, 150);
               }
@@ -142,9 +160,11 @@ export class MapComponent implements OnInit, OnDestroy {
         joinedRider.zIndex = this.zCounter++;
         if ( joinedRider.leader ) joinedRider.zIndex += 500;
         console.log("listenForNewRider(). rider:", joinedRider);
-        // The rider might be a new rider or a disconnected rider who reconnected.
+        // The rider can be a new rider, or a disconnected rider who reconnected.
         this.riderList = this.riderList.filter(rider => rider._id !== joinedRider._id);
         this.riderList.push(joinedRider);
+
+        this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
       }
     });
   }
@@ -157,6 +177,8 @@ export class MapComponent implements OnInit, OnDestroy {
       this.riderList[ idx ].position.coords.accuracy = updatedRider.position.coords.accuracy;
       this.riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
       this.riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
+
+      this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
     });
   }
 
@@ -164,6 +186,9 @@ export class MapComponent implements OnInit, OnDestroy {
     this.socket.on('removedRider', _id => {
       console.log("listenForRemovedRider(). _id:", _id);
       this.riderList = this.riderList.filter(rider => rider._id !== _id);
+
+      // This will be used to set the map bounds.
+      this.riderList$.next(this.riderList);
     });
   }
 
@@ -172,16 +197,20 @@ export class MapComponent implements OnInit, OnDestroy {
       console.log("listenForDisconnectedRider(). disconnectedRider:", disconnectedRider);
       let idx = _.findIndex(this.riderList, rider => rider._id === disconnectedRider._id);
       this.riderList[ idx ].disconnected = disconnectedRider.disconnected;
+
+      this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
     });
   }
 
   removeLongDisconnectedRiders() {
-    this.timer2 = setInterval(() => {
+    this.timer = setInterval(() => {
       console.log("removeLongDisconnectedRiders. A new 30-second interval started ...");
       this.riderList = _.filter(this.riderList, rider => {
         // Todo: Use an environment variable for the time? Or a variable that can be set through a UI?
         return !rider.disconnected || (Date.now() - rider.disconnected) < 1800000;
       });
+
+      this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
     }, 30000);
   }
 
@@ -212,11 +241,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   focusOnUser() {
-    this.bounds = new this.google.maps.LatLngBounds();
+    // this.bounds = new this.google.maps.LatLngBounds();
     if ( this.positionSub ) this.positionSub.unsubscribe();
     this.positionSub = this.userService.position$.subscribe(position => {
           if ( position ) {
             console.log("focusOnUser(). position$.subscribe(). position:", position);
+            this.bounds = new this.google.maps.LatLngBounds();
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
             this.latLng = this.bounds.toJSON();
           }
@@ -229,12 +259,14 @@ export class MapComponent implements OnInit, OnDestroy {
 
   showAllRiders() {
     console.log("showAllRiders()");
-    // Todo: This doesn't track the user; it only sets the bounds once.
-    this.bounds = new this.google.maps.LatLngBounds();
-    this.riderList.forEach(rider => {
-      this.bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude })
+    this.riderList$.subscribe(riderList => {
+      this.bounds = new this.google.maps.LatLngBounds();
+      riderList.forEach(rider => {
+        this.bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
+      });
+      this.bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
+      this.latLng = this.bounds.toJSON();
     });
-    this.latLng = this.bounds.toJSON();
   }
 
   ngOnDestroy() {
@@ -243,7 +275,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // if ( this.coordsSub ) this.coordsSub.unsubscribe();
     if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
     // this.riders.forEach(rider => clearInterval(this.timer[ rider._id ]));
-    clearInterval(this.timer2);
+    clearInterval(this.timer);
     clearTimeout(this.navBarStateTimer);
     setTimeout(() => {
       this.miscService.navBarState$.next('show');

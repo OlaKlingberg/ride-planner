@@ -48,16 +48,12 @@ export class UserService {
     this.geoWatch = navigator.geolocation.watchPosition(position => {
           console.log("position:", position);
           this.position$.next(position);
-          let user = this.user$.value;
-          if (!user || !user.fname) this.debuggingService.debugMessages$.next(`geolocation.watchPosition: success: Latitude: ${position.coords.latitude}.`);
-          if (user && user.fname) this.debuggingService.debugMessages$.next(`${this.user$.value.fname} ${this.user$.value.lname}. geolocation.watchPosition: success: Latitude: ${position.coords.latitude}.`);
           // Set timer to up rerun watchPosition if it has not yielded results for a while. Logically, this should not be needed, but it often seems to yield a new position.
           clearTimeout(this.geoWatchTimer);
           this.startGeoWatchTimer(position);
         },
         err => {
           console.log(`watchPosition error: ${err.message}`);
-          this.debuggingService.debugMessages$.next(`${this.user$.value.fname} ${this.user$.value.lname}. geolocation.watchPosition: err: ${err}`);
         },
         {
           enableHighAccuracy: true,

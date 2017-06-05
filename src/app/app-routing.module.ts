@@ -21,6 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'map',
+    canActivate: [AuthGuard],
     component: MapComponent
   },
   {

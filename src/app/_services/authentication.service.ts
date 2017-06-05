@@ -50,7 +50,7 @@ export class AuthenticationService {
           if ( user && token ) {
             environment.storage.setItem('rpToken', JSON.stringify(token));
 
-            // Todo: This seems like a lot of repetition.
+            // Todo: This seems like a lot of code. Is there a simpler way?
             let position = this.userService.position$.value;
             if (position) {
               user.position = {

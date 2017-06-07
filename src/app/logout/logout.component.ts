@@ -36,6 +36,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
 
               this.socket.emit('leaveRide');
 
+              this.userService.watchWhenToUpdateUserPosition();
               this.userService.watchWhenToJoinRide();
 
               this.alertService.success('You have been logged out', true);

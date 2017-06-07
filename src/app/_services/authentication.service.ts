@@ -51,17 +51,17 @@ export class AuthenticationService {
             environment.storage.setItem('rpToken', JSON.stringify(token));
 
             // Todo: This seems like a lot of code. Is there a simpler way?
-            let position = this.userService.position$.value;
-            if (position) {
-              user.position = {
-                coords: {
-                  accuracy: position.coords.accuracy,
-                  latitude: position.coords.accuracy,
-                  longitude: position.coords.longitude
-                },
-                timestamp: position.timestamp
-              };
-            }
+            // let position = this.userService.position$.value;
+            // if (position) {
+            //   user.position = {
+            //     coords: {
+            //       accuracy: position.coords.accuracy,
+            //       latitude: position.coords.accuracy,
+            //       longitude: position.coords.longitude
+            //     },
+            //     timestamp: position.timestamp
+            //   };
+            // }
 
             this.userService.user$.next(user);
           }

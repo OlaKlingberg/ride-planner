@@ -31,8 +31,8 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscribeToUser();
-    // this.subscribeToAvailableRides();
     this.getAvailableRides();
+    console.log("RideSelectorComponent");
   }
 
   subscribeToUser() {

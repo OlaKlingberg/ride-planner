@@ -55,6 +55,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private userRideSub: Subscription;
   private positionSub: Subscription;
   private navBarStateSub: Subscription;
+  private riderListSub: Subscription;
 
   private markerUrl: string = "assets/img/";
   private colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
@@ -92,7 +93,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.listenForSocketConnection();
     this.requestRiderList();
     this.listenForRiderList();
-    // this.listenForSocketConnection();
     this.listenForJoinedRider();
     this.listenForUpdatedRiderPosition();
     this.listenForRemovedRider();
@@ -130,17 +130,8 @@ export class MapComponent implements OnInit, OnDestroy {
         });
   }
 
-  // listenForSocketConnection() {
-  //   this.socket.on('socketConnection', () => {
-  //     let ride = this.userService.ride$.value;
-  //     if (ride) this.socket.emit('giveMeRiderList');
-  //   });
-  // }
-
   listenForSocketConnection() {
-    this.socket.on('socketConnection', () => {
-      this.requestRiderList();
-    });
+    this.socket.on('socketConnection', () => this.requestRiderList());
   }
 
   requestRiderList() {
@@ -148,7 +139,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // Wait till a ride has been selected ...
     let userRidePromise = new Promise((resolve, reject) => {
       this.userRideSub = this.userService.user$.subscribe(user => {
-        if (user.ride) resolve(user.ride);
+        if ( user.ride ) resolve(user.ride);
       })
     });
 
@@ -157,15 +148,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.userRideSub.unsubscribe();
       this.socket.emit('giveMeRiderList', ride);
     });
-
-    // // ... and request it again on socket connection.
-    // this.socket.on('socketConnection', () => {
-    //   console.log("MapComponent.requestRiderList. on('socketConnection')");
-    //   let ride = this.userService.ride$.value;
-    //   if (ride) this.socket.emit('giveMeRiderList', ride);
-    // });
   }
-
 
 
   setZIndexAndOpacity() {
@@ -196,7 +179,7 @@ export class MapComponent implements OnInit, OnDestroy {
         console.log("Counter reached 1000! About to emit giveMeRiderList.");
         this.socket.emit('giveMeRiderList', this.user.ride);
       } else {
-        if (joinedRider._id !== this.user._id) {
+        if ( joinedRider._id !== this.user._id ) {
           joinedRider = new User(joinedRider);
           joinedRider.zIndex = this.zCounter++;
           if ( joinedRider.leader ) joinedRider.zIndex += 500;
@@ -215,8 +198,7 @@ export class MapComponent implements OnInit, OnDestroy {
   listenForUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
       let idx = _.findIndex(this.riderList, rider => rider._id === updatedRider._id);
-      if (idx >= 0) {
-        if (this.riderList[idx].fname === 'Ada') console.log('New lat for Ada:', updatedRider.position.coords.latitude * 1000);
+      if ( idx >= 0 ) {
         this.riderList[ idx ].position.timestamp = updatedRider.position.timestamp;
         this.riderList[ idx ].position.coords.accuracy = updatedRider.position.coords.accuracy;
         this.riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
@@ -273,16 +255,19 @@ export class MapComponent implements OnInit, OnDestroy {
   setMapMode(mapMode) {
     this.miscService.navBarState$.next('show');
 
+    if ( this.positionSub ) this.positionSub.unsubscribe();
+    if ( this.riderListSub ) this.riderListSub.unsubscribe();
+
     this.mapMode = mapMode;
+
     switch ( mapMode ) {
-      case 'trackAllRiders':
-        this.showAllRiders();
-        break;
-      case 'trackUser':
+      case 'focusOnUser':
         this.focusOnUser();
         break;
+      case 'showAllRiders':
+        this.showAllRiders();
+        break;
       default:
-        if ( this.positionSub ) this.positionSub.unsubscribe();
         break;
     }
   }
@@ -294,12 +279,15 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // Todo: Update bounds only if position has changed more than a certain amount.
   focusOnUser() {
-    if ( this.positionSub ) this.positionSub.unsubscribe();
     this.positionSub = this.userService.position$.subscribe(position => {
           if ( position ) {
-            // console.log("focusOnUser(). position$.subscribe(). position:", position);
             this.bounds = new this.google.maps.LatLngBounds();
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
+
+            let user = this.userService.user$.value;
+            console.log("Posi lat:", position.coords.latitude * 1000);
+            console.log('User lat:', user.position.coords.latitude * 1000);
+
             this.latLng = this.bounds.toJSON();
           }
         },
@@ -311,7 +299,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   showAllRiders() {
     console.log("showAllRiders()");
-    this.riderList$.subscribe(riderList => {
+    this.riderListSub = this.riderList$.subscribe(riderList => {
       this.bounds = new this.google.maps.LatLngBounds();
       riderList.forEach(rider => {
         this.bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
@@ -325,6 +313,8 @@ export class MapComponent implements OnInit, OnDestroy {
     if ( this.userSub ) this.userSub.unsubscribe();
     if ( this.userRideSub ) this.userRideSub.unsubscribe();
     if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
+    if ( this.positionSub ) this.positionSub.unsubscribe();
+    if ( this.riderListSub ) this.riderListSub.unsubscribe;
     clearInterval(this.timer);
     clearTimeout(this.navBarStateTimer);
     setTimeout(() => {

@@ -1,3 +1,24 @@
+import { environment } from "../../environments/environment";
+
+let latInitialAdd,
+    lngInitialAdd,
+    latIncrement,
+    lngIncrement,
+    timer;
+
+if ( environment.dummyPosition ) {
+  latInitialAdd = Math.random() * .001 - .0005;
+  lngInitialAdd = Math.random() * .001 - .0005;
+}
+
+if ( environment.dummyMovement ) {
+  latIncrement = Math.random() * .0001 - .00005;
+  lngIncrement = Math.random() * .0001 - .00005;
+  timer = Math.random() * 3000 + 500;
+}
+
+console.log("user.ts. this:", this);
+
 export class User {
   _id: string;
   fname: string;
@@ -15,15 +36,32 @@ export class User {
       latitude: number,
       longitude: number
     },
-    timestamp: number;
+    timestamp: number,
+  } = {
+    coords: {
+      accuracy: null,
+      latitude: null,
+      longitude: null
+    },
+    timestamp: null
   };
-  dummyAdjustments: {
-    latInitialAdd: number,
-    lngInitialAdd: number,
-    latRecurrentAdd: number,
-    lngRecurrentAdd: number,
-    time: number
-  };
+  // dummyAdjustments: {
+  //   latInitialAdd: number,
+  //   lngInitialAdd: number,
+  //   latIncrement: number,
+  //   lngIncrement: number,
+  //   timer: number,
+  //   latCurrentAdd: number,
+  //   lngCurrentAdd: number
+  // } = {
+  //   latInitialAdd,
+  //   lngInitialAdd,
+  //   latIncrement,
+  //   lngIncrement,
+  //   timer,
+  //   latCurrentAdd: null,
+  //   lngCurrentAdd: null,
+  // };
   ride: string;
   socketId: string;
   zIndex: number;
@@ -43,7 +81,7 @@ export class User {
     this.socketId = obj.socketId; // Todo: Do I need this?
     this.disconnected = obj.disconnected;
 
-    if (obj.position) {
+    if ( obj.position ) {
       this.position = {
         coords: {
           accuracy: obj.position.coords.accuracy,
@@ -54,6 +92,17 @@ export class User {
       }
     }
 
+    // if ( obj.dummyAdjustments ) {
+    //   this.dummyAdjustments = {
+    //     latInitialAdd: obj.dummyAdjustments.latInitialAdd,
+    //     lngInitialAdd: obj.dummyAdjustments.lngInitialAdd,
+    //     latIncrement: obj.dummyAdjustments.latIncrement,
+    //     lngIncrement: obj.dummyAdjustments.lngIncrement,
+    //     timer: obj.dummyAdjustments.timer,
+    //     latCurrentAdd: null,
+    //     lngCurrentAdd: null
+    //   }
+    // }
   }
 
   get initials() {
@@ -65,8 +114,8 @@ export class User {
   }
 
   get colorNumber() {
-    if (this.leader) return 1;  // Leader are red even if disconnected.
-    if (this.disconnected && Date.now() - this.disconnected > 5000) return 0; // Disconnected riders are gray.
+    if ( this.leader ) return 1;  // Leader are red even if disconnected.
+    if ( this.disconnected && Date.now() - this.disconnected > 5000 ) return 0; // Disconnected riders are gray.
     // Base the colorNumber on the first letter of the first name + the second letter of the last name.
     let colorNumber = this.fname.charCodeAt(0) + this.lname.charCodeAt(0);
     if ( this.lname.length >= 2 ) colorNumber += this.lname.charCodeAt(1);
@@ -74,17 +123,17 @@ export class User {
   }
 
   get secondsSinceDisconnected() {
-    if (!this.disconnected) return null;
+    if ( !this.disconnected ) return null;
     return (Date.now() - this.disconnected) / 1000;
   }
 
   get minutesSinceDisconnected() {
-    if (!this.disconnected) return null;
+    if ( !this.disconnected ) return null;
     return Math.round((Date.now() - this.disconnected) / 60000);
   }
 
   get opacity() {
-    if (this.disconnected && Date.now() - this.disconnected > 5000) return .5;
+    if ( this.disconnected && Date.now() - this.disconnected > 5000 ) return .5;
     return 1;
   }
 

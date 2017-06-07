@@ -52,6 +52,7 @@ export class MapComponent implements OnInit, OnDestroy {
   public latLng: LatLngBoundsLiteral;
 
   private userSub: Subscription;
+  private userRideSub: Subscription;
   private positionSub: Subscription;
   private navBarStateSub: Subscription;
 
@@ -88,6 +89,10 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscribeToUser();
     this.subscribeToNavBarState();
+    this.listenForSocketConnection();
+    this.requestRiderList();
+    this.listenForRiderList();
+    // this.listenForSocketConnection();
     this.listenForJoinedRider();
     this.listenForUpdatedRiderPosition();
     this.listenForRemovedRider();
@@ -101,11 +106,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   subscribeToUser() {
-    this.userSub = this.userService.user$.subscribe(user => {
-      this.user = user;
-      // this.fullName = user ? user.fullName : null;  // This actually seems to be necessary!
-      if ( user && user.ride ) this.getRiderList();
-    });
+    console.log("subscribeToUser");
+    this.userSub = this.userService.user$.subscribe(user => this.user = user);
   }
 
   // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
@@ -128,17 +130,43 @@ export class MapComponent implements OnInit, OnDestroy {
         });
   }
 
-  // Todo: Should these functions be moved to RiderService and just be called from here?
-  getRiderList() {
-    console.log("MapComponent.getRiderList()");
-    this.socket.emit('giveMeRiderList', this.user.ride);
-    this.socket.on('riderList', riderList => {
-      this.riderList = riderList.map(rider => new User(rider));
-      // Filter out the user, which will be displayed using a separate marker.
-      this.riderList = this.riderList.filter(rider => rider._id !== this.user._id);
-      this.setZIndexAndOpacity();
+  // listenForSocketConnection() {
+  //   this.socket.on('socketConnection', () => {
+  //     let ride = this.userService.ride$.value;
+  //     if (ride) this.socket.emit('giveMeRiderList');
+  //   });
+  // }
+
+  listenForSocketConnection() {
+    this.socket.on('socketConnection', () => {
+      this.requestRiderList();
     });
   }
+
+  requestRiderList() {
+    console.log("MapComponent.requestRiderList");
+    // Wait till a ride has been selected ...
+    let userRidePromise = new Promise((resolve, reject) => {
+      this.userRideSub = this.userService.user$.subscribe(user => {
+        if (user.ride) resolve(user.ride);
+      })
+    });
+
+    // ... and then request the riderList.
+    userRidePromise.then(ride => {
+      this.userRideSub.unsubscribe();
+      this.socket.emit('giveMeRiderList', ride);
+    });
+
+    // // ... and request it again on socket connection.
+    // this.socket.on('socketConnection', () => {
+    //   console.log("MapComponent.requestRiderList. on('socketConnection')");
+    //   let ride = this.userService.ride$.value;
+    //   if (ride) this.socket.emit('giveMeRiderList', ride);
+    // });
+  }
+
+
 
   setZIndexAndOpacity() {
     this.riderList = this.riderList.map(rider => {
@@ -149,36 +177,53 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  listenForRiderList() {
+    this.socket.on('riderList', riderList => {
+      console.log('riderList:', riderList);
+      this.riderList = riderList.map(rider => new User(rider));
+      // Filter out the user, which will be displayed using a separate marker.
+      this.riderList = this.riderList.filter(rider => rider._id !== this.user._id);
+      this.setZIndexAndOpacity();
+    });
+  }
+
   listenForJoinedRider() {
     this.socket.on('joinedRider', joinedRider => {
       // If the zIndices are getting too high, it's time to request the whole riderList again.
+      console.log("zCounter:", this.zCounter);
       if ( this.zCounter >= 1000 ) {
         this.zCounter = 0;
-        this.getRiderList();
+        console.log("Counter reached 1000! About to emit giveMeRiderList.");
+        this.socket.emit('giveMeRiderList', this.user.ride);
       } else {
-        joinedRider = new User(joinedRider);
-        joinedRider.zIndex = this.zCounter++;
-        if ( joinedRider.leader ) joinedRider.zIndex += 500;
-        console.log("listenForNewRider(). rider:", joinedRider);
-        // The rider can be a new rider, or a disconnected rider who reconnected.
-        this.riderList = this.riderList.filter(rider => rider._id !== joinedRider._id);
-        this.riderList.push(joinedRider);
+        if (joinedRider._id !== this.user._id) {
+          joinedRider = new User(joinedRider);
+          joinedRider.zIndex = this.zCounter++;
+          if ( joinedRider.leader ) joinedRider.zIndex += 500;
+          // joinedRider = this.setDummyMovement(joinedRider);
+          console.log("listenForJoinedRider(). rider:", joinedRider);
+          // The rider can be a new rider, or a disconnected rider who reconnected.
+          this.riderList = this.riderList.filter(rider => rider._id !== joinedRider._id);
+          this.riderList.push(joinedRider);
 
-        this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
+          this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
+        }
       }
     });
   }
 
   listenForUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
-      console.log("listenForUpdatedRiderPosition(). updatedRider:", updatedRider);
       let idx = _.findIndex(this.riderList, rider => rider._id === updatedRider._id);
-      this.riderList[ idx ].position.timestamp = updatedRider.position.timestamp;
-      this.riderList[ idx ].position.coords.accuracy = updatedRider.position.coords.accuracy;
-      this.riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
-      this.riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
+      if (idx >= 0) {
+        if (this.riderList[idx].fname === 'Ada') console.log('New lat for Ada:', updatedRider.position.coords.latitude * 1000);
+        this.riderList[ idx ].position.timestamp = updatedRider.position.timestamp;
+        this.riderList[ idx ].position.coords.accuracy = updatedRider.position.coords.accuracy;
+        this.riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
+        this.riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
 
-      this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
+        this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
+      }
     });
   }
 
@@ -226,6 +271,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setMapMode(mapMode) {
+    this.miscService.navBarState$.next('show');
+
     this.mapMode = mapMode;
     switch ( mapMode ) {
       case 'trackAllRiders':
@@ -240,12 +287,17 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
+  showNavBar() {
+    console.log("MapComponent.showNavBar()");
+    this.miscService.navBarState$.next('show');
+  }
+
+  // Todo: Update bounds only if position has changed more than a certain amount.
   focusOnUser() {
-    // this.bounds = new this.google.maps.LatLngBounds();
     if ( this.positionSub ) this.positionSub.unsubscribe();
     this.positionSub = this.userService.position$.subscribe(position => {
           if ( position ) {
-            console.log("focusOnUser(). position$.subscribe(). position:", position);
+            // console.log("focusOnUser(). position$.subscribe(). position:", position);
             this.bounds = new this.google.maps.LatLngBounds();
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
             this.latLng = this.bounds.toJSON();
@@ -270,11 +322,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // if ( this.riderSub ) this.riderSub.unsubscribe();
     if ( this.userSub ) this.userSub.unsubscribe();
-    // if ( this.coordsSub ) this.coordsSub.unsubscribe();
+    if ( this.userRideSub ) this.userRideSub.unsubscribe();
     if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
-    // this.riders.forEach(rider => clearInterval(this.timer[ rider._id ]));
     clearInterval(this.timer);
     clearTimeout(this.navBarStateTimer);
     setTimeout(() => {

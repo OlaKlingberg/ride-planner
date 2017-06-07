@@ -28,14 +28,15 @@ export class LogoutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.logoutSub = this.authenticationService.logout()
-        .subscribe(
-            () => {
+        .subscribe(() => {
               environment.storage.removeItem('rpToken');
               environment.storage.removeItem('rpRide');
               this.userService.user$.next(null);
               this.userService.ride$.next(null);
 
               this.socket.emit('leaveRide');
+
+              this.userService.watchWhenToJoinRide();
 
               this.alertService.success('You have been logged out', true);
               this.router.navigate([ '/login' ]);

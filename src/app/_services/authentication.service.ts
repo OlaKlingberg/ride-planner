@@ -21,7 +21,7 @@ export class AuthenticationService {
               private riderService: RiderService) {
     this.authenticateByToken(); // If the user has a token, log them in automatically.
     this.socket = this.miscService.socket;
-    this.addAdminsToRoomAdmins();
+    // this.addAdminsToRoomAdmins();
   }
 
   authenticateByToken() {
@@ -74,18 +74,6 @@ export class AuthenticationService {
     const requestOptions = new RequestOptions({ headers });
 
     return this.http.get(`${environment.api}/users/logout`, requestOptions);
-
-  }
-
-  addAdminsToRoomAdmins() {
-    this.userService.user$.subscribe(user => {
-      if ( user && user.admin ) {
-        let token = JSON.parse(environment.storage.getItem('rpToken'));
-        this.socket.emit('admin', token, () => {
-          // Todo: Do I have any use for this callback?
-        });
-      }
-    });
   }
 
 

@@ -4,7 +4,7 @@
 
       <form (ngSubmit)="onSubmit()" #selectRideForm="ngForm">
 
-        <div *ngIf="user.position">
+        <div *ngIf="user.position.coords.latitude">
           <div *ngIf="!user.ride">
             <div class="form-group">
               <label for="ride">Select a ride</label>
@@ -27,7 +27,7 @@
           </div>
 
         </div>
-        <div *ngIf="!user.position">
+        <div *ngIf="!user.position.coords.latitude">
           <h3>Retrieving your location ...</h3>
         </div>
       </form>

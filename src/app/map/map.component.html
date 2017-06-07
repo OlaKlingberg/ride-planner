@@ -12,6 +12,25 @@
             (pinchstart)="setMapMode('stationary')"
             (panstart)="setMapMode('stationary')"
         >
+
+          <sebm-google-map-marker *ngIf="user && user.position"
+                                  [latitude]="user.position.coords.latitude"
+                                  [longitude]="user.position.coords.longitude"
+                                  [label]="{text: user.initials, color: 'white'}"
+                                  [markerDraggable]="true"
+                                  [iconUrl]="markerUrl + 'black.png'"
+                                  [zIndex]="1000"
+                                  [opacity]="user.opacity"
+                                  (markerClick)="closeInfoWindows(user._id)">
+
+            <sebm-google-map-info-window #userInfoWindow
+                                         attr.data-index={{user._id}}
+            >
+              <div class="info-window">This is you!</div>
+            </sebm-google-map-info-window>
+
+          </sebm-google-map-marker>
+
           <sebm-google-map-marker #markers
                                   *ngFor="let rider of riderList"
                                   [latitude]="rider.position.coords.latitude"
@@ -37,41 +56,17 @@
 
           </sebm-google-map-marker>
 
-          <sebm-google-map-marker *ngIf="user && user.position"
-                                  [latitude]="user.position.coords.latitude"
-                                  [longitude]="user.position.coords.longitude"
-                                  [label]="{text: user.initials, color: 'white'}"
-                                  [markerDraggable]="true"
-                                  [iconUrl]="markerUrl + 'black.png'"
-                                  [zIndex]="1000"
-                                  [opacity]="user.opacity"
-                                  (markerClick)="closeInfoWindows(user._id)">
-
-            <sebm-google-map-info-window #userInfoWindow
-                                         attr.data-index={{user._id}}
-            >
-              <div class="info-window">This is you!</div>
-            </sebm-google-map-info-window>
-
-          </sebm-google-map-marker>
-
-
         </sebm-google-map>
 
         <div id="map-buttons-container"
              [@buttons]="navBarState"
         >
-          <button class="btn btn-danger"
-                  *ngIf="!production"
-                  (click)="setMapMode('stationary')">Fake Pinch
-          </button>
-          <br>
-          <button class="btn btn-primary"
+          <button class="btn btn-primary btn-md"
                   type="button"
                   *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"
                   (click)="setMapMode('showAllRiders')">Track All Riders
           </button>
-          <button class="btn btn-info"
+          <button class="btn btn-info btn-md"
                   *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
                   (click)="setMapMode('focusOnUser')">Track Me
           </button>

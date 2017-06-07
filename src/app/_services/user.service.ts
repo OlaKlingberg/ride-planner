@@ -129,7 +129,7 @@ export class UserService {
     let userPromise = new Promise((resolve, reject) => {
       this.userSub2 = this.user$.subscribe(user => {
         if ( user ) {
-          // console.log("UserService.watchWhenToUpdateUserPosition(). user:", user);
+          console.log("UserService.watchWhenToUpdateUserPosition(). user exists:", user);
           resolve(user)
         }
       });
@@ -137,9 +137,11 @@ export class UserService {
 
     // ... and then subscribe to position$
     userPromise.then((user: any) => {
+      console.log("UserService.watchWhenToUpdateUserPosition. Promise resolved.");
       this.userSub2.unsubscribe();
       this.positionSub = this.position$.subscribe(position => {
         if (position) {
+          console.log("UserService.watchWhenToUpdateUserPosition. position$.subscribe() position:", position);
           user.position = {
             coords: {
               accuracy: position.coords.accuracy,
@@ -148,6 +150,7 @@ export class UserService {
             },
             timestamp: position.timestamp
           };
+          console.log("UserService.watchWhenToUpdateUserPosition. About to call user$.next(user). user:", user);
           this.user$.next(user);
           if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
         }

@@ -62,7 +62,7 @@ export class AuthenticationService {
             //     timestamp: position.timestamp
             //   };
             // }
-
+            console.log("AuthenticationService.login(). About to call userService.user$.next(user)");
             this.userService.user$.next(user);
           }
         });

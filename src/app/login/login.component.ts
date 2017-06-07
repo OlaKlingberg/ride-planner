@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Get return url from route parameters or default to '/'
-    this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
+    this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/ride-selector';
 
     this.userSub = this.userService.user$.subscribe(user => {
           if ( user ) {
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true);
               console.log("About to navigate to /ride-selector");
-              this.router.navigate([ '/ride-selector' ])
+              this.router.navigate([ '/ride-selector' ]);
             },
             error => {
               console.log("LoginComponent.login(). There was an error logging in.");

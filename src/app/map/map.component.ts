@@ -117,13 +117,14 @@ export class MapComponent implements OnInit, OnDestroy {
     console.log("subscribeToUser");
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
+      if (user && user.position && user.position.coords) console.log("User lat:", user.position.coords.latitude * 1000);
     });
   }
 
   // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
   subscribeToNavBarState() {
     this.navBarStateSub = this.miscService.navBarState$
-        .combineLatest(this.userService.position$)
+        .combineLatest(this.userService.position$)  // Todo: Do I need to unsubscribe from this?
         .subscribe(([ navBarState, position ]) => {
           // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.
           // Todo: The condition is kind of ugly.
@@ -283,18 +284,14 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  showNavBar() {
-    console.log("MapComponent.showNavBar()");
-    this.miscService.navBarState$.next('show');
-  }
-
   // Todo: Update bounds only if position has changed more than a certain amount.
   focusOnUser() {
-    // this.bounds = new this.google.maps.LatLngBounds();
-
+    console.log("focusOnUser()");
+    if (this.positionSub) this.positionSub.unsubscribe();
     this.positionSub = this.userService.position$.subscribe(position => {
-          console.log("MapComponent.focusOnUser() position$.subscribe()");
+          // console.log("MapComponent.focusOnUser() position$.subscribe()");
           if ( position ) {
+            // console.log("About to extend bounds. Lat:", position.coords.latitude * 1000);
             this.bounds = new this.google.maps.LatLngBounds();
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
             this.latLng = this.bounds.toJSON();
@@ -304,10 +301,15 @@ export class MapComponent implements OnInit, OnDestroy {
           // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
           console.log("MapComponent.trackUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
         });
+    // setTimeout(() => {
+    //   this.bounds = null;
+    //   this.setMapMode('focusOnUser');
+    // }, 15000);
   }
 
   showAllRiders() {
     console.log("showAllRiders()");
+    if (this.riderListSub) this.riderListSub.unsubscribe();
     this.riderListSub = this.riderList$.subscribe(riderList => {
       console.log("MapComponent.showAllRiders() riderList$.subscribe()");
       if ( !riderList || riderList.length < 0 ) return;
@@ -318,7 +320,9 @@ export class MapComponent implements OnInit, OnDestroy {
       this.bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
       this.latLng = this.bounds.toJSON();
     });
-    return;
+    // setTimeout(() => {
+    //   this.setMapMode('focusOnUser');
+    // }, 15000);
   }
 
   ngOnDestroy() {

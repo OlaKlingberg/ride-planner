@@ -27,7 +27,7 @@ export class UserService {
   private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
   // private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
-  private dummyUpdateFrequency: number = 500;
+  private dummyUpdateFrequency: number = 200;
   private dummyLatIncrement: number = Math.random() * .00006 - .00003;
   // private dummyLatIncrement: number = Math.random() * .00004 - .00002;
   private dummyLngIncrement: number = Math.random() * .00006 - .00003;
@@ -42,7 +42,7 @@ export class UserService {
               private miscService: MiscService,
               private debuggingService: DebuggingService) {
     this.getRideFromStorage();
-    if (environment.dummyMovement) this.incrementDummyPositionAdds()
+    // if (environment.dummyMovement) this.incrementDummyPositionAdds()
     this.watchPosition();
     this.watchWhenToJoinRide();
     this.watchWhenToUpdateUserPosition();
@@ -56,13 +56,12 @@ export class UserService {
     if ( ride ) this.ride$.next(ride);
   }
 
-  incrementDummyPositionAdds() {
-    setInterval(() => {
-      this.dummyLatCurrentAdd += this.dummyLatIncrement;
-      this.dummyLngCurrentAdd += this.dummyLngIncrement;
-      // console.log("dummyLatCurrentAdd:", Math.round(this.dummyLatCurrentAdd * 1000000), "dummyLngCurrentAdd:", Math.round(this.dummyLngCurrentAdd * 1000000));
-    }, this.dummyUpdateFrequency);
-  }
+  // incrementDummyPositionAdds() {
+  //   setInterval(() => {
+  //     this.dummyLatCurrentAdd += this.dummyLatIncrement;
+  //     this.dummyLngCurrentAdd += this.dummyLngIncrement;
+  //   }, this.dummyUpdateFrequency);
+  // }
 
   // Todo: Refactor!
   watchPosition() {
@@ -81,9 +80,10 @@ export class UserService {
             let startLat = pos.coords.latitude;
             let startLng = pos.coords.longitude;
             this.updateTimer = setInterval(() => {
+              this.dummyLatCurrentAdd += this.dummyLatIncrement;
+              this.dummyLngCurrentAdd += this.dummyLngIncrement;
               pos.coords.latitude = startLat + this.dummyLatCurrentAdd;
               pos.coords.longitude = startLng + this.dummyLngCurrentAdd;
-              // console.log("Lat:", Math.round(pos.coords.latitude * 1000000), "Lng:", Math.round(pos.coords.longitude * 1000000));
               this.position$.next(pos);
             }, this.dummyUpdateFrequency);
           } else {
@@ -236,4 +236,3 @@ export class UserService {
   }
 
 }
-

@@ -27,15 +27,14 @@ export class UserService {
   private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
   // private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
-  private dummyUpdateFrequency: number = 30;
-  // private dummyLatIncrement: number = Math.random() * .00002 - .00001;
-  private dummyLatIncrement: number = .000005;
-  // private dummyLngIncrement: number = Math.random() * .00002 - .00001;
-  private dummyLngIncrement: number = .000005;
+  private dummyUpdateFrequency: number = 500;
+  private dummyLatIncrement: number = Math.random() * .00006 - .00003;
+  // private dummyLatIncrement: number = Math.random() * .00004 - .00002;
+  private dummyLngIncrement: number = Math.random() * .00006 - .00003;
+  // private dummyLngIncrement: number = Math.random() * .00004 - .00002;
   private dummyLatCurrentAdd: number = null;
   private dummyLngCurrentAdd: number = null;
   private updateTimer: any;
-
 
   private socket: Socket;
 
@@ -67,9 +66,9 @@ export class UserService {
 
   // Todo: Refactor!
   watchPosition() {
-    if (this.updateTimer) clearInterval(this.updateTimer);
     this.geoWatch = navigator.geolocation.watchPosition(position => {
           console.log("position:", position);
+          if (this.updateTimer) clearInterval(this.updateTimer);
 
           let pos = this.copyPositionObject(position);
 
@@ -92,7 +91,7 @@ export class UserService {
           }
 
           // Set timer to rerun watchPosition if it has not yielded results for a while. Logically, this should not be needed, but it often seems to yield a new position.
-          clearTimeout(this.geoWatchTimer);
+          if (this.geoWatchTimer) clearTimeout(this.geoWatchTimer);
           this.startGeoWatchTimer(position);
         },
         err => {
@@ -108,11 +107,11 @@ export class UserService {
 
   startGeoWatchTimer(position) {
     this.geoWatchTimer = setTimeout(() => {
-      if ( Date.now() - position.timestamp > 19000 ) {
+      // if ( Date.now() - position.timestamp > 19000 ) {
         navigator.geolocation.clearWatch(this.geoWatch);
         this.watchPosition();
-        // this.startGeoWatchTimer(position); // Todo: Is this needed? Why did I have this before?
-      }
+        this.startGeoWatchTimer(position);
+      // }
     }, 20000);
   }
 
@@ -237,3 +236,4 @@ export class UserService {
   }
 
 }
+

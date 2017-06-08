@@ -20,6 +20,7 @@ import {
   transition
 } from '@angular/animations';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'rp-map',
@@ -83,7 +84,8 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService,
               private miscService: MiscService,
               private mapsAPILoader: MapsAPILoader,
-              private debuggingService: DebuggingService) {
+              private debuggingService: DebuggingService,
+              private router: Router) {
     this.socket = this.miscService.socket;
   }
 
@@ -102,6 +104,12 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapsAPILoader.load().then(() => {
       this.google = google;
       this.focusOnUser();
+
+      setTimeout(() => {
+        this.router.navigate([ '/map' ]);
+      }, 6000);
+
+
     });
   }
 
@@ -109,7 +117,6 @@ export class MapComponent implements OnInit, OnDestroy {
     console.log("subscribeToUser");
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
-      console.log(user);
     });
   }
 
@@ -126,7 +133,7 @@ export class MapComponent implements OnInit, OnDestroy {
               let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
               if ( navBarState === 'show' && !ariaExpanded ) {
                 // this.navBarStateTimer = setTimeout(() => {  // Don't remember why the setTimeout is needed, but it is.
-                  this.miscService.navBarState$.next('hide');
+                this.miscService.navBarState$.next('hide');
                 // }, 0);
               }
             }, 0);
@@ -283,15 +290,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // Todo: Update bounds only if position has changed more than a certain amount.
   focusOnUser() {
+    // this.bounds = new this.google.maps.LatLngBounds();
+
     this.positionSub = this.userService.position$.subscribe(position => {
+          console.log("MapComponent.focusOnUser() position$.subscribe()");
           if ( position ) {
             this.bounds = new this.google.maps.LatLngBounds();
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
-
-            let user = this.userService.user$.value;
-            // console.log("Posi lat:", position.coords.latitude * 1000);
-            // console.log('User lat:', user.position.coords.latitude * 1000);
-
             this.latLng = this.bounds.toJSON();
           }
         },
@@ -304,6 +309,7 @@ export class MapComponent implements OnInit, OnDestroy {
   showAllRiders() {
     console.log("showAllRiders()");
     this.riderListSub = this.riderList$.subscribe(riderList => {
+      console.log("MapComponent.showAllRiders() riderList$.subscribe()");
       if ( !riderList || riderList.length < 0 ) return;
       this.bounds = new this.google.maps.LatLngBounds();
       riderList.forEach(rider => {

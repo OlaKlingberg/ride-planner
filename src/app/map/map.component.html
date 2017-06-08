@@ -13,7 +13,8 @@
             (panstart)="setMapMode('stationary')"
         >
 
-          <sebm-google-map-marker *ngIf="user && user.position"
+          <sebm-google-map-marker class="user-marker"
+                                  *ngIf="user && user.position"
                                   [latitude]="user.position.coords.latitude"
                                   [longitude]="user.position.coords.longitude"
                                   [label]="{text: user.initials, color: 'white'}"

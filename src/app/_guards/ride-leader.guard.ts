@@ -7,10 +7,11 @@ import { UserService } from '../_services/user.service';
 @Injectable()
 export class RideLeaderGuard implements CanActivate {
   user: User;
+  private counter: number = 0;
 
   constructor(private router: Router,
               private userService: UserService) {
-
+    console.log("RideLeaderGuard. constructor. Counter:", this.counter++);
     this.userService.user$.subscribe(
         user => this.user = user
     );

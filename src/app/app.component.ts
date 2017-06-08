@@ -25,23 +25,23 @@ export class AppComponent implements OnInit {
               private riderService: RiderService,                   // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
               private miscService: MiscService,
-              public location: Location) {
+              public location: Location) {                          // Is used in the template.
   }
 
   ngOnInit() {
-    this.watchUser();
-    this.watchCoords();
+    this.subscribeToUser();
+    this.subscribeToPosition();
     this.refreshAfterSleep();
   }
 
-  watchUser() {
+  subscribeToUser() {
     this.userService.user$.subscribe(user => {
       this.userName = user ? user.fullName : null;  // Todo: Surely, this ugliness shouldn't be necessary!
       if ( user ) this.ride = user.ride;
     });
   }
 
-  watchCoords() {
+  subscribeToPosition() {
     this.userService.position$.subscribe(position => {
       if ( position ) {
         this.latitude = position.coords.latitude;

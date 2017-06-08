@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginSub: Subscription;
   userSub: Subscription;
 
+  private counter: number = 0;
+
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private authenticationService: AuthenticationService,
@@ -33,6 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/ride-selector';
 
+    console.log("LoginComponent. About to subscribe to user$. Counter:", this.counter++);
     this.userSub = this.userService.user$.subscribe(user => {
           if ( user ) {
             this.user = user;

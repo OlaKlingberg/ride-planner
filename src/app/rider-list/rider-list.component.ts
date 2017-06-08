@@ -61,6 +61,9 @@ export class RiderListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.rideSub.unsubscribe();
+    this.userSub.unsubscribe();
+    this.socket.removeAllListeners();
   }
 
 }

@@ -26,9 +26,12 @@ export class UserService {
 
   private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
-  private dummyUpdateFrequency: number = Math.random() * 1000 + 1000;
-  private dummyLatIncrement: number = Math.random() * .0001 - .00005;
-  private dummyLngIncrement: number = Math.random() * .0001 - .00005;
+  // private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
+  private dummyUpdateFrequency: number = 30;
+  // private dummyLatIncrement: number = Math.random() * .00002 - .00001;
+  private dummyLatIncrement: number = .000005;
+  // private dummyLngIncrement: number = Math.random() * .00002 - .00001;
+  private dummyLngIncrement: number = .000005;
   private dummyLatCurrentAdd: number = null;
   private dummyLngCurrentAdd: number = null;
   private updateTimer: any;
@@ -58,6 +61,7 @@ export class UserService {
     setInterval(() => {
       this.dummyLatCurrentAdd += this.dummyLatIncrement;
       this.dummyLngCurrentAdd += this.dummyLngIncrement;
+      // console.log("dummyLatCurrentAdd:", Math.round(this.dummyLatCurrentAdd * 1000000), "dummyLngCurrentAdd:", Math.round(this.dummyLngCurrentAdd * 1000000));
     }, this.dummyUpdateFrequency);
   }
 
@@ -79,7 +83,8 @@ export class UserService {
             let startLng = pos.coords.longitude;
             this.updateTimer = setInterval(() => {
               pos.coords.latitude = startLat + this.dummyLatCurrentAdd;
-              pos.coords.longitude = startLng + this.dummyLngInitialAdd;
+              pos.coords.longitude = startLng + this.dummyLngCurrentAdd;
+              // console.log("Lat:", Math.round(pos.coords.latitude * 1000000), "Lng:", Math.round(pos.coords.longitude * 1000000));
               this.position$.next(pos);
             }, this.dummyUpdateFrequency);
           } else {
@@ -129,7 +134,7 @@ export class UserService {
     let userPromise = new Promise((resolve, reject) => {
       this.userSub2 = this.user$.subscribe(user => {
         if ( user ) {
-          console.log("UserService.watchWhenToUpdateUserPosition(). user exists:", user);
+          // console.log("UserService.watchWhenToUpdateUserPosition(). user exists:", user);
           resolve(user)
         }
       });
@@ -137,11 +142,11 @@ export class UserService {
 
     // ... and then subscribe to position$
     userPromise.then((user: any) => {
-      console.log("UserService.watchWhenToUpdateUserPosition. Promise resolved.");
+      // console.log("UserService.watchWhenToUpdateUserPosition. Promise resolved.");
       this.userSub2.unsubscribe();
       this.positionSub = this.position$.subscribe(position => {
         if (position) {
-          console.log("UserService.watchWhenToUpdateUserPosition. position$.subscribe() position:", position);
+          // console.log("UserService.watchWhenToUpdateUserPosition. position$.subscribe() position:", position);
           user.position = {
             coords: {
               accuracy: position.coords.accuracy,
@@ -150,13 +155,12 @@ export class UserService {
             },
             timestamp: position.timestamp
           };
-          console.log("UserService.watchWhenToUpdateUserPosition. About to call user$.next(user). user:", user);
+          // console.log("UserService.watchWhenToUpdateUserPosition. About to call user$.next(user). user:", user);
           this.user$.next(user);
           if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
         }
       });
     });
-
 
     // Todo: This is incompatible with the dummy[Lat/Lng]CurrentAdd used above. Decide if I need this functionality. It would be so much easier to just get rid of it. I could decide to use it when dummyMovements === false.
     // Update user.position, but only if the position has changed enough.
@@ -231,6 +235,5 @@ export class UserService {
 
     return this.http.get(`${environment.api}/users`, this.requestOptions);
   }
-
 
 }

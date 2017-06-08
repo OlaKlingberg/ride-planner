@@ -7,10 +7,11 @@ import { User } from '../_models/user';
 @Injectable()
 export class AuthGuard implements CanActivate {
   user: User;
+  private counter: number = 0;
 
   constructor(private router: Router,
               private userService: UserService) {
-
+    console.log("AuthGuard. constructor. Counter:", this.counter++);
     this.userService.user$.subscribe(
         user => this.user = user
     );

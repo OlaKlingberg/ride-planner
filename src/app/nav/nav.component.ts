@@ -26,8 +26,9 @@ import { UserService } from '../_services/user.service';
         opacity: 0,
         display: "none"
       })),
+      // transition('show => hide', animate('500ms 4s')),
       transition('show => hide', animate('500ms 4s')),
-      transition('hide => show', animate('100ms'))
+      // transition('hide => show', animate('10ms'))
     ])
   ]
 })
@@ -47,6 +48,7 @@ export class NavComponent implements OnInit {
   }
 
   subscribeToUser() {
+    console.log("NavComponent. subscribeToUser()");
     this.userService.user$.subscribe(
         user => this.user = user
     );
@@ -54,7 +56,6 @@ export class NavComponent implements OnInit {
 
   subscribeToNavBarState() {
     this.miscService.navBarState$.subscribe(navBarState => {
-      // if ( this.user ) console.log(`${this.user.fname} ${this.user.lname}. NavComponent.watchNavBar. navBarState: ${navBarState}`);
       this.navBarState = navBarState;
     });
   }

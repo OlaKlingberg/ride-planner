@@ -36,7 +36,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
         display: "none"
       })),
       transition('show => hide', animate('500ms 4s')),
-      transition('hide => show', animate('100ms'))
+      // transition('hide => show', animate('10ms'))
     ])
   ]
 })
@@ -107,7 +107,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
   subscribeToUser() {
     console.log("subscribeToUser");
-    this.userSub = this.userService.user$.subscribe(user => this.user = user);
+    this.userSub = this.userService.user$.subscribe(user => {
+      this.user = user;
+      console.log(user);
+    });
   }
 
   // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
@@ -115,15 +118,16 @@ export class MapComponent implements OnInit, OnDestroy {
     this.navBarStateSub = this.miscService.navBarState$
         .combineLatest(this.userService.position$)
         .subscribe(([ navBarState, position ]) => {
-          // Start the timer to hide the nav bar only when the map is shown, which happens when there are coords.
-          if ( position ) {
+          // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.
+          // Todo: The condition is kind of ugly.
+          if ( position && position.coords && position.coords.latitude ) {
             this.navBarState = navBarState;
             setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
               let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
               if ( navBarState === 'show' && !ariaExpanded ) {
-                this.navBarStateTimer = setTimeout(() => {  // Don't remember why the setTimeout is needed, but it is.
+                // this.navBarStateTimer = setTimeout(() => {  // Don't remember why the setTimeout is needed, but it is.
                   this.miscService.navBarState$.next('hide');
-                }, 150);
+                // }, 0);
               }
             }, 0);
           }
@@ -231,7 +235,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   removeLongDisconnectedRiders() {
     this.timer = setInterval(() => {
-      console.log("removeLongDisconnectedRiders. A new 30-second interval started ...");
+      // console.log("removeLongDisconnectedRiders. A new 30-second interval started ...");
       this.riderList = _.filter(this.riderList, rider => {
         // Todo: Use an environment variable for the time? Or a variable that can be set through a UI?
         return !rider.disconnected || (Date.now() - rider.disconnected) < 1800000;
@@ -285,8 +289,8 @@ export class MapComponent implements OnInit, OnDestroy {
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
 
             let user = this.userService.user$.value;
-            console.log("Posi lat:", position.coords.latitude * 1000);
-            console.log('User lat:', user.position.coords.latitude * 1000);
+            // console.log("Posi lat:", position.coords.latitude * 1000);
+            // console.log('User lat:', user.position.coords.latitude * 1000);
 
             this.latLng = this.bounds.toJSON();
           }
@@ -300,6 +304,7 @@ export class MapComponent implements OnInit, OnDestroy {
   showAllRiders() {
     console.log("showAllRiders()");
     this.riderListSub = this.riderList$.subscribe(riderList => {
+      if ( !riderList || riderList.length < 0 ) return;
       this.bounds = new this.google.maps.LatLngBounds();
       riderList.forEach(rider => {
         this.bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
@@ -307,6 +312,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
       this.latLng = this.bounds.toJSON();
     });
+    return;
   }
 
   ngOnDestroy() {
@@ -314,7 +320,10 @@ export class MapComponent implements OnInit, OnDestroy {
     if ( this.userRideSub ) this.userRideSub.unsubscribe();
     if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
-    if ( this.riderListSub ) this.riderListSub.unsubscribe;
+    if ( this.riderListSub ) this.riderListSub.unsubscribe();
+
+    this.socket.removeAllListeners();
+
     clearInterval(this.timer);
     clearTimeout(this.navBarStateTimer);
     setTimeout(() => {

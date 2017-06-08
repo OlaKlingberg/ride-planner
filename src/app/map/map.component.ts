@@ -44,7 +44,7 @@ import { Router } from '@angular/router';
 export class MapComponent implements OnInit, OnDestroy {
   public production = environment.production;
   private fullName: string = '';
-  public maxZoom: number = 18;
+  public maxZoom: number = 16;
 
   public user: User;
 
@@ -117,7 +117,7 @@ export class MapComponent implements OnInit, OnDestroy {
     console.log("subscribeToUser");
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
-      if (user && user.position && user.position.coords) console.log("User lat:", user.position.coords.latitude * 1000);
+      // if (user && user.position && user.position.coords) console.log("User lat:", user.position.coords.latitude * 1000);
     });
   }
 
@@ -301,10 +301,7 @@ export class MapComponent implements OnInit, OnDestroy {
           // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
           console.log("MapComponent.trackUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
         });
-    // setTimeout(() => {
-    //   this.bounds = null;
-    //   this.setMapMode('focusOnUser');
-    // }, 15000);
+
   }
 
   showAllRiders() {
@@ -320,9 +317,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
       this.latLng = this.bounds.toJSON();
     });
-    // setTimeout(() => {
-    //   this.setMapMode('focusOnUser');
-    // }, 15000);
+
   }
 
   ngOnDestroy() {

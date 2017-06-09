@@ -44,7 +44,8 @@ import { Router } from '@angular/router';
 export class MapComponent implements OnInit, OnDestroy {
   public production = environment.production;
   private fullName: string = '';
-  public maxZoom: number = 16;
+  public maxZoom: number = 18;
+  // public zoom: number = 14;
 
   public user: User;
 
@@ -345,4 +346,3 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
 }
-

@@ -26,12 +26,10 @@ export class UserService {
 
   private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
-  // private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
-  private dummyUpdateFrequency: number = 200;
-  private dummyLatIncrement: number = Math.random() * .00006 - .00003;
-  // private dummyLatIncrement: number = Math.random() * .00004 - .00002;
-  private dummyLngIncrement: number = Math.random() * .00006 - .00003;
-  // private dummyLngIncrement: number = Math.random() * .00004 - .00002;
+  private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
+  // private dummyUpdateFrequency: number = 200;
+  private dummyLatIncrement: number = Math.random() * .0002 - .0001;
+  private dummyLngIncrement: number = Math.random() * .0002 - .0001;
   private dummyLatCurrentAdd: number = null;
   private dummyLngCurrentAdd: number = null;
   private updateTimer: any;
@@ -55,13 +53,6 @@ export class UserService {
     console.log("UserService.getRideFromStorage(). ride:", ride);
     if ( ride ) this.ride$.next(ride);
   }
-
-  // incrementDummyPositionAdds() {
-  //   setInterval(() => {
-  //     this.dummyLatCurrentAdd += this.dummyLatIncrement;
-  //     this.dummyLngCurrentAdd += this.dummyLngIncrement;
-  //   }, this.dummyUpdateFrequency);
-  // }
 
   // Todo: Refactor!
   watchPosition() {
@@ -107,11 +98,9 @@ export class UserService {
 
   startGeoWatchTimer(position) {
     this.geoWatchTimer = setTimeout(() => {
-      // if ( Date.now() - position.timestamp > 19000 ) {
         navigator.geolocation.clearWatch(this.geoWatch);
         this.watchPosition();
         this.startGeoWatchTimer(position);
-      // }
     }, 20000);
   }
 
@@ -133,7 +122,6 @@ export class UserService {
     let userPromise = new Promise((resolve, reject) => {
       this.userSub2 = this.user$.subscribe(user => {
         if ( user ) {
-          // console.log("UserService.watchWhenToUpdateUserPosition(). user exists:", user);
           resolve(user)
         }
       });
@@ -145,7 +133,6 @@ export class UserService {
       this.userSub2.unsubscribe();
       this.positionSub = this.position$.subscribe(position => {
         if (position) {
-          // console.log("UserService.watchWhenToUpdateUserPosition. position$.subscribe() position:", position);
           user.position = {
             coords: {
               accuracy: position.coords.accuracy,
@@ -154,39 +141,11 @@ export class UserService {
             },
             timestamp: position.timestamp
           };
-          // console.log("UserService.watchWhenToUpdateUserPosition. About to call user$.next(user). user:", user);
           this.user$.next(user);
           if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
         }
       });
     });
-
-    // Todo: This is incompatible with the dummy[Lat/Lng]CurrentAdd used above. Decide if I need this functionality. It would be so much easier to just get rid of it. I could decide to use it when dummyMovements === false.
-    // Update user.position, but only if the position has changed enough.
-    // this.user$
-    //     .combineLatest(this.position$)
-    //     .subscribe(([ user, position ]) => {
-    //       if ( user && position ) {
-    //         if ( !user.position.coords.latitude ||
-    //             Math.abs(user.position.coords.latitude - position.coords.latitude) > .0001 ||
-    //             Math.abs(user.position.coords.longitude - position.coords.longitude) > .0001 ||
-    //             user.position.coords.accuracy > position.coords.accuracy
-    //         ) {
-    //           user.position = {
-    //             coords: {
-    //               accuracy: position.coords.accuracy,
-    //               latitude: position.coords.latitude,
-    //               longitude: position.coords.longitude
-    //             },
-    //             timestamp: position.timestamp
-    //           };
-    //           // And emit updateUserPosition, but only if the user has joined a ride.
-    //           this.user$.next(user);
-    //           if ( user.ride ) console.log("socket.emit('updateUserPosition'):", user.position);
-    //           if ( user.ride ) this.socket.emit('updateUserPosition()', user.position);
-    //         }
-    //       }
-    //     });
   }
 
   watchWhenToJoinRide() {

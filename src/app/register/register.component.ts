@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class RegisterComponent implements OnDestroy {
   model: any = {};
-  loading = false;
+  loading: boolean = false;
   user: User;
 
   createSub: Subscription
@@ -26,8 +26,7 @@ export class RegisterComponent implements OnDestroy {
   register() {
     this.loading = true;
     this.userService.create(this.model)
-        .subscribe(
-            () => {
+        .subscribe(() => {
               this.alertService.success('Registration successful', true);
               this.router.navigate([ '/login' ]);
             },

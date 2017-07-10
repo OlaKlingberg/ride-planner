@@ -49,20 +49,6 @@ export class AuthenticationService {
 
           if ( user && token ) {
             environment.storage.setItem('rpToken', JSON.stringify(token));
-
-            // Todo: This seems like a lot of code. Is there a simpler way?
-            // let position = this.userService.position$.value;
-            // if (position) {
-            //   user.position = {
-            //     coords: {
-            //       accuracy: position.coords.accuracy,
-            //       latitude: position.coords.accuracy,
-            //       longitude: position.coords.longitude
-            //     },
-            //     timestamp: position.timestamp
-            //   };
-            // }
-            console.log("AuthenticationService.login(). About to call userService.user$.next(user)");
             this.userService.user$.next(user);
           }
         });

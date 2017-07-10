@@ -30,6 +30,13 @@ import { DebuggingService } from './_services/debugging.service';
 import { WindowRefService } from './_services/window-ref.service';
 import { EqualValidator } from './register/equal-validator.directive';
 import { ValuesPipe } from './_pipes/values.pipe';
+import { CuesheetComponent } from './cuesheet/cuesheet.component';
+import { CuesheetService } from './_services/cuesheet.service';
+import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
+import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
+import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
+import { CuesheetNavigateComponent } from './cuesheet-navigate/cuesheet-navigate.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
   declarations: [
@@ -46,7 +53,12 @@ import { ValuesPipe } from './_pipes/values.pipe';
     RiderListComponent,
     DebuggerComponent,
     EqualValidator,
-    ValuesPipe
+    ValuesPipe,
+    CuesheetComponent,
+    CuesheetListComponent,
+    CuesheetNewComponent,
+    CuesheetEditComponent,
+    CuesheetNavigateComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +66,8 @@ import { ValuesPipe } from './_pipes/values.pipe';
     HttpModule,
     AppRoutingModule,
     MapModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    TooltipModule.forRoot()
   ],
   providers: [
     UserService,
@@ -66,7 +79,8 @@ import { ValuesPipe } from './_pipes/values.pipe';
     RiderService,
     MiscService,
     DebuggingService,
-    WindowRefService
+    WindowRefService,
+    CuesheetService
   ],
   bootstrap: [ AppComponent ]
 })

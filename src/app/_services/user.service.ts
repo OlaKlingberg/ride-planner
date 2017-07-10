@@ -57,7 +57,7 @@ export class UserService {
   // Todo: Refactor!
   watchPosition() {
     this.geoWatch = navigator.geolocation.watchPosition(position => {
-          console.log("position:", position);
+          // console.log("position:", position);
           if (this.updateTimer) clearInterval(this.updateTimer);
 
           let pos = this.copyPositionObject(position);

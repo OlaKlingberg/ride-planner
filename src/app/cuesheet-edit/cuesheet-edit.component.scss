@@ -1,0 +1,28 @@
+
+.right {
+  float: right;
+}
+
+.btn-circle {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  padding: 4px 0;
+  font-size: 8px;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+.buttons-column {
+  position: relative;
+}
+
+.insert-button-container {
+  position: absolute;
+  bottom: 100%;
+  right: 20%;
+}
+
+.insert-button {
+  margin-bottom: -50%;
+}

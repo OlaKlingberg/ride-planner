@@ -106,9 +106,10 @@ export class MapComponent implements OnInit, OnDestroy {
       this.google = google;
       this.focusOnUser();
 
-      setTimeout(() => {
-        this.router.navigate([ '/map' ]);
-      }, 6000);
+      // Todo: What the hell was my thought behind this?
+      // setTimeout(() => {
+      //   this.router.navigate([ '/map' ]);
+      // }, 6000);
 
 
     });
@@ -317,6 +318,9 @@ export class MapComponent implements OnInit, OnDestroy {
       });
       this.bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
       this.latLng = this.bounds.toJSON();
+      console.log("latLng, before adjustment:", this.latLng);
+      // Add 10% to the map at the upper edge for what is covered by the phone-browser address bar.
+      this.latLng.north += (this.latLng.north - this.latLng.south) / 10;
     });
 
   }

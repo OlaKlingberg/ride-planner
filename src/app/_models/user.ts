@@ -17,14 +17,12 @@ if ( environment.dummyMovement ) {
   timer = Math.random() * 3000 + 500;
 }
 
-console.log("user.ts. this:", this);
-
 export class User {
   _id: string;
   fname: string;
   lname: string;
   email: string;
-  password: string;
+  // password: string;
   leader: boolean;
   phone: string;
   emergencyName: string;
@@ -45,23 +43,7 @@ export class User {
     },
     timestamp: null
   };
-  // dummyAdjustments: {
-  //   latInitialAdd: number,
-  //   lngInitialAdd: number,
-  //   latIncrement: number,
-  //   lngIncrement: number,
-  //   timer: number,
-  //   latCurrentAdd: number,
-  //   lngCurrentAdd: number
-  // } = {
-  //   latInitialAdd,
-  //   lngInitialAdd,
-  //   latIncrement,
-  //   lngIncrement,
-  //   timer,
-  //   latCurrentAdd: null,
-  //   lngCurrentAdd: null,
-  // };
+
   ride: string;
   socketId: string;
   zIndex: number;
@@ -91,18 +73,6 @@ export class User {
         timestamp: obj.position.timestamp
       }
     }
-
-    // if ( obj.dummyAdjustments ) {
-    //   this.dummyAdjustments = {
-    //     latInitialAdd: obj.dummyAdjustments.latInitialAdd,
-    //     lngInitialAdd: obj.dummyAdjustments.lngInitialAdd,
-    //     latIncrement: obj.dummyAdjustments.latIncrement,
-    //     lngIncrement: obj.dummyAdjustments.lngIncrement,
-    //     timer: obj.dummyAdjustments.timer,
-    //     latCurrentAdd: null,
-    //     lngCurrentAdd: null
-    //   }
-    // }
   }
 
   get initials() {

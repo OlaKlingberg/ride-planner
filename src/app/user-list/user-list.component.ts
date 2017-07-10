@@ -18,8 +18,8 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getAllUsersSub = this.userService.getAllUsers()
-        .subscribe((response) => {
-          this.users = response.json();
+        .subscribe(response => {
+          this.users = response.json().users;
           this.users.sort(nameSort);
         });
   }

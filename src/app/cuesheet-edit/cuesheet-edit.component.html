@@ -1,0 +1,91 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h1 class="w-100">{{ cuesheet?.name }}<span class="right btn btn-primary btn-sm">Delete this cuesheet</span></h1>
+      <h4>{{ cuesheet?.description }}</h4>
+      <span>Created by {{ cuesheet?._creator.fname }} {{ cuesheet?._creator.lname }}</span>
+      <span *ngIf="cuesheet?.cues.length > 0">
+      <hr>
+      <p>Click in any field below to edit it.</p>
+      </span>
+
+      <form name="form" (ngSubmit)="syncModel() && f.form.valid && saveCuesheet()" #f="ngForm" novalidate>
+
+        <table class="table table-striped table-bordered">
+          <thead>
+          <tr>
+            <th class="col-xs-1">Cue</th>
+            <th class="col-xs-2">Distance</th>
+            <th class="col-xs-1">Turn</th>
+            <th class="col-xs-5">Description</th>
+            <th class="col-xs-1">Total</th>
+            <th class="col-xs-1"></th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <!-- Existing cues -->
+          <tr *ngFor="let cue of cuesheet?.cues; index as i"
+              [@cueState]="cue.state"
+              id="cue-row-{{ i }}"
+          >
+            <td>{{ i + 1 }}</td>
+            <td>{{ cue.distance / 100 | number:'1.0-2' }}</td>
+            <td>{{ cue.turn }}</td>
+            <td>{{ cue.description }}</td>
+            <td>{{ cue.total / 100 | number:'1.0-2'}}</td>
+            <td class="buttons-column">
+              <span
+                  (click)="deleteCue(i)"
+                  class="btn btn-danger btn-xs btn-circle"
+                  tooltip="Delete this cue"
+                  placement="right">
+                <i class="glyphicon glyphicon-remove"></i>
+              </span>
+
+              <span class="insert-button-container" (click)="insertCue(i)">
+                <span
+                    class="btn btn-success btn-xs btn-circle insert-button"
+                    tooltip="Insert cue here"
+                    placement="right">
+                  <i class="glyphicon glyphicon-plus"></i>
+                </span>
+              </span>
+            </td>
+          </tr>
+
+          <!-- New cue -->
+          <tr id="new-cue-row">
+            <td>
+
+            </td>
+            <td>
+              <input type="number" class="form-control" name="distance" id="distance" placeholder="Miles" step=".01"
+                     [(ngModel)]="model.distance" #distance="ngModel" required/>
+            </td>
+            <td>
+              <input type="text" class="form-control" name="turn" id="turn" placeholder="Turn" [(ngModel)]="model.turn"
+                     #turn="ngModel" required/>
+            </td>
+            <td>
+              <input type="text" class="form-control" name="description" id="description" placeholder="Description"
+                     [(ngModel)]="model.description" #description="ngModel" required>
+            </td>
+            <td>
+
+            </td>
+            <td>
+              <span class="btn btn-primary btn-block" (click)="saveCue(); f.reset()">Save Cue</span>
+            </td>
+
+          </tr>
+
+          </tbody>
+        </table>
+
+      </form>
+
+    </div>
+  </div>
+</div>

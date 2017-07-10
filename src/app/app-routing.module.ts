@@ -13,6 +13,11 @@ import { RiderListComponent } from './rider-list/rider-list.component';
 import { DebuggerComponent } from './debugger/debugger.component';
 import { AdminGuard } from './_guards/admin.guard';
 import { RideLeaderGuard } from './_guards/ride-leader.guard';
+import { CuesheetComponent } from './cuesheet/cuesheet.component';
+import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
+import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
+import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
+import { CuesheetNavigateComponent } from './cuesheet-navigate/cuesheet-navigate.component';
 
 const routes: Routes = [
   {
@@ -60,6 +65,31 @@ const routes: Routes = [
     path: 'debugger',
     canActivate: [AdminGuard],
     component: DebuggerComponent
+  },
+  {
+    path: 'cuesheets',
+    canActivate: [AuthGuard],
+    component: CuesheetListComponent
+  },
+  {
+    path: 'cuesheets/new',
+    canActivate: [AuthGuard],
+    component: CuesheetNewComponent
+  },
+  {
+    path: 'cuesheets/:_id/view',
+    canActivate: [AuthGuard],
+    component: CuesheetComponent
+  },
+  {
+    path: 'cuesheets/:_id/edit',
+    canActivate: [AuthGuard],
+    component: CuesheetEditComponent
+  },
+  {
+    path: 'cuesheets/:_id/navigate/:cueId',
+    canActivate: [AuthGuard],
+    component: CuesheetNavigateComponent
   }
 ];
 

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-12">
 
-      <h1 class="w-100">{{ cuesheet?.name }}<span class="right btn btn-primary btn-sm">Delete this cuesheet</span></h1>
+      <h1 class="w-100">{{ cuesheet?.name }}<span class="right btn btn-primary btn-sm" (click)="deleteCuesheet()">Delete this cuesheet</span></h1>
       <h4>{{ cuesheet?.description }}</h4>
       <span>Created by {{ cuesheet?._creator.fname }} {{ cuesheet?._creator.lname }}</span>
       <span *ngIf="cuesheet?.cues.length > 0">
@@ -28,6 +28,7 @@
           <!-- Existing cues -->
           <tr *ngFor="let cue of cuesheet?.cues; index as i"
               [@cueState]="cue.state"
+              class="cue-row"
               id="cue-row-{{ i }}"
           >
             <td>{{ i + 1 }}</td>
@@ -73,6 +74,7 @@
                      [(ngModel)]="model.description" #description="ngModel" required>
             </td>
             <td>
+              <span class="btn btn-danger btn-block" (click)="cancel(); f.reset()">Cancel</span>
 
             </td>
             <td>
@@ -83,6 +85,12 @@
 
           </tbody>
         </table>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <a routerLink='/cuesheets/{{cuesheet?._id}}/view' class='btn btn-primary btn-block'>I'm done with this cue sheet for now</a>
+          </div>
+        </div>
 
       </form>
 

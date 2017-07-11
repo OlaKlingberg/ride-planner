@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CuesheetService } from '../_services/cuesheet.service';
 import { Cuesheet } from '../_models/cuesheet';
 import { Cue } from '../_models/cue';
@@ -12,6 +12,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { AlertService } from '../_services/alert.service';
 
 @Component({
   selector: 'app-cuesheet-edit',
@@ -26,7 +27,7 @@ import {
         opacity: 0,
       })),
       transition('display => remove', [
-        animate('250ms')
+        animate('1000ms')
       ])
     ])
   ]
@@ -41,13 +42,14 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
   private cuesheetId: string = '';
 
   constructor(private route: ActivatedRoute,
-              private cuesheetService: CuesheetService) {
+              private cuesheetService: CuesheetService,
+              private alertService: AlertService,
+              private router: Router) {
   }
 
   ngOnInit() {
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ '_id' ];
-      // const _id = params[ '_id' ];
 
       this.getCuesheet();
     });
@@ -80,8 +82,8 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
 
     this.cuesheetService.saveCue(this.cuesheet._id, this.model, this.insertBeforeId)
         .then((cue: Cue) => {
-          if (cue) {  // Safety precaution.
-            if (this.insertBeforeId) {
+          if ( cue ) {  // Safety precaution.
+            if ( this.insertBeforeId ) {
               // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
               this.total = 0;
               this.getCuesheet();
@@ -97,28 +99,44 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
   }
 
   deleteCue(i) {
-    const cueId = this.cuesheet.cues[i]._id;
+    const cueId = this.cuesheet.cues[ i ]._id;
     this.cuesheetService.deleteCue(this.cuesheet._id, cueId)
         .then((cue: Cue) => {
-          this.cuesheet.cues[i].state = 'remove';
-          // $("#cue[i]").hide(1000);
-
+          this.cuesheet.cues[ i ].state = 'remove';
 
           setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
-            if (cue) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
-          }, 300);
+            if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
+          }, 1500);
         });
   }
 
   insertCue(i) {
     $('.insert-button-container').show();
     $(`#cue-row-${i} .insert-button-container`).hide();
-    $(`#cue-row-${i}`).before($(`#new-cue-row`));
-    this.insertBeforeId = this.cuesheet.cues[i]._id;
+    $(`#cue-row-${i}`).before($('#new-cue-row'));
+    this.insertBeforeId = this.cuesheet.cues[ i ]._id;
   }
 
-  saveCuesheet() {
+  cancel() {
+    $('.insert-button-container').show();
+    $('.cue-row').last().after($('#new-cue-row'));
+    this.insertBeforeId = '';
+  }
 
+  // saveCuesheet() {
+  //
+  // }
+
+  deleteCuesheet() {
+    this.cuesheetService.deleteCuesheet(this.cuesheet._id)
+        .then((cuesheet: Cuesheet) => {
+          if ( cuesheet ) {
+            this.alertService.success(`The cue sheet <i>${cuesheet.name}</i> has been deleted.`);
+            this.router.navigate([ '/cuesheets' ]);
+          } else {
+            this.alertService.error("Oops! Something went wrong!");
+          }
+        });
   }
 
   // Todo: Do I need this?

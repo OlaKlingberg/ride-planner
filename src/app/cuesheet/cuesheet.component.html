@@ -18,12 +18,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let cue of cuesheet?.cues">
-          <td>Todo</td>
-          <td>{{ cue.distance }}</td>
+        <tr *ngFor="let cue of cuesheet?.cues; index as i">
+          <td>{{ i + 1 }}</td>
+          <td>{{ cue.distance / 100 | number:'1.0-2' }}</td>
           <td>{{ cue.turn }}</td>
           <td>{{ cue.description }}</td>
-          <td>Todo</td>
+          <td>{{ cue.total / 100 | number:'1.0-2'}}</td>
         </tr>
         </tbody>
       </table>

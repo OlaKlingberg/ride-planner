@@ -70,6 +70,12 @@ export class CuesheetService {
         }).toPromise();
   }
 
+  deleteCuesheet(cuesheetId: any) {
+    let requestOptions = this.setHeaders();
 
+      return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}`, requestOptions)
+          .map((response: Response) => new Cuesheet(response.json().cuesheet))
+          .toPromise(); // Todo: Add error handling.
+  }
 
 }

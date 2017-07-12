@@ -40,6 +40,7 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
   public total: number = 0;
   private insertBeforeId: string = '';
   private cuesheetId: string = '';
+  private cueToDelete: number = null;
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService,
@@ -52,6 +53,29 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
       this.cuesheetId = params[ '_id' ];
 
       this.getCuesheet();
+    });
+
+    this.removeRowBorderOnModalClose();
+  }
+
+  removeRowBorderOnModalClose() {
+    // Todo: This is what I want to do, but it doesn't work!
+    // $('#cueDeletionModal').on('hidden.bs.modal', () => $('.cue-row').removeClass('red-border'));
+
+    // This is my workaround. It's ugly, but it seems to work.
+    $(document).on('click', (e) => {
+      if ( $(e.target).hasClass('modal') ) {
+        $('.cue-row').removeClass('red-border');
+        $('#highlighted-box').addClass('hide');
+      }
+      if ( $(e.target).hasClass('modal-btn-dismiss') ) {
+        $('.cue-row').removeClass('red-border');
+        $('#highlighted-box').addClass('hide');
+      }
+      if ( $(e.target).hasClass('close-modal') ) {
+        $('.cue-row').removeClass('red-border');
+        $('#highlighted-box').addClass('hide');
+      }
     });
   }
 
@@ -80,35 +104,58 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
   saveCue() {
     this.model.distance = Math.round(this.model.distance * 100);
 
-    this.cuesheetService.saveCue(this.cuesheet._id, this.model, this.insertBeforeId)
-        .then((cue: Cue) => {
-          if ( cue ) {  // Safety precaution.
-            if ( this.insertBeforeId ) {
-              // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
-              this.total = 0;
-              this.getCuesheet();
-            } else {
-              // The cue was added to the end of the cuesheet. Push the returned cue onto cuesheet.cues.
-              this.total += cue.distance;
-              cue.total = this.total;
-              cue.state = 'display';
-              this.cuesheet.cues.push(cue);
-            }
-          }
-        });
+    this.cuesheetService.saveCue(this.cuesheet._id, this.model, this.insertBeforeId).then((cue: Cue) => {
+      if ( !cue ) return; // Safety precaution.
+      if ( this.insertBeforeId ) {
+        // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
+        this.total = 0;
+        this.getCuesheet();
+      } else {
+        // The cue was added to the end of the cuesheet. Push the returned cue onto cuesheet.cues.
+        this.total += cue.distance;
+        cue.total = this.total;
+        cue.state = 'display';
+        this.cuesheet.cues.push(cue);
+      }
+      this.insertBeforeId = '';
+    });
   }
 
-  deleteCue(i) {
-    const cueId = this.cuesheet.cues[ i ]._id;
-    this.cuesheetService.deleteCue(this.cuesheet._id, cueId)
-        .then((cue: Cue) => {
-          this.cuesheet.cues[ i ].state = 'remove';
+  prepareToDeleteCue(i) {
+    this.cueToDelete = i;
+    const rowToDelete = $(`#cue-row-${i}`);
+    $(rowToDelete).addClass('red-border');
+    // console.log(rowToDelete.position());
+    // console.log(rowToDelete.offset());
+    // console.log(rowToDelete.height());
+    // console.log(rowToDelete.width());
 
-          setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
-            if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
-          }, 1500);
+    $('#highlighted-box')
+        .removeClass('hide')
+        .css({
+          "top": rowToDelete.position().top -5,
+          "left": rowToDelete.position().left -5,
+          "height": rowToDelete.height() +10,
+          "width": rowToDelete.width() +10
         });
+
+
+
   }
+
+  deleteCue() {
+    const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
+    this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
+      this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
+      $('#highlighted-box').addClass('hide');
+
+      setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
+        if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
+        this.cueToDelete = null;
+      }, 1500);
+    });
+  }
+
 
   insertCue(i) {
     $('.insert-button-container').show();
@@ -128,15 +175,14 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
   // }
 
   deleteCuesheet() {
-    this.cuesheetService.deleteCuesheet(this.cuesheet._id)
-        .then((cuesheet: Cuesheet) => {
-          if ( cuesheet ) {
-            this.alertService.success(`The cue sheet <i>${cuesheet.name}</i> has been deleted.`);
-            this.router.navigate([ '/cuesheets' ]);
-          } else {
-            this.alertService.error("Oops! Something went wrong!");
-          }
-        });
+    this.cuesheetService.deleteCuesheet(this.cuesheet._id).then((cuesheet: Cuesheet) => {
+      if ( cuesheet ) {
+        this.alertService.success(`The cue sheet <i>${cuesheet.name}</i> has been deleted.`);
+        this.router.navigate([ '/cuesheets' ]);
+      } else {
+        this.alertService.error("Oops! Something went wrong!");
+      }
+    });
   }
 
   // Todo: Do I need this?

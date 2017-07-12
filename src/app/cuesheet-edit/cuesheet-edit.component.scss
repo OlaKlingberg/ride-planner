@@ -26,3 +26,65 @@
 .insert-button {
   margin-bottom: -50%;
 }
+
+.modal-btn-dismiss {
+  width: 49%;
+  float: left;
+}
+
+.modal-btn-delete {
+  width: 49%;
+}
+
+.red-border {
+  position: relative;
+  z-index: 1200;
+  //border: 3px solid red;
+  td:not(.buttons-column) {
+    z-index: 1100;
+    position: relative;
+    background-color: #A55;
+  }
+}
+
+#highlighted-box {
+  position: absolute;
+  //top: 0;
+  //left: 0;
+  z-index: 2000;
+  border: 3px solid red;
+  //background-color: hotpink;
+  display: block;
+  border-radius: 10px;
+  //width: 100px;
+  //height: 100px;
+
+}
+
+.hide {
+  //display: none;
+}
+
+//.relative {
+//  position: relative;
+//}
+
+//.red-border::after {
+//  content: '';
+//  display: block;
+//  height: 100px;
+//  width: 200px;
+//  border: 3px solid red;
+//  position: absolute;
+//  top: 0;
+//  left: 0;
+//  z-index: 1200;
+//}
+
+//.modal-backdrop.in {
+//  opacity: 0.1 !important;
+//}
+
+//body {
+//  position: relative;
+//}

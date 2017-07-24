@@ -137,7 +137,7 @@ export class CuesheetEditComponent implements OnInit {
   saveCue() {
     this.cueModel.distance = Math.round(this.cueModel.distance * 100);
 
-    if ( this.cueToEdit ) {
+    if ( this.rowToEdit ) {
       this.updateCue();
     } else {
       this.createCue();
@@ -150,6 +150,7 @@ export class CuesheetEditComponent implements OnInit {
       // Get the updated cuesheet.
       this.total = 0;
       this.cueToEdit = null;
+      this.rowToEdit = null;
       this.insertBeforeId = '';
       this.getCuesheet();
     })
@@ -234,15 +235,14 @@ export class CuesheetEditComponent implements OnInit {
     }
 
     this.rowToEdit = $(`#cue-row-${i}`);
-    $('.insert-button-container').show();
-    $(`#cue-row-${i + 1} .insert-button-container`).hide();
-    this.cueToEdit = i;
+    this.rowToEdit.after($('#new-cue-row'));
     this.cueModel.distance = this.cuesheet.cues[ i ].distance / 100;
     this.cueModel.turn = this.cuesheet.cues[ i ].turn;
     this.cueModel.description = this.cuesheet.cues[ i ].description;
-
-    this.rowToEdit.after($('#new-cue-row'));
     $(this.rowToEdit).remove();
+    $('.insert-button-container').show();
+    $(`#cue-row-${i + 1} .insert-button-container`).hide();
+    this.cueToEdit = i;
   }
 
   deleteCuesheet() {

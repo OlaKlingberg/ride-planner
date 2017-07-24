@@ -14,6 +14,9 @@ export class CuesheetBikeComponent implements OnInit {
   public cueNumber: number = null;
   public total: number = 0;
   public cuesheet: Cuesheet;
+  public panCount: number = null;
+  public swipeCount: number = null;
+  public swipeupCount: number = null;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -73,15 +76,18 @@ export class CuesheetBikeComponent implements OnInit {
 
   pan() {
     console.log("pan");
+    this.panCount++;
   }
 
   swipe() {
     console.log("swipe");
-    this.router.navigate([`/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}`]);
+    this.swipeCount++;
+    // this.router.navigate([`/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}`]);
   }
 
   swipeup() {
     console.log("swipeup");
+    this.swipeupCount++;
     this.router.navigate([`/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}`]);
   }
 

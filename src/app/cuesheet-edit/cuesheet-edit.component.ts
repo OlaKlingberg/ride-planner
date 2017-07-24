@@ -215,9 +215,9 @@ export class CuesheetEditComponent implements OnInit {
   }
 
   cancelCue() {
-    if (this.rowToEdit) {
-      $('.cue-row').last().remove();
-    }
+    // if (this.rowToEdit) {
+    //   $('.cue-row').last().remove();
+    // }
 
     $('#new-cue-row').after(this.rowToEdit);
     $('.insert-button-container').show();
@@ -231,7 +231,7 @@ export class CuesheetEditComponent implements OnInit {
     if ( this.rowToEdit ) {
       $('#new-cue-row').after(this.rowToEdit);
     } else {
-      $('.cue-row').last().after("<tr class='cue-row invisible'><td>&nbsp;</td></tr>");
+      // $('.cue-row').last().after("<tr class='cue-row invisible'><td>&nbsp;</td></tr>");
     }
 
     this.rowToEdit = $(`#cue-row-${i}`);

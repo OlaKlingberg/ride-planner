@@ -1,3 +1,7 @@
+<p>swipe: {{swipeCount}}</p>
+<p>swipeup: {{swipeupCount}}</p>
+<p>pan: {{panCount}}</p>
+
 <div class="container" (swipeup)="swipeup()" (swipe)="swipe()" (pan)="pan()">
   <div class="faded">
     <rp-cuesheet-cue *ngIf="cueNumber > 0"

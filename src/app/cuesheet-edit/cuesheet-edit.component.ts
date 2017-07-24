@@ -39,7 +39,7 @@ export class CuesheetEditComponent implements OnInit {
   public cueModel: any = {};
   public cuesheetModel: any = {};
   public total: number = 0;
-  private insertBeforeId: string = '';
+  public insertBeforeId: string = '';
   private cuesheetId: string = '';
   private cueToDelete: number = null;
   public cueToEdit: number = null;  // Todo: Can't I make do with just rowToEdit?

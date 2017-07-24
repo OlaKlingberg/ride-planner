@@ -4,7 +4,8 @@ export class Cuesheet {
   _id: string;
   name: string;
   description: string;
-  _creator: string | object;
+  // _creator: string | object;
+  _creator: any;  // Todo: Type this.
   updatedAt: Date;
   createdAt: Date;
   cues: Array<Cue> = [];

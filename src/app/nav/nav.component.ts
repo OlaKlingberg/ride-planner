@@ -48,7 +48,7 @@ export class NavComponent implements OnInit {
   }
 
   subscribeToUser() {
-    console.log("NavComponent. subscribeToUser()");
+    // console.log("NavComponent. subscribeToUser()");
     this.userService.user$.subscribe(
         user => this.user = user
     );

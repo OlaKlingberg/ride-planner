@@ -17,7 +17,7 @@ import { CuesheetComponent } from './cuesheet/cuesheet.component';
 import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
 import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
-import { CuesheetNavigateComponent } from './cuesheet-navigate/cuesheet-navigate.component';
+import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
 
 const routes: Routes = [
   {
@@ -87,10 +87,10 @@ const routes: Routes = [
     component: CuesheetEditComponent
   },
   {
-    path: 'cuesheets/:_id/navigate/:cueId',
+    path: 'cuesheets/:cuesheetId/bike/:cueNumber',
     canActivate: [AuthGuard],
-    component: CuesheetNavigateComponent
-  }
+    component: CuesheetBikeComponent
+  },
 ];
 
 @NgModule({

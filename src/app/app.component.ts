@@ -12,7 +12,7 @@ import { UserService } from './_services/user.service';
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit {
-  title: string = 'RidePlanner2';
+  title: string = 'RidePlanner';
   userName: string;
   ride: string;
   debugMessages: Array<any> = [];

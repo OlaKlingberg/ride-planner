@@ -15,7 +15,7 @@ import {
 import { AlertService } from '../_services/alert.service';
 
 @Component({
-  selector: 'app-cuesheet-edit',
+  selector: 'rp-cuesheet-edit',
   templateUrl: './cuesheet-edit.component.html',
   styleUrls: [ './cuesheet-edit.component.scss' ],
   animations: [
@@ -32,15 +32,20 @@ import { AlertService } from '../_services/alert.service';
     ])
   ]
 })
-export class CuesheetEditComponent implements OnInit, OnDestroy {
+export class CuesheetEditComponent implements OnInit {
   @Input() cuesheet: Cuesheet;
 
   // public cuesheet: Cuesheet;  // Todo: Or should this be: @Input() cuesheet: Cuesheet; ?
-  public model: any = {};
+  public cueModel: any = {};
+  public cuesheetModel: any = {};
   public total: number = 0;
   private insertBeforeId: string = '';
   private cuesheetId: string = '';
   private cueToDelete: number = null;
+  public cueToEdit: number = null;  // Todo: Can't I make do with just rowToEdit?
+  public rowToEdit: any = null;
+  public cuesheetNameInput: boolean = false;
+  public cuesheetDescriptionInput: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService,
@@ -60,21 +65,17 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
 
   removeRowBorderOnModalClose() {
     // Todo: This is what I want to do, but it doesn't work!
-    // $('#cueDeletionModal').on('hidden.bs.modal', () => $('.cue-row').removeClass('red-border'));
+    // $('#cueDeletionModal').on('hidden.bs.modal', () => $('.cue-row').removeClass('highlight'));
 
     // This is my workaround. It's ugly, but it seems to work.
     $(document).on('click', (e) => {
-      if ( $(e.target).hasClass('modal') ) {
-        $('.cue-row').removeClass('red-border');
-        $('#highlighted-box').addClass('hide');
-      }
-      if ( $(e.target).hasClass('modal-btn-dismiss') ) {
-        $('.cue-row').removeClass('red-border');
-        $('#highlighted-box').addClass('hide');
-      }
-      if ( $(e.target).hasClass('close-modal') ) {
-        $('.cue-row').removeClass('red-border');
-        $('#highlighted-box').addClass('hide');
+      if (
+          $(e.target).hasClass('modal') ||
+          $(e.target).hasClass('modal-btn-dismiss') ||
+          $(e.target).hasClass('close-modal')
+      ) {
+        $('.cue-row').removeClass('highlight');
+        $('#red-box').addClass('hide');
       }
     });
   }
@@ -82,6 +83,8 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
   getCuesheet() {
     this.cuesheetService.getCuesheet(this.cuesheetId)
         .then(cuesheet => {
+          this.cuesheetModel.cuesheetName = cuesheet.name;
+          this.cuesheetModel.cuesheetDescription = cuesheet.description;
           this.cuesheet = this.setTotalDistances(cuesheet);
           this.cuesheet.cues = this.cuesheet.cues.map(cue => {
             cue.state = 'display';  // Used for animation.
@@ -101,10 +104,59 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
     return cuesheet;
   }
 
-  saveCue() {
-    this.model.distance = Math.round(this.model.distance * 100);
+  editCuesheetName() {
+    this.cuesheetNameInput = true;
+    this.cuesheetDescriptionInput = false;
+  }
 
-    this.cuesheetService.saveCue(this.cuesheet._id, this.model, this.insertBeforeId).then((cue: Cue) => {
+  editCuesheetDescription() {
+      this.cuesheetNameInput = false;
+      this.cuesheetDescriptionInput = true;
+  }
+
+  hideInputFields() {
+    this.cuesheetNameInput = false;
+    this.cuesheetDescriptionInput = false;
+  }
+
+  cancelCuesheetUpdate() {
+    this.hideInputFields()
+  }
+
+  updateCuesheet() {
+    this.cuesheetService.updateCuesheet(this.cuesheetId, {
+      name: this.cuesheetModel.cuesheetName,
+      description: this.cuesheetModel.cuesheetDescription
+    }).then(cuesheet => {
+      this.cuesheetModel.cuesheetName = cuesheet.name;
+      this.cuesheetModel.cuesheetDescription = cuesheet.description;
+      this.hideInputFields();
+    })
+  }
+
+  saveCue() {
+    this.cueModel.distance = Math.round(this.cueModel.distance * 100);
+
+    if ( this.cueToEdit ) {
+      this.updateCue();
+    } else {
+      this.createCue();
+    }
+  }
+
+  updateCue() {
+    this.cuesheetService.updateCue(this.cuesheet.cues[ this.cueToEdit ]._id.toString(), this.cueModel).then((cue: Cue) => {
+      if ( !cue ) return; // Safety precaution.
+      // Get the updated cuesheet.
+      this.total = 0;
+      this.cueToEdit = null;
+      this.insertBeforeId = '';
+      this.getCuesheet();
+    })
+  }
+
+  createCue() {
+    this.cuesheetService.createCue(this.cuesheet._id, this.cueModel, this.insertBeforeId).then((cue: Cue) => {
       if ( !cue ) return; // Safety precaution.
       if ( this.insertBeforeId ) {
         // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
@@ -124,21 +176,16 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
   prepareToDeleteCue(i) {
     this.cueToDelete = i;
     const rowToDelete = $(`#cue-row-${i}`);
-    $(rowToDelete).addClass('red-border');
-    // console.log(rowToDelete.position());
-    // console.log(rowToDelete.offset());
-    // console.log(rowToDelete.height());
-    // console.log(rowToDelete.width());
+    $(rowToDelete).addClass('highlight');
 
-    $('#highlighted-box')
+    $('#red-box')
         .removeClass('hide')
         .css({
-          "top": rowToDelete.position().top -5,
-          "left": rowToDelete.position().left -5,
-          "height": rowToDelete.height() +10,
-          "width": rowToDelete.width() +10
+          "top": rowToDelete.position().top - 5,
+          "left": rowToDelete.position().left - 5,
+          "height": rowToDelete.height() + 10,
+          "width": rowToDelete.width() + 10
         });
-
 
 
   }
@@ -147,11 +194,13 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
     const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
     this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
       this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
-      $('#highlighted-box').addClass('hide');
+      $('#red-box').addClass('hide');
 
       setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
         if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
         this.cueToDelete = null;
+        this.total = 0;
+        this.getCuesheet();
       }, 1500);
     });
   }
@@ -164,15 +213,37 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
     this.insertBeforeId = this.cuesheet.cues[ i ]._id;
   }
 
-  cancel() {
+  cancelCue() {
+    if (this.rowToEdit) {
+      $('.cue-row').last().remove();
+    }
+
+    $('#new-cue-row').after(this.rowToEdit);
     $('.insert-button-container').show();
     $('.cue-row').last().after($('#new-cue-row'));
     this.insertBeforeId = '';
+    this.cueToEdit = null;
+    this.rowToEdit = null;
   }
 
-  // saveCuesheet() {
-  //
-  // }
+  editCue(i) {
+    if ( this.rowToEdit ) {
+      $('#new-cue-row').after(this.rowToEdit);
+    } else {
+      $('.cue-row').last().after("<tr class='cue-row invisible'><td>&nbsp;</td></tr>");
+    }
+
+    this.rowToEdit = $(`#cue-row-${i}`);
+    $('.insert-button-container').show();
+    $(`#cue-row-${i + 1} .insert-button-container`).hide();
+    this.cueToEdit = i;
+    this.cueModel.distance = this.cuesheet.cues[ i ].distance / 100;
+    this.cueModel.turn = this.cuesheet.cues[ i ].turn;
+    this.cueModel.description = this.cuesheet.cues[ i ].description;
+
+    this.rowToEdit.after($('#new-cue-row'));
+    $(this.rowToEdit).remove();
+  }
 
   deleteCuesheet() {
     this.cuesheetService.deleteCuesheet(this.cuesheet._id).then((cuesheet: Cuesheet) => {
@@ -185,12 +256,10 @@ export class CuesheetEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Todo: Do I need this?
+  // Todo: Do I need this here? I do need it on the login-form.
   syncModel() {
 
   }
 
-  ngOnDestroy() {
-  }
 
 }

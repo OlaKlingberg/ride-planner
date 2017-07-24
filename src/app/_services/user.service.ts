@@ -48,9 +48,9 @@ export class UserService {
   }
 
   getRideFromStorage() {
-    console.log("UserService.getRideFromStorage()");
+    // console.log("UserService.getRideFromStorage()");
     let ride = environment.storage.getItem('rpRide');  // This may or may not exist.
-    console.log("UserService.getRideFromStorage(). ride:", ride);
+    // console.log("UserService.getRideFromStorage(). ride:", ride);
     if ( ride ) this.ride$.next(ride);
   }
 

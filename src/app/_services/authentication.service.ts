@@ -34,7 +34,7 @@ export class AuthenticationService {
           .subscribe(response => {
             if ( response.status === 200 ) {
               let user: User = new User(response.json());
-              console.log("AuthenticationService.authenticateByToken(). user:", user);
+              // console.log("AuthenticationService.authenticateByToken(). user:", user);
               this.userService.user$.next(user);
             }
           });

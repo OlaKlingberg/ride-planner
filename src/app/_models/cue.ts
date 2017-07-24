@@ -1,6 +1,7 @@
 export class Cue {
   _id: string;
   turn: string;
+  icon: string;
   description: string;
   comment: string;
   distance: number;
@@ -22,6 +23,7 @@ export class Cue {
       this.lng = obj.lng;
       this.createdAt = obj.createdAt;
       this.updatedAt = obj.updatedAt;
+      // this.icon = obj.icon;
     }
   }
 }

@@ -59,7 +59,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private navBarStateSub: Subscription;
   private riderListSub: Subscription;
 
-  private markerUrl: string = "assets/img/";
+  private markerUrl: string = "assets/img/rider-markers/";
   private colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
 
   private socket: Socket;
@@ -267,6 +267,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setMapMode(mapMode) {
+    console.log("setMapMode:", mapMode);
     this.miscService.navBarState$.next('show');
 
     if ( this.positionSub ) this.positionSub.unsubscribe();
@@ -288,7 +289,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // Todo: Update bounds only if position has changed more than a certain amount.
   focusOnUser() {
-    console.log("focusOnUser()");
     if (this.positionSub) this.positionSub.unsubscribe();
     this.positionSub = this.userService.position$.subscribe(position => {
           // console.log("MapComponent.focusOnUser() position$.subscribe()");
@@ -310,7 +310,6 @@ export class MapComponent implements OnInit, OnDestroy {
     console.log("showAllRiders()");
     if (this.riderListSub) this.riderListSub.unsubscribe();
     this.riderListSub = this.riderList$.subscribe(riderList => {
-      console.log("MapComponent.showAllRiders() riderList$.subscribe()");
       if ( !riderList || riderList.length < 0 ) return;
       this.bounds = new this.google.maps.LatLngBounds();
       riderList.forEach(rider => {
@@ -318,7 +317,6 @@ export class MapComponent implements OnInit, OnDestroy {
       });
       this.bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
       this.latLng = this.bounds.toJSON();
-      console.log("latLng, before adjustment:", this.latLng);
       // Add 10% to the map at the upper edge for what is covered by the phone-browser address bar.
       this.latLng.north += (this.latLng.north - this.latLng.south) / 10;
     });

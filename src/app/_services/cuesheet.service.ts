@@ -24,7 +24,7 @@ export class CuesheetService {
     return new RequestOptions({ headers });
   }
 
-  create(model) {
+  createCuesheet(model) {
     if ( this.user ) model._creator = this.user._id;   // Todo: User *should* exist here, but what if not?
     let requestOptions = this.setHeaders();
 
@@ -51,12 +51,37 @@ export class CuesheetService {
         .toPromise();
   }
 
-  saveCue(cuesheetId: any, cue: any, insertBeforeId: string) {
+  updateCuesheet(_id: string, cuesheet: any) {
+    let requestOptions = this.setHeaders();
+
+    return this.http.patch(`${environment.api}/cuesheets/${_id}`, cuesheet, requestOptions)
+        .map((response: Response) => new Cuesheet(response.json().cuesheet))
+        .toPromise();
+  }
+
+  deleteCuesheet(cuesheetId: any) {
+    let requestOptions = this.setHeaders();
+
+    return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}`, requestOptions)
+        .map((response: Response) => new Cuesheet(response.json().cuesheet))
+        .toPromise(); // Todo: Add error handling.
+  }
+
+  createCue(cuesheetId: any, cue: any, insertBeforeId: string) {
     let requestOptions = this.setHeaders();
 
     return this.http.post(`${environment.api}/cuesheets/cues`, { cuesheetId, cue, insertBeforeId }, requestOptions)
         .map((response: Response) => {
           console.log("response.json():", response.json());
+          return new Cue(response.json());
+        }).toPromise();
+  }
+
+  updateCue(_id: string, cue: any) {
+    let requestOptions = this.setHeaders();
+
+    return this.http.patch(`${environment.api}/cuesheets/cues/${_id}`, cue, requestOptions)
+        .map((response: Response) => {
           return new Cue(response.json());
         }).toPromise();
   }
@@ -70,12 +95,6 @@ export class CuesheetService {
         }).toPromise();
   }
 
-  deleteCuesheet(cuesheetId: any) {
-    let requestOptions = this.setHeaders();
 
-      return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}`, requestOptions)
-          .map((response: Response) => new Cuesheet(response.json().cuesheet))
-          .toPromise(); // Todo: Add error handling.
-  }
 
 }

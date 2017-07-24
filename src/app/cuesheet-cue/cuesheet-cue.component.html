@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-xs-6">
+    <span>At</span>
+  </div>
+  <!--<div class="col-xs-4 text-align-center" [ngClass]="{'bold larger': position === 'Current'}">{{position}}</div>-->
+  <div class="col-xs-6">
+    <span class="pull-right">Total</span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-6">
+    <span class="bold x-large">{{ cue?.distance / 100 | number:'1.0-2' }} M</span>
+  </div>
+  <div class="col-xs-6">
+    <span class="pull-right bold x-large">{{ cue?.total / 100 | number:'1.0-2'}} M</span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-5 text-align-center">
+    <img *ngIf="cue?.icon"
+        [ngClass]="{'position-current': position === 'Current', 'position-not-current': position !== 'Current'}"
+         src="{{cue?.icon}}">
+  </div>
+  <div class="col-xs-7">
+    <p class="bold x-large">{{cue?.turn}}</p>
+    <p>{{cue?.description}}</p>
+  </div>
+</div>

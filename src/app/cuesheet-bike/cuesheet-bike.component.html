@@ -1,0 +1,25 @@
+<div class="container" (swipeup)="swipeup()" (swipe)="swipe()" (pan)="pan()">
+  <div class="faded">
+    <rp-cuesheet-cue *ngIf="cueNumber > 0"
+                     [cue]="cuesheet?.cues[cueNumber - 1]"
+                     [cueNumber]="cueNumber - 1"
+                     [position]="'Previous'"></rp-cuesheet-cue>
+  </div>
+
+  <hr>
+
+  <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]"
+                   [cueNumber]="cueNumber"
+                   [position]="'Current'"></rp-cuesheet-cue>
+  <hr>
+
+  <div class="faded">
+    <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
+                     [cue]="cuesheet?.cues[cueNumber + 1]"
+                     [cueNumber]="cueNumber + 1"
+                     [position]="'Next'"></rp-cuesheet-cue>
+  </div>
+
+  <hr>
+
+</div>

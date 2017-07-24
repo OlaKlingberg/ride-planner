@@ -26,7 +26,7 @@ export class CuesheetNewComponent implements OnInit, OnDestroy {
 
   createCuesheet() {
     this.loading = true;
-    this.cuesheetSub = this.cuesheetService.create(this.model)
+    this.cuesheetSub = this.cuesheetService.createCuesheet(this.model)
         .subscribe((cuesheet: Cuesheet) => {
               console.log(cuesheet);
               this.alertService.success('The Cue Sheet has been created', true);

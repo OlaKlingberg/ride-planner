@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Cuesheet } from '../_models/cuesheet';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { Cuesheet } from '../_models/cuesheet';
 import { CuesheetService } from '../_services/cuesheet.service';
 
 @Component({

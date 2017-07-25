@@ -27,7 +27,7 @@ import { AlertService } from '../_services/alert.service';
         opacity: 0,
       })),
       transition('display => remove', [
-        animate('1000ms')
+        animate('300ms')
       ])
     ])
   ]
@@ -202,7 +202,7 @@ export class CuesheetEditComponent implements OnInit {
         this.cueToDelete = null;
         this.total = 0;
         this.getCuesheet();
-      }, 1500);
+      }, 800);
     });
   }
 

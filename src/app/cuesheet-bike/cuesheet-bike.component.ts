@@ -20,13 +20,13 @@ import * as Hammer from '../../../node_modules/hammerjs/hammer';
   animations: [
     trigger('cuesheetContainer', [
       state('up', style({
-        transform: 'translate(0, -190px)'
+        transform: 'translate(0, -217px)'
       })),
       state('down', style({
-        transform: 'translate(0, 190px)'
+        transform: 'translate(0, 217px)'
       })),
-      transition('still => up', animate('1000ms ease-in-out')),
-      transition('still => down', animate('1000ms ease-out'))
+      transition('still => up', animate('500ms ease-in-out')),
+      transition('still => down', animate('500ms ease-in-out'))
     ])
   ]
 })
@@ -95,7 +95,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   }
 
   setSwipeListeners() {
-    this.cuesContainer = $('#cues-container').get(0);
+    this.cuesContainer = $('#page').get(0);
     this.mc = new Hammer(this.cuesContainer);
 
     // // mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL }); // Todo: Figure out why DIRECTION_ALL doesn't exist on Hammer.
@@ -106,7 +106,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.move = 'still';
         this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
-      }, 800);
+      }, 600);
     });
 
     this.mc.on('swipedown', () => {
@@ -114,7 +114,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.move = 'still';
         this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
-      }, 800);
+      }, 600);
     });
 
   }

@@ -1,28 +1,43 @@
-<div class="container" id="cues-container" [@cuesheetContainer]="move">
-  <div class="faded">
-    <rp-cuesheet-cue *ngIf="cueNumber > 0"
-                     [cue]="cuesheet?.cues[cueNumber - 1]"
-                     [cueNumber]="cueNumber - 1"
-                     [position]="'Previous'"
-                     [move]="move"></rp-cuesheet-cue>
+<div id="page">
+  <div class="container" id="cues-container" [@cuesheetContainer]="move">
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber > 0"
+                       [cue]="cuesheet?.cues[cueNumber - 1]"
+                       [cueNumber]="cueNumber - 1"
+                       [position]="'Previous'"
+                       [move]="move"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]"
+                       [cueNumber]="cueNumber"
+                       [position]="'Current'"
+                       [move]="move"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
+                       [cue]="cuesheet?.cues[cueNumber + 1]"
+                       [cueNumber]="cueNumber + 1"
+                       [position]="'Next'"
+                       [move]="move"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
+                       [cue]="cuesheet?.cues[cueNumber + 2]"
+                       [cueNumber]="cueNumber + 2"
+                       [position]="'Next'"
+                       [move]="move"></rp-cuesheet-cue>
+    </div>
+
   </div>
 
-  <hr>
-
-  <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]"
-                   [cueNumber]="cueNumber"
-                   [position]="'Current'"
-                   [move]="move"></rp-cuesheet-cue>
-  <hr>
-
-  <div class="faded">
-    <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
-                     [cue]="cuesheet?.cues[cueNumber + 1]"
-                     [cueNumber]="cueNumber + 1"
-                     [position]="'Next'"
-                     [move]="move"></rp-cuesheet-cue>
-  </div>
-
-  <hr>
-
+  <div id="next-cue-mask"></div>
+  <div id="bottom-field"></div>
 </div>
+
+

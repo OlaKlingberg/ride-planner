@@ -1,0 +1,27 @@
+#cues-container {
+  position: relative;
+  top: -222px;
+}
+
+.cue {
+  height: 200px;
+  border-bottom: 1px solid gray;
+  margin-bottom: 17px;
+}
+
+#next-cue-mask {
+  height: 222px;
+  width: 100%;
+  position: relative;
+  top: -680px;
+  background-color: #2b3e50;
+  opacity: .7;
+}
+
+#bottom-field {
+  height: 1000px;
+  width: 100%;
+  position: relative;
+  top: -680px;
+  background-color: #2b3e50;
+}

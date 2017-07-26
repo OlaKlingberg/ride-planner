@@ -49,9 +49,9 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
     console.log("ngOnInit");
     this.route.params.forEach((params: Params) => {
       console.log("Extracting params.");
+      this.move = 'still';
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
-      this.move = 'still';
     });
     this.getCuesheet();
     this.setSwipeListeners();

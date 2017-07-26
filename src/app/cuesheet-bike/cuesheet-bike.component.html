@@ -21,7 +21,7 @@
 
 
     <div class="cue">
-      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 2"
                        [cue]="cuesheet?.cues[cueNumber + 2]"
                        [cueNumber]="cueNumber + 2"></rp-cuesheet-cue>
     </div>

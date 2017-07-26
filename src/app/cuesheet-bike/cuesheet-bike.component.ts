@@ -51,6 +51,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       console.log("Extracting params.");
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
+      this.move = 'still';
     });
     this.getCuesheet();
     this.setSwipeListeners();
@@ -107,18 +108,18 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
     this.mc.on('swipeup', () => {
       this.move = 'up';
       setTimeout(() => {
-        this.move = 'still';
-        this.cueNumber++;
-        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber}` ]);
+        // this.move = 'still';
+        // this.cueNumber++;
+        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber++}` ]);
       }, 2000);
     });
 
     this.mc.on('swipedown', () => {
       this.move = 'down';
       setTimeout(() => {
-        this.move = 'still';
-        this.cueNumber--;
-        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber}` ]);
+        // this.move = 'still';
+        // this.cueNumber--;
+        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber--}` ]);
       }, 2000);
     });
 

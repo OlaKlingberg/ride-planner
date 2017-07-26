@@ -1,4 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnDestroy,
+  OnInit
+} from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
   trigger,
@@ -29,7 +32,7 @@ import * as Hammer from '../../../node_modules/hammerjs/hammer';
     ])
   ]
 })
-export class CuesheetBikeComponent implements OnInit, OnDestroy {
+export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
   public cuesheetId: string = '';
   public cueNumber: number = null;
   public total: number = 0;
@@ -48,7 +51,6 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
     console.log("ngOnInit");
     this.route.params.forEach((params: Params) => {
       console.log("Extracting params.");
-      this.move = 'still';
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
     });
@@ -118,6 +120,23 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       }, 500);
     });
 
+  }
+
+  ngAfterContentInit() {
+    console.log("ngAfterContentInit");
+  }
+
+  ngAfterContentChecked() {
+    console.log("ngAfterContentChecked");
+    this.move = 'still';
+  }
+
+  ngAfterViewInit() {
+    console.log("ngAfterViewInit");
+  }
+
+  ngAfterViewChecked() {
+    console.log("ngAfterViewChecked");
   }
 
   ngOnDestroy() {

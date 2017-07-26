@@ -53,7 +53,9 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
       console.log("Extracting params.");
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
-      this.move = 'still';
+      setTimeout(() => {
+        this.move = 'still';
+      }, 100);
     });
     this.getCuesheet();
     this.setSwipeListeners();

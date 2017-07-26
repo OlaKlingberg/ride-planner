@@ -13,7 +13,6 @@ export class CuesheetCueComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    // console.log("cuesheetCueComponent.ngOnInit()");
   }
 
 

@@ -85,13 +85,17 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
     cuesheet.cues = cuesheet.cues.map((cue: Cue) => {
       const turn = cue.turn;
       if ( turn === 'L' || turn.toLowerCase().includes('left') ) {
-        cue.icon = 'assets/img/arrows/left.png';
+        // cue.icon = 'assets/img/arrows/left.png';
+        cue.icon = 'left';
       } else if ( turn === 'R' || turn.toLowerCase().includes('right') ) {
-        cue.icon = 'assets/img/arrows/right.png';
+        // cue.icon = 'assets/img/arrows/right.png';
+        cue.icon = 'right'
       } else if ( turn.toLowerCase().includes('straight') || turn.toLowerCase().includes('across') ) {
-        cue.icon = 'assets/img/arrows/straight.png';
+        // cue.icon = 'assets/img/arrows/straight.png';
+        cue.icon = 'straight';
       } else if ( turn.toLowerCase().includes('stop') ) {
-        cue.icon = 'assets/img/arrows/stop.png';
+        // cue.icon = 'assets/img/arrows/stop.png';
+        cue.icon = 'stop';
       }
 
       return cue;

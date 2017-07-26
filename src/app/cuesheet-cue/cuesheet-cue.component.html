@@ -16,9 +16,18 @@
 </div>
 <div class="row">
   <div class="col-xs-5 text-align-center">
-    <img *ngIf="cue?.icon"
-         class="icon"
-         src="{{cue?.icon}}">
+    <img class="icon"
+         [ngClass]="{'display-none': cue?.icon !== 'left'}"
+         src='assets/img/arrows/left.png'>
+    <img class="icon"
+         [ngClass]="{'display-none': cue?.icon !== 'right'}"
+         src='assets/img/arrows/right.png'>
+    <img class="icon"
+         [ngClass]="{'display-none': cue?.icon !== 'straight'}"
+         src='assets/img/arrows/straight.png'>
+    <img class="icon"
+         [ngClass]="{'display-none': cue?.icon !== 'stop'}"
+         src='assets/img/arrows/stop.png'>
   </div>
   <div class="col-xs-7">
     <p class="bold x-large">{{cue?.turn}}</p>

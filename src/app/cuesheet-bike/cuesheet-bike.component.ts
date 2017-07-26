@@ -96,7 +96,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
 
   setSwipeListeners() {
     this.cuesContainer = $('#page').get(0);
-    this.mc = new Hammer(this.cuesContainer);
+    this.mc = Hammer(this.cuesContainer);
 
     // // mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL }); // Todo: Figure out why DIRECTION_ALL doesn't exist on Hammer.
     this.mc.get('swipe').set({ direction: 30 });

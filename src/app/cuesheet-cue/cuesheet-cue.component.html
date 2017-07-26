@@ -17,16 +17,16 @@
 <div class="row">
   <div class="col-xs-5 text-align-center">
     <img class="icon"
-         [ngClass]="{'display-none': cue?.icon !== 'left'}"
+         [ngClass]="{'display-block': cue?.icon === 'left'}"
          src='assets/img/arrows/left.png'>
     <img class="icon"
-         [ngClass]="{'display-none': cue?.icon !== 'right'}"
+         [ngClass]="{'display-block': cue?.icon === 'right'}"
          src='assets/img/arrows/right.png'>
     <img class="icon"
-         [ngClass]="{'display-none': cue?.icon !== 'straight'}"
+         [ngClass]="{'display-block': cue?.icon === 'straight'}"
          src='assets/img/arrows/straight.png'>
     <img class="icon"
-         [ngClass]="{'display-none': cue?.icon !== 'stop'}"
+         [ngClass]="{'display-block': cue?.icon === 'stop'}"
          src='assets/img/arrows/stop.png'>
   </div>
   <div class="col-xs-7">

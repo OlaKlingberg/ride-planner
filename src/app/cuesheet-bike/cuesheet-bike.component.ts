@@ -110,7 +110,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         // this.move = 'still';
         // this.cueNumber++;
-        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber++}` ]);
+        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
       }, 2000);
     });
 
@@ -119,7 +119,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         // this.move = 'still';
         // this.cueNumber--;
-        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber--}` ]);
+        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
       }, 2000);
     });
 

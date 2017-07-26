@@ -48,6 +48,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log("ngOnInit");
     this.route.params.forEach((params: Params) => {
+      console.log("Extracting params.");
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
     });
@@ -107,7 +108,8 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       this.move = 'up';
       setTimeout(() => {
         this.move = 'still';
-        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
+        this.cueNumber++;
+        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber}` ]);
       }, 990);
     });
 
@@ -115,7 +117,8 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       this.move = 'down';
       setTimeout(() => {
         this.move = 'still';
-        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
+        this.cueNumber--;
+        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber}` ]);
       }, 990);
     });
 

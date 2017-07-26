@@ -110,7 +110,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
         this.move = 'still';
         this.cueNumber++;
         this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber}` ]);
-      }, 990);
+      }, 1050);
     });
 
     this.mc.on('swipedown', () => {
@@ -119,7 +119,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
         this.move = 'still';
         this.cueNumber--;
         this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber}` ]);
-      }, 990);
+      }, 1050);
     });
 
   }

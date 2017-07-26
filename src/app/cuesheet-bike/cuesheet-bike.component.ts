@@ -25,8 +25,7 @@ import * as Hammer from '../../../node_modules/hammerjs/hammer';
       state('down', style({
         transform: 'translate(0, 217px)'
       })),
-      transition('still => up', animate('1000ms ease-in-out')),
-      transition('still => down', animate('1000ms ease-in-out'))
+      transition('still => *', animate('500ms ease-in-out')),
     ])
   ]
 })
@@ -108,19 +107,15 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
     this.mc.on('swipeup', () => {
       this.move = 'up';
       setTimeout(() => {
-        // this.move = 'still';
-        // this.cueNumber++;
         this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
-      }, 2000);
+      }, 500);
     });
 
     this.mc.on('swipedown', () => {
       this.move = 'down';
       setTimeout(() => {
-        // this.move = 'still';
-        // this.cueNumber--;
         this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
-      }, 2000);
+      }, 500);
     });
 
   }

@@ -53,6 +53,7 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
       console.log("Extracting params.");
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
+      this.move = 'still';
     });
     this.getCuesheet();
     this.setSwipeListeners();
@@ -123,20 +124,19 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
   }
 
   ngAfterContentInit() {
-    console.log("ngAfterContentInit");
+    // console.log("ngAfterContentInit");
   }
 
   ngAfterContentChecked() {
-    console.log("ngAfterContentChecked");
-    this.move = 'still';
+    // console.log("ngAfterContentChecked");
   }
 
   ngAfterViewInit() {
-    console.log("ngAfterViewInit");
+    // console.log("ngAfterViewInit");
   }
 
   ngAfterViewChecked() {
-    console.log("ngAfterViewChecked");
+    // console.log("ngAfterViewChecked");
   }
 
   ngOnDestroy() {

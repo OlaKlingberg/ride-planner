@@ -3,35 +3,27 @@
     <div class="cue">
       <rp-cuesheet-cue *ngIf="cueNumber > 0"
                        [cue]="cuesheet?.cues[cueNumber - 1]"
-                       [cueNumber]="cueNumber - 1"
-                       [position]="'Previous'"
-                       [move]="move"></rp-cuesheet-cue>
+                       [cueNumber]="cueNumber - 1"></rp-cuesheet-cue>
     </div>
 
 
     <div class="cue">
       <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]"
-                       [cueNumber]="cueNumber"
-                       [position]="'Current'"
-                       [move]="move"></rp-cuesheet-cue>
+                       [cueNumber]="cueNumber"></rp-cuesheet-cue>
     </div>
 
 
     <div class="cue">
       <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
                        [cue]="cuesheet?.cues[cueNumber + 1]"
-                       [cueNumber]="cueNumber + 1"
-                       [position]="'Next'"
-                       [move]="move"></rp-cuesheet-cue>
+                       [cueNumber]="cueNumber + 1"></rp-cuesheet-cue>
     </div>
 
 
     <div class="cue">
       <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
                        [cue]="cuesheet?.cues[cueNumber + 2]"
-                       [cueNumber]="cueNumber + 2"
-                       [position]="'Next'"
-                       [move]="move"></rp-cuesheet-cue>
+                       [cueNumber]="cueNumber + 2"></rp-cuesheet-cue>
     </div>
 
   </div>

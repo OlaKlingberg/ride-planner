@@ -46,6 +46,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    console.log("ngOnInit");
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
@@ -55,6 +56,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   }
 
   getCuesheet() {
+    console.log("getCuesheet");
     this.cuesheetService.getCuesheet(this.cuesheetId)
         .then((cuesheet: Cuesheet) => {
           return this.setTotalDistances(cuesheet);
@@ -106,7 +108,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.move = 'still';
         this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
-      }, 2000);
+      }, 990);
     });
 
     this.mc.on('swipedown', () => {
@@ -114,7 +116,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.move = 'still';
         this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
-      }, 2000);
+      }, 990);
     });
 
   }

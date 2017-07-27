@@ -10,7 +10,9 @@ import {
   state,
   style,
   animate,
-  transition
+  transition,
+  keyframes,
+  group
 } from '@angular/animations';
 import { AlertService } from '../_services/alert.service';
 
@@ -22,20 +24,39 @@ import { AlertService } from '../_services/alert.service';
     trigger('cueState', [
       state('display', style({
         opacity: 1,
+        height: '*',
+        fontSize: '*',
+        padding: '*',
+        border: '*'
       })),
       state('remove', style({
         opacity: 0,
+        height: 0,
+        fontSize: 0,
+        padding: 0,
+        border: 0
       })),
       transition('display => remove', [
-        animate('300ms')
+        animate('800ms', keyframes([
+          style({
+            opacity: 0,
+            offset: .5
+          }),
+          style({
+            opacity: 0,
+            height: 0,
+            fontSize: 0,
+            padding: 0,
+            border: 0,
+            offset: 1
+          })
+        ]))
       ])
     ])
   ]
 })
 export class CuesheetEditComponent implements OnInit {
-  @Input() cuesheet: Cuesheet;
-
-  // public cuesheet: Cuesheet;  // Todo: Or should this be: @Input() cuesheet: Cuesheet; ?
+  public cuesheet: Cuesheet;
   public cueModel: any = {};
   public cuesheetModel: any = {};
   public total: number = 0;
@@ -60,10 +81,10 @@ export class CuesheetEditComponent implements OnInit {
       this.getCuesheet();
     });
 
-    this.removeRowBorderOnModalClose();
+    this.hideRedBoxOnModalClose();
   }
 
-  removeRowBorderOnModalClose() {
+  hideRedBoxOnModalClose() {
     // Todo: This is what I want to do, but it doesn't work!
     // $('#cueDeletionModal').on('hidden.bs.modal', () => $('.cue-row').removeClass('highlight'));
 
@@ -75,7 +96,8 @@ export class CuesheetEditComponent implements OnInit {
           $(e.target).hasClass('close-modal')
       ) {
         $('.cue-row').removeClass('highlight');
-        $('#red-box').addClass('hide');
+        // $('#red-box').addClass('hide');
+        $('#red-box').fadeOut(200);
       }
     });
   }
@@ -110,8 +132,8 @@ export class CuesheetEditComponent implements OnInit {
   }
 
   editCuesheetDescription() {
-      this.cuesheetNameInput = false;
-      this.cuesheetDescriptionInput = true;
+    this.cuesheetNameInput = false;
+    this.cuesheetDescriptionInput = true;
   }
 
   hideInputFields() {
@@ -180,32 +202,31 @@ export class CuesheetEditComponent implements OnInit {
     $(rowToDelete).addClass('highlight');
 
     $('#red-box')
-        .removeClass('hide')
         .css({
-          "top": rowToDelete.position().top - 5,
+          "top": rowToDelete.position().top - 4,
           "left": rowToDelete.position().left - 5,
           "height": rowToDelete.height() + 10,
           "width": rowToDelete.width() + 10
-        });
-
-
+        })
+        .fadeIn(200);
   }
 
   deleteCue() {
     const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
-    this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
-      this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
-      $('#red-box').addClass('hide');
+    // this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
+    this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
+    // $('#red-box').addClass('hide');
+    $('#red-box').fadeOut(400);
 
-      setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
-        if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
-        this.cueToDelete = null;
-        this.total = 0;
-        this.getCuesheet();
-      }, 800);
-    });
+    setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
+      //     if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
+      this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
+      //     this.cueToDelete = null;
+      //     this.total = 0;
+      //     this.getCuesheet();
+    }, 1000);
+    // });
   }
-
 
   insertCue(i) {
     $('.insert-button-container').show();
@@ -215,10 +236,6 @@ export class CuesheetEditComponent implements OnInit {
   }
 
   cancelCue() {
-    // if (this.rowToEdit) {
-    //   $('.cue-row').last().remove();
-    // }
-
     $('#new-cue-row').after(this.rowToEdit);
     $('.insert-button-container').show();
     $('.cue-row').last().after($('#new-cue-row'));
@@ -230,8 +247,6 @@ export class CuesheetEditComponent implements OnInit {
   editCue(i) {
     if ( this.rowToEdit ) {
       $('#new-cue-row').after(this.rowToEdit);
-    } else {
-      // $('.cue-row').last().after("<tr class='cue-row invisible'><td>&nbsp;</td></tr>");
     }
 
     this.rowToEdit = $(`#cue-row-${i}`);

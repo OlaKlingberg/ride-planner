@@ -93,7 +93,7 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
       } else if ( turn.toLowerCase().includes('straight') || turn.toLowerCase().includes('across') ) {
         // cue.icon = 'assets/img/arrows/straight.png';
         cue.icon = 'straight';
-      } else if ( turn.toLowerCase().includes('stop') ) {
+      } else if ( turn.toLowerCase().includes('stop') || turn.toLowerCase().includes('end')) {
         // cue.icon = 'assets/img/arrows/stop.png';
         cue.icon = 'stop';
       }

@@ -164,7 +164,7 @@
           <thead>
 
           <!-- Box around high-lighted table row -->
-          <tr id="red-box" class="hide"></tr>
+          <tr id="red-box" class="display-none"></tr>
 
           <tr [ngClass]="{'faded': cuesheetNameInput || cuesheetDescriptionInput}">
             <th class="col-xs-1">Cue</th>
@@ -179,23 +179,28 @@
 
           <!-- Existing cues -->
           <tr *ngFor="let cue of cuesheet?.cues; index as i"
-              [@cueState]="cue.state"
               class="cue-row"
               id="cue-row-{{ i }}"
           >
 
             <!-- While the cueform row is pristine and the cuesheet info is not being edited. -->
-            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput">{{ i + 1 }}</td>
             <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
-                (click)="editCue(i)">{{ cue.distance / 100 | number:'1.0-2' }}
+                [@cueState]="cue.state">{{ i + 1 }}
             </td>
             <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
-                (click)="editCue(i)">{{ cue.turn }}
+                (click)="editCue(i)"
+                [@cueState]="cue.state">{{ cue.distance / 100 | number:'1.0-2' }}
             </td>
             <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
-                (click)="editCue(i)">{{ cue.description }}
+                (click)="editCue(i)"
+                [@cueState]="cue.state">{{ cue.turn }}
             </td>
-            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput">{{ cue.total / 100 |
+            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
+                (click)="editCue(i)"
+                [@cueState]="cue.state">{{ cue.description }}
+            </td>
+            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
+                [@cueState]="cue.state">{{ cue.total / 100 |
               number:'1.0-2'}}
             </td>
 
@@ -219,28 +224,32 @@
             </td>
 
             <!-- The same whether or not the cueform row is pristine, or the cuesheet info is being edited. -->
-            <td class="buttons-column">
-              <button
-                  type="button"
-                  data-toggle="modal"
-                  data-target="#cueDeletionModal"
-                  (click)="prepareToDeleteCue(i)"
-                  [disabled]="!cueForm.pristine || insertBeforeId || rowToEdit || cuesheetNameInput || cuesheetDescriptionInput"
-                  class="btn btn-danger btn-xs btn-circle"
-                  placement="right"
-                  tooltip="Delete this cue">
-                <i class="glyphicon glyphicon-remove"></i>
+            <td class="buttons-column"
+                [@cueState]="cue.state">
+              <button [@cueState]="cue.state"
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#cueDeletionModal"
+                      (click)="prepareToDeleteCue(i)"
+                      [disabled]="!cueForm.pristine || insertBeforeId || rowToEdit || cuesheetNameInput || cuesheetDescriptionInput"
+                      class="btn btn-danger btn-xs btn-circle"
+                      placement="right"
+                      tooltip="Delete this cue">
+                <i class="glyphicon glyphicon-remove"
+                   [@cueState]="cue.state"></i>
               </button>
 
-              <span class="insert-button-container">
-                <button
-                    type="button"
-                    (click)="insertCue(i)"
-                    [disabled]="!cueForm.pristine || insertBeforeId || rowToEdit || cuesheetNameInput || cuesheetDescriptionInput"
-                    class="btn btn-success btn-xs btn-circle insert-button"
-                    tooltip="Insert cue here"
-                    placement="right">
-                  <i class="glyphicon glyphicon-plus"></i>
+              <span class="insert-button-container"
+                    [@cueState]="cue.state">
+                <button [@cueState]="cue.state"
+                        type="button"
+                        (click)="insertCue(i)"
+                        [disabled]="!cueForm.pristine || insertBeforeId || rowToEdit || cuesheetNameInput || cuesheetDescriptionInput"
+                        class="btn btn-success btn-xs btn-circle insert-button"
+                        tooltip="Insert cue here"
+                        placement="right">
+                  <i class="glyphicon glyphicon-plus"
+                     [@cueState]="cue.state"></i>
                 </button>
               </span>
             </td>

@@ -52,7 +52,6 @@
   position: absolute;
   z-index: 2000;
   border: 3px solid red;
-  display: block;
   border-radius: 10px;
 }
 
@@ -63,4 +62,8 @@
 
 .invisible {
   visibility: hidden;
+}
+
+.display-none {
+  display: none;
 }

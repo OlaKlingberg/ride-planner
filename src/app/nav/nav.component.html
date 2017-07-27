@@ -1,6 +1,9 @@
 <nav class="navbar navbar-inverse"
      [@navBar]="navBarState"
-     [ngClass]="{'map-page': location.path() === '/map'}"
+     [ngClass]="{
+        'no-header': location.path() === '/map',
+        'no-header cuesheet-bike-page': ( location.path().includes('cuesheets') && location.path().includes('bike'))
+      }"
 >
   <div class="container">
     <div class="navbar-header">

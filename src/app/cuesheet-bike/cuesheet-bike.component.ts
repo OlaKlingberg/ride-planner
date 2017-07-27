@@ -48,9 +48,7 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
 
 
   ngOnInit() {
-    console.log("ngOnInit");
     this.route.params.forEach((params: Params) => {
-      console.log("Extracting params.");
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
         this.move = 'still';
@@ -60,7 +58,6 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
   }
 
   getCuesheet() {
-    console.log("getCuesheet");
     this.cuesheetService.getCuesheet(this.cuesheetId)
         .then((cuesheet: Cuesheet) => {
           return this.setTotalDistances(cuesheet);

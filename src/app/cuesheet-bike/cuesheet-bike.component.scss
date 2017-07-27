@@ -1,6 +1,8 @@
 #cues-container {
   position: relative;
-  top: -222px;
+  //top: -222px;
+  top: -160px;
+  max-width: 414px;
 }
 
 .cue {
@@ -10,10 +12,12 @@
 }
 
 #next-cue-mask {
-  height: 222px;
+  //height: 222px;
+  height: 200px;
   width: 100%;
   position: relative;
-  top: -680px;
+  //top: -680px;
+  top: -618px;
   background-color: #2b3e50;
   opacity: .7;
 }
@@ -22,6 +26,7 @@
   height: 1000px;
   width: 100%;
   position: relative;
-  top: -680px;
+  //top: -680px;
+  top: -618px;
   background-color: #2b3e50;
 }

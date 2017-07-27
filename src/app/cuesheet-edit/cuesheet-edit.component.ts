@@ -143,6 +143,7 @@ export class CuesheetEditComponent implements OnInit {
 
     // This is my workaround. It's ugly, but it seems to work.
     $(document).on('click', (e) => {
+      console.log("You clicked on the document!");
       if (
           $(e.target).hasClass('modal') ||
           $(e.target).hasClass('modal-btn-dismiss') ||

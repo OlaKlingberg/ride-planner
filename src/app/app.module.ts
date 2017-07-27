@@ -36,7 +36,6 @@ import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
 import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
 import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CuesheetCueComponent } from './cuesheet-cue/cuesheet-cue.component';
 
 @NgModule({
@@ -68,8 +67,7 @@ import { CuesheetCueComponent } from './cuesheet-cue/cuesheet-cue.component';
     HttpModule,
     AppRoutingModule,
     MapModule,
-    BrowserAnimationsModule,
-    TooltipModule.forRoot()
+    BrowserAnimationsModule
   ],
   providers: [
     UserService,

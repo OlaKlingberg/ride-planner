@@ -51,10 +51,25 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
-        this.move = 'still';
+      this.move = 'still';
     });
     this.getCuesheet();
     this.setSwipeListeners();
+
+    $('#navbar').removeClass('in');
+
+    this.setMasks()
+
+  }
+
+  setMasks() {
+    const height = $(window).height();
+    const width = $(window).width();
+
+    $('.side-mask').width((width - 414) / 2).height(height);
+    $('#bottom-mask').height(height - 736);
+    console.log($('#left-mask').width());
+    console.log($('#left-mask').height());
   }
 
   getCuesheet() {
@@ -90,7 +105,7 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
       } else if ( turn.toLowerCase().includes('straight') || turn.toLowerCase().includes('across') ) {
         // cue.icon = 'assets/img/arrows/straight.png';
         cue.icon = 'straight';
-      } else if ( turn.toLowerCase().includes('stop') || turn.toLowerCase().includes('end')) {
+      } else if ( turn.toLowerCase().includes('stop') || turn.toLowerCase().includes('end') ) {
         // cue.icon = 'assets/img/arrows/stop.png';
         cue.icon = 'stop';
       }

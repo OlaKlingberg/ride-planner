@@ -65,8 +65,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // On some phone browsers, the model doesn't sync automatically when a form field is filled in using autocomplete. That's why this function is needed.
   syncModel() {
-    this.model.email = $('#email')[0].value;
-    this.model.password = $('#password')[0].value;
+    // Todo: Make this work.
+    // this.model.email = $('#email')[0].value;
+    // this.model.password = $('#password')[0].value;
 
     return true;
   }

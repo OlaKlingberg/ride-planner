@@ -42,9 +42,6 @@ export class NavComponent implements OnInit {
   constructor(private miscService: MiscService,
               private userService: UserService,
               public location: Location) {
-    setTimeout(() => {
-      $('.navbar-collapse').collapse();
-    }, 1000);
   }
 
   ngOnInit() {

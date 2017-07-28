@@ -180,8 +180,7 @@
           <!-- Existing cues -->
           <tr *ngFor="let cue of cuesheet?.cues; index as i"
               class="cue-row"
-              id="cue-row-{{ i }}"
-              [@newCueRow]="newCueRowState">
+              id="cue-row-{{ i }}">
 
             <!-- While the cueform row is pristine and the cuesheet info is not being edited. -->
             <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
@@ -206,7 +205,8 @@
 
             <!-- When the cueform row no longer is pristine or the cueheet info is being edited. -->
             <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
-                class="faded">{{ i + 1 }}
+                class="faded"
+                [@newCueRow]="newCueRowState">{{ i + 1 }}
             </td>
             <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
                 class="faded">{{ cue.distance / 100 |
@@ -309,6 +309,7 @@
             </td>
             <td>
               <button type="button"
+                      [@newCueRow]="newCueRowState"
                       (click)="saveCue(); cueForm.reset()"
                       [disabled]="!cueForm.form.valid || cueForm.pristine"
                       class="btn btn-primary btn-block btn-sm margin-neg-5">Save Cue

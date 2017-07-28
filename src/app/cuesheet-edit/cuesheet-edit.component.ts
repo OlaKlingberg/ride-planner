@@ -68,7 +68,7 @@ import { AlertService } from '../_services/alert.service';
         border: 0
       })),
       transition('display => move', [
-        animate(`4000ms ease-in-out`, keyframes([
+        animate(`1400ms ease-in-out`, keyframes([
           style({
             opacity: 0.2,
             offset: .25
@@ -120,7 +120,7 @@ export class CuesheetEditComponent implements OnInit {
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
   public newCueRowState: string = 'display';
-  private animationDuration: number = 4000; // Todo: Can I sync this automatically with the animate time in the decorator above?
+  private animationDuration: number = 1400; // Todo: Can I sync this automatically with the animate time in the decorator above?
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService,

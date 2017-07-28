@@ -1,7 +1,7 @@
 <div (click)="showNavBar()">
 
   <div class="container hidden-xs"
-       [ngClass]="{'map-page': location.path() === '/map'}"
+       [ngClass]="{'no-header': location.path() === '/map' || ( location.path().includes('cuesheets') && location.path().includes('bike'))}"
   >
     <div class="row">
       <div class="col-sm-12">

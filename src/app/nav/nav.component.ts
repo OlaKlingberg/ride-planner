@@ -10,6 +10,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -26,7 +27,6 @@ import { UserService } from '../_services/user.service';
         opacity: 0,
         display: "none"
       })),
-      // transition('show => hide', animate('500ms 4s')),
       transition('show => hide', animate('500ms 4s')),
       // transition('hide => show', animate('10ms'))
     ])

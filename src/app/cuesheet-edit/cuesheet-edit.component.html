@@ -181,7 +181,7 @@
           <tr *ngFor="let cue of cuesheet?.cues; index as i"
               class="cue-row"
               id="cue-row-{{ i }}"
-          >
+              [@newCueRow]="newCueRowState">
 
             <!-- While the cueform row is pristine and the cuesheet info is not being edited. -->
             <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
@@ -259,13 +259,14 @@
           <tr *ngIf="!cuesheetNameInput && !cuesheetDescriptionInput"
               id="new-cue-row">
             <td *ngIf="rowToEdit">
-              {{cueToEdit + 1}}
+              <span [@newCueRow]="newCueRowState">{{cueToEdit + 1}}</span>
             </td>
             <td *ngIf="!rowToEdit">
-              {{ cuesheet?.cues.length + 1 }}
+              <span [@newCueRow]="newCueRowState">{{ cuesheet?.cues.length + 1 }}</span>
             </td>
             <td>
-              <input type="number"
+              <input [@newCueRow]="newCueRowState"
+                     type="number"
                      class="form-control input-sm margin-neg-5"
                      name="distance"
                      id="distance"
@@ -276,7 +277,8 @@
                      required/>
             </td>
             <td>
-              <input type="text"
+              <input [@newCueRow]="newCueRowState"
+                     type="text"
                      class="form-control input-sm margin-neg-5"
                      name="turn"
                      id="turn"
@@ -286,7 +288,8 @@
                      required/>
             </td>
             <td>
-              <input type="text"
+              <input [@newCueRow]="newCueRowState"
+                     type="text"
                      class="form-control input-sm margin-neg-5"
                      name="description"
                      id="description"
@@ -296,7 +299,8 @@
                      required>
             </td>
             <td>
-              <button type="button"
+              <button [@newCueRow]="newCueRowState"
+                      type="button"
                       class="btn btn-danger btn-block btn-sm margin-neg-5"
                       [disabled]="cueForm.pristine && !insertBeforeId && !rowToEdit"
                       (click)="cancelCue();

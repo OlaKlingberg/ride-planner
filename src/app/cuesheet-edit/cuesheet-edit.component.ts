@@ -11,8 +11,7 @@ import {
   style,
   animate,
   transition,
-  keyframes,
-  group
+  keyframes
 } from '@angular/animations';
 import { AlertService } from '../_services/alert.service';
 
@@ -52,9 +51,62 @@ import { AlertService } from '../_services/alert.service';
           })
         ]))
       ])
+    ]),
+    trigger('newCueRow', [
+      state('display', style({
+        opacity: 1,
+        height: '*',
+        fontSize: '*',
+        padding: '*',
+        border: '*'
+      })),
+      state('hide', style({
+        opacity: 0,
+        height: 0,
+        fontSize: 0,
+        padding: 0,
+        border: 0
+      })),
+      transition('display => move', [
+        animate(`1400ms ease-in-out`, keyframes([
+          style({
+            opacity: 0.2,
+            offset: .25
+          }),
+          style({
+            opacity: 0,
+            height: 0,
+            fontSize: 0,
+            padding: 0,
+            border: 0,
+            offset: .45
+          }),
+          style({
+            opacity: 0,
+            height: 0,
+            fontSize: 0,
+            padding: 0,
+            border: 0,
+            offset: .55
+          }),
+          style({
+            opacity: .2,
+            height: '*',
+            fontSize: '*',
+            padding: '*',
+            border: '*',
+            offset: .75
+          }),
+          style({
+            opacity: 1,
+            offset: 1
+          })
+        ]))
+      ])
     ])
   ]
 })
+
 export class CuesheetEditComponent implements OnInit {
   public cuesheet: Cuesheet;
   public cueModel: any = {};
@@ -67,6 +119,8 @@ export class CuesheetEditComponent implements OnInit {
   public rowToEdit: any = null;
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
+  public newCueRowState: string = 'display';
+  private animationDuration: number = 1400; // Todo: Can I sync this automatically with the animate time in the decorator above?
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService,
@@ -229,20 +283,37 @@ export class CuesheetEditComponent implements OnInit {
   }
 
   insertCue(i) {
-    $('.insert-button-container').show();
-    $(`#cue-row-${i} .insert-button-container`).hide();
-    $(`#cue-row-${i}`).before($('#new-cue-row'));
-    this.insertBeforeId = this.cuesheet.cues[ i ]._id;
+    this.newCueRowState = 'move';
+    setTimeout(() => {
+      this.insertBeforeId = this.cuesheet.cues[ i ]._id;
+      $('.insert-button-container').show();
+      $(`#cue-row-${i} .insert-button-container`).hide();
+      $(`#cue-row-${i}`).before($('#new-cue-row'));
+    }, this.animationDuration / 2);
+
+    setTimeout(() => {
+      this.newCueRowState = 'display';
+    }, this.animationDuration);
   }
 
   cancelCue() {
-    $('#new-cue-row').after(this.rowToEdit);
-    $('.insert-button-container').show();
-    $('.cue-row').last().after($('#new-cue-row'));
-    this.insertBeforeId = '';
-    this.cueToEdit = null;
-    this.rowToEdit = null;
+    this.newCueRowState = 'move';
+
+    setTimeout(() => {
+      $('#new-cue-row').after(this.rowToEdit);
+      $('.cue-row').last().after($('#new-cue-row'));
+      $('.insert-button-container').show();
+      this.insertBeforeId = '';
+      this.cueToEdit = null;
+      this.rowToEdit = null;
+    }, this.animationDuration / 2);
+
+    setTimeout(() => {
+      this.newCueRowState = 'display'
+    }, this.animationDuration);
+
   }
+
 
   editCue(i) {
     if ( this.rowToEdit ) {

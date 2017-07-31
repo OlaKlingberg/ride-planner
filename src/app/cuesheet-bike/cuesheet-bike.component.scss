@@ -11,48 +11,46 @@
 }
 
 #next-cue-mask {
-  //height: 222px;
   height: 200px;
   width: 100%;
   position: relative;
-  //top: -680px;
   top: -618px;
   background-color: #2b3e50;
+  //background-color: hotpink;
   opacity: .7;
 }
 
 #bottom-field {
-  //height: 1000px;
   height: 200px;
   width: 100%;
   position: relative;
-  //top: -680px;
   top: -618px;
   background-color: #2b3e50;
+  //background-color: chartreuse;;
 }
 
-.mask {
-  position: fixed;
-  background-color: white;
-  z-index: 3000;
-}
+//#page {
+//  max-height: 600px;
+//  overflow: hidden;
+//}
 
-#left-mask {
-  top: 0;
-  left: 0;
-}
-
-#right-mask {
-  top: 0;
-  right: 0;
-}
-
-#bottom-mask {
-  bottom: 0;
-  width: 100%;
-}
-
-#page {
-  max-height: 600px;
-  overflow: hidden;
-}
+//.mask {
+//  position: fixed;
+//  background-color: white;
+//  z-index: 3000;
+//}
+//
+//#left-mask {
+//  top: 0;
+//  left: 0;
+//}
+//
+//#right-mask {
+//  top: 0;
+//  right: 0;
+//}
+//
+//#bottom-mask {
+//  bottom: 0;
+//  width: 100%;
+//}

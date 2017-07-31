@@ -205,8 +205,7 @@
 
             <!-- When the cueform row no longer is pristine or the cueheet info is being edited. -->
             <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
-                class="faded"
-                [@newCueRow]="newCueRowState">{{ i + 1 }}
+                class="faded">{{ i + 1 }}
             </td>
             <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
                 class="faded">{{ cue.distance / 100 |
@@ -257,7 +256,8 @@
 
           <!-- New cue -->
           <tr *ngIf="!cuesheetNameInput && !cuesheetDescriptionInput"
-              id="new-cue-row">
+              id="new-cue-row"
+              [@newCueRow]="newCueRowState">
             <td *ngIf="rowToEdit">
               <span [@newCueRow]="newCueRowState">{{cueToEdit + 1}}</span>
             </td>

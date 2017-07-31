@@ -61,17 +61,17 @@ import { AlertService } from '../_services/alert.service';
         border: '*'
       })),
       state('hide', style({
-        opacity: 0,
+        opacity: 0.2,
         height: 0,
         fontSize: 0,
         padding: 0,
         border: 0
       })),
       transition('display => move', [
-        animate(`1400ms ease-in-out`, keyframes([
+        animate(`1400ms`, keyframes([
           style({
-            opacity: 0.2,
-            offset: .25
+            opacity: .2,
+            offset: .1
           }),
           style({
             opacity: 0,
@@ -95,7 +95,7 @@ import { AlertService } from '../_services/alert.service';
             fontSize: '*',
             padding: '*',
             border: '*',
-            offset: .75
+            offset: .9
           }),
           style({
             opacity: 1,
@@ -196,7 +196,9 @@ export class CuesheetEditComponent implements OnInit {
   }
 
   cancelCuesheetUpdate() {
-    this.hideInputFields()
+    this.cuesheetModel.cuesheetName = this.cuesheet.name;
+    this.cuesheetModel.cuesheetDescription = this.cuesheet.description;
+    this.hideInputFields();
   }
 
   updateCuesheet() {

@@ -31,6 +31,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log("RideSelector.ngOnInit()");
     this.subscribeToUser();
     this.getAvailableRides();
     console.log("RideSelectorComponent");
@@ -43,6 +44,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   getAvailableRides() {
+    console.log("RideSelector.getAvailableRides()");
     this.socket.emit('giveMeAvailableRides');
     this.availableRidesListener = this.socket.on('availableRides', availableRides => {
       console.log("availableRides:", availableRides);

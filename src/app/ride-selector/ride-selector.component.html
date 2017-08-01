@@ -4,20 +4,38 @@
     <div class="row">
       <div class="col-sm-6">
 
-        <div *ngIf="user.position.coords.latitude">
+        <!--<div *ngIf="user.position.coords.latitude">-->
           <div *ngIf="!user.ride">
-            <div class="form-group">
-              <label for="ride">Select a ride</label>
-              <select name="ride"
-                      id="ride"
-                      class="form-control"
-                      [(ngModel)]="model.ride">
-                <option *ngFor="let ride of availableRides" [value]="ride?.name">{{ride?.name}}</option>
-              </select>
+
+
+            <div *ngIf="availableRides.length > 0">
+
+              <div class="form-group">
+                <label for="ride">Select a ride</label>
+                <select name="ride"
+                        id="ride"
+                        class="form-control"
+                        [(ngModel)]="model.ride">
+                  <option *ngFor="let ride of availableRides" [value]="ride?.name">{{ride?.name}}</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Sign in to ride</button>
+              <a id="create-ride-link" [routerLink]="['/ride-creator']">Create new ride</a>
+
             </div>
 
-            <button type="submit" class="btn btn-primary">Sign in to ride</button>
-            <a id="create-ride-link" [routerLink]="['/ride-creator']">Create new ride</a>
+            <div *ngIf="availableRides.length <= 0">
+              <h3>Sorry, there are currently no rides!</h3>
+              <h4>Do you want to create one?</h4>
+              <a class="btn btn-primary" [routerLink]="['/ride-creator']">Create new ride</a>
+            </div>
+
+
+
+
+
+
           </div>
 
           <div *ngIf="user.ride">
@@ -28,10 +46,10 @@
             </button>
           </div>
 
-        </div>
-        <div *ngIf="!user.position.coords.latitude">
-          <h3>Retrieving your location ...</h3>
-        </div>
+        <!--</div>-->
+        <!--<div *ngIf="!user.position.coords.latitude">-->
+          <!--<h3>Retrieving your location ...</h3>-->
+        <!--</div>-->
 
       </div>
     </div>

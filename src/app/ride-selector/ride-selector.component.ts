@@ -11,7 +11,7 @@ import Socket = SocketIOClient.Socket;
 import { environment } from "../../environments/environment";
 
 @Component({
-  selector: 'app-ride-selector',
+  selector: 'rp-ride-selector',
   templateUrl: './ride-selector.component.html',
   styleUrls: [ './ride-selector.component.scss' ]
 })

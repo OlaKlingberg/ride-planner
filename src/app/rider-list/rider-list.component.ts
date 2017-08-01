@@ -9,7 +9,7 @@ import { User } from '../_models/user';
 import { UserService } from '../_services/user.service';
 
 @Component({
-  selector: 'app-rider-list',
+  selector: 'rp-rider-list',
   templateUrl: './rider-list.component.html',
   styleUrls: [ './rider-list.component.scss' ]
 })

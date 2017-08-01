@@ -21,10 +21,10 @@ import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
 import { RideCreatorComponent } from './ride-creator/ride-creator.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: HomeComponent
-  },
+  // {
+  //   path: '',
+  //   component: HomeComponent
+  // },
   {
     path: 'map',
     canActivate: [AuthGuard],

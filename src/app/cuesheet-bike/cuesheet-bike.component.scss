@@ -1,8 +1,13 @@
+.container {
+  max-width: 414px;
+}
+
 #cues-container {
   position: relative;
   //top: -222px;
   top: -160px;
-  max-width: 414px;}
+  //overflow: hidden;
+}
 
 .cue {
   height: 200px;
@@ -11,27 +16,52 @@
 }
 
 #next-cue-mask {
-  height: 200px;
-  width: 100%;
   position: relative;
   top: -618px;
+  height: 230px;
+  width: 100%;
+  //padding-bottom: 50px;
+
   background-color: #2b3e50;
-  //background-color: hotpink;
+  //background-color: chartreuse;
   opacity: .7;
 }
 
+//#bottom-field-background {
+//  position: relative;
+//  top: -1018px;
+//  //left: -50%;
+//  z-index: 1;
+//  height: 400px;
+//  width: 200%;
+//  background-color: darkmagenta;
+//}
+
 #bottom-field {
-  height: 200px;
-  width: 100%;
   position: relative;
-  top: -618px;
-  background-color: #2b3e50;
-  //background-color: chartreuse;;
+  top: -630px;
+  //left: -5px;
+  z-index: 2;
+  padding-top: 20px;
+  height: 400px;
+  width: 100%;
+  //background-color: #2b3e50;
+  background-color: silver;
+  //opacity: .2;
 }
 
-//#page {
-//  max-height: 600px;
-//  overflow: hidden;
+#page {
+  max-height: 800px;
+  overflow: hidden;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+//.container {
+  //overflow: hidden;
+  //background: red;
 //}
 
 //.mask {

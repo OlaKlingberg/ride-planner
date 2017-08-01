@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'app-cuesheet-new',
+  selector: 'rp-cuesheet-new',
   templateUrl: './cuesheet-new.component.html',
   styleUrls: [ './cuesheet-new.component.scss' ]
 })

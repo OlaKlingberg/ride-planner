@@ -1,8 +1,8 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
+  <form (ngSubmit)="onSubmit()">
 
-      <form (ngSubmit)="onSubmit()" #selectRideForm="ngForm">
+    <div class="row">
+      <div class="col-sm-6">
 
         <div *ngIf="user.position.coords.latitude">
           <div *ngIf="!user.ride">
@@ -12,26 +12,29 @@
                       id="ride"
                       class="form-control"
                       [(ngModel)]="model.ride">
-                <option *ngFor="let ride of availableRides" [value]="ride">{{ride}}</option>
+                <option *ngFor="let ride of availableRides" [value]="ride?.name">{{ride?.name}}</option>
               </select>
             </div>
 
             <button type="submit" class="btn btn-primary">Sign in to ride</button>
+            <a id="create-ride-link" [routerLink]="['/ride-creator']">Create new ride</a>
           </div>
 
           <div *ngIf="user.ride">
             <h3>You are logged in to the ride: {{ user.ride }}</h3>
             <p>You have to log out from this ride before you can log into another ride.</p>
 
-            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride {{ user.ride }}</button>
+            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride {{ user.ride }}
+            </button>
           </div>
 
         </div>
         <div *ngIf="!user.position.coords.latitude">
           <h3>Retrieving your location ...</h3>
         </div>
-      </form>
 
+      </div>
     </div>
-  </div>
+  </form>
+
 </div>

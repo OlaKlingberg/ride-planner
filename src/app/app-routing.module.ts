@@ -18,6 +18,7 @@ import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
 import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
 import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
+import { RideCreatorComponent } from './ride-creator/ride-creator.component';
 
 const routes: Routes = [
   {
@@ -50,6 +51,11 @@ const routes: Routes = [
     path: 'ride-selector',
     canActivate: [AuthGuard],
     component: RideSelectorComponent
+  },
+  {
+    path: 'ride-creator',
+    canActivate: [AuthGuard],
+    component: RideCreatorComponent
   },
   {
     path: 'members',

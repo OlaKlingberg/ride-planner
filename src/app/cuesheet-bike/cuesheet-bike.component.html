@@ -28,10 +28,40 @@
 
   </div>
 
-  <div id="next-cue-mask"></div>
-  <div id="bottom-field"></div>
+  <!--<div id="next-cue-mask"></div>-->
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div id="next-cue-mask"></div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 no-padding">
+        <div id="bottom-field">
+          <div class="col-xs-6">
+            <a [routerLink]="['/cuesheets/', cuesheetId ,'view']" class="btn btn-primary btn-block">Overview</a>
+          </div>
+          <div class="col-xs-6">
+            <a [routerLink]="['/map']" class="btn btn-primary btn-block">Map</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
 </div>
 
-<div id="left-mask" class="mask side-mask"></div>
-<div id="right-mask" class="mask side-mask"></div>
-<div id="bottom-mask" class="mask"></div>
+<!--<div id="left-mask" class="mask side-mask"></div>-->
+<!--<div id="right-mask" class="mask side-mask"></div>-->
+<!--<div id="bottom-mask" class="mask"></div>-->

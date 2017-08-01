@@ -19,14 +19,14 @@ export class CuesheetService {
   }
 
   setHeaders() {
-    let token = JSON.parse(environment.storage.getItem('rpToken'));
-    let headers = new Headers({ 'x-auth': token });
+    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }
 
   createCuesheet(model) {
     if ( this.user ) model._creator = this.user._id;   // Todo: User *should* exist here, but what if not?
-    let requestOptions = this.setHeaders();
+    const requestOptions = this.setHeaders();
 
     return this.http.post(`${environment.api}/cuesheets`, model, requestOptions)
         .map((response: Response) => {

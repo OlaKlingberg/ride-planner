@@ -162,10 +162,12 @@ export class CuesheetEditComponent implements OnInit {
           this.cuesheetModel.cuesheetName = cuesheet.name;
           this.cuesheetModel.cuesheetDescription = cuesheet.description;
           this.cuesheet = this.setTotalDistances(cuesheet);
-          this.cuesheet.cues = this.cuesheet.cues.map(cue => {
-            cue.state = 'display';  // Used for animation.
-            return cue;
-          });
+
+          if (this.cuesheet.cues.length === 0) {
+            console.log("Apparently a new cue sheet!");
+            this.cueModel.distance = '0';
+            this.cueModel.turn = 'Start';
+          }
         });
   }
 
@@ -174,6 +176,7 @@ export class CuesheetEditComponent implements OnInit {
     cuesheet.cues = cuesheet.cues.map(cue => {
       this.total += cue.distance;
       cue.total = this.total;
+      cue.state = 'display';  // Used for animation.
       return cue;
     });
 

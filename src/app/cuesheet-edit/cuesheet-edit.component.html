@@ -258,10 +258,9 @@
           <tr *ngIf="!cuesheetNameInput && !cuesheetDescriptionInput"
               id="new-cue-row"
               [@newCueRow]="newCueRowState">
-            <td *ngIf="rowToEdit">
-              <span [@newCueRow]="newCueRowState">{{cueToEdit + 1}}</span>
+            <td *ngIf="insertBeforeId">
             </td>
-            <td *ngIf="!rowToEdit">
+            <td *ngIf="!insertBeforeId">
               <span [@newCueRow]="newCueRowState">{{ cuesheet?.cues.length + 1 }}</span>
             </td>
             <td>

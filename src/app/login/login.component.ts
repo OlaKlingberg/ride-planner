@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Get return url from route parameters or default to '/'
-    this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/ride-selector';
+    this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
     // console.log("LoginComponent. About to subscribe to user$. Counter:", this.counter++);
     this.userSub = this.userService.user$.subscribe(user => {

@@ -23,10 +23,10 @@ import { RideRemoverComponent } from './ride-remover/ride-remover.component';
 import { RideActionSelectorComponent } from './ride-action-selector/ride-action-selector.component';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   component: HomeComponent
-  // },
+  {
+    path: '',
+    component: HomeComponent
+  },
   {
     path: 'map',
     canActivate: [AuthGuard],

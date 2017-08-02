@@ -42,6 +42,7 @@ import { RideCreatorComponent } from './ride-creator/ride-creator.component';
 import { RideService } from './_services/ride.service';
 import { RideRemoverComponent } from './ride-remover/ride-remover.component';
 import { RideActionSelectorComponent } from './ride-action-selector/ride-action-selector.component';
+import { FocusDirective } from './_directives/focus.directive';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { RideActionSelectorComponent } from './ride-action-selector/ride-action-
     CuesheetCueComponent,
     RideCreatorComponent,
     RideRemoverComponent,
-    RideActionSelectorComponent
+    RideActionSelectorComponent,
+    FocusDirective
   ],
   imports: [
     BrowserModule,

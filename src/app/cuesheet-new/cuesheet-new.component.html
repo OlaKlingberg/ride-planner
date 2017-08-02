@@ -10,7 +10,7 @@
              id="name"
              [(ngModel)]="model.name"
              #name="ngModel"
-             autofocus
+             [focus]="focusTrigger"
              required>
       <div *ngIf="f.submitted && !name.valid" class="help-block">A cue sheet name is required</div>
     </div>

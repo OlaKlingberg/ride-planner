@@ -18,7 +18,7 @@ import { RideService } from '../_services/ride.service';
   styleUrls: [ './ride-remover.component.scss' ]
 })
 export class RideRemoverComponent implements OnInit, OnDestroy {
-  private model: any = [];
+  public model: any = [];
   private socket: Socket;
   public user: User = null;
   private availableRides: Array<string> = null;

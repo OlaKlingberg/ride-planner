@@ -12,7 +12,12 @@ export class FocusDirective {
 
   ngOnInit() {
     this.focusEvent.subscribe(event => {
-      this.renderer.invokeElementMethod(this.element.nativeElement, 'focus', []);
+      // this.renderer.invokeElementMethod(this.element.nativeElement, 'focus', []);
+
+      setTimeout(() => {
+        this.element.nativeElement.focus();
+      }, 1);
+
     });
   }
 

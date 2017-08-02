@@ -35,7 +35,7 @@ export class CuesheetService {
   }
 
   getAllCuesheets() {
-    let requestOptions = this.setHeaders();
+    const requestOptions = this.setHeaders();
 
     return this.http.get(`${environment.api}/cuesheets`, requestOptions)
         .map((response: Response) => {
@@ -44,7 +44,7 @@ export class CuesheetService {
   }
 
   getCuesheet(_id) {
-    let requestOptions = this.setHeaders();
+    const requestOptions = this.setHeaders();
 
     return this.http.get(`${environment.api}/cuesheets/${_id}`, requestOptions)
         .map((response: Response) => new Cuesheet(response.json().cuesheet))
@@ -52,7 +52,7 @@ export class CuesheetService {
   }
 
   updateCuesheet(_id: string, cuesheet: any) {
-    let requestOptions = this.setHeaders();
+    const requestOptions = this.setHeaders();
 
     return this.http.patch(`${environment.api}/cuesheets/${_id}`, cuesheet, requestOptions)
         .map((response: Response) => new Cuesheet(response.json().cuesheet))
@@ -60,7 +60,7 @@ export class CuesheetService {
   }
 
   deleteCuesheet(cuesheetId: any) {
-    let requestOptions = this.setHeaders();
+    const requestOptions = this.setHeaders();
 
     return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}`, requestOptions)
         .map((response: Response) => new Cuesheet(response.json().cuesheet))
@@ -68,7 +68,7 @@ export class CuesheetService {
   }
 
   createCue(cuesheetId: any, cue: any, insertBeforeId: string) {
-    let requestOptions = this.setHeaders();
+    const requestOptions = this.setHeaders();
 
     return this.http.post(`${environment.api}/cuesheets/cues`, { cuesheetId, cue, insertBeforeId }, requestOptions)
         .map((response: Response) => {
@@ -78,7 +78,7 @@ export class CuesheetService {
   }
 
   updateCue(_id: string, cue: any) {
-    let requestOptions = this.setHeaders();
+    const requestOptions = this.setHeaders();
 
     return this.http.patch(`${environment.api}/cuesheets/cues/${_id}`, cue, requestOptions)
         .map((response: Response) => {
@@ -87,7 +87,7 @@ export class CuesheetService {
   }
 
   deleteCue(cuesheetId: any, cueId: any) {
-    let requestOptions = this.setHeaders();
+    const requestOptions = this.setHeaders();
 
     return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}/cues/${cueId}`, requestOptions)
         .map((response: Response) => {

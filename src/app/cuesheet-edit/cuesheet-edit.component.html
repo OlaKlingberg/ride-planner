@@ -168,7 +168,7 @@
 
           <tr [ngClass]="{'faded': cuesheetNameInput || cuesheetDescriptionInput}">
             <th class="col-xs-1">Cue</th>
-            <th class="col-xs-2">Leg</th>
+            <th class="col-xs-2">At (Miles)</th>
             <th class="col-xs-1">Turn</th>
             <th class="col-xs-5">Description</th>
             <th class="col-xs-1">Total</th>
@@ -267,6 +267,7 @@
             <td>
               <input [@newCueRow]="newCueRowState"
                      type="number"
+                     autofocus
                      class="form-control input-sm margin-neg-5"
                      name="distance"
                      id="distance"

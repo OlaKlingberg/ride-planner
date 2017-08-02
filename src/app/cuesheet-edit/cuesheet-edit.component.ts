@@ -214,6 +214,7 @@ export class CuesheetEditComponent implements OnInit {
 
   saveCue() {
     this.cueModel.distance = Math.round(this.cueModel.distance * 100);
+    $('#distance').get(0).focus();
 
     if ( this.rowToEdit ) {
       this.updateCue();
@@ -269,19 +270,19 @@ export class CuesheetEditComponent implements OnInit {
 
   deleteCue() {
     const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
-    // this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
-    this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
-    // $('#red-box').addClass('hide');
-    $('#red-box').fadeOut(400);
+    this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
+      this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
+      // $('#red-box').addClass('hide');
+      $('#red-box').fadeOut(400);
 
-    setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
-      //     if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
-      this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
-      //     this.cueToDelete = null;
-      //     this.total = 0;
-      //     this.getCuesheet();
-    }, 1000);
-    // });
+      setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
+            if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
+        this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
+            this.cueToDelete = null;
+            this.total = 0;
+            this.getCuesheet();
+      }, 1000);
+    });
   }
 
   insertCue(i) {
@@ -336,7 +337,7 @@ export class CuesheetEditComponent implements OnInit {
   deleteCuesheet() {
     this.cuesheetService.deleteCuesheet(this.cuesheet._id).then((cuesheet: Cuesheet) => {
       if ( cuesheet ) {
-        this.alertService.success(`The cue sheet <i>${cuesheet.name}</i> has been deleted.`);
+        this.alertService.success(`The cue sheet ${cuesheet.name} has been deleted.`);
         this.router.navigate([ '/cuesheets' ]);
       } else {
         this.alertService.error("Oops! Something went wrong!");

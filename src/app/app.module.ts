@@ -40,6 +40,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CuesheetCueComponent } from './cuesheet-cue/cuesheet-cue.component';
 import { RideCreatorComponent } from './ride-creator/ride-creator.component';
 import { RideService } from './_services/ride.service';
+import { RideRemoverComponent } from './ride-remover/ride-remover.component';
+import { RideActionSelectorComponent } from './ride-action-selector/ride-action-selector.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { RideService } from './_services/ride.service';
     CuesheetEditComponent,
     CuesheetBikeComponent,
     CuesheetCueComponent,
-    RideCreatorComponent
+    RideCreatorComponent,
+    RideRemoverComponent,
+    RideActionSelectorComponent
   ],
   imports: [
     BrowserModule,

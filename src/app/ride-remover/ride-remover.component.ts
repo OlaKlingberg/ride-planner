@@ -9,13 +9,15 @@ import { User } from '../_models/user';
 import { MiscService } from '../_services/misc.service';
 import Socket = SocketIOClient.Socket;
 import { environment } from "../../environments/environment";
+import { Ride } from '../_models/ride';
+import { RideService } from '../_services/ride.service';
 
 @Component({
-  selector: 'rp-ride-selector',
-  templateUrl: './ride-selector.component.html',
-  styleUrls: [ './ride-selector.component.scss' ]
+  selector: 'rp-ride-remover',
+  templateUrl: './ride-remover.component.html',
+  styleUrls: [ './ride-remover.component.scss' ]
 })
-export class RideSelectorComponent implements OnInit, OnDestroy {
+export class RideRemoverComponent implements OnInit, OnDestroy {
   private model: any = [];
   private socket: Socket;
   public user: User = null;
@@ -24,8 +26,9 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   private availableRidesListener: any;
 
   constructor(private router: Router,
+              private alertService: AlertService,
               private userService: UserService,
-              private riderService: RiderService,
+              private rideService: RideService,
               private miscService: MiscService) {
     this.socket = this.miscService.socket;
   }
@@ -41,17 +44,23 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Todo: I'm not sure i should be using sockets here.
   getAvailableRides() {
     this.socket.emit('giveMeAvailableRides');
     this.availableRidesListener = this.socket.on('availableRides', availableRides => {
-      if (availableRides.length > 0) this.availableRides = availableRides;
+      if ( availableRides.length > 0 ) this.availableRides = availableRides;
     });
   }
 
-  signIn() {
-    this.userService.ride$.next(this.model.ride);
-    environment.storage.setItem('rpRide', this.model.ride);
-    this.router.navigate(['/map']);
+  deleteRide() {
+    this.rideService.deleteRide(this.model.ride).then((ride: Ride) => {
+      if ( ride ) {
+        this.alertService.success(`The ride ${ride.name} has been deleted.`);
+        this.router.navigate([ '/ride-action-selector' ])
+      } else {
+        this.alertService.error("Oops! Something went wrong!");
+      }
+    })
   }
 
   logOutFromRide() {

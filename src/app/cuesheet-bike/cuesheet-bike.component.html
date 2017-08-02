@@ -38,9 +38,10 @@
 
       </div>
     </div>
-    <div class="row">
-      <div class="col-xs-12 no-padding">
-        <div id="bottom-field">
+    <div class="row no-padding">
+      <!--<div class="col-xs-12 no-padding">-->
+      <div id="bottom-field" class="col-xs-12">
+        <div class="row">
           <div class="col-xs-6">
             <a [routerLink]="['/cuesheets/', cuesheetId ,'view']" class="btn btn-primary btn-block">Overview</a>
           </div>
@@ -48,16 +49,15 @@
             <a [routerLink]="['/map']" class="btn btn-primary btn-block">Map</a>
           </div>
         </div>
+        <hr>
+        <div class="row" id="ride-info">
+          <div class="col-xs-12">What info might be good to display here?</div>
+        </div>
+
       </div>
+      <!--</div>-->
     </div>
   </div>
-
-
-
-
-
-
-
 
 
 </div>

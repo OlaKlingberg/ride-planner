@@ -16,12 +16,6 @@ export class RideService {
     });
   }
 
-  // setHeaders() {
-  //   const token = JSON.parse(environment.storage.getItem('rpToken'));
-  //   const headers = new Headers({ 'x-auth': token });
-  //   return new RequestOptions({ headers });
-  // }
-
   setHeaders() {
     const token = JSON.parse(environment.storage.getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
@@ -36,6 +30,14 @@ export class RideService {
         .map((response: Response) => {
           return new Ride(response.json());
         });
+  }
+
+  deleteRide(rideId: any) {
+    const requestOptions = this.setHeaders();
+
+    return this.http.delete(`${environment.api}/rides/${rideId}`, requestOptions)
+        .map((response: Response) => new Ride(response.json().ride))
+        .toPromise(); // Todo: Add error handling.
   }
 
 }

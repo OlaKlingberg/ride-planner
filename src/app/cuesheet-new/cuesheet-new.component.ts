@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './cuesheet-new.component.html',
   styleUrls: [ './cuesheet-new.component.scss' ]
 })
-export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit {
   model: any = {};
   loading: boolean = false;
   cuesheet: Cuesheet;
@@ -27,10 +27,6 @@ export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit, A
 
   ngAfterViewInit() {
     this.focusTrigger.emit(true);
-  }
-
-  ngAfterViewChecked() {
-    // this.focusTrigger.emit(true);
   }
 
   createCuesheet() {

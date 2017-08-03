@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, EventEmitter, Input, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CuesheetService } from '../_services/cuesheet.service';
 import { Cuesheet } from '../_models/cuesheet';
@@ -107,7 +107,7 @@ import { AlertService } from '../_services/alert.service';
   ]
 })
 
-export class CuesheetEditComponent implements OnInit {
+export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public cuesheet: Cuesheet;
   public cueModel: any = {};
   public cuesheetModel: any = {};
@@ -120,7 +120,8 @@ export class CuesheetEditComponent implements OnInit {
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
   public newCueRowState: string = 'display';
-  private animationDuration: number = 1400; // Todo: Can I sync this automatically with the animate time in the decorator above?
+  private animationDuration: number = 1400; // Todo: Can I sync this automatically with the animation time in the decorator above?
+  public focusTrigger = new EventEmitter<boolean>();
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService,
@@ -136,6 +137,10 @@ export class CuesheetEditComponent implements OnInit {
     });
 
     this.hideRedBoxOnModalClose();
+  }
+
+  ngAfterViewInit() {
+    this.focusTrigger.emit(true);
   }
 
   hideRedBoxOnModalClose() {
@@ -217,7 +222,8 @@ export class CuesheetEditComponent implements OnInit {
 
   saveCue() {
     this.cueModel.distance = Math.round(this.cueModel.distance * 100);
-    $('#distance').get(0).focus();
+    // $('#distance').get(0).focus();
+    this.focusTrigger.emit(true);
 
     if ( this.rowToEdit ) {
       this.updateCue();
@@ -299,6 +305,7 @@ export class CuesheetEditComponent implements OnInit {
 
     setTimeout(() => {
       this.newCueRowState = 'display';
+      this.focusTrigger.emit(true);
     }, this.animationDuration);
   }
 
@@ -315,7 +322,8 @@ export class CuesheetEditComponent implements OnInit {
     }, this.animationDuration / 2);
 
     setTimeout(() => {
-      this.newCueRowState = 'display'
+      this.newCueRowState = 'display';
+      this.focusTrigger.emit(true);
     }, this.animationDuration);
 
   }

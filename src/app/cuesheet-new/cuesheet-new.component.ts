@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, AfterViewChecked, AfterViewInit } from '@angular/core';
 import { Cuesheet } from '../_models/cuesheet';
 import { AlertService } from '../_services/alert.service';
 import { CuesheetService } from '../_services/cuesheet.service';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './cuesheet-new.component.html',
   styleUrls: [ './cuesheet-new.component.scss' ]
 })
-export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
   model: any = {};
   loading: boolean = false;
   cuesheet: Cuesheet;
@@ -25,8 +25,12 @@ export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewChecked
   ngOnInit() {
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewInit() {
     this.focusTrigger.emit(true);
+  }
+
+  ngAfterViewChecked() {
+    // this.focusTrigger.emit(true);
   }
 
   createCuesheet() {

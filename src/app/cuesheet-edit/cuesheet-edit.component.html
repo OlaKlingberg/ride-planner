@@ -178,7 +178,7 @@
           <tbody>
 
           <!-- Existing cues -->
-          <tr *ngFor="let cue of cuesheet?.cues; index as i"
+          <tr *ngFor="let cue of cuesheet?.cues; index as i; trackBy: trackByCueId"
               class="cue-row"
               id="cue-row-{{ i }}">
 

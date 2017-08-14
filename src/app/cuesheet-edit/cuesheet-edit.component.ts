@@ -161,6 +161,11 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // Todo: How can I test that this really works? And do I need to accept index as a parameter?
+  trackByCueId(index: number, cue: Cue): string {
+    return cue._id;
+  }
+
   getCuesheet() {
     this.cuesheetService.getCuesheet(this.cuesheetId)
         .then(cuesheet => {
@@ -222,7 +227,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   saveCue() {
     this.cueModel.distance = Math.round(this.cueModel.distance * 100);
-    // $('#distance').get(0).focus();
     this.focusTrigger.emit(true);
 
     if ( this.rowToEdit ) {

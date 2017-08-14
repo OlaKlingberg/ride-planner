@@ -21,7 +21,7 @@ export class UserListComponent implements OnInit, OnDestroy {
         .subscribe(response => {
           this.users = response.json().users;
           this.users.sort(nameSort);
-        });
+        }); // Todo: Handle errors.
   }
 
   ngOnDestroy() {

@@ -1,4 +1,27 @@
+<!-- Modal shown when user tries to scroll before first cue or after last cue. -->
+<div class="modal fade" id="noMoreCuesModal" tabindex="-1" role="dialog" #noMoreCuesModal
+     aria-labelledby="noMoreCuesModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="noMoreCuesModalLabel">This is the first/last cue</h4>
+      </div>
+      <div class="modal-body">
+        I don't think I need any body.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
 <div id="page">
+
   <div class="container" id="cues-container" [@cuesheetContainer]="move">
     <div class="cue">
       <rp-cuesheet-cue *ngIf="cueNumber > 0"
@@ -51,7 +74,7 @@
         </div>
         <hr>
         <div class="row" id="ride-info">
-          <div class="col-xs-12">What info might be good to display here?</div>
+          <div class="col-xs-12" data-toggle="modal" data-target="#noMoreCuesModal" id="trigger">What info might be good to display here?</div>
         </div>
 
       </div>

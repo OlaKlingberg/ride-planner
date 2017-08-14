@@ -1,9 +1,16 @@
-<div *ngIf="message"
-     [@messageState]="message.state"
-     [ngClass]="{
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12"
+         *ngIf="message"
+         [@messageState]="message.state"
+         [ngClass]="{
       'alert': message,
       'alert-success': message.type === 'success',
       'alert-danger': message.type === 'error' }">
-  {{message.text}}
+      {{message.text}}
+    </div>
+  </div>
 </div>
+
+
 

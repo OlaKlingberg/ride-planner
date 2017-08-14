@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, AfterViewChecked, AfterViewInit, ElementRef } from '@angular/core';
 import { Cuesheet } from '../_models/cuesheet';
 import { AlertService } from '../_services/alert.service';
 import { CuesheetService } from '../_services/cuesheet.service';
@@ -26,6 +26,7 @@ export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    console.log("CueshhetNewComponent.ngAfterViewInit()");
     this.focusTrigger.emit(true);
   }
 

@@ -1,7 +1,4 @@
-import {
-  AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnDestroy,
-  OnInit
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
   trigger,
@@ -32,7 +29,7 @@ import * as Hammer from '../../../node_modules/hammerjs/hammer';
     ])
   ]
 })
-export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
+export class CuesheetBikeComponent implements OnInit, OnDestroy {
   public cuesheetId: string = '';
   public cueNumber: number = null;
   public total: number = 0;
@@ -40,6 +37,9 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
   private cuesContainer: any;
   private mc: any;
   public move: string = 'still';
+  // public noMoreCuesModal: any;
+
+  @ViewChild('noMoreCuesModal') private noMoreCuesModal;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -58,7 +58,14 @@ export class CuesheetBikeComponent implements OnInit, AfterContentInit, AfterCon
 
     $('#navbar').removeClass('in');
 
-    this.setMasks()
+    this.setMasks();
+
+    console.log(this.noMoreCuesModal);
+    this.noMoreCuesModal.open();
+
+    // this.noMoreCuesModal = $('#noMoreCuesModal');
+    // $('#trigger').click();
+    // this.noMoreCuesModal.modal();
   }
 
 setMasks() {
@@ -117,42 +124,42 @@ setMasks() {
   }
 
   setSwipeListeners() {
-    this.cuesContainer = $('#page').get(0);
+    this.cuesContainer = $('#page').get(0); // Todo: Is it okay to use jQuery for this? (It works.) Should I use viewChild instead?
     this.mc = Hammer(this.cuesContainer);
 
     // // mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL }); // Todo: Figure out why DIRECTION_ALL doesn't exist on Hammer.
-    this.mc.get('swipe').set({ direction: 30 });
+    this.mc.get('swipe').set({ direction: 30 });  // This replaces the line above.
 
     this.mc.on('swipeup', () => {
-      this.move = 'up';
-      setTimeout(() => {
-        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
-      }, 500);
+      if (this.cueNumber >= this.cuesheet.cues.length - 1) {
+        console.log("This is the last cue!");
+        // this.noMoreCuesModal.modal('show');
+        $('#trigger').click();
+
+      } else {
+        this.move = 'up';
+        setTimeout(() => {
+          this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
+        }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
+      }
     });
 
     this.mc.on('swipedown', () => {
-      this.move = 'down';
-      setTimeout(() => {
-        this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
-      }, 500);
+      if (this.cueNumber <= 0) {
+        console.log("This is the first cue!");
+        // this.noMoreCuesModal.modal('show');
+        $('#trigger').click();
+
+
+
+      } else {
+        this.move = 'down';
+        setTimeout(() => {
+          this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
+        }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
+      }
     });
 
-  }
-
-  ngAfterContentInit() {
-    // console.log("ngAfterContentInit");
-  }
-
-  ngAfterContentChecked() {
-    // console.log("ngAfterContentChecked");
-  }
-
-  ngAfterViewInit() {
-    // console.log("ngAfterViewInit");
-  }
-
-  ngAfterViewChecked() {
-    // console.log("ngAfterViewChecked");
   }
 
   ngOnDestroy() {

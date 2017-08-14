@@ -147,11 +147,11 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
 
 
       } else {
-        this.move = 'down';
         this.modalTitle = "This is the first cue";
         this.modalBody = "There are no more cues before this one.";
         this.modalRef = this.modalService.show(this.noMoreCuesModal);
         setTimeout(() => {
+          this.move = 'down';
           this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
         }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
       }

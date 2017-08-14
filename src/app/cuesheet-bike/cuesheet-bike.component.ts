@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
   trigger,
@@ -12,6 +12,7 @@ import { Cuesheet } from '../_models/cuesheet';
 import { Cue } from '../_models/cue';
 import * as $ from 'jquery';
 import * as Hammer from '../../../node_modules/hammerjs/hammer';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'rp-cuesheet-bike',
@@ -37,13 +38,16 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   private cuesContainer: any;
   private mc: any;
   public move: string = 'still';
-  // public noMoreCuesModal: any;
+  public modalRef: BsModalRef;
+  public modalTitle: string = "Initial value";
+  public modalBody: string = "Initial value";
 
-  @ViewChild('noMoreCuesModal') private noMoreCuesModal;
+  @ViewChild('noMoreCuesModal') noMoreCuesModal: TemplateRef<any>;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private cuesheetService: CuesheetService) {
+              private cuesheetService: CuesheetService,
+              private modalService: BsModalService) {
   }
 
 
@@ -56,27 +60,20 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
     this.getCuesheet();
     this.setSwipeListeners();
 
-    $('#navbar').removeClass('in');
+    $('#navbar').removeClass('in'); // Todo: This is surely not the right way of doing this ...
 
-    this.setMasks();
-
-    console.log(this.noMoreCuesModal);
-    this.noMoreCuesModal.open();
-
-    // this.noMoreCuesModal = $('#noMoreCuesModal');
-    // $('#trigger').click();
-    // this.noMoreCuesModal.modal();
+    // this.setMasks();
   }
 
-setMasks() {
-    const height = $(window).height();
-    const width = $(window).width();
-
-    $('.side-mask').width((width - 414) / 2).height(height);
-    $('#bottom-mask').height(height - 736);
-    console.log($('#left-mask').width());
-    console.log($('#left-mask').height());
-  }
+// setMasks() {
+//     const height = $(window).height();
+//     const width = $(window).width();
+//
+//     $('.side-mask').width((width - 414) / 2).height(height);
+//     $('#bottom-mask').height(height - 736);
+//     console.log($('#left-mask').width());
+//     console.log($('#left-mask').height());
+//   }
 
 
   getCuesheet() {
@@ -132,10 +129,9 @@ setMasks() {
 
     this.mc.on('swipeup', () => {
       if (this.cueNumber >= this.cuesheet.cues.length - 1) {
-        console.log("This is the last cue!");
-        // this.noMoreCuesModal.modal('show');
-        $('#trigger').click();
-
+        this.modalTitle = "This is the last cue";
+        this.modalBody = "There are no more cues after this one.";
+        this.modalRef = this.modalService.show(this.noMoreCuesModal);
       } else {
         this.move = 'up';
         setTimeout(() => {
@@ -146,14 +142,15 @@ setMasks() {
 
     this.mc.on('swipedown', () => {
       if (this.cueNumber <= 0) {
-        console.log("This is the first cue!");
-        // this.noMoreCuesModal.modal('show');
-        $('#trigger').click();
+        this.modalRef = this.modalService.show(this.noMoreCuesModal);
 
 
 
       } else {
         this.move = 'down';
+        this.modalTitle = "This is the first cue";
+        this.modalBody = "There are no more cues before this one.";
+        this.modalRef = this.modalService.show(this.noMoreCuesModal);
         setTimeout(() => {
           this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
         }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?

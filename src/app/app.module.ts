@@ -43,6 +43,7 @@ import { RideService } from './_services/ride.service';
 import { RideRemoverComponent } from './ride-remover/ride-remover.component';
 import { RideActionSelectorComponent } from './ride-action-selector/ride-action-selector.component';
 import { FocusDirective } from './_directives/focus.directive';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { FocusDirective } from './_directives/focus.directive';
     AppRoutingModule,
     MapModule,
     BrowserAnimationsModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    ModalModule.forRoot()
   ],
   providers: [
     UserService,

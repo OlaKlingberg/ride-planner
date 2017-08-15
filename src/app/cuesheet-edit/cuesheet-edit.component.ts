@@ -8,107 +8,17 @@ import { Cuesheet } from '../_models/cuesheet';
 import { Cue } from '../_models/cue';
 import * as _ from 'lodash';
 import * as $ from 'jquery';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-  keyframes
-} from '@angular/animations';
+
 import { AlertService } from '../_services/alert.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
+import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 
 @Component({
   selector: 'rp-cuesheet-edit',
   templateUrl: './cuesheet-edit.component.html',
   styleUrls: [ './cuesheet-edit.component.scss' ],
-  animations: [
-    trigger('cueState', [
-      state('display', style({
-        opacity: 1,
-        height: '*',
-        fontSize: '*',
-        padding: '*',
-        border: '*'
-      })),
-      state('remove', style({
-        opacity: 0,
-        height: 0,
-        fontSize: 0,
-        padding: 0,
-        border: 0
-      })),
-      transition('display => remove', [
-        animate('800ms', keyframes([
-          style({
-            opacity: 0,
-            offset: .5
-          }),
-          style({
-            opacity: 0,
-            height: 0,
-            fontSize: 0,
-            padding: 0,
-            border: 0,
-            offset: 1
-          })
-        ]))
-      ])
-    ]),
-    trigger('newCueRow', [
-      state('display', style({
-        opacity: 1,
-        height: '*',
-        fontSize: '*',
-        padding: '*',
-        border: '*'
-      })),
-      state('hide', style({
-        opacity: 0.2,
-        height: 0,
-        fontSize: 0,
-        padding: 0,
-        border: 0
-      })),
-      transition('display => move', [
-        animate(`1400ms`, keyframes([
-          style({
-            opacity: .2,
-            offset: .1
-          }),
-          style({
-            opacity: 0,
-            height: 0,
-            fontSize: 0,
-            padding: 0,
-            border: 0,
-            offset: .45
-          }),
-          style({
-            opacity: 0,
-            height: 0,
-            fontSize: 0,
-            padding: 0,
-            border: 0,
-            offset: .55
-          }),
-          style({
-            opacity: .2,
-            height: '*',
-            fontSize: '*',
-            padding: '*',
-            border: '*',
-            offset: .9
-          }),
-          style({
-            opacity: 1,
-            offset: 1
-          })
-        ]))
-      ])
-    ])
-  ]
+  animations: cuesheetEditAnimations
 })
 export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public cuesheet: Cuesheet;

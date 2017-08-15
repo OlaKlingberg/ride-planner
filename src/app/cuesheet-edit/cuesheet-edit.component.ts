@@ -82,6 +82,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   getCuesheet(cuesheetId) {
+    console.log("getCuesheet()", cuesheetId);
     this.cuesheetService.getCuesheet(cuesheetId)
         .then(cuesheet => {
           this.cuesheetModel.cuesheetName = cuesheet.name;
@@ -152,7 +153,9 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   updateCue() {
+    console.log("updateCue()");
     this.cuesheetService.updateCue(this.cuesheet.cues[ this.cueToEdit ]._id.toString(), this.cueModel).then((cue: Cue) => {
+      console.log(cue);
       if ( !cue ) return; // Safety precaution.
       // Get the updated cuesheet.
       this.total = 0;

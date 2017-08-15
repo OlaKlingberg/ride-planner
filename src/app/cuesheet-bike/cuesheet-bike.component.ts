@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import {
   trigger,
   state,
@@ -39,10 +39,10 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   private mc: any;
   public move: string = 'still';
   public modalRef: BsModalRef;
-  public modalTitle: string = "Initial value";
-  public modalBody: string = "Initial value";
 
-  @ViewChild('noMoreCuesModal') noMoreCuesModal: TemplateRef<any>;
+  @ViewChild('firstCueModal') firstCueModal: TemplateRef<any>;
+  @ViewChild('lastCueModal') lastCueModal: TemplateRef<any>;
+
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -52,12 +52,10 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.route.params.forEach((params: Params) => {
-      this.cuesheetId = params[ 'cuesheetId' ];
-      this.cueNumber = +params[ 'cueNumber' ];
-      this.move = 'still';
-    });
-    this.getCuesheet();
+    this.cueNumber = +this.route.snapshot.paramMap.get('cueNumber');
+    this.cuesheetId = this.route.snapshot.paramMap.get('cuesheetId');
+
+    this.getCuesheet(this.cuesheetId);
     this.setSwipeListeners();
 
     $('#navbar').removeClass('in'); // Todo: This is surely not the right way of doing this ...
@@ -65,26 +63,17 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
     // this.setMasks();
   }
 
-// setMasks() {
-//     const height = $(window).height();
-//     const width = $(window).width();
-//
-//     $('.side-mask').width((width - 414) / 2).height(height);
-//     $('#bottom-mask').height(height - 736);
-//     console.log($('#left-mask').width());
-//     console.log($('#left-mask').height());
-//   }
-
-
-  getCuesheet() {
-    this.cuesheetService.getCuesheet(this.cuesheetId)
+  getCuesheet(cuesheetId) {
+    this.cuesheetService.getCuesheet(cuesheetId)
         .then((cuesheet: Cuesheet) => {
           return this.setTotalDistances(cuesheet);
         })
         .then((cuesheet: Cuesheet) => {
           this.cuesheet = this.setIcons(cuesheet);
-        });
+        })
   }
+
+
 
 // Todo: Seems like an ugly solution. Isn't there a better way?
   setTotalDistances(cuesheet) {
@@ -128,30 +117,23 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
     this.mc.get('swipe').set({ direction: 30 });  // This replaces the line above.
 
     this.mc.on('swipeup', () => {
-      if (this.cueNumber >= this.cuesheet.cues.length - 1) {
-        this.modalTitle = "This is the last cue";
-        this.modalBody = "There are no more cues after this one.";
-        this.modalRef = this.modalService.show(this.noMoreCuesModal);
+      if ( this.cueNumber >= this.cuesheet.cues.length - 1 ) {
+        this.modalRef = this.modalService.show(this.lastCueModal);
       } else {
         this.move = 'up';
         setTimeout(() => {
           this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
+          // this.move = 'still';
         }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
       }
     });
 
     this.mc.on('swipedown', () => {
-      if (this.cueNumber <= 0) {
-        this.modalRef = this.modalService.show(this.noMoreCuesModal);
-
-
-
+      if ( this.cueNumber <= 0 ) {
+        this.modalRef = this.modalService.show(this.firstCueModal);
       } else {
-        this.modalTitle = "This is the first cue";
-        this.modalBody = "There are no more cues before this one.";
-        this.modalRef = this.modalService.show(this.noMoreCuesModal);
+        this.move = 'down';
         setTimeout(() => {
-          this.move = 'down';
           this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
         }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
       }
@@ -162,5 +144,15 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.mc.off('swipedown swipeup');
   }
+
+  // setMasks() {
+//     const height = $(window).height();
+//     const width = $(window).width();
+//
+//     $('.side-mask').width((width - 414) / 2).height(height);
+//     $('#bottom-mask').height(height - 736);
+//     console.log($('#left-mask').width());
+//     console.log($('#left-mask').height());
+//   }
 
 }

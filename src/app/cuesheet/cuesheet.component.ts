@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, ParamMap } from '@angular/router';
 import { Cuesheet } from '../_models/cuesheet';
 import { CuesheetService } from '../_services/cuesheet.service';
 
@@ -11,32 +11,24 @@ import { CuesheetService } from '../_services/cuesheet.service';
 export class CuesheetComponent implements OnInit {
   public cuesheet: Cuesheet;
   public total: number = 0;
-  private cuesheetId: string = '';
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService) {
   }
 
   ngOnInit() {
-    this.route.params.forEach((params: Params) => {
-      this.cuesheetId = params[ '_id' ];
-
-      this.getCuesheet();
-    });
+    this.getCuesheet();
   }
 
   getCuesheet() {
-    this.cuesheetService.getCuesheet(this.cuesheetId)
+    let _id = this.route.snapshot.paramMap.get('_id');
+
+    this.cuesheetService.getCuesheet(_id)
         .then(cuesheet => {
-          this.cuesheet = this.setTotalDistances(cuesheet);
-          this.cuesheet.cues = this.cuesheet.cues.map(cue => {
-            // cue.state = 'display';  // Used for animation.
-            return cue;
-          });
+          this.setTotalDistances(cuesheet);
         });
   }
 
-  // Todo: Seems like an ugly solution. Isn't there a better way?
   setTotalDistances(cuesheet) {
     cuesheet.cues = cuesheet.cues.map(cue => {
       this.total += cue.distance;
@@ -44,8 +36,6 @@ export class CuesheetComponent implements OnInit {
       return cue;
     });
 
-    return cuesheet;
+    this.cuesheet = cuesheet;
   }
-
-
 }

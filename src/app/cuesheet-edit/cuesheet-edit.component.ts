@@ -130,11 +130,9 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.route.params.forEach((params: Params) => {
-      this.cuesheetId = params[ '_id' ];
+    this.cuesheetId = this.route.snapshot.paramMap.get('_id');
 
-      this.getCuesheet();
-    });
+    this.getCuesheet(this.cuesheetId);
 
     this.hideRedBoxOnModalClose();
   }
@@ -166,14 +164,14 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     return cue._id;
   }
 
-  getCuesheet() {
-    this.cuesheetService.getCuesheet(this.cuesheetId)
+  getCuesheet(cuesheetId) {
+    this.cuesheetService.getCuesheet(cuesheetId)
         .then(cuesheet => {
           this.cuesheetModel.cuesheetName = cuesheet.name;
           this.cuesheetModel.cuesheetDescription = cuesheet.description;
           this.cuesheet = this.setTotalDistances(cuesheet);
 
-          if (this.cuesheet.cues.length === 0) {
+          if ( this.cuesheet.cues.length === 0 ) {
             console.log("Apparently a new cue sheet!");
             this.cueModel.distance = '0';
             this.cueModel.turn = 'Start';
@@ -244,7 +242,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       this.cueToEdit = null;
       this.rowToEdit = null;
       this.insertBeforeId = '';
-      this.getCuesheet();
+      this.getCuesheet(this.cuesheetId);
     })
   }
 
@@ -254,7 +252,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       if ( this.insertBeforeId ) {
         // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
         this.total = 0;
-        this.getCuesheet();
+        this.getCuesheet(this.cuesheetId);
       } else {
         // The cue was added to the end of the cuesheet. Push the returned cue onto cuesheet.cues.
         this.total += cue.distance;
@@ -289,11 +287,11 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       $('#red-box').fadeOut(400);
 
       setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
-            if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
+        if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
         this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
-            this.cueToDelete = null;
-            this.total = 0;
-            this.getCuesheet();
+        this.cueToDelete = null;
+        this.total = 0;
+        this.getCuesheet(this.cuesheetId);
       }, 1000);
     });
   }

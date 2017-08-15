@@ -1,16 +1,29 @@
-<!-- Modal shown when user tries to scroll before first cue or after last cue. -->
-<ng-template #noMoreCuesModal>
+<!-- Todo: Replace these two templates with one that takes dynamic content. (I couldn't make it work.) -->
+<!-- Modal shown when user tries to scroll before first cue. -->
+<ng-template #firstCueModal>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">{{ modalTitle }}</h4>
+    <h4 class="modal-title pull-left">This is the first cue</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    {{ modalBody }}
-  </div>
+  <!--<div class="modal-body">-->
+    <!--There are no more cues before this one.-->
+  <!--</div>-->
 </ng-template>
 
+<!-- Modal shown when user tries to scroll before first cue. -->
+<ng-template #lastCueModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">This is the last cue</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!--<div class="modal-body">-->
+    <!--There are no more cues after this one.-->
+  <!--</div>-->
+</ng-template>
 
 
 <div id="page">
@@ -45,7 +58,6 @@
   </div>
 
   <!--<div id="next-cue-mask"></div>-->
-
 
   <div class="container">
     <div class="row">

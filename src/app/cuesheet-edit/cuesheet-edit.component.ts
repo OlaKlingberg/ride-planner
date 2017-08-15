@@ -76,11 +76,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Todo: How can I test that this really works? And do I need to accept index as a parameter?
-  trackByCueId(index: number, cue: Cue): string {
-    return cue._id;
-  }
-
   getCuesheet(cuesheetId) {
     console.log("getCuesheet()", cuesheetId);
     this.cuesheetService.getCuesheet(cuesheetId)

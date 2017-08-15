@@ -1,55 +1,41 @@
 <!-- Modal for confirmation of cuesheet deletion -->
-<div class="modal fade" id="cuesheetDeletionModal" tabindex="-1" role="dialog"
-     aria-labelledby="cuesheetDeletionModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-            aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="cuesheetDeletionModalLabel">Are you sure?</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this entire cue sheet?<br>This action cannot be undone.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default modal-btn-dismiss" data-dismiss="modal">No!!! Don't delete
-          anything!
-        </button>
-        <button type="button" class="btn btn-primary modal-btn-delete" data-dismiss="modal" (click)="deleteCuesheet()">
-          Yes, delete this cue sheet
-        </button>
-      </div>
-    </div>
+<ng-template #cuesheetDeletionModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Are you sure?</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-</div>
+  <div class="modal-body">
+    Are you sure you want to delete this entire cue sheet?<br>This action cannot be undone.
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default modal-btn-dismiss" (click)="modalRef.hide()">No!!! Don't delete
+      anything!
+    </button>
+    <button type="button" class="btn btn-primary modal-btn-delete" (click)="modalRef.hide(); deleteCuesheet()">
+      Yes, delete this cue sheet
+    </button>
+  </div>
+</ng-template>
 
 <!-- Modal for confirmation of cue deletion -->
-<div class="modal fade" id="cueDeletionModal" tabindex="-1" role="dialog" aria-labelledby="cueDeletionModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close">
-          <span aria-hidden="true" class="close-modal">&times;</span>
-        </button>
-        <h4 class="modal-title" id="cueDeletionModalLabel">Are you sure you want to delete this cue?</h4>
-      </div>
-      <div class="modal-footer">
-        <button type="button"
-                class="btn btn-default modal-btn-dismiss"
-                data-dismiss="modal">No, don't delete!
-        </button>
-        <button type="button"
-                (click)="deleteCue()"
-                class="btn btn-primary modal-btn-delete"
-                data-dismiss="modal">Yes, delete this cue.
-        </button>
-      </div>
-    </div>
+<ng-template #cueDeletionModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Are you sure you want to delete this cue?</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true" class="close-modal">&times;</span>
+    </button>
   </div>
-</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default modal-btn-dismiss" (click)="modalRef.hide()">No, don't delete!
+    </button>
+    <button type="button" class="btn btn-primary modal-btn-delete" (click)="modalRef.hide(); deleteCue()">
+      Yes, delete this cue.
+    </button>
+  </div>
+</ng-template>
+
 
 
 <div class="container">
@@ -72,8 +58,7 @@
                   id="delete-cuesheet"
                   [disabled]="!cueForm.pristine || insertBeforeId || rowToEdit || cuesheetDescriptionInput"
                   class="right btn btn-primary"
-                  data-toggle="modal"
-                  data-target="#cuesheetDeletionModal">Delete this cuesheet
+                  (click)="openCuesheetDeletionModal(cuesheetDeletionModal)">Delete this cuesheet
           </button>
         </div>
       </h1>
@@ -227,9 +212,7 @@
                 [@cueState]="cue.state">
               <button [@cueState]="cue.state"
                       type="button"
-                      data-toggle="modal"
-                      data-target="#cueDeletionModal"
-                      (click)="prepareToDeleteCue(i)"
+                      (click)="openCueDeletionModal(cueDeletionModal, i)"
                       [disabled]="!cueForm.pristine || insertBeforeId || rowToEdit || cuesheetNameInput || cuesheetDescriptionInput"
                       class="btn btn-danger btn-xs btn-circle"
                       placement="right"

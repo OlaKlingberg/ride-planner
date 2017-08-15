@@ -1,4 +1,7 @@
-import { AfterViewChecked, Component, EventEmitter, Input, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
+import {
+  AfterViewChecked, Component, EventEmitter, Input, OnDestroy, OnInit, AfterViewInit,
+  TemplateRef
+} from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CuesheetService } from '../_services/cuesheet.service';
 import { Cuesheet } from '../_models/cuesheet';
@@ -14,6 +17,7 @@ import {
   keyframes
 } from '@angular/animations';
 import { AlertService } from '../_services/alert.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'rp-cuesheet-edit',
@@ -106,7 +110,6 @@ import { AlertService } from '../_services/alert.service';
     ])
   ]
 })
-
 export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public cuesheet: Cuesheet;
   public cueModel: any = {};
@@ -122,11 +125,13 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public newCueRowState: string = 'display';
   private animationDuration: number = 1400; // Todo: Can I sync this automatically with the animation time in the decorator above?
   public focusTrigger = new EventEmitter<boolean>();
+  public modalRef: BsModalRef;
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService,
               private alertService: AlertService,
-              private router: Router) {
+              private router: Router,
+              private modalService: BsModalService) {
   }
 
   ngOnInit() {
@@ -143,9 +148,11 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   hideRedBoxOnModalClose() {
     // Todo: This is what I want to do, but it doesn't work!
-    // $('#cueDeletionModal').on('hidden.bs.modal', () => $('.cue-row').removeClass('highlight'));
+    // this.modalService.onHide.subscribe((reason: string) => {
+    //   $('.cue-row').removeClass('highlight');
+    // });
 
-    // This is my workaround. It's ugly, but it seems to work.
+    // This is my workaround. It's ugly, but it does work.
     $(document).on('click', (e) => {
       if (
           $(e.target).hasClass('modal') ||
@@ -264,9 +271,12 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     });
   }
 
-  prepareToDeleteCue(i) {
+  openCueDeletionModal(template: TemplateRef<any>, i: number) {
     this.cueToDelete = i;
     const rowToDelete = $(`#cue-row-${i}`);
+
+    this.modalRef = this.modalService.show(template);
+
     $(rowToDelete).addClass('highlight');
 
     $('#red-box')
@@ -345,6 +355,10 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     $('.insert-button-container').show();
     $(`#cue-row-${i + 1} .insert-button-container`).hide();
     this.cueToEdit = i;
+  }
+
+  openCuesheetDeletionModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
   }
 
   deleteCuesheet() {

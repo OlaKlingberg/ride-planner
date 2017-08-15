@@ -33,7 +33,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
   public newCueRowState: string = 'display';
-  private animationDuration: number = 1400; // Todo: Can I sync this automatically with the animation time in the decorator above?
+  private animationDuration: number = 1400; // Todo: Can I sync this automatically with the animation time?
   public focusTrigger = new EventEmitter<boolean>();
   public modalRef: BsModalRef;
 
@@ -181,6 +181,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   openCueDeletionModal(template: TemplateRef<any>, i: number) {
     this.cueToDelete = i;
+
     const rowToDelete = $(`#cue-row-${i}`);
 
     this.modalRef = this.modalService.show(template);
@@ -217,6 +218,12 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   insertCue(i) {
     this.newCueRowState = 'move';
     setTimeout(() => {
+
+      // Insert something in the cuesheet.cues array that marks where the row with input fields should be put, and if the fields should be prepopulated (which they should not in this case).
+
+      console.log(this.cuesheet.cues);
+
+
       this.insertBeforeId = this.cuesheet.cues[ i ]._id;
       $('.insert-button-container').show();
       $(`#cue-row-${i} .insert-button-container`).hide();

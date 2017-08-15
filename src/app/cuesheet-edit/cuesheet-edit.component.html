@@ -37,7 +37,6 @@
 </ng-template>
 
 
-
 <div class="container">
 
   <form name="cuesheet-form" #cuesheetForm="ngForm" novalidate>
@@ -168,44 +167,22 @@
               id="cue-row-{{ i }}">
 
             <!-- While the cueform row is pristine and the cuesheet info is not being edited. -->
-            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
-                [@cueState]="cue.state">{{ i + 1 }}
-            </td>
-            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
-                (click)="editCue(i)"
-                [@cueState]="cue.state">{{ cue.distance / 100 | number:'1.0-2' }}
-            </td>
-            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
-                (click)="editCue(i)"
-                [@cueState]="cue.state">{{ cue.turn }}
-            </td>
-            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
-                (click)="editCue(i)"
-                [@cueState]="cue.state">{{ cue.description }}
-            </td>
-            <td *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput"
-                [@cueState]="cue.state">{{ cue.total / 100 |
-              number:'1.0-2'}}
-            </td>
+            <ng-container *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput">
+              <td [@cueState]="cue.state">{{ i + 1 }}</td>
+              <td (click)="editCue(i)" [@cueState]="cue.state">{{ cue.distance / 100 | number:'1.0-2' }}</td>
+              <td (click)="editCue(i)" [@cueState]="cue.state">{{ cue.turn }}</td>
+              <td (click)="editCue(i)" [@cueState]="cue.state">{{ cue.description }}</td>
+              <td [@cueState]="cue.state">{{ cue.total / 100 | number:'1.0-2'}}</td>
+            </ng-container>
 
             <!-- When the cueform row no longer is pristine or the cueheet info is being edited. -->
-            <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
-                class="faded">{{ i + 1 }}
-            </td>
-            <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
-                class="faded">{{ cue.distance / 100 |
-              number:'1.0-2' }}
-            </td>
-            <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
-                class="faded">{{ cue.turn }}
-            </td>
-            <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
-                class="faded">{{ cue.description }}
-            </td>
-            <td *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput"
-                class="faded">{{ cue.total / 100 |
-              number:'1.0-2'}}
-            </td>
+            <ng-container *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput">
+              <td class="faded">{{ i + 1 }}</td>
+              <td class="faded">{{ cue.distance / 100 | number:'1.0-2' }}</td>
+              <td class="faded">{{ cue.turn }}</td>
+              <td class="faded">{{ cue.description }}</td>
+              <td class="faded">{{ cue.total / 100 | number:'1.0-2'}}</td>
+            </ng-container>
 
             <!-- The same whether or not the cueform row is pristine, or the cuesheet info is being edited. -->
             <td class="buttons-column"

@@ -159,6 +159,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       this.cueToEdit = null;
       this.rowToEdit = null;
       this.insertBeforeCueId = '';
+      this.insertBeforeCueNumber = null;
       this.getCuesheet(this.cuesheetId);
     })
   }
@@ -178,6 +179,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         this.cuesheet.cues.push(cue);
       }
       this.insertBeforeCueId = '';
+      this.insertBeforeCueNumber = null;
     });
   }
 
@@ -209,8 +211,8 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
       setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
         if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
-        this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
         this.cueToDelete = null;
+        this.insertBeforeCueNumber = null;
         this.total = 0;
         this.getCuesheet(this.cuesheetId);
       }, 1000);
@@ -222,6 +224,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     this.insertBeforeCueNumber = i;
     this.insertBeforeCueId = this.cuesheet.cues[ i ]._id;
     $(`#cue-row-${i} .insert-button-container`).hide();
+
 
 
 

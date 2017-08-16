@@ -221,6 +221,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
     this.insertBeforeCueNumber = i;
     this.insertBeforeCueId = this.cuesheet.cues[ i ]._id;
+    $(`#cue-row-${i} .insert-button-container`).hide();
 
 
 

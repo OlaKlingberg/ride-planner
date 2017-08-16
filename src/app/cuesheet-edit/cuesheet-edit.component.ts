@@ -25,9 +25,11 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public cueModel: any = {};
   public cuesheetModel: any = {};
   public total: number = 0;
+  private cuesheetId: string = '';
+
   public insertBeforeCueId: string = '';
   public insertBeforeCueNumber: number = null;
-  private cuesheetId: string = '';
+
   private cueToDelete: number = null;
   public cueToEdit: number = null;  // Todo: Can't I make do with just rowToEdit?
   public rowToEdit: any = null;
@@ -266,19 +268,26 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
 
   editCue(i) {
-    if ( this.rowToEdit ) {
-      $('#new-cue-row').after(this.rowToEdit);
-    }
+    this.insertBeforeCueNumber = i;
+    this.insertBeforeCueId = this.cuesheet.cues[ i ]._id;
+    $(`#cue-row-${i} .insert-button-container`).hide();
 
-    this.rowToEdit = $(`#cue-row-${i}`);
-    this.rowToEdit.after($('#new-cue-row'));
-    this.cueModel.distance = this.cuesheet.cues[ i ].distance / 100;
-    this.cueModel.turn = this.cuesheet.cues[ i ].turn;
-    this.cueModel.description = this.cuesheet.cues[ i ].description;
-    $(this.rowToEdit).remove();
-    $('.insert-button-container').show();
-    $(`#cue-row-${i + 1} .insert-button-container`).hide();
-    this.cueToEdit = i;
+
+
+
+    // if ( this.rowToEdit ) {
+    //   $('#new-cue-row').after(this.rowToEdit);
+    // }
+
+    // this.rowToEdit = $(`#cue-row-${i}`);
+    // this.rowToEdit.after($('#new-cue-row'));
+    // this.cueModel.distance = this.cuesheet.cues[ i ].distance / 100;
+    // this.cueModel.turn = this.cuesheet.cues[ i ].turn;
+    // this.cueModel.description = this.cuesheet.cues[ i ].description;
+    // $(this.rowToEdit).remove();
+    // $('.insert-button-container').show();
+    // $(`#cue-row-${i + 1} .insert-button-container`).hide();
+    // this.cueToEdit = i;
   }
 
   openCuesheetDeletionModal(template: TemplateRef<any>) {

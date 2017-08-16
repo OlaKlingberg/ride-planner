@@ -148,6 +148,7 @@
 
         <table [ngClass]="{'faded': cuesheetNameInput || cuesheetDescriptionInput}"
                class="table table-striped table-bordered">
+
           <thead>
 
           <!-- Box around high-lighted table row -->
@@ -161,9 +162,10 @@
             <th class="col-xs-1">Total</th>
             <th class="col-xs-1"></th>
           </tr>
-          </thead>
-          <tbody>
 
+          </thead>
+
+          <tbody>
           <ng-container *ngFor="let cue of cuesheet?.cues; index as i">
 
             <!-- Row with input fields -->
@@ -353,7 +355,6 @@
             </td>
           </tr>
           <!-- End of final row with input fields -->
-
 
           </tbody>
         </table>

@@ -56,7 +56,7 @@
         <div class="col-sm-2">
           <button type="button"
                   id="delete-cuesheet"
-                  [disabled]="!cueForm.pristine || insertBeforeCueId || rowToEdit || cuesheetDescriptionInput"
+                  [disabled]="!cueForm.pristine || cueToInsertBefore !== null || cuesheetDescriptionInput"
                   class="right btn btn-primary"
                   (click)="openCuesheetDeletionModal(cuesheetDeletionModal)">Delete this cuesheet
           </button>
@@ -169,24 +169,23 @@
           <ng-container *ngFor="let cue of cuesheet?.cues; index as i">
 
             <!-- Row with input fields -->
-            <tr *ngIf="i === insertBeforeCueNumber"
-                id="new-cue-row"
+            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit"
                 [@newCueRow]="newCueRowState">
-              <td *ngIf="insertBeforeCueId">
+
+              <td *ngIf="cueToInsertBefore !== null">
               </td>
-              <td *ngIf="!insertBeforeCueId">
-                <span [@newCueRow]="newCueRowState">{{ cuesheet?.cues.length + 1 }}</span>
+              <td *ngIf="cueToInsertBefore === null">
+                <span [@newCueRow]="newCueRowState">{{ i + 1 }}</span>
               </td>
+
               <td>
                 <input [@newCueRow]="newCueRowState"
                        type="number"
                        class="form-control input-sm margin-neg-5"
                        name="distance"
-                       id="distance"
                        placeholder="Miles"
                        step=".01"
                        [(ngModel)]="cueModel.distance"
-                       #distance="ngModel"
                        [focus]="focusTrigger"
                        required/>
               </td>
@@ -195,10 +194,8 @@
                        type="text"
                        class="form-control input-sm margin-neg-5"
                        name="turn"
-                       id="turn"
                        placeholder="Turn"
                        [(ngModel)]="cueModel.turn"
-                       #turn="ngModel"
                        required/>
               </td>
               <td>
@@ -206,17 +203,14 @@
                        type="text"
                        class="form-control input-sm margin-neg-5"
                        name="description"
-                       id="description"
                        placeholder="Description"
                        [(ngModel)]="cueModel.description"
-                       #description="ngModel"
                        required>
               </td>
               <td>
                 <button [@newCueRow]="newCueRowState"
                         type="button"
                         class="btn btn-danger btn-block btn-sm margin-neg-5"
-                        [disabled]="cueForm.pristine && !insertBeforeCueId && !rowToEdit"
                         (click)="cancelCue();
                       cueForm.reset()">Cancel
                 </button>
@@ -233,7 +227,7 @@
             <!-- End of row with input fields -->
 
             <!-- Existing cues -->
-            <tr *ngIf="true"
+            <tr *ngIf="i !== cueToEdit"
                 class="cue-row"
                 id="cue-row-{{ i }}">
 
@@ -263,7 +257,7 @@
                 <button [@cueState]="cue.state"
                         type="button"
                         (click)="openCueDeletionModal(cueDeletionModal, i)"
-                        [disabled]="!cueForm.pristine || insertBeforeCueId || rowToEdit || cuesheetNameInput || cuesheetDescriptionInput"
+                        [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
                         class="btn btn-danger btn-xs btn-circle"
                         placement="right"
                         tooltip="Delete this cue">
@@ -271,15 +265,16 @@
                      [@cueState]="cue.state"></i>
                 </button>
 
-                <span class="insert-button-container"
+                <span *ngIf="i !== cueToInsertBefore && (cueToEdit === null || i !== cueToEdit + 1)"
+                      class="insert-button-container"
                       [@cueState]="cue.state">
-                <button [@cueState]="cue.state"
-                        type="button"
-                        (click)="insertCue(i)"
-                        [disabled]="!cueForm.pristine || insertBeforeCueId || rowToEdit || cuesheetNameInput || cuesheetDescriptionInput"
-                        class="btn btn-success btn-xs btn-circle insert-button"
-                        tooltip="Insert cue here"
-                        placement="right">
+                  <button [@cueState]="cue.state"
+                          type="button"
+                          (click)="insertCue(i)"
+                          [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
+                          class="btn btn-success btn-xs btn-circle insert-button"
+                          tooltip="Insert cue here"
+                          placement="right">
                   <i class="glyphicon glyphicon-plus"
                      [@cueState]="cue.state"></i>
                 </button>
@@ -293,12 +288,9 @@
           </ng-container>
 
           <!-- Final row with input fields -->
-          <tr *ngIf="insertBeforeCueNumber === null"
-              id="new-cue-row-XXX"
+          <tr *ngIf="cueToInsertBefore === null && cueToEdit === null"
               [@newCueRow]="newCueRowState">
-            <td *ngIf="insertBeforeCueId">
-            </td>
-            <td *ngIf="!insertBeforeCueId">
+            <td>
               <span [@newCueRow]="newCueRowState">{{ cuesheet?.cues.length + 1 }}</span>
             </td>
             <td>
@@ -306,11 +298,9 @@
                      type="number"
                      class="form-control input-sm margin-neg-5"
                      name="distance"
-                     id="distance-XXX"
                      placeholder="Miles"
                      step=".01"
                      [(ngModel)]="cueModel.distance"
-                     #distance="ngModel"
                      [focus]="focusTrigger"
                      required/>
             </td>
@@ -319,10 +309,8 @@
                      type="text"
                      class="form-control input-sm margin-neg-5"
                      name="turn"
-                     id="turn-XXX"
                      placeholder="Turn"
                      [(ngModel)]="cueModel.turn"
-                     #turn="ngModel"
                      required/>
             </td>
             <td>
@@ -330,17 +318,15 @@
                      type="text"
                      class="form-control input-sm margin-neg-5"
                      name="description"
-                     id="description-XXX"
                      placeholder="Description"
                      [(ngModel)]="cueModel.description"
-                     #description="ngModel"
                      required>
             </td>
             <td>
               <button [@newCueRow]="newCueRowState"
                       type="button"
                       class="btn btn-danger btn-block btn-sm margin-neg-5"
-                      [disabled]="cueForm.pristine && !insertBeforeCueId && !rowToEdit"
+                      [disabled]="cueForm.pristine"
                       (click)="cancelCue();
                       cueForm.reset()">Cancel
               </button>
@@ -362,7 +348,7 @@
         <div class="row">
           <div class="col-sm-6">
             <button type="button"
-                    [disabled]="!cueForm.pristine || insertBeforeCueId || rowToEdit || cuesheetNameInput || cuesheetDescriptionInput"
+                    [disabled]="!cueForm.pristine || cueToEdit !== null || cueToInsertBefore !== null"
                     routerLink='/cuesheets/{{cuesheet?._id}}/view'
                     class='btn btn-primary btn-block'>I'm done with this cue sheet for now
             </button>

@@ -25,7 +25,8 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public cueModel: any = {};
   public cuesheetModel: any = {};
   public total: number = 0;
-  public insertBeforeId: string = '';
+  public insertBeforeCueId: string = '';
+  public insertBeforeCueNumber: number = null;
   private cuesheetId: string = '';
   private cueToDelete: number = null;
   public cueToEdit: number = null;  // Todo: Can't I make do with just rowToEdit?
@@ -50,6 +51,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     this.getCuesheet(this.cuesheetId);
 
     this.hideRedBoxOnModalClose();
+
   }
 
   ngAfterViewInit() {
@@ -156,15 +158,15 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       this.total = 0;
       this.cueToEdit = null;
       this.rowToEdit = null;
-      this.insertBeforeId = '';
+      this.insertBeforeCueId = '';
       this.getCuesheet(this.cuesheetId);
     })
   }
 
   createCue() {
-    this.cuesheetService.createCue(this.cuesheet._id, this.cueModel, this.insertBeforeId).then((cue: Cue) => {
+    this.cuesheetService.createCue(this.cuesheet._id, this.cueModel, this.insertBeforeCueId).then((cue: Cue) => {
       if ( !cue ) return; // Safety precaution.
-      if ( this.insertBeforeId ) {
+      if ( this.insertBeforeCueId ) {
         // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
         this.total = 0;
         this.getCuesheet(this.cuesheetId);
@@ -175,7 +177,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         cue.state = 'display';
         this.cuesheet.cues.push(cue);
       }
-      this.insertBeforeId = '';
+      this.insertBeforeCueId = '';
     });
   }
 
@@ -216,24 +218,27 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   insertCue(i) {
-    this.newCueRowState = 'move';
-    setTimeout(() => {
+
+    this.insertBeforeCueNumber = i;
+    this.insertBeforeCueId = this.cuesheet.cues[ i ]._id;
+
+
+
+    // this.newCueRowState = 'move';
+    // setTimeout(() => {
 
       // Insert something in the cuesheet.cues array that marks where the row with input fields should be put, and if the fields should be prepopulated (which they should not in this case).
 
-      console.log(this.cuesheet.cues);
+      // this.insertBeforeCueId = this.cuesheet.cues[ i ]._id;
+      // $('.insert-button-container').show();
+      // $(`#cue-row-${i} .insert-button-container`).hide();
+      // $(`#cue-row-${i}`).before($('#new-cue-row'));
+    // }, this.animationDuration / 2);
 
-
-      this.insertBeforeId = this.cuesheet.cues[ i ]._id;
-      $('.insert-button-container').show();
-      $(`#cue-row-${i} .insert-button-container`).hide();
-      $(`#cue-row-${i}`).before($('#new-cue-row'));
-    }, this.animationDuration / 2);
-
-    setTimeout(() => {
-      this.newCueRowState = 'display';
-      this.focusTrigger.emit(true);
-    }, this.animationDuration);
+    // setTimeout(() => {
+    //   this.newCueRowState = 'display';
+    //   this.focusTrigger.emit(true);
+    // }, this.animationDuration);
   }
 
   cancelCue() {
@@ -243,7 +248,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       $('#new-cue-row').after(this.rowToEdit);
       $('.cue-row').last().after($('#new-cue-row'));
       $('.insert-button-container').show();
-      this.insertBeforeId = '';
+      this.insertBeforeCueId = '';
       this.cueToEdit = null;
       this.rowToEdit = null;
     }, this.animationDuration / 2);

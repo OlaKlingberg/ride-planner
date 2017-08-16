@@ -28,9 +28,8 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   private cuesheetId: string = '';
 
   private cueToDelete: number = null;
-  public cueToEdit: number = null;  // Todo: Can't I make do with just rowToEdit?
+  public cueToEdit: number = null;
   public cueToInsertBefore: number = null;
-  public cueToInsertBeforeId: string = ''; // Todo: Can't I make do with just cueToInsertBefore?
 
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
@@ -60,22 +59,11 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   hideRedBoxOnModalClose() {
-    // Todo: This is what I want to do, but it doesn't work!
-    // this.modalService.onHide.subscribe((reason: string) => {
-    //   $('.cue-row').removeClass('highlight');
-    // });
+    this.modalService.onHide.subscribe((reason: string) => {
+      $('.cue-row').removeClass('highlight');
+      $('#red-box').fadeOut(200);
+      this.cueToDelete = null;
 
-    // This is my workaround. It's ugly, but it does work.
-    $(document).on('click', (e) => {
-      if (
-          $(e.target).hasClass('modal') ||
-          $(e.target).hasClass('modal-btn-dismiss') ||
-          $(e.target).hasClass('close-modal')
-      ) {
-        $('.cue-row').removeClass('highlight');
-        // $('#red-box').addClass('hide');
-        $('#red-box').fadeOut(200);
-      }
     });
   }
 
@@ -143,10 +131,10 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     this.cueModel.distance = Math.round(this.cueModel.distance * 100);
     this.focusTrigger.emit(true);
 
-    if ( this.cueToEdit !== null ) {
-      this.updateCue();
-    } else {
+    if ( this.cueToEdit === null ) {
       this.createCue();
+    } else {
+      this.updateCue();
     }
   }
 
@@ -158,16 +146,17 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       // Get the updated cuesheet.
       this.total = 0;
       this.cueToEdit = null;
-      this.cueToInsertBeforeId = '';
       this.cueToInsertBefore = null;
       this.getCuesheet(this.cuesheetId);
     })
   }
 
   createCue() {
-    this.cuesheetService.createCue(this.cuesheet._id, this.cueModel, this.cueToInsertBeforeId).then((cue: Cue) => {
+    const cueToInsertBeforeId = this.cueToInsertBefore ? this.cuesheet.cues[ this.cueToInsertBefore ]._id : null;
+
+    this.cuesheetService.createCue(this.cuesheet._id, this.cueModel, cueToInsertBeforeId).then((cue: Cue) => {
       if ( !cue ) return; // Safety precaution.
-      if ( this.cueToInsertBeforeId ) {
+      if ( this.cueToInsertBefore !== null ) {
         // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
         this.total = 0;
         this.getCuesheet(this.cuesheetId);
@@ -178,28 +167,16 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         cue.state = 'display';
         this.cuesheet.cues.push(cue);
       }
-      this.cueToInsertBeforeId = '';
       this.cueToInsertBefore = null;
     });
   }
 
   openCueDeletionModal(template: TemplateRef<any>, i: number) {
     this.cueToDelete = i;
-
-    const rowToDelete = $(`#cue-row-${i}`); // Todo: Try to get away from jQuery.
+    console.log("cueToDelete:", this.cueToDelete);
 
     this.modalRef = this.modalService.show(template);
 
-    $(rowToDelete).addClass('highlight');
-
-    $('#red-box')
-        .css({
-          "top": rowToDelete.position().top - 4,
-          "left": rowToDelete.position().left - 5,
-          "height": rowToDelete.height() + 10,
-          "width": rowToDelete.width() + 10
-        })
-        .fadeIn(200);
   }
 
   deleteCue() {
@@ -212,7 +189,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
         if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
         this.cueToDelete = null;
-        // this.cueToInsertBefore = null;
         this.total = 0;
         this.getCuesheet(this.cuesheetId);
       }, 1000);
@@ -220,25 +196,13 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   insertCue(i) {
-
     this.cueToInsertBefore = i;
-    console.log("cueToInsertBefore:", this.cueToInsertBefore);
-    console.log("cueToInsertBefore === null:", this.cueToInsertBefore === null);
-    this.cueToInsertBeforeId = this.cuesheet.cues[ i ]._id;
-    // $(`#cue-row-${i} .insert-button-container`).hide();
-
-
 
 
     // this.newCueRowState = 'move';
     // setTimeout(() => {
 
-      // Insert something in the cuesheet.cues array that marks where the row with input fields should be put, and if the fields should be prepopulated (which they should not in this case).
-
-      // this.cueToInsertBeforeId = this.cuesheet.cues[ i ]._id;
-      // $('.insert-button-container').show();
-      // $(`#cue-row-${i} .insert-button-container`).hide();
-      // $(`#cue-row-${i}`).before($('#new-cue-row'));
+    // this.cueToInsertBeforeId = this.cuesheet.cues[ i ]._id;
     // }, this.animationDuration / 2);
 
     // setTimeout(() => {
@@ -252,7 +216,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       this.cueToInsertBefore = null;
-      this.cueToInsertBeforeId = null;
+      // this.cueToInsertBeforeId = null;
       this.cueToEdit = null;
     }, this.animationDuration / 2);
 

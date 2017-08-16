@@ -37,7 +37,6 @@
 }
 
 .highlight {
-  position: relative;
   z-index: 1200;
   td {
     background-color: #A55;
@@ -46,13 +45,6 @@
       position: relative;
     }
   }
-}
-
-#red-box {
-  position: absolute;
-  z-index: 2000;
-  border: 3px solid red;
-  border-radius: 10px;
 }
 
 .margin-neg-5 {

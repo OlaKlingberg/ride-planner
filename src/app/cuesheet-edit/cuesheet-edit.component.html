@@ -151,9 +151,6 @@
 
           <thead>
 
-          <!-- Box around high-lighted table row -->
-          <tr id="red-box" class="display-none"></tr>
-
           <tr [ngClass]="{'faded': cuesheetNameInput || cuesheetDescriptionInput}">
             <th class="col-xs-1">Cue</th>
             <th class="col-xs-2">At (Miles)</th>
@@ -229,7 +226,8 @@
             <!-- Existing cues -->
             <tr *ngIf="i !== cueToEdit"
                 class="cue-row"
-                id="cue-row-{{ i }}">
+                id="cue-row-{{ i }}"
+                [ngClass]="{'highlight': i === cueToDelete}">
 
               <!-- While the cueform row is pristine and the cuesheet info is not being edited. -->
               <ng-container *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput">

@@ -175,48 +175,43 @@
               </td>
 
               <td>
-                <input
-                    type="number"
-                    class="form-control input-sm margin-neg-5"
-                    name="distance"
-                    placeholder="Miles"
-                    step=".01"
-                    [(ngModel)]="cueModel.distance"
-                    [focus]="focusTrigger"
-                    required/>
+                <input type="number"
+                       class="form-control input-sm margin-neg-5"
+                       name="distance"
+                       placeholder="Miles"
+                       step=".01"
+                       [(ngModel)]="cueModel.distance"
+                       [focus]="focusTrigger"
+                       required/>
               </td>
               <td>
-                <input
-                    type="text"
-                    class="form-control input-sm margin-neg-5"
-                    name="turn"
-                    placeholder="Turn"
-                    [(ngModel)]="cueModel.turn"
-                    required/>
+                <input type="text"
+                       class="form-control input-sm margin-neg-5"
+                       name="turn"
+                       placeholder="Turn"
+                       [(ngModel)]="cueModel.turn"
+                       required/>
               </td>
               <td>
-                <input
-                    type="text"
-                    class="form-control input-sm margin-neg-5"
-                    name="description"
-                    placeholder="Description"
-                    [(ngModel)]="cueModel.description"
-                    required>
+                <input type="text"
+                       class="form-control input-sm margin-neg-5"
+                       name="description"
+                       placeholder="Description"
+                       [(ngModel)]="cueModel.description"
+                       required>
               </td>
               <td>
-                <button
-                    type="button"
-                    class="btn btn-danger btn-block btn-sm margin-neg-5"
-                    (click)="cancelCue();
+                <button type="button"
+                        class="btn btn-danger btn-block btn-sm margin-neg-5"
+                        (click)="cancelCue();
                       cueForm.reset()">Cancel
                 </button>
               </td>
               <td>
-                <button
-                    type="button"
-                    (click)="saveCue(); cueForm.reset()"
-                    [disabled]="!cueForm.form.valid || cueForm.pristine"
-                    class="btn btn-primary btn-block btn-sm margin-neg-5">Save Cue
+                <button type="button"
+                        (click)="saveCue(); cueForm.reset()"
+                        [disabled]="!cueForm.form.valid || cueForm.pristine"
+                        class="btn btn-primary btn-block btn-sm margin-neg-5">Save Cue
                 </button>
               </td>
             </tr>

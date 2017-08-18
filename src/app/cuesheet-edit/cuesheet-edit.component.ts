@@ -39,7 +39,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public displayCueFormButton: boolean = true;
 
 
-
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
   // public newCueRowState: string = 'display';
@@ -189,77 +188,35 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   insertCue(i) {
     // Remove the at-table-bottom form row. (cueFormRow)
-    // this.cueFormState = 'removed';
-    // setTimeout(() => {
-    //   this.cueToInsertBefore = i;
-    // }, 0);
-
     this.displayCueFormButton = false;
     this.displayCueFormInput = false;
     setTimeout(() => {
-      // this.displayCueFormCell = false;
-      setTimeout(() => {
-        this.displayCueFormRow = false;
-      }, 2000);
-    }, 0);
-
-
+      this.displayCueFormCell = false;
+    }, 1000);
+    setTimeout(() => {
+      this.cueToInsertBefore = i;
+    }, 2000);
 
     // Insert in-table form row. (insertFormRow)
 
 
 
-
-
-
-    // setTimeout(() => {
-    //   this.cueToInsertBefore = i;
-    // }, this.animationDuration)
-
-    // this.newCueRowState = 'move';
-    // setTimeout(() => {
-
-    // this.cueToInsertBeforeId = this.cuesheet.cues[ i ]._id;
-    // }, this.animationDuration / 2);
-
-    // setTimeout(() => {
-    //   this.newCueRowState = 'display';
-    //   this.focusTrigger.emit(true);
-    // }, this.animationDuration);
   }
 
   cancelCue() {
-    // Hide the in-table input row.
+    this.cueToInsertBefore = null;
+    this.cueToEdit = null;
+    this.cueToDelete = null;
 
+    // this.displayCueFormCell = true;
+    // this.displayCueFormInput = true;
 
-    // Display the at-table-bottom input row.
-    setTimeout(() => {
-      this.cueToInsertBefore = null;
-      this.cueToEdit = null;
-      setTimeout(() => {
-        this.cueFormState = 'display';
-      }, 0);
-    }, this.animationDuration);
-
-    // setTimeout(() => {
-    //   this.cueFormState
-    // }, this.animationDuration * 2);
-    //
-    //
     // this.cueFormState = 'display';
-    //
-    // this.newCueRowState = 'move';
-    //
-    // setTimeout(() => {
-    //   this.cueToInsertBefore = null;
-    //   // this.cueToInsertBeforeId = null;
-    //   this.cueToEdit = null;
-    // }, this.animationDuration / 2);
-    //
-    // setTimeout(() => {
-    //   this.newCueRowState = 'display';
-    //   this.focusTrigger.emit(true);
-    // }, this.animationDuration);
+
+
+
+
+
 
   }
 
@@ -293,8 +250,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   syncModel() {
 
   }
-
-
 
 
 }

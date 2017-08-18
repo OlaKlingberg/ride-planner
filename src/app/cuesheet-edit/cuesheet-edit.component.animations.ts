@@ -37,23 +37,23 @@ export const cuesheetEditAnimations = [
 
 
 
-  trigger('cueFormRow', [
-    state('display', style({
-      fontSize: '*',
-      padding: '*',
-      height: '*',
-      border: '*',
-    })),
-    state('void', style({
-      fontSize: 0,
-      padding: 0,
-      height: 0,
-      border: 0,
-    })),
-    transition(':leave', [
-      animate('2000ms')
-    ])
-  ]),
+  // trigger('cueFormRow', [
+  //   state('display', style({
+  //     fontSize: '*',
+  //     padding: '*',
+  //     height: '*',
+  //     border: '*',
+  //   })),
+  //   state('void', style({
+  //     fontSize: 0,
+  //     padding: 0,
+  //     height: 0,
+  //     border: 0,
+  //   })),
+  //   transition(':leave', [
+  //     animate('2000ms')
+  //   ])
+  // ]),
 
   trigger('cueFormCell', [
     state('display', style({
@@ -68,8 +68,8 @@ export const cuesheetEditAnimations = [
       height: 0,
       border: 0
     })),
-    transition(':leave', [
-      animate('2000ms')
+    transition('* <=> void', [
+      animate('1000ms')
     ])
   ]),
 
@@ -86,7 +86,7 @@ export const cuesheetEditAnimations = [
       height: 0,
       border: 0
     })),
-    transition(':leave', [
+    transition('* <=> void', [
       animate('2000ms')
     ])
   ]),

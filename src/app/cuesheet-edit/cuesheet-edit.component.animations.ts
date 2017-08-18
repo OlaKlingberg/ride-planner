@@ -2,18 +2,52 @@ import { animate, group, keyframes, state, style, transition, trigger } from '@a
 
 // I had some problems animating the entering and leaving of the rows using :enter, :leave, or void, so I animate the rows out and then remove them, or add them and then animate them in.
 export const cuesheetEditAnimations = [
+  // trigger('cueRow', [
+  //   state('display', style({
+  //     fontSize: '*',
+  //     padding: '*',
+  //     opacity: 1,
+  //   })),
+  //   state('void', style({
+  //     fontSize: 0,
+  //     padding: 0,
+  //     opacity: 0
+  //   })),
+  //   transition(':leave', [
+  //     animate('300ms')
+  //   ])
+  // ]),
+  //
+  // trigger('cueCell', [
+  //   state('display', style({
+  //     fontSize: '*',
+  //     padding: '*',
+  //     opacity: 1
+  //   })),
+  //   state('void', style({
+  //     fontSize: 0,
+  //     padding: 0,
+  //     opacity: 0
+  //   })),
+  //   transition(':leave', [
+  //     animate('300ms')
+  //   ])
+  // ]),
+
+
+
   trigger('cueRow', [
     state('display', style({
       fontSize: '*',
       padding: '*',
       opacity: 1,
     })),
-    state('void', style({
+    state('removed', style({
       fontSize: 0,
       padding: 0,
       opacity: 0
     })),
-    transition(':leave', [
+    transition('display => removed', [
       animate('300ms')
     ])
   ]),
@@ -24,17 +58,15 @@ export const cuesheetEditAnimations = [
       padding: '*',
       opacity: 1
     })),
-    state('void', style({
+    state('removed', style({
       fontSize: 0,
       padding: 0,
       opacity: 0
     })),
-    transition(':leave', [
+    transition('display => removed', [
       animate('300ms')
     ])
   ]),
-
-
 
 
   // trigger('cueFormRow', [

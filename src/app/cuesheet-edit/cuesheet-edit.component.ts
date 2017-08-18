@@ -184,7 +184,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.cuesheet.cues.splice(this.cueToDelete, 1);
       this.cueToDelete = null;
-    }, 0);
+    }, 300);
     // });
 
 

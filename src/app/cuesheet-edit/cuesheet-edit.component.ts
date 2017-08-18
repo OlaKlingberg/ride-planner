@@ -51,23 +51,11 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     this.cuesheetId = this.route.snapshot.paramMap.get('_id');
 
     this.getCuesheet(this.cuesheetId);
-
-    // this.hideRedBoxOnModalClose();
-
   }
 
   ngAfterViewInit() {
     this.focusTrigger.emit(true);
   }
-
-  // hideRedBoxOnModalClose() {
-  //   this.modalService.onHide.subscribe((reason: string) => {
-  //     $('.cue-row').removeClass('highlight');
-  //     $('#red-box').fadeOut(100);
-  //     this.cueToDelete = null;
-  //
-  //   });
-  // }
 
   getCuesheet(cuesheetId) {
     console.log("getCuesheet()", cuesheetId);
@@ -211,18 +199,17 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   cancelCue() {
-    $('.in-table-row').slideUp(3000);
-    $('.in-table-cell').slideUp(2000);
-    $('.in-table-input').slideUp(2000);
-    $('.in-table-button').slideUp(2000);
+    // Hide the in-table input row.
 
 
-
-    // setTimeout(() => {
-    //   this.cueToInsertBefore = null;
-    //   this.cueToEdit = null;
-    //   this.cueFormState = 'display'
-    // }, this.animationDuration);
+    // Display the at-table-bottom input row.
+    setTimeout(() => {
+      this.cueToInsertBefore = null;
+      this.cueToEdit = null;
+      setTimeout(() => {
+        this.cueFormState = 'display';
+      }, 0);
+    }, this.animationDuration);
 
     // setTimeout(() => {
     //   this.cueFormState

@@ -166,18 +166,18 @@
           <ng-container *ngFor="let cue of cuesheet?.cues; index as i">
 
             <!-- Row with input fields -->
-            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit" class="in-table-row">
+            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit">
 
-              <td *ngIf="cueToInsertBefore !== null" class="in-table-cell">
+              <td *ngIf="cueToInsertBefore !== null">
               </td>
-              <td *ngIf="cueToInsertBefore === null" class="in-table-cell">
+              <td *ngIf="cueToInsertBefore === null">
                 {{ i + 1 }}
               </td>
 
-              <td class="in-table-cell">
+              <td>
                 <input
                     type="number"
-                    class="form-control input-sm margin-neg-5 in-table-input"
+                    class="form-control input-sm margin-neg-5"
                     name="distance"
                     placeholder="Miles"
                     step=".01"
@@ -185,38 +185,38 @@
                     [focus]="focusTrigger"
                     required/>
               </td>
-              <td class="in-table-cell">
+              <td>
                 <input
                     type="text"
-                    class="form-control input-sm margin-neg-5 in-table-input"
+                    class="form-control input-sm margin-neg-5"
                     name="turn"
                     placeholder="Turn"
                     [(ngModel)]="cueModel.turn"
                     required/>
               </td>
-              <td class="in-table-cell">
+              <td>
                 <input
                     type="text"
-                    class="form-control input-sm margin-neg-5 in-table-input"
+                    class="form-control input-sm margin-neg-5"
                     name="description"
                     placeholder="Description"
                     [(ngModel)]="cueModel.description"
                     required>
               </td>
-              <td class="in-table-cell">
+              <td>
                 <button
                     type="button"
-                    class="btn btn-danger btn-block btn-sm margin-neg-5 in-table-input"
+                    class="btn btn-danger btn-block btn-sm margin-neg-5"
                     (click)="cancelCue();
                       cueForm.reset()">Cancel
                 </button>
               </td>
-              <td class="in-table-cell">
+              <td>
                 <button
                     type="button"
                     (click)="saveCue(); cueForm.reset()"
                     [disabled]="!cueForm.form.valid || cueForm.pristine"
-                    class="btn btn-primary btn-block btn-sm margin-neg-5 in-table-button">Save Cue
+                    class="btn btn-primary btn-block btn-sm margin-neg-5">Save Cue
                 </button>
               </td>
             </tr>

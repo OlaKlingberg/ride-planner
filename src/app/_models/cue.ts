@@ -10,7 +10,7 @@ export class Cue {
   lng: number;
   createdAt: Date;
   updatedAt: Date;
-  state: 'display' | 'remove' = 'display';
+  state: 'display' | 'removed' = 'display';
 
   constructor(obj) {
     if (obj) {

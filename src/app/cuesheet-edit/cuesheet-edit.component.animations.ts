@@ -41,24 +41,34 @@ export const cuesheetEditAnimations = [
     state('display', style({
       fontSize: '*',
       padding: '*',
+      height: '*',
+      border: '*',
     })),
-    state('remove', style({
+    state('void', style({
       fontSize: 0,
       padding: 0,
+      height: 0,
+      border: 0,
     })),
-    transition('display <=> remove', [
+    transition(':leave', [
       animate('2000ms')
     ])
   ]),
 
   trigger('cueFormCell', [
     state('display', style({
-      padding: '*'
+      fontSize: '*',
+      padding: '*',
+      height: '*',
+      border: '*',
     })),
-    state('remove', style({
-      padding: 0
+    state('void', style({
+      fontSize: 0,
+      padding: 0,
+      height: 0,
+      border: 0
     })),
-    transition('display <=> remove', [
+    transition(':leave', [
       animate('2000ms')
     ])
   ]),
@@ -69,83 +79,65 @@ export const cuesheetEditAnimations = [
       padding: '*',
       height: '*',
       border: '*',
-      margin: '*'
     })),
-    state('remove', style({
+    state('void', style({
       fontSize: 0,
       padding: 0,
       height: 0,
-      border: 0,
-      margin: 0
+      border: 0
     })),
-    transition('display <=> remove', [
+    transition(':leave', [
       animate('2000ms')
     ])
   ]),
 
+
+
   // The buttons don't animate nicely, so I remove them and set a color to the td instead.
   // A lot of code for very little effect ...
-  trigger('cueFormCellRed', [
-    state('display', style({
-      fontSize: '*',
-      padding: '*',
-      height: '*',
-      border: '*',
-      margin: '*'
-    })),
-    state('remove', style({
-      fontSize: 0,
-      padding: 0,
-      height: 0,
-      border: 0,
-      margin: 0
-    })),
-    transition('display <=> remove', [
-      style({
-        backgroundColor: '#a56264',
-        opacity: 1
-      }),
-      animate('2000ms', style({
-        opacity: 0,
-        fontSize: 0,
-        padding: 0,
-        height: 0,
-        border: 0,
-        margin: 0
-      }))
-    ])
-  ]),
-
-  trigger('cueFormCellYellow', [
-    state('display', style({
-      fontSize: '*',
-      padding: '*',
-      height: '*',
-      border: '*',
-      margin: '*'
-    })),
-    state('remove', style({
-      fontSize: 0,
-      padding: 0,
-      height: 0,
-      border: 0,
-      margin: 0
-    })),
-    transition('display <=> remove', [
-      style({
-        backgroundColor: '#a86e49',
-        opacity: 1
-      }),
-      animate('2000ms', style({
-        opacity: 0,
-        fontSize: 0,
-        padding: 0,
-        height: 0,
-        border: 0,
-        margin: 0
-      }))
-    ])
-  ])
+  // trigger('cueFormCellRed', [
+  //   state('display', style({
+  //     fontSize: '*',
+  //     padding: '*',
+  //   })),
+  //   state('void', style({
+  //     fontSize: 0,
+  //     padding: 0,
+  //   })),
+  //   transition(':leave', [
+  //     style({
+  //       backgroundColor: '#a56264',
+  //       opacity: 1
+  //     }),
+  //     animate('2000ms', style({
+  //       opacity: 0,
+  //       fontSize: 0,
+  //       padding: 0,
+  //     }))
+  //   ])
+  // ]),
+  //
+  // trigger('cueFormCellYellow', [
+  //   state('display', style({
+  //     fontSize: '*',
+  //     padding: '*',
+  //   })),
+  //   state('void', style({
+  //     fontSize: 0,
+  //     padding: 0,
+  //   })),
+  //   transition(':leave', [
+  //     style({
+  //       backgroundColor: '#a86e49',
+  //       opacity: 1
+  //     }),
+  //     animate('2000ms', style({
+  //       opacity: 0,
+  //       fontSize: 0,
+  //       padding: 0,
+  //     }))
+  //   ])
+  // ])
 
 
 ];

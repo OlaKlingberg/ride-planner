@@ -165,7 +165,7 @@
           <tbody>
           <ng-container *ngFor="let cue of cuesheet?.cues; index as i">
 
-            <!-- Row with input fields -->
+            <!-- In-middle-of-the-table input row -->
             <tr *ngIf="i === cueToInsertBefore || i === cueToEdit">
 
               <td *ngIf="cueToInsertBefore !== null">
@@ -220,7 +220,7 @@
                 </button>
               </td>
             </tr>
-            <!-- End of row with input fields -->
+            <!-- End of in-middle-of-the-table input row -->
 
             <!-- Existing cues -->
             <tr *ngIf="i !== cueToEdit"
@@ -252,26 +252,25 @@
 
               <!-- The same whether or not the cueform row is pristine, or the cuesheet info is being edited. -->
               <td class="buttons-column"
-                  *ngIf="cue.state == 'display'"> <!-- For the row-deletion animation to work, the buttons have to be removed first. -->
-                <button
-                    type="button"
-                    (click)="openCueDeletionModal(cueDeletionModal, i)"
-                    [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
-                    class="btn btn-danger btn-xs btn-circle"
-                    placement="right"
-                    tooltip="Delete this cue">
+                  *ngIf="cue.state === 'display'">
+                <!-- For the row-deletion animation to work, the buttons have to be removed first. -->
+                <button type="button"
+                        (click)="openCueDeletionModal(cueDeletionModal, i)"
+                        [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
+                        class="btn btn-danger btn-xs btn-circle"
+                        placement="right"
+                        tooltip="Delete this cue">
                   <i *ngIf="cue" class="glyphicon glyphicon-remove"></i>
                 </button>
 
                 <span *ngIf="i !== cueToInsertBefore && (cueToEdit === null || i !== cueToEdit + 1)"
                       class="insert-button-container">
-                  <button
-                      type="button"
-                      (click)="insertCue(i)"
-                      [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
-                      class="btn btn-success btn-xs btn-circle insert-button"
-                      tooltip="Insert cue here"
-                      placement="right">
+                  <button type="button"
+                          (click)="insertCue(i)"
+                          [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
+                          class="btn btn-success btn-xs btn-circle insert-button"
+                          tooltip="Insert cue here"
+                          placement="right">
                   <i class="glyphicon glyphicon-plus"></i>
                   </button>
                 </span>
@@ -285,13 +284,17 @@
           </ng-container>
 
           <!-- At-table-bottom input row -->
-          <tr *ngIf="cueToInsertBefore === null && cueToEdit === null"
+          <tr *ngIf="displayCueFormRow"
               [@cueFormRow]="cueFormState">
-            <td [@cueFormCell]="cueFormState">
-              {{ cuesheet?.cues.length + 1 }}
+            <!--*ngIf="cueToInsertBefore === null && cueToEdit === null"-->
+            <td *ngIf="displayCueFormCell"
+                [@cueFormCell]="cueFormState">
+              <!--{{ cuesheet?.cues.length + 1 }}-->
             </td>
-            <td [@cueFormCell]="cueFormState">
-              <input [@cueFormInput]="cueFormState"
+            <td *ngIf="displayCueFormCell"
+                [@cueFormCell]="cueFormState">
+              <input *ngIf="displayCueFormInput"
+                     [@cueFormInput]="cueFormState"
                      type="number"
                      class="form-control input-sm margin-neg-5"
                      name="distance"
@@ -301,8 +304,10 @@
                      [focus]="focusTrigger"
                      required/>
             </td>
-            <td [@cueFormCell]="cueFormState">
-              <input [@cueFormInput]="cueFormState"
+            <td *ngIf="displayCueFormCell"
+                [@cueFormCell]="cueFormState">
+              <input *ngIf="displayCueFormInput"
+                     [@cueFormInput]="cueFormState"
                      type="text"
                      class="form-control input-sm margin-neg-5"
                      name="turn"
@@ -310,8 +315,10 @@
                      [(ngModel)]="cueModel.turn"
                      required/>
             </td>
-            <td [@cueFormCell]="cueFormState">
-              <input [@cueFormInput]="cueFormState"
+            <td *ngIf="displayCueFormCell"
+                [@cueFormCell]="cueFormState">
+              <input *ngIf="displayCueFormInput"
+                     [@cueFormInput]="cueFormState"
                      type="text"
                      class="form-control input-sm margin-neg-5"
                      name="description"
@@ -319,17 +326,18 @@
                      [(ngModel)]="cueModel.description"
                      required>
             </td>
-            <td [@cueFormCellRed]="cueFormState">
-              <button *ngIf="cueFormState === 'display'"
+            <td *ngIf="displayCueFormCell"
+                [@cueFormCell]="cueFormState">
+              <button *ngIf="displayCueFormButton"
                       type="button"
                       class="btn btn-danger btn-block btn-sm margin-neg-5"
                       [disabled]="cueForm.pristine"
-                      (click)="cancelCue();
-                      cueForm.reset()">Cancel
+                      (click)="cancelCue(); cueForm.reset()">Cancel
               </button>
             </td>
-            <td [@cueFormCellYellow]="cueFormState">
-              <button *ngIf="cueFormState === 'display'"
+            <td *ngIf="displayCueFormCell"
+                [@cueFormCell]="cueFormState">
+              <button *ngIf="displayCueFormButton"
                       type="button"
                       (click)="saveCue(); cueForm.reset()"
                       [disabled]="!cueForm.form.valid || cueForm.pristine"
@@ -360,3 +368,4 @@
 
 
 <ng-container>
+

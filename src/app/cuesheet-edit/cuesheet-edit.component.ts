@@ -33,12 +33,20 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   public cueFormState: string = 'display';
 
+  public displayCueFormRow: boolean = true;
+  public displayCueFormCell: boolean = true;
+  public displayCueFormInput: boolean = true;
+  public displayCueFormButton: boolean = true;
+
+
+
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
   // public newCueRowState: string = 'display';
   private animationDuration: number = 2000; // Todo: Can I sync this automatically with the animation time?
   public focusTrigger = new EventEmitter<boolean>();
   public modalRef: BsModalRef;
+
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService,
@@ -167,28 +175,46 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   deleteCue() {
-
-
-    // const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
+    const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
     // // this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
-    this.cuesheet.cues[ this.cueToDelete ].state = 'remove'; // Removes the insert and delete buttons, before running the animation that removes the table row.
+    this.cuesheet.cues[ this.cueToDelete ].state = 'removed'; // Removes the insert and delete buttons, before running the animation that removes the table row.
     setTimeout(() => {
       this.cuesheet.cues.splice(this.cueToDelete, 1);
       this.cueToDelete = null;
     }, 0);
+    // });
 
-    // // });
-
-    // this.cuesheet.cues[ 1 ].state = 'remove';
 
   }
 
   insertCue(i) {
-    this.cueFormState = 'remove';
+    // Remove the at-table-bottom form row. (cueFormRow)
+    // this.cueFormState = 'removed';
+    // setTimeout(() => {
+    //   this.cueToInsertBefore = i;
+    // }, 0);
 
+    this.displayCueFormButton = false;
+    this.displayCueFormInput = false;
     setTimeout(() => {
-      this.cueToInsertBefore = i;
-    }, this.animationDuration)
+      // this.displayCueFormCell = false;
+      setTimeout(() => {
+        this.displayCueFormRow = false;
+      }, 2000);
+    }, 0);
+
+
+
+    // Insert in-table form row. (insertFormRow)
+
+
+
+
+
+
+    // setTimeout(() => {
+    //   this.cueToInsertBefore = i;
+    // }, this.animationDuration)
 
     // this.newCueRowState = 'move';
     // setTimeout(() => {
@@ -267,6 +293,8 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   syncModel() {
 
   }
+
+
 
 
 }

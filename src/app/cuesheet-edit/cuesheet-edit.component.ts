@@ -31,14 +31,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public cueToEdit: number = null;
   public cueToInsertBefore: number = null;
 
-  public cueFormState: string = 'display';
-
-  public displayCueFormRow: boolean = true;
-  public displayCueFormCell: boolean = true;
-  public displayCueFormInput: boolean = true;
-  public displayCueFormButton: boolean = true;
-
-
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
   // public newCueRowState: string = 'display';
@@ -57,11 +49,23 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.cuesheetId = this.route.snapshot.paramMap.get('_id');
 
+    this.checkForModalClose();
+
     this.getCuesheet(this.cuesheetId);
+
   }
 
   ngAfterViewInit() {
     this.focusTrigger.emit(true);
+
+    $('#cue-form, #cue-form td, #cue-form td input, #cue-form td button').slideDown(1);
+
+  }
+
+  checkForModalClose() {
+    this.modalService.onHide.subscribe((reason: string) => {
+      this.cueToDelete = null;
+    });
   }
 
   getCuesheet(cuesheetId) {
@@ -187,31 +191,33 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   insertCue(i) {
-    // Remove the at-table-bottom form row. (cueFormRow)
-    this.displayCueFormButton = false;
-    this.displayCueFormInput = false;
-    setTimeout(() => {
-      this.displayCueFormCell = false;
-    }, 1000);
+    $('#cue-form, #cue-form td, #cue-form td input, #cue-form td button').slideUp(300);
     setTimeout(() => {
       this.cueToInsertBefore = i;
-    }, 2000);
+      setTimeout(() => {
+        $('#insert-form, #insert-form td, #insert-form td input, #insert-form td button').slideDown(300);
+      }, 0);
+    }, 350);
 
-    // Insert in-table form row. (insertFormRow)
 
 
 
   }
 
   cancelCue() {
-    this.cueToInsertBefore = null;
-    this.cueToEdit = null;
-    this.cueToDelete = null;
+    $('#insert-form, #insert-form td, #insert-form td input, #insert-form td button').slideUp(300);
 
-    // this.displayCueFormCell = true;
-    // this.displayCueFormInput = true;
+    setTimeout(() => {
+      this.cueToInsertBefore = null;
+      this.cueToEdit = null;
+      this.cueToDelete = null;
+      setTimeout(() => {
+        $('#cue-form, #cue-form td, #cue-form td input, #cue-form td button').slideDown(300);
+      }, 0);
+    }, 350);
 
-    // this.cueFormState = 'display';
+
+
 
 
 

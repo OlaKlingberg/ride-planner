@@ -65,3 +65,17 @@
   width: 200px;
   background-color: tomato;
 }
+
+#cue-form,
+#cue-form td,
+#cue-form td input,
+#cue-form td button {
+  display: none;
+}
+
+#insert-form,
+#insert-form td,
+#insert-form td input,
+#insert-form td button {
+  display: none;
+}

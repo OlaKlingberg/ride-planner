@@ -166,7 +166,7 @@
           <ng-container *ngFor="let cue of cuesheet?.cues; index as i">
 
             <!-- In-middle-of-the-table input row -->
-            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit">
+            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit" id="insert-form">
 
               <td *ngIf="cueToInsertBefore !== null">
               </td>
@@ -284,7 +284,7 @@
           </ng-container>
 
           <!-- At-table-bottom input row -->
-          <tr *ngIf="cueToInsertBefore === null && cueToEdit === null">
+          <tr *ngIf="cueToInsertBefore === null && cueToEdit === null" id="cue-form">
             <td>
               <!--{{ cuesheet?.cues.length + 1 }}-->
             </td>

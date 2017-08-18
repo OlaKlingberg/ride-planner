@@ -55,41 +55,41 @@ export const cuesheetEditAnimations = [
   //   ])
   // ]),
 
-  trigger('cueFormCell', [
-    state('display', style({
-      fontSize: '*',
-      padding: '*',
-      height: '*',
-      border: '*',
-    })),
-    state('void', style({
-      fontSize: 0,
-      padding: 0,
-      height: 0,
-      border: 0
-    })),
-    transition('* <=> void', [
-      animate('1000ms')
-    ])
-  ]),
-
-  trigger('cueFormInput', [
-    state('display', style({
-      fontSize: '*',
-      padding: '*',
-      height: '*',
-      border: '*',
-    })),
-    state('void', style({
-      fontSize: 0,
-      padding: 0,
-      height: 0,
-      border: 0
-    })),
-    transition('* <=> void', [
-      animate('2000ms')
-    ])
-  ]),
+  // trigger('cueFormCell', [
+  //   state('display', style({
+  //     fontSize: '*',
+  //     padding: '*',
+  //     height: '*',
+  //     border: '*',
+  //   })),
+  //   state('void', style({
+  //     fontSize: 0,
+  //     padding: 0,
+  //     height: 0,
+  //     border: 0
+  //   })),
+  //   transition('* <=> void', [
+  //     animate('1000ms')
+  //   ])
+  // ]),
+  //
+  // trigger('cueFormInput', [
+  //   state('display', style({
+  //     fontSize: '*',
+  //     padding: '*',
+  //     height: '*',
+  //     border: '*',
+  //   })),
+  //   state('void', style({
+  //     fontSize: 0,
+  //     padding: 0,
+  //     height: 0,
+  //     border: 0
+  //   })),
+  //   transition('* <=> void', [
+  //     animate('2000ms')
+  //   ])
+  // ]),
 
 
 

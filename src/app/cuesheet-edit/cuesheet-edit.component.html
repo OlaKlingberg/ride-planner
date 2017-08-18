@@ -252,33 +252,31 @@
 
               <!-- The same whether or not the cueform row is pristine, or the cuesheet info is being edited. -->
               <td class="buttons-column"
-                  [@cueCell]="cue.state">
-                <ng-container *ngIf="cue.state === 'display'">
-                  <button type="button"
-                          (click)="openCueDeletionModal(cueDeletionModal, i)"
-                          [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
-                          class="btn btn-danger btn-xs btn-circle"
-                          placement="right"
-                          tooltip="Delete this cue">
-                    <i class="glyphicon glyphicon-remove"></i>
-                  </button>
-
-                  <span *ngIf="i !== cueToInsertBefore && (cueToEdit === null || i !== cueToEdit + 1)"
-                        class="insert-button-container">
-                  <button [@cueCell]="cue.state"
-                          type="button"
-                          (click)="insertCue(i)"
-                          [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
-                          class="btn btn-success btn-xs btn-circle insert-button"
-                          tooltip="Insert cue here"
-                          placement="right">
-                  <i class="glyphicon glyphicon-plus"></i>
+                  *ngIf="cue.state == 'display'"> <!-- For the row-deletion animation to work, the buttons have to be removed first. -->
+                <button
+                    type="button"
+                    (click)="openCueDeletionModal(cueDeletionModal, i)"
+                    [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
+                    class="btn btn-danger btn-xs btn-circle"
+                    placement="right"
+                    tooltip="Delete this cue">
+                  <i *ngIf="cue" class="glyphicon glyphicon-remove"></i>
                 </button>
-              </span>
 
-
-                </ng-container>
+                <span *ngIf="i !== cueToInsertBefore && (cueToEdit === null || i !== cueToEdit + 1)"
+                      class="insert-button-container">
+                  <button
+                      type="button"
+                      (click)="insertCue(i)"
+                      [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
+                      class="btn btn-success btn-xs btn-circle insert-button"
+                      tooltip="Insert cue here"
+                      placement="right">
+                  <i class="glyphicon glyphicon-plus"></i>
+                  </button>
+                </span>
               </td>
+
               <!-- End of: The same whether or not the cueform row is pristine ... -->
 
             </tr>
@@ -286,7 +284,7 @@
 
           </ng-container>
 
-          <!-- Final row with input fields -->
+          <!-- At-table-bottom input row -->
           <tr *ngIf="cueToInsertBefore === null && cueToEdit === null"
               [@cueFormRow]="cueFormState">
             <td [@cueFormCell]="cueFormState">
@@ -339,7 +337,7 @@
               </button>
             </td>
           </tr>
-          <!-- End of final row with input fields -->
+          <!-- End of at-table-bottom input row. -->
 
           </tbody>
         </table>
@@ -359,3 +357,6 @@
   </div>
   <!-- End of cuesheet, main part -->
 </div>
+
+
+<ng-container>

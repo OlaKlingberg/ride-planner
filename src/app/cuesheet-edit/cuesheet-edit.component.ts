@@ -167,16 +167,20 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   deleteCue() {
-    const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
-    // this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
-    this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
 
-    // I couldn't make the animation callback work as I thought they should. Hence this ugly solution:
+
+    // const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
+    // // this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
+    this.cuesheet.cues[ this.cueToDelete ].state = 'remove'; // Removes the insert and delete buttons, before running the animation that removes the table row.
     setTimeout(() => {
       this.cuesheet.cues.splice(this.cueToDelete, 1);
       this.cueToDelete = null;
-    }, 500)
-    // });
+    }, 0);
+
+    // // });
+
+    // this.cuesheet.cues[ 1 ].state = 'remove';
+
   }
 
   insertCue(i) {

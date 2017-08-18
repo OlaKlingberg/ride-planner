@@ -6,27 +6,36 @@ export const cuesheetEditAnimations = [
     state('display', style({
       fontSize: '*',
       padding: '*',
+      opacity: 1,
     })),
-    state('remove', style({
+    state('void', style({
       fontSize: 0,
       padding: 0,
+      opacity: 0
     })),
-    transition('display => remove', [
+    transition(':leave', [
       animate('300ms')
     ])
   ]),
 
   trigger('cueCell', [
     state('display', style({
+      fontSize: '*',
       padding: '*',
+      opacity: 1
     })),
-    state('remove', style({
+    state('void', style({
+      fontSize: 0,
       padding: 0,
+      opacity: 0
     })),
-    transition('display => remove', [
-      animate('200ms 300ms')
+    transition(':leave', [
+      animate('300ms')
     ])
   ]),
+
+
+
 
   trigger('cueFormRow', [
     state('display', style({
@@ -137,8 +146,6 @@ export const cuesheetEditAnimations = [
       }))
     ])
   ])
-
-
 
 
 ];

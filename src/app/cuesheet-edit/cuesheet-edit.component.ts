@@ -31,10 +31,12 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public cueToEdit: number = null;
   public cueToInsertBefore: number = null;
 
+  public cueFormState: string = 'display';
+
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
-  public newCueRowState: string = 'display';
-  private animationDuration: number = 1400; // Todo: Can I sync this automatically with the animation time?
+  // public newCueRowState: string = 'display';
+  private animationDuration: number = 2000; // Todo: Can I sync this automatically with the animation time?
   public focusTrigger = new EventEmitter<boolean>();
   public modalRef: BsModalRef;
 
@@ -50,7 +52,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
     this.getCuesheet(this.cuesheetId);
 
-    this.hideRedBoxOnModalClose();
+    // this.hideRedBoxOnModalClose();
 
   }
 
@@ -58,14 +60,14 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     this.focusTrigger.emit(true);
   }
 
-  hideRedBoxOnModalClose() {
-    this.modalService.onHide.subscribe((reason: string) => {
-      $('.cue-row').removeClass('highlight');
-      $('#red-box').fadeOut(200);
-      this.cueToDelete = null;
-
-    });
-  }
+  // hideRedBoxOnModalClose() {
+  //   this.modalService.onHide.subscribe((reason: string) => {
+  //     $('.cue-row').removeClass('highlight');
+  //     $('#red-box').fadeOut(100);
+  //     this.cueToDelete = null;
+  //
+  //   });
+  // }
 
   getCuesheet(cuesheetId) {
     console.log("getCuesheet()", cuesheetId);
@@ -173,31 +175,28 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   openCueDeletionModal(template: TemplateRef<any>, i: number) {
     this.cueToDelete = i;
-    console.log("cueToDelete:", this.cueToDelete);
-
     this.modalRef = this.modalService.show(template);
-
   }
 
   deleteCue() {
     const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
-    this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
-      this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
-      // $('#red-box').addClass('hide');
-      $('#red-box').fadeOut(400);
+    // this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
+    this.cuesheet.cues[ this.cueToDelete ].state = 'remove';
 
-      setTimeout(() => {  // Removes the cue only after it has been faded. Not sure this is the best solution.
-        if ( cue ) this.cuesheet.cues = _.filter(this.cuesheet.cues, cue => cue._id !== cueId);
-        this.cueToDelete = null;
-        this.total = 0;
-        this.getCuesheet(this.cuesheetId);
-      }, 1000);
-    });
+    // I couldn't make the animation callback work as I thought they should. Hence this ugly solution:
+    setTimeout(() => {
+      this.cuesheet.cues.splice(this.cueToDelete, 1);
+      this.cueToDelete = null;
+    }, 500)
+    // });
   }
 
   insertCue(i) {
-    this.cueToInsertBefore = i;
+    this.cueFormState = 'remove';
 
+    setTimeout(() => {
+      this.cueToInsertBefore = i;
+    }, this.animationDuration)
 
     // this.newCueRowState = 'move';
     // setTimeout(() => {
@@ -212,18 +211,38 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   cancelCue() {
-    this.newCueRowState = 'move';
+    $('.in-table-row').slideUp(3000);
+    $('.in-table-cell').slideUp(2000);
+    $('.in-table-input').slideUp(2000);
+    $('.in-table-button').slideUp(2000);
 
-    setTimeout(() => {
-      this.cueToInsertBefore = null;
-      // this.cueToInsertBeforeId = null;
-      this.cueToEdit = null;
-    }, this.animationDuration / 2);
 
-    setTimeout(() => {
-      this.newCueRowState = 'display';
-      this.focusTrigger.emit(true);
-    }, this.animationDuration);
+
+    // setTimeout(() => {
+    //   this.cueToInsertBefore = null;
+    //   this.cueToEdit = null;
+    //   this.cueFormState = 'display'
+    // }, this.animationDuration);
+
+    // setTimeout(() => {
+    //   this.cueFormState
+    // }, this.animationDuration * 2);
+    //
+    //
+    // this.cueFormState = 'display';
+    //
+    // this.newCueRowState = 'move';
+    //
+    // setTimeout(() => {
+    //   this.cueToInsertBefore = null;
+    //   // this.cueToInsertBeforeId = null;
+    //   this.cueToEdit = null;
+    // }, this.animationDuration / 2);
+    //
+    // setTimeout(() => {
+    //   this.newCueRowState = 'display';
+    //   this.focusTrigger.emit(true);
+    // }, this.animationDuration);
 
   }
 

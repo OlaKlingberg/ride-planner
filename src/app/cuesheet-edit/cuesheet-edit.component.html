@@ -166,58 +166,57 @@
           <ng-container *ngFor="let cue of cuesheet?.cues; index as i">
 
             <!-- Row with input fields -->
-            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit"
-                [@newCueRow]="newCueRowState">
+            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit" class="in-table-row">
 
-              <td *ngIf="cueToInsertBefore !== null">
+              <td *ngIf="cueToInsertBefore !== null" class="in-table-cell">
               </td>
-              <td *ngIf="cueToInsertBefore === null">
-                <span [@newCueRow]="newCueRowState">{{ i + 1 }}</span>
+              <td *ngIf="cueToInsertBefore === null" class="in-table-cell">
+                {{ i + 1 }}
               </td>
 
-              <td>
-                <input [@newCueRow]="newCueRowState"
-                       type="number"
-                       class="form-control input-sm margin-neg-5"
-                       name="distance"
-                       placeholder="Miles"
-                       step=".01"
-                       [(ngModel)]="cueModel.distance"
-                       [focus]="focusTrigger"
-                       required/>
+              <td class="in-table-cell">
+                <input
+                    type="number"
+                    class="form-control input-sm margin-neg-5 in-table-input"
+                    name="distance"
+                    placeholder="Miles"
+                    step=".01"
+                    [(ngModel)]="cueModel.distance"
+                    [focus]="focusTrigger"
+                    required/>
               </td>
-              <td>
-                <input [@newCueRow]="newCueRowState"
-                       type="text"
-                       class="form-control input-sm margin-neg-5"
-                       name="turn"
-                       placeholder="Turn"
-                       [(ngModel)]="cueModel.turn"
-                       required/>
+              <td class="in-table-cell">
+                <input
+                    type="text"
+                    class="form-control input-sm margin-neg-5 in-table-input"
+                    name="turn"
+                    placeholder="Turn"
+                    [(ngModel)]="cueModel.turn"
+                    required/>
               </td>
-              <td>
-                <input [@newCueRow]="newCueRowState"
-                       type="text"
-                       class="form-control input-sm margin-neg-5"
-                       name="description"
-                       placeholder="Description"
-                       [(ngModel)]="cueModel.description"
-                       required>
+              <td class="in-table-cell">
+                <input
+                    type="text"
+                    class="form-control input-sm margin-neg-5 in-table-input"
+                    name="description"
+                    placeholder="Description"
+                    [(ngModel)]="cueModel.description"
+                    required>
               </td>
-              <td>
-                <button [@newCueRow]="newCueRowState"
-                        type="button"
-                        class="btn btn-danger btn-block btn-sm margin-neg-5"
-                        (click)="cancelCue();
+              <td class="in-table-cell">
+                <button
+                    type="button"
+                    class="btn btn-danger btn-block btn-sm margin-neg-5 in-table-input"
+                    (click)="cancelCue();
                       cueForm.reset()">Cancel
                 </button>
               </td>
-              <td>
-                <button type="button"
-                        [@newCueRow]="newCueRowState"
-                        (click)="saveCue(); cueForm.reset()"
-                        [disabled]="!cueForm.form.valid || cueForm.pristine"
-                        class="btn btn-primary btn-block btn-sm margin-neg-5">Save Cue
+              <td class="in-table-cell">
+                <button
+                    type="button"
+                    (click)="saveCue(); cueForm.reset()"
+                    [disabled]="!cueForm.form.valid || cueForm.pristine"
+                    class="btn btn-primary btn-block btn-sm margin-neg-5 in-table-button">Save Cue
                 </button>
               </td>
             </tr>
@@ -225,17 +224,19 @@
 
             <!-- Existing cues -->
             <tr *ngIf="i !== cueToEdit"
+                [@cueRow]="cue.state"
                 class="cue-row"
                 id="cue-row-{{ i }}"
                 [ngClass]="{'highlight': i === cueToDelete}">
 
               <!-- While the cueform row is pristine and the cuesheet info is not being edited. -->
               <ng-container *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput">
-                <td [@cueState]="cue.state">{{ i + 1 }}</td>
-                <td (click)="editCue(i)" [@cueState]="cue.state">{{ cue.distance / 100 | number:'1.0-2' }}</td>
-                <td (click)="editCue(i)" [@cueState]="cue.state">{{ cue.turn }}</td>
-                <td (click)="editCue(i)" [@cueState]="cue.state">{{ cue.description }}</td>
-                <td [@cueState]="cue.state">{{ cue.total / 100 | number:'1.0-2'}}</td>
+                <td [@cueCell]="cue.state">{{ i + 1 }}
+                </td>
+                <td [@cueCell]="cue.state" (click)="editCue(i)">{{ cue.distance / 100 | number:'1.0-2' }}</td>
+                <td [@cueCell]="cue.state" (click)="editCue(i)">{{ cue.turn }}</td>
+                <td [@cueCell]="cue.state" (click)="editCue(i)">{{ cue.description }}</td>
+                <td [@cueCell]="cue.state">{{ cue.total / 100 | number:'1.0-2'}}</td>
               </ng-container>
               <!-- End of: While cueform row is pristine ... ->
 
@@ -251,32 +252,32 @@
 
               <!-- The same whether or not the cueform row is pristine, or the cuesheet info is being edited. -->
               <td class="buttons-column"
-                  [@cueState]="cue.state">
-                <button [@cueState]="cue.state"
-                        type="button"
-                        (click)="openCueDeletionModal(cueDeletionModal, i)"
-                        [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
-                        class="btn btn-danger btn-xs btn-circle"
-                        placement="right"
-                        tooltip="Delete this cue">
-                  <i class="glyphicon glyphicon-remove"
-                     [@cueState]="cue.state"></i>
-                </button>
+                  [@cueCell]="cue.state">
+                <ng-container *ngIf="cue.state === 'display'">
+                  <button type="button"
+                          (click)="openCueDeletionModal(cueDeletionModal, i)"
+                          [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
+                          class="btn btn-danger btn-xs btn-circle"
+                          placement="right"
+                          tooltip="Delete this cue">
+                    <i class="glyphicon glyphicon-remove"></i>
+                  </button>
 
-                <span *ngIf="i !== cueToInsertBefore && (cueToEdit === null || i !== cueToEdit + 1)"
-                      class="insert-button-container"
-                      [@cueState]="cue.state">
-                  <button [@cueState]="cue.state"
+                  <span *ngIf="i !== cueToInsertBefore && (cueToEdit === null || i !== cueToEdit + 1)"
+                        class="insert-button-container">
+                  <button [@cueCell]="cue.state"
                           type="button"
                           (click)="insertCue(i)"
                           [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
                           class="btn btn-success btn-xs btn-circle insert-button"
                           tooltip="Insert cue here"
                           placement="right">
-                  <i class="glyphicon glyphicon-plus"
-                     [@cueState]="cue.state"></i>
+                  <i class="glyphicon glyphicon-plus"></i>
                 </button>
               </span>
+
+
+                </ng-container>
               </td>
               <!-- End of: The same whether or not the cueform row is pristine ... -->
 
@@ -287,12 +288,12 @@
 
           <!-- Final row with input fields -->
           <tr *ngIf="cueToInsertBefore === null && cueToEdit === null"
-              [@newCueRow]="newCueRowState">
-            <td>
-              <span [@newCueRow]="newCueRowState">{{ cuesheet?.cues.length + 1 }}</span>
+              [@cueFormRow]="cueFormState">
+            <td [@cueFormCell]="cueFormState">
+              {{ cuesheet?.cues.length + 1 }}
             </td>
-            <td>
-              <input [@newCueRow]="newCueRowState"
+            <td [@cueFormCell]="cueFormState">
+              <input [@cueFormInput]="cueFormState"
                      type="number"
                      class="form-control input-sm margin-neg-5"
                      name="distance"
@@ -302,8 +303,8 @@
                      [focus]="focusTrigger"
                      required/>
             </td>
-            <td>
-              <input [@newCueRow]="newCueRowState"
+            <td [@cueFormCell]="cueFormState">
+              <input [@cueFormInput]="cueFormState"
                      type="text"
                      class="form-control input-sm margin-neg-5"
                      name="turn"
@@ -311,8 +312,8 @@
                      [(ngModel)]="cueModel.turn"
                      required/>
             </td>
-            <td>
-              <input [@newCueRow]="newCueRowState"
+            <td [@cueFormCell]="cueFormState">
+              <input [@cueFormInput]="cueFormState"
                      type="text"
                      class="form-control input-sm margin-neg-5"
                      name="description"
@@ -320,8 +321,8 @@
                      [(ngModel)]="cueModel.description"
                      required>
             </td>
-            <td>
-              <button [@newCueRow]="newCueRowState"
+            <td [@cueFormCellRed]="cueFormState">
+              <button *ngIf="cueFormState === 'display'"
                       type="button"
                       class="btn btn-danger btn-block btn-sm margin-neg-5"
                       [disabled]="cueForm.pristine"
@@ -329,9 +330,9 @@
                       cueForm.reset()">Cancel
               </button>
             </td>
-            <td>
-              <button type="button"
-                      [@newCueRow]="newCueRowState"
+            <td [@cueFormCellYellow]="cueFormState">
+              <button *ngIf="cueFormState === 'display'"
+                      type="button"
                       (click)="saveCue(); cueForm.reset()"
                       [disabled]="!cueForm.form.valid || cueForm.pristine"
                       class="btn btn-primary btn-block btn-sm margin-neg-5">Save Cue

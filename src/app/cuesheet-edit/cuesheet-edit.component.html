@@ -224,30 +224,29 @@
                 id="cue-row-{{ i }}"
                 [ngClass]="{'highlight': i === cueToDelete}">
 
-              <!-- While the cueform row is pristine and the cuesheet info is not being edited. -->
-              <ng-container *ngIf="cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput">
-                <td [@cueCell]="cue.state">{{ i + 1 }}
-                </td>
-                <td [@cueCell]="cue.state" (click)="editCue(i)">{{ cue.distance / 100 | number:'1.0-2' }}</td>
-                <td [@cueCell]="cue.state" (click)="editCue(i)">{{ cue.turn }}</td>
-                <td [@cueCell]="cue.state" (click)="editCue(i)">{{ cue.description }}</td>
-                <td [@cueCell]="cue.state">{{ cue.total / 100 | number:'1.0-2'}}</td>
-              </ng-container>
-              <!-- End of: While cueform row is pristine ... ->
+              <td [@cueCell]="cue.state"
+                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
+                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ i + 1 }}
+              </td>
+              <td [@cueCell]="cue.state"
+                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
+                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ cue.distance / 100 | number:'1.0-2' }}
+              </td>
+              <td [@cueCell]="cue.state"
+                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
+                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ cue.turn }}
+              </td>
+              <td [@cueCell]="cue.state"
+                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
+                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ cue.description }}
+              </td>
+              <td [@cueCell]="cue.state"
+                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
+                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ cue.total / 100 | number:'1.0-2'}}
+              </td>
 
-              <!-- When the cueform row no longer is pristine or the cueheet info is being edited. -->
-              <ng-container *ngIf="!cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput">
-                <td class="faded">{{ i + 1 }}</td>
-                <td class="faded">{{ cue.distance / 100 | number:'1.0-2' }}</td>
-                <td class="faded">{{ cue.turn }}</td>
-                <td class="faded">{{ cue.description }}</td>
-                <td class="faded">{{ cue.total / 100 | number:'1.0-2'}}</td>
-              </ng-container>
-              <!-- End of: When the cueform row no longer is pristine ... ->
-
-              <!-- The same whether or not the cueform row is pristine, or the cuesheet info is being edited. -->
-              <td class="buttons-column"
-                  *ngIf="cue.state === 'display'">
+              <td *ngIf="cue.state === 'display'"
+                  class="buttons-column">
                 <!-- For the row-deletion animation to work, the buttons have to be removed first. -->
                 <button type="button"
                         (click)="openCueDeletionModal(cueDeletionModal, i)"
@@ -270,8 +269,6 @@
                   </button>
                 </span>
               </td>
-
-              <!-- End of: The same whether or not the cueform row is pristine ... -->
 
             </tr>
             <!-- End of existing cues -->

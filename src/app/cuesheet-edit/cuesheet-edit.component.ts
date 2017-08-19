@@ -184,7 +184,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.cuesheet.cues.splice(this.cueToDelete, 1);
       this.cueToDelete = null;
-    }, 300);
+    }, 0);
     // });
 
 
@@ -227,14 +227,16 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
 
-  editCue(i) {
-    this.cueToEdit = i;
-    this.cueToInsertBefore = null;
+  editCue(i, shouldAct) {
+    console.log(shouldAct);
+    if (shouldAct) {
+      this.cueToEdit = i;
+      this.cueToInsertBefore = null;
 
-    this.cueModel.distance = this.cuesheet.cues[ i ].distance / 100;
-    this.cueModel.turn = this.cuesheet.cues[ i ].turn;
-    this.cueModel.description = this.cuesheet.cues[ i ].description;
-
+      this.cueModel.distance = this.cuesheet.cues[ i ].distance / 100;
+      this.cueModel.turn = this.cuesheet.cues[ i ].turn;
+      this.cueModel.description = this.cuesheet.cues[ i ].description;
+    }
   }
 
   openCuesheetDeletionModal(template: TemplateRef<any>) {

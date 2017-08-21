@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, AfterViewInit, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, OnInit, AfterViewInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CuesheetService } from '../_services/cuesheet.service';
 import { Cuesheet } from '../_models/cuesheet';
@@ -9,6 +9,7 @@ import { AlertService } from '../_services/alert.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'rp-cuesheet-edit',
@@ -32,6 +33,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   public focusTrigger = new EventEmitter<boolean>();
   public modalRef: BsModalRef;
 
+  @ViewChild('cueForm') cueForm: NgForm;
 
   constructor(private route: ActivatedRoute,
               private cuesheetService: CuesheetService,
@@ -46,12 +48,10 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     this.checkForModalClose();
 
     this.getCuesheet(this.cuesheetId);
-
   }
 
   ngAfterViewInit() {
     this.focusTrigger.emit(true);
-
   }
 
   checkForModalClose() {
@@ -76,6 +76,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   // Todo: Seems like an ugly solution. Isn't there a better way?
   setTotalDistances(cuesheet) {
+    this.total = 0;
     cuesheet.cues = cuesheet.cues.map(cue => {
       this.total += cue.distance;
       cue.total = this.total;
@@ -118,26 +119,36 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     })
   }
 
-  saveCue() {
-    this.cueModel.distance = Math.round(this.cueModel.distance * 100);
-    this.focusTrigger.emit(true);
+  saveCue($event) {
+    if ( ($event && $event.keyCode === 13 ) || $event === 'saveCueButton' ) {
+      this.cueModel.distance = Math.round(this.cueModel.distance * 100);
 
-    if ( this.cueToEdit === null ) {
-      this.createCue();
-    } else {
-      this.updateCue();
+      if ( this.cueToEdit === null ) {
+        this.createCue();
+      } else {
+        this.updateCue();
+      }
+
+      this.cueForm.reset();
+      this.focusTrigger.emit(true);
     }
   }
 
   updateCue() {
-    this.cuesheetService.updateCue(this.cuesheet.cues[ this.cueToEdit ]._id.toString(), this.cueModel).then((cue: Cue) => {
-      if ( !cue ) return; // Safety precaution.
-      // Get the updated cuesheet.
-      this.total = 0;
-      this.cueToEdit = null;
-      this.cueToInsertBefore = null;
-      this.getCuesheet(this.cuesheetId);
-    })
+    this.cuesheetService.updateCue(this.cuesheet.cues[ this.cueToEdit ]._id.toString(), this.cueModel)
+        .then((cue: Cue) => {
+          console.log("cue:", cue);
+
+          if ( !cue ) return; // Safety precaution.
+
+          this.cuesheet.cues.splice(this.cueToEdit, 1, cue);
+          this.cuesheet = this.setTotalDistances(this.cuesheet);
+
+          this.fadeOutTr($('#insert-form-row'));
+          // setTimeout(() => {
+          //   this.cueToEdit = null;
+          // }, 0);
+        })
   }
 
   createCue() {
@@ -147,8 +158,10 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       if ( !cue ) return; // Safety precaution.
       if ( this.cueToInsertBefore !== null ) {
         // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
-        this.total = 0;
-        this.getCuesheet(this.cuesheetId);
+
+        this.cuesheet.cues.splice(this.cueToInsertBefore, 0, cue);
+        this.cuesheet = this.setTotalDistances(this.cuesheet);
+
       } else {
         // The cue was added to the end of the cuesheet. Push the returned cue onto cuesheet.cues.
         this.total += cue.distance;
@@ -170,11 +183,12 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   deleteCue() {
     const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
     this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
-    this.cuesheet.cues[ this.cueToDelete ].state = 'removed'; // Removes the insert and delete buttons, before running the animation that removes the table row.
-    setTimeout(() => {
-      this.cuesheet.cues.splice(this.cueToDelete, 1);
-      this.cueToDelete = null;
-    }, 300);
+      this.cuesheet.cues[ this.cueToDelete ].state = 'removed'; // Removes the insert and delete buttons, before running the animation that removes the table row.
+      setTimeout(() => {
+        this.cuesheet.cues.splice(this.cueToDelete, 1);
+        this.cueToDelete = null;
+        this.focusTrigger.emit(true);
+      }, 300);
     });
   }
 
@@ -185,6 +199,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         this.cueToInsertBefore = i;
         setTimeout(() => {
           this.slideDownTr($('#insert-form-row'));
+          this.focusTrigger.emit(true);
         }, 0);
       }, 350);
     }
@@ -196,6 +211,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         .parent()
         .find('td > div')
         .slideDown(300, () => {
+          this.focusTrigger.emit(true);
           // Todo: Figure out what the two lines below are for. The don't seem to be needed, and they throw an error.
           // const $set = $(this);
           // $set.replaceWith($set.contents());
@@ -218,6 +234,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         .parent()
         .find('td > div')
         .fadeIn(200, () => {
+
           // Todo: Figure out what the two lines below are for.
           // const $set = $(this);
           // $set.replaceWith($set.contents());
@@ -229,13 +246,13 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         .wrapInner('<div style="display: block;" />')
         .parent()
         .find('td > div')
-        .fadeOut(200, () => {
-
+        .fadeOut(1200, () => {
+          $(this).parent().parent().remove();
         });
   }
 
   cancelCue() {
-    if (this.cueToInsertBefore !== null) {
+    if ( this.cueToInsertBefore !== null ) {
       this.slideUpTr($('#insert-form-row'));
 
       setTimeout(() => {
@@ -243,6 +260,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
         setTimeout(() => {
           this.slideDownTr($('#cue-form-row'));
+          // this.focusTrigger.emit(true);
         }, 0);
       }, 350);
     } else {
@@ -253,7 +271,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
         setTimeout(() => {
           this.slideDownTr($('#cue-form-row'));
-
+          // this.focusTrigger.emit(true);
         }, 0);
       }, 200);
     }
@@ -269,7 +287,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         this.cueModel.turn = this.cuesheet.cues[ i ].turn;
         this.cueModel.description = this.cuesheet.cues[ i ].description;
 
-        this.cueToInsertBefore = null;
+        // this.cueToInsertBefore = null;
         this.cueToEdit = i;
 
         setTimeout(() => {
@@ -292,6 +310,10 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         this.alertService.error("Oops! Something went wrong!");
       }
     });
+  }
+
+  onKeyup($event) {
+    console.log("onKeyup. $event:", $event.keyCode);
   }
 
   // Todo: Do I need this here? I do need it on the login-form.

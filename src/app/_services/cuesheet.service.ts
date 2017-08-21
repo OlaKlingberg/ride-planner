@@ -72,7 +72,6 @@ export class CuesheetService {
 
     return this.http.post(`${environment.api}/cuesheets/cues`, { cuesheetId, cue, insertBeforeId }, requestOptions)
         .map((response: Response) => {
-          console.log("response.json():", response.json());
           return new Cue(response.json());
         }).toPromise();
   }

@@ -180,6 +180,7 @@
                        name="distance"
                        placeholder="Miles"
                        step=".01"
+                       (keyup)="saveCue($event)"
                        [(ngModel)]="cueModel.distance"
                        [focus]="focusTrigger"
                        required/>
@@ -189,6 +190,7 @@
                        class="form-control input-sm margin-neg-5"
                        name="turn"
                        placeholder="Turn"
+                       (keyup)="saveCue($event)"
                        [(ngModel)]="cueModel.turn"
                        required/>
               </td>
@@ -197,6 +199,7 @@
                        class="form-control input-sm margin-neg-5"
                        name="description"
                        placeholder="Description"
+                       (keyup)="saveCue($event)"
                        [(ngModel)]="cueModel.description"
                        required>
               </td>
@@ -209,7 +212,7 @@
               </td>
               <td>
                 <button type="button"
-                        (click)="saveCue(); cueForm.reset()"
+                        (click)="saveCue('saveCueButton'); cueForm.reset()"
                         [disabled]="!cueForm.form.valid || cueForm.pristine"
                         class="btn btn-primary btn-block btn-sm margin-neg-5">Save Cue
                 </button>
@@ -291,6 +294,7 @@
                      name="distance"
                      placeholder="Miles"
                      step=".01"
+                     (keyup)="saveCue($event)"
                      [(ngModel)]="cueModel.distance"
                      [focus]="focusTrigger"
                      required/>
@@ -300,6 +304,7 @@
                      class="form-control input-sm margin-neg-5"
                      name="turn"
                      placeholder="Turn"
+                     (keyup)="saveCue($event)"
                      [(ngModel)]="cueModel.turn"
                      required/>
             </td>
@@ -308,6 +313,7 @@
                      class="form-control input-sm margin-neg-5"
                      name="description"
                      placeholder="Description"
+                     (keyup)="saveCue($event)"
                      [(ngModel)]="cueModel.description"
                      required>
             </td>
@@ -320,7 +326,7 @@
             </td>
             <td>
               <button type="button"
-                      (click)="saveCue(); cueForm.reset()"
+                      (click)="saveCue('saveCueButton'); cueForm.reset()"
                       [disabled]="!cueForm.form.valid || cueForm.pristine"
                       class="btn btn-primary btn-block btn-sm margin-neg-5">Save Cue
               </button>

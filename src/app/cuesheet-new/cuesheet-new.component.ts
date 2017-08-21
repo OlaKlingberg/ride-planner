@@ -26,7 +26,6 @@ export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log("CueshhetNewComponent.ngAfterViewInit()");
     this.focusTrigger.emit(true);
   }
 

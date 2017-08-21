@@ -137,18 +137,24 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   updateCue() {
     this.cuesheetService.updateCue(this.cuesheet.cues[ this.cueToEdit ]._id.toString(), this.cueModel)
         .then((cue: Cue) => {
-          console.log("cue:", cue);
 
           if ( !cue ) return; // Safety precaution.
 
-          this.cuesheet.cues.splice(this.cueToEdit, 1, cue);
-          this.cuesheet = this.setTotalDistances(this.cuesheet);
-
           this.fadeOutTr($('#insert-form-row'));
-          // setTimeout(() => {
-          //   this.cueToEdit = null;
-          // }, 0);
-        })
+
+          setTimeout(() => {
+            this.cuesheet.cues.splice(this.cueToEdit, 1, cue);
+            this.cuesheet = this.setTotalDistances(this.cuesheet);
+            this.cueToEdit = null;
+            setTimeout(() => {
+              this.slideDownTr($('#cue-form-row'));
+            }, 0);
+          }, 200);
+
+
+
+
+        });
   }
 
   createCue() {
@@ -158,18 +164,26 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       if ( !cue ) return; // Safety precaution.
       if ( this.cueToInsertBefore !== null ) {
         // The cue was inserted in the middle of cuesheet. Get the updated cuesheet.
+        this.fadeOutTr($('#insert-form-row'));
 
-        this.cuesheet.cues.splice(this.cueToInsertBefore, 0, cue);
-        this.cuesheet = this.setTotalDistances(this.cuesheet);
+        setTimeout(() => {
+          this.cuesheet.cues.splice(this.cueToInsertBefore, 0, cue);
+          this.cuesheet = this.setTotalDistances(this.cuesheet);
+          this.cueToInsertBefore = null;
 
+          setTimeout(() => {
+            this.slideDownTr($('#cue-form-row'));
+          }, 0);
+        }, 200);
       } else {
         // The cue was added to the end of the cuesheet. Push the returned cue onto cuesheet.cues.
+        this.fadeOutTr($('#insert-form-row'));
+
         this.total += cue.distance;
         cue.total = this.total;
         cue.state = 'display';
         this.cuesheet.cues.push(cue);
       }
-      this.cueToInsertBefore = null;
     });
   }
 
@@ -246,7 +260,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         .wrapInner('<div style="display: block;" />')
         .parent()
         .find('td > div')
-        .fadeOut(1200, () => {
+        .fadeOut(200, () => {
           $(this).parent().parent().remove();
         });
   }
@@ -271,7 +285,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
         setTimeout(() => {
           this.slideDownTr($('#cue-form-row'));
-          // this.focusTrigger.emit(true);
         }, 0);
       }, 200);
     }

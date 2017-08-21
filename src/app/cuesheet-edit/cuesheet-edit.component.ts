@@ -1,12 +1,8 @@
-import {
-  AfterViewChecked, Component, EventEmitter, Input, OnDestroy, OnInit, AfterViewInit,
-  TemplateRef
-} from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Component, EventEmitter, OnInit, AfterViewInit, TemplateRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CuesheetService } from '../_services/cuesheet.service';
 import { Cuesheet } from '../_models/cuesheet';
 import { Cue } from '../_models/cue';
-import * as _ from 'lodash';
 import * as $ from 'jquery';
 
 import { AlertService } from '../_services/alert.service';
@@ -33,8 +29,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   public cuesheetNameInput: boolean = false;
   public cuesheetDescriptionInput: boolean = false;
-  // public newCueRowState: string = 'display';
-  private animationDuration: number = 2000; // Todo: Can I sync this automatically with the animation time?
   public focusTrigger = new EventEmitter<boolean>();
   public modalRef: BsModalRef;
 
@@ -57,8 +51,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.focusTrigger.emit(true);
-
-    // $('#cue-form, #cue-form td, #cue-form td input, #cue-form td button').slideDown(1);
 
   }
 
@@ -120,9 +112,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       name: this.cuesheetModel.cuesheetName,
       description: this.cuesheetModel.cuesheetDescription
     }).then(cuesheet => {
-      // Todo: Do I really need both this.cuesheetModel and this.cuesheetName etc.? Two points of truth?
-      this.cuesheetModel.cuesheetName = cuesheet.name;
-      this.cuesheetModel.cuesheetDescription = cuesheet.description;
       this.cuesheet.name = cuesheet.name;
       this.cuesheet.description = cuesheet.description;
       this.hideInputFields();
@@ -180,14 +169,13 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   deleteCue() {
     const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
-    // // this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
+    this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
     this.cuesheet.cues[ this.cueToDelete ].state = 'removed'; // Removes the insert and delete buttons, before running the animation that removes the table row.
     setTimeout(() => {
       this.cuesheet.cues.splice(this.cueToDelete, 1);
       this.cueToDelete = null;
     }, 300);
-    // });
-
+    });
   }
 
   insertCue(i, shouldAct: boolean) {
@@ -208,7 +196,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         .parent()
         .find('td > div')
         .slideDown(300, () => {
-          // Todo: Figure out what the two lines below are for.
+          // Todo: Figure out what the two lines below are for. The don't seem to be needed, and they throw an error.
           // const $set = $(this);
           // $set.replaceWith($set.contents());
         });
@@ -246,41 +234,34 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
         });
   }
 
-
   cancelCue() {
-    console.log("cueToEdit:", this.cueToEdit);
-    console.log("cueToInsertBefore:", this.cueToInsertBefore);
-
     if (this.cueToInsertBefore !== null) {
       this.slideUpTr($('#insert-form-row'));
 
       setTimeout(() => {
         this.cueToInsertBefore = null;
-        // this.cueToEdit = null;
-        // this.cueToDelete = null;
+
         setTimeout(() => {
           this.slideDownTr($('#cue-form-row'));
         }, 0);
       }, 350);
     } else {
-
       this.fadeOutTr($('#insert-form-row'));
 
       setTimeout(() => {
         this.cueToEdit = null;
+
         setTimeout(() => {
           this.slideDownTr($('#cue-form-row'));
 
         }, 0);
-      }, 200);    }
-
-
+      }, 200);
+    }
   }
 
 
   editCue(i, shouldAct) {
     if ( shouldAct ) {
-
       this.slideUpTr($('#cue-form-row'));
 
       setTimeout(() => {

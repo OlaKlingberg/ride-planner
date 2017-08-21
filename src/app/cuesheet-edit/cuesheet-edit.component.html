@@ -166,7 +166,7 @@
           <ng-container *ngFor="let cue of cuesheet?.cues; index as i">
 
             <!-- In-middle-of-the-table input row -->
-            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit" id="insert-form">
+            <tr *ngIf="i === cueToInsertBefore || i === cueToEdit" id="insert-form-row">
 
               <td *ngIf="cueToInsertBefore !== null">
               </td>
@@ -222,34 +222,35 @@
                 [@cueRow]="cue.state"
                 class="cue-row"
                 id="cue-row-{{ i }}"
-                [ngClass]="{'highlight': i === cueToDelete}">
+                [ngClass]="{
+                  'highlight': i === cueToDelete,
+                  'faded':  cueForm.value.distance ||
+                            cueForm.value.turn ||
+                            cueForm.value.description ||
+                            cuesheetNameInput ||
+                            cuesheetDescriptionInput
+                  }"
+                (click)="editCue(i, ( !cueForm.value.distance &&
+                                      !cueForm.value.turn &&
+                                      !cueForm.value.description &&
+                                      !cuesheetNameInput &&
+                                      !cuesheetDescriptionInput ))">
 
-              <td [@cueCell]="cue.state"
-                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
-                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ i + 1 }}
-              </td>
-              <td [@cueCell]="cue.state"
-                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
-                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ cue.distance / 100 | number:'1.0-2' }}
-              </td>
-              <td [@cueCell]="cue.state"
-                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
-                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ cue.turn }}
-              </td>
-              <td [@cueCell]="cue.state"
-                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
-                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ cue.description }}
-              </td>
-              <td [@cueCell]="cue.state"
-                  [ngClass]="{ 'faded': !cueForm.pristine || cuesheetNameInput || cuesheetDescriptionInput }"
-                  (click)="editCue(i, (cueForm.pristine && !cuesheetNameInput && !cuesheetDescriptionInput))">{{ cue.total / 100 | number:'1.0-2'}}
-              </td>
+              <td [@cueCell]="cue.state">{{ i + 1 }}</td>
+              <td [@cueCell]="cue.state">{{ cue.distance / 100 | number:'1.0-2' }}</td>
+              <td [@cueCell]="cue.state">{{ cue.turn }}</td>
+              <td [@cueCell]="cue.state">{{ cue.description }}</td>
+              <td [@cueCell]="cue.state">{{ cue.total / 100 | number:'1.0-2'}}</td>
 
               <td *ngIf="cue.state === 'display'"
-                  class="buttons-column">
-                <!-- For the row-deletion animation to work, the buttons have to be removed first. -->
+                  class="buttons-column"
+                  (click)="$event.stopPropagation()">
                 <button type="button"
-                        (click)="openCueDeletionModal(cueDeletionModal, i)"
+                        (click)="openCueDeletionModal(cueDeletionModal, i, (  !cueForm.value.distance &&
+                                                                              !cueForm.value.turn &&
+                                                                              !cueForm.value.description &&
+                                                                              !cuesheetNameInput &&
+                                                                              !cuesheetDescriptionInput  ))"
                         [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
                         class="btn btn-danger btn-xs btn-circle"
                         placement="right"
@@ -260,7 +261,11 @@
                 <span *ngIf="i !== cueToInsertBefore && (cueToEdit === null || i !== cueToEdit + 1)"
                       class="insert-button-container">
                   <button type="button"
-                          (click)="insertCue(i)"
+                          (click)="insertCue(i, ( !cueForm.value.distance &&
+                                                  !cueForm.value.turn &&
+                                                  !cueForm.value.description &&
+                                                  !cuesheetNameInput &&
+                                                  !cuesheetDescriptionInput ))"
                           [disabled]="cueToEdit !== null || cueToInsertBefore !== null"
                           class="btn btn-success btn-xs btn-circle insert-button"
                           tooltip="Insert cue here"
@@ -276,7 +281,7 @@
           </ng-container>
 
           <!-- At-table-bottom input row -->
-          <tr *ngIf="cueToInsertBefore === null && cueToEdit === null" id="cue-form">
+          <tr *ngIf="cueToInsertBefore === null && cueToEdit === null" id="cue-form-row">
             <td>
               <!--{{ cuesheet?.cues.length + 1 }}-->
             </td>

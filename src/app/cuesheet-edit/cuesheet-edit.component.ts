@@ -58,7 +58,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.focusTrigger.emit(true);
 
-    $('#cue-form, #cue-form td, #cue-form td input, #cue-form td button').slideDown(1);
+    // $('#cue-form, #cue-form td, #cue-form td input, #cue-form td button').slideDown(1);
 
   }
 
@@ -69,7 +69,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   getCuesheet(cuesheetId) {
-    console.log("getCuesheet()", cuesheetId);
     this.cuesheetService.getCuesheet(cuesheetId)
         .then(cuesheet => {
           this.cuesheetModel.cuesheetName = cuesheet.name;
@@ -77,7 +76,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
           this.cuesheet = this.setTotalDistances(cuesheet);
 
           if ( this.cuesheet.cues.length === 0 ) {
-            console.log("Apparently a new cue sheet!");
             this.cueModel.distance = '0';
             this.cueModel.turn = 'Start';
           }
@@ -122,8 +120,11 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       name: this.cuesheetModel.cuesheetName,
       description: this.cuesheetModel.cuesheetDescription
     }).then(cuesheet => {
+      // Todo: Do I really need both this.cuesheetModel and this.cuesheetName etc.? Two points of truth?
       this.cuesheetModel.cuesheetName = cuesheet.name;
       this.cuesheetModel.cuesheetDescription = cuesheet.description;
+      this.cuesheet.name = cuesheet.name;
+      this.cuesheet.description = cuesheet.description;
       this.hideInputFields();
     })
   }
@@ -140,9 +141,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   updateCue() {
-    console.log("updateCue()");
     this.cuesheetService.updateCue(this.cuesheet.cues[ this.cueToEdit ]._id.toString(), this.cueModel).then((cue: Cue) => {
-      console.log(cue);
       if ( !cue ) return; // Safety precaution.
       // Get the updated cuesheet.
       this.total = 0;
@@ -172,9 +171,11 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openCueDeletionModal(template: TemplateRef<any>, i: number) {
-    this.cueToDelete = i;
-    this.modalRef = this.modalService.show(template);
+  openCueDeletionModal(template: TemplateRef<any>, i: number, shouldAct: boolean) {
+    if ( shouldAct ) {
+      this.cueToDelete = i;
+      this.modalRef = this.modalService.show(template);
+    }
   }
 
   deleteCue() {
@@ -184,58 +185,116 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.cuesheet.cues.splice(this.cueToDelete, 1);
       this.cueToDelete = null;
-    }, 0);
+    }, 300);
     // });
 
-
   }
 
-  insertCue(i) {
-    $('#cue-form, #cue-form td, #cue-form td input, #cue-form td button').slideUp(300);
-    setTimeout(() => {
-      this.cueToInsertBefore = i;
+  insertCue(i, shouldAct: boolean) {
+    if ( shouldAct ) {
+      this.slideUpTr($('#cue-form-row'));
       setTimeout(() => {
-        $('#insert-form, #insert-form td, #insert-form td input, #insert-form td button').slideDown(300);
-      }, 0);
-    }, 350);
-
-
-
-
+        this.cueToInsertBefore = i;
+        setTimeout(() => {
+          this.slideDownTr($('#insert-form-row'));
+        }, 0);
+      }, 350);
+    }
   }
+
+  slideDownTr(tr) {
+    tr.find('td')
+        .wrapInner('<div style="display: none;" />')
+        .parent()
+        .find('td > div')
+        .slideDown(300, () => {
+          // Todo: Figure out what the two lines below are for.
+          // const $set = $(this);
+          // $set.replaceWith($set.contents());
+        });
+  }
+
+  slideUpTr(tr) {
+    tr.find('td')
+        .wrapInner('<div style="display: block;" />')
+        .parent()
+        .find('td > div')
+        .slideUp(300, () => {
+          $(this).parent().parent().remove();
+        });
+  }
+
+  fadeInTr(tr) {
+    tr.find('td')
+        .wrapInner('<div style="display: none;" />')
+        .parent()
+        .find('td > div')
+        .fadeIn(200, () => {
+          // Todo: Figure out what the two lines below are for.
+          // const $set = $(this);
+          // $set.replaceWith($set.contents());
+        });
+  }
+
+  fadeOutTr(tr) {
+    tr.find('td')
+        .wrapInner('<div style="display: block;" />')
+        .parent()
+        .find('td > div')
+        .fadeOut(200, () => {
+
+        });
+  }
+
 
   cancelCue() {
-    $('#insert-form, #insert-form td, #insert-form td input, #insert-form td button').slideUp(300);
+    console.log("cueToEdit:", this.cueToEdit);
+    console.log("cueToInsertBefore:", this.cueToInsertBefore);
 
-    setTimeout(() => {
-      this.cueToInsertBefore = null;
-      this.cueToEdit = null;
-      this.cueToDelete = null;
+    if (this.cueToInsertBefore !== null) {
+      this.slideUpTr($('#insert-form-row'));
+
       setTimeout(() => {
-        $('#cue-form, #cue-form td, #cue-form td input, #cue-form td button').slideDown(300);
-      }, 0);
-    }, 350);
+        this.cueToInsertBefore = null;
+        // this.cueToEdit = null;
+        // this.cueToDelete = null;
+        setTimeout(() => {
+          this.slideDownTr($('#cue-form-row'));
+        }, 0);
+      }, 350);
+    } else {
 
+      this.fadeOutTr($('#insert-form-row'));
 
+      setTimeout(() => {
+        this.cueToEdit = null;
+        setTimeout(() => {
+          this.slideDownTr($('#cue-form-row'));
 
-
-
-
-
+        }, 0);
+      }, 200);    }
 
 
   }
 
 
   editCue(i, shouldAct) {
-    console.log(shouldAct);
-    if (shouldAct) {
-      this.cueToEdit = i;
-      this.cueToInsertBefore = null;
+    if ( shouldAct ) {
 
-      this.cueModel.distance = this.cuesheet.cues[ i ].distance / 100;
-      this.cueModel.turn = this.cuesheet.cues[ i ].turn;
-      this.cueModel.description = this.cuesheet.cues[ i ].description;
+      this.slideUpTr($('#cue-form-row'));
+
+      setTimeout(() => {
+        this.cueModel.distance = this.cuesheet.cues[ i ].distance / 100;
+        this.cueModel.turn = this.cuesheet.cues[ i ].turn;
+        this.cueModel.description = this.cuesheet.cues[ i ].description;
+
+        this.cueToInsertBefore = null;
+        this.cueToEdit = i;
+
+        setTimeout(() => {
+          this.fadeInTr($('#insert-form-row'));
+        }, 0);
+      }, 350);
     }
   }
 

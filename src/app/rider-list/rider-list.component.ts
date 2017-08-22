@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MiscService } from '../_services/misc.service';
+import { MiscService } from '../shared/misc.service';
 // import { Rider } from '../_models/rider';
 import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
-import { RiderService } from '../_services/rider.service';
-import { User } from '../_models/user';
-import { UserService } from '../_services/user.service';
+import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'rp-rider-list',

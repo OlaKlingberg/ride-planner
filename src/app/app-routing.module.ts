@@ -1,26 +1,26 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MapComponent } from "./map/map.component";
-import { LoginComponent } from "./login/login.component";
-import { RegisterComponent } from "./register/register.component";
+import { LoginComponent } from "./authentication/login/login.component";
+import { RegistrationComponent } from "./authentication/registration/registration.component";
 import { HomeComponent } from "./home/home.component";
-import { LogoutComponent } from "./logout/logout.component";
+import { LogoutComponent } from "./authentication/logout/logout.component";
 import { ProtectedComponent } from "./protected/protected.component";
 import { AuthGuard } from "./_guards/auth.guard";
-import { RideSelectorComponent } from './ride-selector/ride-selector.component';
-import { UserListComponent } from './user-list/user-list.component';
+import { RideSelectorComponent } from './ride/ride-selector/ride-selector.component';
+import { UserListComponent } from './user/user-list/user-list.component';
 import { RiderListComponent } from './rider-list/rider-list.component';
 import { DebuggerComponent } from './debugger/debugger.component';
 import { AdminGuard } from './_guards/admin.guard';
 import { RideLeaderGuard } from './_guards/ride-leader.guard';
-import { CuesheetComponent } from './cuesheet/cuesheet.component';
-import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
-import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
-import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
-import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
-import { RideCreatorComponent } from './ride-creator/ride-creator.component';
-import { RideRemoverComponent } from './ride-remover/ride-remover.component';
-import { RideActionSelectorComponent } from './ride-action-selector/ride-action-selector.component';
+import { CuesheetViewComponent } from './cuesheet/cuesheet-view/cuesheet-view.component';
+import { CuesheetListComponent } from './cuesheet/cuesheet-list/cuesheet-list.component';
+import { CuesheetNewComponent } from './cuesheet/cuesheet-new/cuesheet-new.component';
+import { CuesheetEditComponent } from './cuesheet/cuesheet-edit/cuesheet-edit.component';
+import { CuesheetBikeComponent } from './cuesheet/cuesheet-bike/cuesheet-bike.component';
+import { RideCreatorComponent } from './ride/ride-creator/ride-creator.component';
+import { RideRemoverComponent } from './ride/ride-remover/ride-remover.component';
+import { RideActionSelectorComponent } from './ride/ride-action-selector/ride-action-selector.component';
 
 const routes: Routes = [
   {
@@ -42,7 +42,7 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegistrationComponent
   },
   {
     path: 'protected',
@@ -97,7 +97,7 @@ const routes: Routes = [
   {
     path: 'cuesheets/:_id/view',
     canActivate: [AuthGuard],
-    component: CuesheetComponent
+    component: CuesheetViewComponent
   },
   {
     path: 'cuesheets/:_id/edit',

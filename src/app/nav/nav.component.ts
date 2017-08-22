@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { MiscService } from '../_services/misc.service';
-import { User } from '../_models/user';
+import { MiscService } from '../shared/misc.service';
+import { User } from '../user/user';
 import * as $ from 'jquery';
 import {
   trigger,
@@ -11,7 +11,7 @@ import {
   transition
 } from '@angular/animations';
 
-import { UserService } from '../_services/user.service';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'rp-nav',

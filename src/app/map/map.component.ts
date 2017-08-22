@@ -8,10 +8,10 @@ import Socket = SocketIOClient.Socket;
 import * as _ from 'lodash';
 import * as $ from 'jquery';
 import { environment } from '../../environments/environment';
-import { UserService } from '../_services/user.service';
-import { MiscService } from '../_services/misc.service';
-import { User } from '../_models/user';
-import { DebuggingService } from '../_services/debugging.service';
+import { UserService } from '../user/user.service';
+import { MiscService } from '../shared/misc.service';
+import { User } from '../user/user';
+import { DebuggingService } from '../debugger/debugging.service';
 import {
   trigger,
   state,

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { AuthenticationService } from "./_services/authentication.service";
-import { MiscService } from './_services/misc.service';
-import { RiderService } from './_services/rider.service';
-import { DebuggingService } from './_services/debugging.service';
-import { UserService } from './_services/user.service';
+import { AuthenticationService } from "./authentication/authentication.service";
+import { MiscService } from './shared/misc.service';
+import { DebuggingService } from './debugger/debugging.service';
+import { UserService } from './user/user.service';
 
 @Component({
   selector: 'rp-root',
@@ -22,7 +21,6 @@ export class AppComponent implements OnInit {
 
   constructor(private userService: UserService,
               private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
-              private riderService: RiderService,                   // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
               private miscService: MiscService,
               public location: Location) {                          // Is used in the template.

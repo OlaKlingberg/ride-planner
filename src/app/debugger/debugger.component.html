@@ -1,5 +1,17 @@
-<h3>Debug Messages {{ time }}</h3>
-<button type="button" class="btn btn-primary" (click)="clearMessageList()">Clear</button>
-<ul>
-  <li *ngFor="let message of debugMessages; let i = index">{{i}}. {{ message }}</li>
-</ul>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h3>Debug Messages {{ time }}</h3>
+      <button type="button" class="btn btn-primary" (click)="clearMessageList()">Clear</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <ul>
+        <li *ngFor="let message of debugMessages; let i = index">{{i}}. {{ message }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+

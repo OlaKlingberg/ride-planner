@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../../authentication/authentication.service';
-import { RiderService } from '../../_services/rider.service';
 import { AlertService } from '../../alert/alert.service';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../../user/user.service';

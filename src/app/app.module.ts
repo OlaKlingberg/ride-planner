@@ -10,7 +10,6 @@ import { AuthGuard } from "./_guards/auth.guard";
 import { RideLeaderGuard } from './_guards/ride-leader.guard';
 import { AdminGuard } from './_guards/admin.guard';
 import { DebuggingService } from './debugger/debugging.service';
-import { EqualValidator } from './authentication/registration/equal-validator.directive';
 import { CuesheetService } from './cuesheet/cuesheet.service';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap';
@@ -29,8 +28,7 @@ import { RiderModule } from './rider/rider.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    EqualValidator
+    AppComponent
   ],
   imports: [
     AlertModule,

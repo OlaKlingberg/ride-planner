@@ -1,7 +1,5 @@
 // Probably based on the tutorial:
 //    https://scotch.io/tutorials/how-to-implement-a-custom-validator-directive-confirm-password-in-angular-2
-// And not, in spite of my original note here, on :
-//    Based on tutorial: https://scotch.io/tutorials/using-angular-2s-template-driven-forms
 
 import { Directive, forwardRef, Attribute } from '@angular/core';
 import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';

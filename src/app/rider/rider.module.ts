@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RiderListComponent } from './rider-list.component';
+import { RiderListComponent } from './rider-list/rider-list.component';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
@@ -12,5 +12,5 @@ import { CommonModule } from '@angular/common';
   exports: [],
   providers: []
 })
-export class RiderListModule {
+export class RiderModule {
 }

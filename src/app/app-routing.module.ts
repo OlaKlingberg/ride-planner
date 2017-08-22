@@ -9,7 +9,7 @@ import { ProtectedComponent } from "./protected/protected.component";
 import { AuthGuard } from "./_guards/auth.guard";
 import { RideSelectorComponent } from './ride/ride-selector/ride-selector.component';
 import { UserListComponent } from './user/user-list/user-list.component';
-import { RiderListComponent } from './rider-list/rider-list.component';
+import { RiderListComponent } from './rider/rider-list/rider-list.component';
 import { DebuggerComponent } from './debugger/debugger.component';
 import { AdminGuard } from './_guards/admin.guard';
 import { RideLeaderGuard } from './_guards/ride-leader.guard';

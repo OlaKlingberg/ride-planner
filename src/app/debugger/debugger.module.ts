@@ -3,13 +3,16 @@ import { CommonModule } from '@angular/common';
 import { DebuggerComponent } from './debugger.component';
 
 @NgModule({
-  imports:       [
-      CommonModule
+  imports: [
+    CommonModule
   ],
   declarations: [
     DebuggerComponent
   ],
-  exports:      [],
-  providers:    []
+  exports: [
+    DebuggerComponent
+  ],
+  providers: []
 })
-export class DebuggerModule { }
+export class DebuggerModule {
+}

@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    console.log("HomeComponent. About to subscribe to user. Counter:", this.counter++);
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 

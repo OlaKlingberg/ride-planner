@@ -32,7 +32,7 @@
 
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
       <label for="password">Password</label>
-      <input type="password" class="form-control" name="password" [(ngModel)]="model.password"  validateEqual="confirmPassword" reverse="true" #password="ngModel" id="password" required/>
+      <input type="password" class="form-control" name="password" [(ngModel)]="model.password"  validateEqual="passwordConfirmation" reverse="true" #password="ngModel" id="password" required/>
       <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
     </div>
 

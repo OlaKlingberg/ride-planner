@@ -11,7 +11,6 @@ export class RideLeaderGuard implements CanActivate {
 
   constructor(private router: Router,
               private userService: UserService) {
-    console.log("RideLeaderGuard. constructor. Counter:", this.counter++);
     this.userService.user$.subscribe(
         user => this.user = user
     );

@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MiscService } from '../shared/misc.service';
+import { MiscService } from '../../shared/misc.service';
 // import { Rider } from '../_models/rider';
 import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
-import { User } from '../user/user';
-import { UserService } from '../user/user.service';
+import { User } from '../../user/user';
+import { UserService } from '../../user/user.service';
 
 @Component({
   selector: 'rp-rider-list',
@@ -46,10 +46,8 @@ export class RiderListComponent implements OnInit, OnDestroy {
 
   // Todo: Should these functions be moved to RiderService and just be called from here?
   getRiderList() {
-    console.log("RiderListComponent.getRiderList()");
     this.socket.emit('giveMeRiderList', this.user.ride);
     this.socket.on('riderList', riderList => {
-      console.log("RiderListComponent.getRiderList(). socket.on('riderList'). riderList:", riderList);
       riderList = riderList.map(rider => new User(rider));
       this.riderList = riderList;
     });

@@ -25,7 +25,7 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { NavModule } from './nav/nav.module';
 import { UserListModule } from './user/user-list/user-list.module';
-import { RiderListModule } from './rider-list/rider-list.module';
+import { RiderModule } from './rider/rider.module';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,7 @@ import { RiderListModule } from './rider-list/rider-list.module';
     NavModule,
     ProtectedModule,
     RideModule,
-    RiderListModule,
+    RiderModule,
     SharedModule,
     UserListModule,
     BrowserModule,

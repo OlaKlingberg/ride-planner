@@ -14,7 +14,7 @@
         </thead>
 
         <tbody>
-        <tr *ngFor="let cuesheet of cuesheets" class="clickable" routerLink="/cuesheets/{{cuesheet._id}}/view">
+        <tr *ngFor="let cuesheet of cuesheets" class="clickable" routerLink="/cuesheet/{{cuesheet._id}}/view">
           <td>{{ cuesheet.name }}</td>
           <td>{{ cuesheet.description }}</td>
           <td>{{ cuesheet._creator.fname }} {{ cuesheet._creator.lname }}</td>
@@ -23,7 +23,7 @@
 
       </table>
 
-      <a routerLink="/cuesheets/new" class="btn btn-primary">Make New Cue Sheet</a>
+      <a routerLink="/cuesheet/new" class="btn btn-primary">Make New Cue Sheet</a>
 
       <h3 *ngIf="!cuesheets?.length">There are no cue sheets.</h3>
 

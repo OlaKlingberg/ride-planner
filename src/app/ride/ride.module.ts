@@ -4,9 +4,11 @@ import { RideActionSelectorComponent } from './ride-action-selector/ride-action-
 import { RideRemoverComponent } from './ride-remover/ride-remover.component';
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 import { SharedModule } from '../shared/shared.module';
+import { RideRoutingModule } from './ride-routing.module';
 
 @NgModule({
   imports: [
+    RideRoutingModule,
     SharedModule
   ],
   declarations: [

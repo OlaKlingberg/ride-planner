@@ -3,7 +3,6 @@ import { CuesheetService } from '../cuesheet.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'rp-cuesheet-list',
   templateUrl: './cuesheet-list.component.html',
   styleUrls: ['./cuesheet-list.component.scss']
 })

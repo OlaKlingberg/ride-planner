@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { UserService } from "app/user/user.service";
 
 @Component({
-  selector: 'rp-login',
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ]
 })
@@ -51,8 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginSub = this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true);
-              console.log("About to navigate to /ride-selector");
-              this.router.navigate([ '/ride-selector' ]);
+              this.router.navigate([ this.returnUrl ]);
             },
             error => {
               console.log("LoginComponent.login(). There was an error logging in.");

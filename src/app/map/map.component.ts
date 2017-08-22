@@ -23,7 +23,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'rp-map',
   templateUrl: './map.component.html',
   styleUrls: [ './map.component.scss' ],
   animations: [
@@ -101,7 +100,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.listenForRemovedRider();
     this.listenForDisconnectedRider();
     this.removeLongDisconnectedRiders();
-    console.log("About to load mapsAPILoader.");
     this.mapsAPILoader.load().then(() => {
       this.google = google;
       this.focusOnUser();
@@ -116,7 +114,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   subscribeToUser() {
-    console.log("subscribeToUser");
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
       // if (user && user.position && user.position.coords) console.log("User lat:", user.position.coords.latitude * 1000);
@@ -149,7 +146,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   requestRiderList() {
-    console.log("MapComponent.requestRiderList");
     // Wait till a ride has been selected ...
     let userRidePromise = new Promise((resolve, reject) => {
       this.userRideSub = this.userService.user$.subscribe(user => {

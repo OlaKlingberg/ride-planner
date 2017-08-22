@@ -9,7 +9,6 @@ import Socket = SocketIOClient.Socket;
 import { MiscService } from '../../shared/misc.service';
 
 @Component({
-  selector: 'rp-logout',
   templateUrl: './logout.component.html',
   styleUrls: [ './logout.component.scss' ]
 })
@@ -40,7 +39,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
               this.userService.watchWhenToJoinRide();
 
               this.alertService.success('You have been logged out', true);
-              this.router.navigate([ '/login' ]);
+              this.router.navigate([ '/auth/login' ]);
             },
             error => {
               console.log(error);

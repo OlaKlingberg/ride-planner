@@ -6,7 +6,6 @@ import { Ride } from '../ride';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'rp-ride-creator',
   templateUrl: './ride-creator.component.html',
   styleUrls: ['./ride-creator.component.scss']
 })

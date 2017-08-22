@@ -7,10 +7,12 @@ import { MapComponent } from './map.component';
 import { AgmCoreModule } from "angular2-google-maps/core";
 import { environment } from "../../environments/environment";
 import { SharedModule } from '../shared/shared.module';
+import { MapRoutingModule } from './map-routing.module';
 
 @NgModule({
 
   imports: [
+    MapRoutingModule,
     SharedModule,
     HttpModule,
     AgmCoreModule.forRoot({

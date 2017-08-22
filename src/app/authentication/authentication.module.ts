@@ -4,9 +4,11 @@ import { LogoutComponent } from './logout/logout.component';
 import { RouterModule } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
 import { SharedModule } from '../shared/shared.module';
+import { AuthenticationRoutingModule } from './authentication-routing.module';
 
 @NgModule({
   imports: [
+    AuthenticationRoutingModule,
     RouterModule,
     SharedModule
   ],
@@ -14,7 +16,6 @@ import { SharedModule } from '../shared/shared.module';
     LoginComponent,
     LogoutComponent,
     RegistrationComponent
-
   ],
   exports: [],
   providers: []

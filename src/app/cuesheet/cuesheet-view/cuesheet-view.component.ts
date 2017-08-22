@@ -4,7 +4,6 @@ import { Cuesheet } from '../cuesheet';
 import { CuesheetService } from '../cuesheet.service';
 
 @Component({
-  selector: 'rp-cuesheet',
   templateUrl: './cuesheet-view.component.html',
   styleUrls: [ './cuesheet-view.component.scss' ]
 })
@@ -21,9 +20,9 @@ export class CuesheetViewComponent implements OnInit {
   }
 
   getCuesheet() {
-    let _id = this.route.snapshot.paramMap.get('_id');
+    let id = this.route.snapshot.paramMap.get('id');
 
-    this.cuesheetService.getCuesheet(_id)
+    this.cuesheetService.getCuesheet(id)
         .then(cuesheet => {
           this.setTotalDistances(cuesheet);
         });

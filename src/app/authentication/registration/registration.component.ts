@@ -6,7 +6,6 @@ import { User } from "../../user/user";
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'rp-register',
   templateUrl: './registration.component.html',
   styleUrls: [ './registration.component.scss' ]
 })

@@ -5,7 +5,6 @@ import { UserService } from '../user/user.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'rp-home',
   templateUrl: './home.component.html',
   styleUrls: [ './home.component.scss' ]
 })

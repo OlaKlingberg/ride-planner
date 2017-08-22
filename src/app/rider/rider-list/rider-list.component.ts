@@ -8,7 +8,6 @@ import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
 
 @Component({
-  selector: 'rp-rider-list',
   templateUrl: './rider-list.component.html',
   styleUrls: [ './rider-list.component.scss' ]
 })
@@ -53,9 +52,9 @@ export class RiderListComponent implements OnInit, OnDestroy {
     });
   }
 
-  goToRideSelector() {
-    this.router.navigate([ '/ride-selector' ]);
-  }
+  // goToRideSelector() {
+  //   this.router.navigate([ '/ride-selector' ]);
+  // }
 
   ngOnDestroy() {
     this.rideSub.unsubscribe();

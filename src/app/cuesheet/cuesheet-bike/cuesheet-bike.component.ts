@@ -15,7 +15,6 @@ import * as Hammer from '../../../../node_modules/hammerjs/hammer';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
-  selector: 'rp-cuesheet-bike',
   templateUrl: './cuesheet-bike.component.html',
   styleUrls: [ './cuesheet-bike.component.scss' ],
   animations: [
@@ -122,7 +121,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       } else {
         this.move = 'up';
         setTimeout(() => {
-          this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
+          this.router.navigate([ `/cuesheet/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
           // this.move = 'still';
         }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
       }
@@ -134,7 +133,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       } else {
         this.move = 'down';
         setTimeout(() => {
-          this.router.navigate([ `/cuesheets/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
+          this.router.navigate([ `/cuesheet/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
         }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
       }
     });

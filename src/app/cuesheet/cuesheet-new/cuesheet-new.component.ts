@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'rp-cuesheet-new',
   templateUrl: './cuesheet-new.component.html',
   styleUrls: [ './cuesheet-new.component.scss' ]
 })
@@ -35,7 +34,7 @@ export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit {
         .subscribe((cuesheet: Cuesheet) => {
               console.log(cuesheet);
               this.alertService.success('The Cue Sheet has been created', true);
-              this.router.navigate([ `/cuesheets/${cuesheet._id}/edit` ]);
+              this.router.navigate([ `/cuesheet/${cuesheet._id}/edit` ]);
             },
             error => {
               this.loading = false;

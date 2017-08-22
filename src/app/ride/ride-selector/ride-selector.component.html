@@ -24,14 +24,14 @@
               </div>
 
               <button class="btn btn-primary">Sign in to ride</button>
-              <br><a class="link" routerLink='/ride-action-selector'>Create or delete a ride</a>
+              <br><a class="link" routerLink="../select-action">Create or delete a ride</a>
 
             </div>
 
             <div *ngIf="!availableRides">
               <h3>Sorry, there are currently no rides!</h3>
               <h4>Do you want to create one?</h4>
-              <a class="btn btn-primary" routerLink='/ride-creator'>Create new ride</a>
+              <a class="btn btn-primary" routerLink='/ride/create'>Create new ride</a>
             </div>
           </div>
 

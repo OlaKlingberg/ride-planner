@@ -11,7 +11,6 @@ import { Ride } from '../ride';
 import { RideService } from '../ride.service';
 
 @Component({
-  selector: 'rp-ride-remover',
   templateUrl: './ride-remover.component.html',
   styleUrls: [ './ride-remover.component.scss' ]
 })
@@ -54,7 +53,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
     this.rideService.deleteRide(this.model.ride).then((ride: Ride) => {
       if ( ride ) {
         this.alertService.success(`The ride ${ride.name} has been deleted.`);
-        this.router.navigate([ '/ride-action-selector' ])
+        this.router.navigate([ '/ride/select-action' ])
       } else {
         this.alertService.error("Oops! Something went wrong!");
       }

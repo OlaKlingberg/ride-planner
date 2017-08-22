@@ -7,9 +7,11 @@ import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
+import { CuesheetRoutingModule } from './cuesheet-routing.module';
 
 @NgModule({
   imports: [
+      CuesheetRoutingModule,
       RouterModule,
       SharedModule
   ],

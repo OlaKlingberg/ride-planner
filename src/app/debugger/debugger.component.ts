@@ -4,7 +4,6 @@ import Socket = SocketIOClient.Socket;
 import { User } from '../user/user';
 
 @Component({
-  selector: 'rp-debugger',
   templateUrl: './debugger.component.html',
   styleUrls: [ './debugger.component.scss' ]
 })

@@ -12,7 +12,6 @@ import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'rp-cuesheet-edit',
   templateUrl: './cuesheet-edit.component.html',
   styleUrls: [ './cuesheet-edit.component.scss' ],
   animations: cuesheetEditAnimations
@@ -43,7 +42,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.cuesheetId = this.route.snapshot.paramMap.get('_id');
+    this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
     this.checkForModalClose();
 
@@ -318,7 +317,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     this.cuesheetService.deleteCuesheet(this.cuesheet._id).then((cuesheet: Cuesheet) => {
       if ( cuesheet ) {
         this.alertService.success(`The cue sheet ${cuesheet.name} has been deleted.`);
-        this.router.navigate([ '/cuesheets' ]);
+        this.router.navigate([ '/cuesheet' ]);
       } else {
         this.alertService.error("Oops! Something went wrong!");
       }

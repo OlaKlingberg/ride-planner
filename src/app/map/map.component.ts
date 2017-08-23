@@ -122,17 +122,23 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
   subscribeToNavBarState() {
+    console.log("subscribeToNavBarState()");
     this.navBarStateSub = this.miscService.navBarState$
         .combineLatest(this.userService.position$)  // Todo: Do I need to unsubscribe from this?
         .subscribe(([ navBarState, position ]) => {
+          console.log("navBarState:", navBarState);
+          console.log("position:", position);
           // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.
           // Todo: The condition is kind of ugly.
           if ( position && position.coords && position.coords.latitude ) {
+            console.log("We have a position, and navBarState is:", navBarState);
             this.navBarState = navBarState;
             setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
               let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
+              console.log("ariaExpanded:", ariaExpanded);
               if ( navBarState === 'show' && !ariaExpanded ) {
                 // this.navBarStateTimer = setTimeout(() => {  // Don't remember why the setTimeout is needed, but it is.
+                console.log("About to navBarState$.next('hide')");
                 this.miscService.navBarState$.next('hide');
                 // }, 0);
               }
@@ -285,7 +291,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // Todo: Update bounds only if position has changed more than a certain amount.
   focusOnUser() {
-    if (this.positionSub) this.positionSub.unsubscribe();
+    if ( this.positionSub ) this.positionSub.unsubscribe();
     this.positionSub = this.userService.position$.subscribe(position => {
           // console.log("MapComponent.focusOnUser() position$.subscribe()");
           if ( position ) {
@@ -304,7 +310,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   showAllRiders() {
     console.log("showAllRiders()");
-    if (this.riderListSub) this.riderListSub.unsubscribe();
+    if ( this.riderListSub ) this.riderListSub.unsubscribe();
     this.riderListSub = this.riderList$.subscribe(riderList => {
       if ( !riderList || riderList.length < 0 ) return;
       this.bounds = new this.google.maps.LatLngBounds();

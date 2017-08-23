@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/user.service';
 import Socket = SocketIOClient.Socket;
-import { MiscService } from '../../shared/misc.service';
+import { MiscService } from '../../core/misc.service';
 
 @Component({
   templateUrl: './logout.component.html',

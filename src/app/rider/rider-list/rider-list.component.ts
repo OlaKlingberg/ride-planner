@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MiscService } from '../../shared/misc.service';
+import { MiscService } from '../../core/misc.service';
 // import { Rider } from '../_models/rider';
 import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';

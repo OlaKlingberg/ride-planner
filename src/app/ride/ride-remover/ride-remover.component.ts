@@ -4,7 +4,7 @@ import { AlertService } from '../../alert/alert.service';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../../user/user.service';
 import { User } from '../../user/user';
-import { MiscService } from '../../shared/misc.service';
+import { MiscService } from '../../core/misc.service';
 import Socket = SocketIOClient.Socket;
 import { environment } from "../../../environments/environment";
 import { Ride } from '../ride';

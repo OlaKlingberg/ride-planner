@@ -3,6 +3,7 @@ import { UserService } from '../user/user.service';
 import { CommonModule } from '@angular/common';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { AlertModule } from '../alert/alert.module';
+import { MiscService } from './misc.service';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { AlertModule } from '../alert/alert.module';
   ],
   providers: [
     AuthenticationService,
-    UserService
+    UserService,
+    MiscService
   ]
 })
 export class CoreModule {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { AuthenticationService } from "./authentication/authentication.service";
-import { MiscService } from './shared/misc.service';
+import { MiscService } from './core/misc.service';
 import { DebuggingService } from './debugger/debugging.service';
 import { UserService } from './user/user.service';
 

@@ -6,7 +6,7 @@ import 'rxjs/Rx';
 import { environment } from "../../environments/environment";
 import { User } from "../user/user";
 import Socket = SocketIOClient.Socket;
-import { MiscService } from '../shared/misc.service';
+import { MiscService } from '../core/misc.service';
 import { UserService } from '../user/user.service';
 
 @Injectable()

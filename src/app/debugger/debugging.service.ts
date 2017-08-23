@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MiscService } from '../shared/misc.service';
+import { MiscService } from '../core/misc.service';
 import Socket = SocketIOClient.Socket;
 import { Subject } from 'rxjs/Subject';
 

@@ -9,9 +9,8 @@ import * as _ from 'lodash';
 import * as $ from 'jquery';
 import { environment } from '../../environments/environment';
 import { UserService } from '../user/user.service';
-import { MiscService } from '../shared/misc.service';
+import { MiscService } from '../core/misc.service';
 import { User } from '../user/user';
-import { DebuggingService } from '../debugger/debugging.service';
 import {
   trigger,
   state,
@@ -20,7 +19,6 @@ import {
   transition
 } from '@angular/animations';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './map.component.html',
@@ -83,9 +81,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService,
               private miscService: MiscService,
-              private mapsAPILoader: MapsAPILoader,
-              private debuggingService: DebuggingService,
-              private router: Router) {
+              private mapsAPILoader: MapsAPILoader) {
     this.socket = this.miscService.socket;
   }
 
@@ -122,25 +118,17 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
   subscribeToNavBarState() {
-    console.log("subscribeToNavBarState()");
     this.navBarStateSub = this.miscService.navBarState$
         .combineLatest(this.userService.position$)  // Todo: Do I need to unsubscribe from this?
         .subscribe(([ navBarState, position ]) => {
-          console.log("navBarState:", navBarState);
-          console.log("position:", position);
           // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.
           // Todo: The condition is kind of ugly.
           if ( position && position.coords && position.coords.latitude ) {
-            console.log("We have a position, and navBarState is:", navBarState);
             this.navBarState = navBarState;
             setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
               let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
-              console.log("ariaExpanded:", ariaExpanded);
               if ( navBarState === 'show' && !ariaExpanded ) {
-                // this.navBarStateTimer = setTimeout(() => {  // Don't remember why the setTimeout is needed, but it is.
-                console.log("About to navBarState$.next('hide')");
                 this.miscService.navBarState$.next('hide');
-                // }, 0);
               }
             }, 0);
           }
@@ -189,7 +177,6 @@ export class MapComponent implements OnInit, OnDestroy {
   listenForJoinedRider() {
     this.socket.on('joinedRider', joinedRider => {
       // If the zIndices are getting too high, it's time to request the whole riderList again.
-      console.log("zCounter:", this.zCounter);
       if ( this.zCounter >= 1000 ) {
         this.zCounter = 0;
         console.log("Counter reached 1000! About to emit giveMeRiderList.");

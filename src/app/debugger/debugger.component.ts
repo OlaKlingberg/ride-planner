@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MiscService } from '../shared/misc.service';
+import { MiscService } from '../core/misc.service';
 import Socket = SocketIOClient.Socket;
 import { User } from '../user/user';
 

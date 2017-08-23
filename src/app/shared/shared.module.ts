@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { FocusDirective } from './focus.directive';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MiscService } from './misc.service';
 import { EqualValidator } from './equal-validator.directive';
 
 @NgModule({
@@ -17,9 +16,7 @@ import { EqualValidator } from './equal-validator.directive';
     EqualValidator,
     FocusDirective
   ],
-  providers: [
-    MiscService
-  ]
+  providers: []
 })
 export class SharedModule {
 }

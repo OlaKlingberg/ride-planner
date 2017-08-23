@@ -4,7 +4,7 @@ import { User } from "./user";
 import { environment } from "../../environments/environment";
 import Socket = SocketIOClient.Socket;
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { MiscService } from '../shared/misc.service';
+import { MiscService } from '../core/misc.service';
 import { Subscription } from 'rxjs/Subscription';
 import { DebuggingService } from '../debugger/debugging.service';
 

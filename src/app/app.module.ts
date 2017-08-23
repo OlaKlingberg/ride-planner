@@ -13,7 +13,7 @@ import { DebuggingService } from './debugger/debugging.service';
 import { CuesheetService } from './cuesheet/cuesheet.service';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap';
-import { SharedModule } from './shared/shared.module';
+// import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { NavModule } from './nav/nav.module';
 
@@ -24,7 +24,7 @@ import { NavModule } from './nav/nav.module';
   imports: [
     CoreModule,
     NavModule,
-    SharedModule,
+    // SharedModule,
     BrowserModule,
     HttpModule,
     AppRoutingModule,

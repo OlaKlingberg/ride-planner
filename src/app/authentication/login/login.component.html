@@ -27,7 +27,7 @@
 
     <div *ngIf="user" class="col-md-6">
       <h2>{{user.fname}}, you are already logged in!</h2>
-      <a [routerLink]="['/logout']">Not {{user.fname}}?</a>
+      <a [routerLink]="['/auth/logout']">Not {{user.fname}}?</a>
     </div>
   </div>
 </div>

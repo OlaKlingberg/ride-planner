@@ -5,6 +5,7 @@ import { RideRemoverComponent } from './ride-remover/ride-remover.component';
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 import { SharedModule } from '../shared/shared.module';
 import { RideRoutingModule } from './ride-routing.module';
+import { RideService } from './ride.service';
 
 @NgModule({
   imports: [
@@ -18,7 +19,9 @@ import { RideRoutingModule } from './ride-routing.module';
     RideSelectorComponent
   ],
   exports: [],
-  providers: []
+  providers: [
+      RideService
+  ]
 })
 export class RideModule {
 }

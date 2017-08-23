@@ -27,7 +27,7 @@ export class RideCreatorComponent implements OnInit {
     this.rideSub = this.rideService.createRide(this.model)
         .subscribe((ride: Ride) => {
               this.alertService.success(`The ride "${ride.name}" has been created`, true);
-              this.router.navigate([ '/ride-selector' ]);
+              this.router.navigate([ '/ride/select' ]);
             },
             error => {
               this.loading = false;

@@ -21,7 +21,8 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
               private userService: UserService,
-              private miscService: MiscService) {
+              private miscService: MiscService,
+              ) {
     this.socket = this.miscService.socket;
   }
 

@@ -1,8 +1,6 @@
-import { animate, group, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export const cuesheetEditAnimations = [
-
-
   trigger('cueRow', [
     state('display', style({
       fontSize: '*',

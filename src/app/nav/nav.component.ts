@@ -3,15 +3,10 @@ import { Location } from '@angular/common';
 import { MiscService } from '../shared/misc.service';
 import { User } from '../user/user';
 import * as $ from 'jquery';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
 
 import { UserService } from '../user/user.service';
+import { navAnimations } from './nav.component.animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'rp-nav',
@@ -28,7 +23,6 @@ import { UserService } from '../user/user.service';
         display: "none"
       })),
       transition('show => hide', animate('500ms 4s')),
-      // transition('hide => show', animate('10ms'))
     ])
   ]
 })
@@ -48,7 +42,6 @@ export class NavComponent implements OnInit {
   }
 
   subscribeToUser() {
-    // console.log("NavComponent. subscribeToUser()");
     this.userService.user$.subscribe(
         user => this.user = user
     );

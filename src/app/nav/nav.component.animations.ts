@@ -10,6 +10,6 @@ export const navAnimations = [
       opacity: 0,
       display: "none"
     })),
-    transition('show => hide', animate('500ms 4s')),
+    transition('show => hide', animate('500ms')),
   ])
 ];

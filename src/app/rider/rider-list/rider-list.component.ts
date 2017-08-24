@@ -5,6 +5,7 @@ import { MiscService } from '../../core/misc.service';
 import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
 import { User } from '../../user/user';
+import { RideSubjectService } from '../../ride/ride-subject.service';
 import { UserService } from '../../user/user.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class RiderListComponent implements OnInit, OnDestroy {
   public ride: string;
 
   constructor(private miscService: MiscService,
+              private rideSubjectService: RideSubjectService,
               private userService: UserService,
               private router: Router) {
     this.socket = this.miscService.socket;
@@ -31,7 +33,7 @@ export class RiderListComponent implements OnInit, OnDestroy {
   }
 
   subscribeToRide() {
-    this.rideSub = this.userService.ride$.subscribe(ride => {
+    this.rideSub = this.rideSubjectService.ride$.subscribe(ride => {
       this.ride = ride;
     })
   }

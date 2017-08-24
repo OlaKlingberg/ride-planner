@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/user.service';
 import Socket = SocketIOClient.Socket;
 import { MiscService } from '../../core/misc.service';
+import { RideSubjectService } from '../../ride/ride-subject.service';
 
 @Component({
   templateUrl: './logout.component.html',
@@ -20,6 +21,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private alertService: AlertService,
+              private rideSubjectService: RideSubjectService,
               private userService: UserService,
               private miscService: MiscService) {
     this.socket = this.miscService.socket;
@@ -31,7 +33,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
               environment.storage.removeItem('rpToken');
               environment.storage.removeItem('rpRide');
               this.userService.user$.next(null);
-              this.userService.ride$.next(null);
+              this.rideSubjectService.ride$.next(null);
 
               this.socket.emit('leaveRide');
 

@@ -9,6 +9,7 @@ import Socket = SocketIOClient.Socket;
 import { environment } from "../../../environments/environment";
 import { Ride } from '../ride';
 import { RideService } from '../ride.service';
+import { RideSubjectService } from '../ride-subject.service';
 
 @Component({
   templateUrl: './ride-remover.component.html',
@@ -23,9 +24,10 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   private availableRidesListener: any;
 
   constructor(private router: Router,
-              private alertService: AlertService,
-              private userService: UserService,
               private rideService: RideService,
+              private rideSubjectService: RideSubjectService,
+              private userService: UserService,
+              private alertService: AlertService,
               private miscService: MiscService) {
     this.socket = this.miscService.socket;
   }
@@ -33,6 +35,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscribeToUser();
     this.getAvailableRides();
+
   }
 
   subscribeToUser() {
@@ -41,7 +44,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Todo: I'm not sure i should be using sockets here.
+  // Todo: I'm not sure I should be using sockets here.
   getAvailableRides() {
     this.socket.emit('giveMeAvailableRides');
     this.availableRidesListener = this.socket.on('availableRides', availableRides => {
@@ -62,7 +65,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
 
   logOutFromRide() {
     environment.storage.removeItem('rpRide');
-    this.userService.ride$.next(null);
+    this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;
     user.ride = null;
     this.userService.user$.next(user);

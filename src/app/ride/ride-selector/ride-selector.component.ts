@@ -6,6 +6,8 @@ import { User } from '../../user/user';
 import { MiscService } from '../../core/misc.service';
 import Socket = SocketIOClient.Socket;
 import { environment } from "../../../environments/environment";
+import { PositionService } from '../../core/position.service';
+import { RideSubjectService } from '../ride-subject.service';
 
 @Component({
   templateUrl: './ride-selector.component.html',
@@ -20,6 +22,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   private availableRidesListener: any;
 
   constructor(private router: Router,
+              private rideSubjectService: RideSubjectService,
               private userService: UserService,
               private miscService: MiscService,
               ) {
@@ -45,14 +48,14 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   signIn() {
-    this.userService.ride$.next(this.model.ride);
+    this.rideSubjectService.ride$.next(this.model.ride);
     environment.storage.setItem('rpRide', this.model.ride);
     this.router.navigate(['/map']);
   }
 
   logOutFromRide() {
     environment.storage.removeItem('rpRide');
-    this.userService.ride$.next(null);
+    this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;
     user.ride = null;
     this.userService.user$.next(user);

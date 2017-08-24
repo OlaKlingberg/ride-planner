@@ -4,6 +4,7 @@ import { AuthenticationService } from "./authentication/authentication.service";
 import { MiscService } from './core/misc.service';
 import { DebuggingService } from './debugger/debugging.service';
 import { UserService } from './user/user.service';
+import { PositionService } from './core/position.service';
 
 @Component({
   selector: 'rp-root',
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit {
   longitude: number;
   accuracy: number;
 
-  constructor(private userService: UserService,
+  constructor(private positionService: PositionService,
+              private userService: UserService,
               private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
               private miscService: MiscService,
@@ -40,7 +42,7 @@ export class AppComponent implements OnInit {
   }
 
   subscribeToPosition() {
-    this.userService.position$.subscribe(position => {
+    this.positionService.position$.subscribe(position => {
       if ( position ) {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;

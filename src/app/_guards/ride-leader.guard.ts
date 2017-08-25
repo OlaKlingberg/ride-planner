@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { User } from '../_models/user';
-import { UserService } from '../_services/user.service';
+import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class RideLeaderGuard implements CanActivate {
@@ -11,7 +11,6 @@ export class RideLeaderGuard implements CanActivate {
 
   constructor(private router: Router,
               private userService: UserService) {
-    console.log("RideLeaderGuard. constructor. Counter:", this.counter++);
     this.userService.user$.subscribe(
         user => this.user = user
     );

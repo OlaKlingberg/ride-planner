@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { User } from '../_models/user';
-import { UserService } from '../_services/user.service';
+import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'rp-home',
   templateUrl: './home.component.html',
   styleUrls: [ './home.component.scss' ]
 })
@@ -23,7 +22,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    console.log("HomeComponent. About to subscribe to user. Counter:", this.counter++);
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 

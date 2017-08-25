@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MiscService } from '../_services/misc.service';
 import Socket = SocketIOClient.Socket;
-import { User } from '../_models/user';
+import { User } from '../user/user';
+import { SocketService } from '../core/socket.service';
 
 @Component({
-  selector: 'app-debugger',
   templateUrl: './debugger.component.html',
   styleUrls: [ './debugger.component.scss' ]
 })
@@ -14,8 +13,8 @@ export class DebuggerComponent implements OnInit, OnDestroy {
   public debugMessages: Array<any> = [];
   public time;
 
-  constructor(private miscService: MiscService) {
-    this.socket = miscService.socket;
+  constructor(private socketService: SocketService) {
+    this.socket = socketService.socket;
   }
 
   ngOnInit() {

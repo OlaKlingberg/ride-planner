@@ -5,41 +5,23 @@ import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { Subscription } from 'rxjs/Subscription';
 import Socket = SocketIOClient.Socket;
+import * as $ from 'jquery'
 import * as _ from 'lodash';
-import * as $ from 'jquery';
 import { environment } from '../../environments/environment';
-import { UserService } from '../_services/user.service';
-import { MiscService } from '../_services/misc.service';
-import { User } from '../_models/user';
-import { DebuggingService } from '../_services/debugging.service';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
+import { User } from '../user/user';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Router } from '@angular/router';
+import { PositionService } from '../core/position.service';
+import { UserService } from '../user/user.service';
+import { SocketService } from '../core/socket.service';
+import { NavService } from '../nav/nav.service';
+import { RideSubjectService } from '../ride/ride-subject.service';
+import { MapAnimations } from './map.component.animatins';
+import Timer = NodeJS.Timer;
 
 @Component({
-  selector: 'rp-map',
   templateUrl: './map.component.html',
   styleUrls: [ './map.component.scss' ],
-  animations: [
-    trigger('buttons', [
-      state('show', style({
-        opacity: 1,
-        display: "block"
-      })),
-      state('hide', style({
-        opacity: 0,
-        display: "none"
-      })),
-      transition('show => hide', animate('500ms 4s')),
-      // transition('hide => show', animate('10ms'))
-    ])
-  ]
+  animations: MapAnimations
 })
 export class MapComponent implements OnInit, OnDestroy {
   public production = environment.production;
@@ -56,7 +38,6 @@ export class MapComponent implements OnInit, OnDestroy {
   private userSub: Subscription;
   private userRideSub: Subscription;
   private positionSub: Subscription;
-  private navBarStateSub: Subscription;
   private riderListSub: Subscription;
 
   private markerUrl: string = "assets/img/rider-markers/";
@@ -74,7 +55,9 @@ export class MapComponent implements OnInit, OnDestroy {
   public riderList: Array<User> = [];
   private riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
 
-  public navBarState: string;
+  public buttonState: string = 'show';
+
+  private hideTimer: Timer;
 
 
   @ViewChildren('markers') markers;
@@ -82,17 +65,18 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('userInfoWindow') userInfoWindow;
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
 
-  constructor(private userService: UserService,
-              private miscService: MiscService,
+  constructor(private positionService: PositionService,
+              private socketService: SocketService,
               private mapsAPILoader: MapsAPILoader,
-              private debuggingService: DebuggingService,
-              private router: Router) {
-    this.socket = this.miscService.socket;
+              private navService: NavService,
+              private rideSubjectService: RideSubjectService,
+              private userService: UserService) {
+    this.socket = this.socketService.socket;
   }
 
   ngOnInit() {
+    this.hideNav();
     this.subscribeToUser();
-    this.subscribeToNavBarState();
     this.listenForSocketConnection();
     this.requestRiderList();
     this.listenForRiderList();
@@ -100,74 +84,41 @@ export class MapComponent implements OnInit, OnDestroy {
     this.listenForUpdatedRiderPosition();
     this.listenForRemovedRider();
     this.listenForDisconnectedRider();
+    this.loadMapsAPILoader();
     this.removeLongDisconnectedRiders();
-    console.log("About to load mapsAPILoader.");
+
+  }
+
+  hideNav() {
+    clearTimeout(this.hideTimer);
+    // Wait till the map is shown (which happens when there is a position), sait timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
+    this.positionService.positionPromise().then(() => {
+      this.hideTimer = setTimeout(() => {
+        let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
+        if ( !ariaExpanded ) {
+          this.navService.navBarState$.next('hide');
+          this.buttonState = 'hide';
+        }
+      }, 4000);
+    });
+  }
+
+  showNav() {
+    this.navService.navBarState$.next('show');
+    this.buttonState = 'show';
+  }
+
+  loadMapsAPILoader() {
     this.mapsAPILoader.load().then(() => {
       this.google = google;
       this.focusOnUser();
-
-      // Todo: What the hell was my thought behind this?
-      // setTimeout(() => {
-      //   this.router.navigate([ '/map' ]);
-      // }, 6000);
-
-
     });
   }
 
   subscribeToUser() {
-    console.log("subscribeToUser");
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
-      // if (user && user.position && user.position.coords) console.log("User lat:", user.position.coords.latitude * 1000);
     });
-  }
-
-  // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
-  // subscribeToNavBarState() {
-  //   this.navBarStateSub = this.miscService.navBarState$
-  //       .combineLatest(this.userService.position$)  // Todo: Do I need to unsubscribe from this?
-  //       .subscribe(([ navBarState, position ]) => {
-  //         // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.
-  //         // Todo: The condition is kind of ugly.
-  //         if ( position && position.coords && position.coords.latitude ) {
-  //           this.navBarState = navBarState;
-  //           setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
-  //             let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
-  //             if ( navBarState === 'show' && !ariaExpanded ) {
-  //               // this.navBarStateTimer = setTimeout(() => {  // Don't remember why the setTimeout is needed, but it is.
-  //               this.miscService.navBarState$.next('hide');
-  //               // }, 0);
-  //             }
-  //           }, 0);
-  //         }
-  //       });
-  // }
-
-  subscribeToNavBarState() {
-    console.log("subscribeToNavBarState()");
-    this.navBarStateSub = this.miscService.navBarState$
-        .combineLatest(this.userService.position$)  // Todo: Do I need to unsubscribe from this?
-        .subscribe(([ navBarState, position ]) => {
-          console.log("navBarState:", navBarState);
-          console.log("position:", position);
-          // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.
-          // Todo: The condition is kind of ugly.
-          if ( position && position.coords && position.coords.latitude ) {
-            console.log("We have a position, and navBarState is:", navBarState);
-            this.navBarState = navBarState;
-            setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
-              let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
-              console.log("ariaExpanded:", ariaExpanded);
-              if ( navBarState === 'show' && !ariaExpanded ) {
-                // this.navBarStateTimer = setTimeout(() => {  // Don't remember why the setTimeout is needed, but it is.
-                console.log("About to navBarState$.next('hide')");
-                this.miscService.navBarState$.next('hide');
-                // }, 0);
-              }
-            }, 0);
-          }
-        });
   }
 
   listenForSocketConnection() {
@@ -175,21 +126,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   requestRiderList() {
-    console.log("MapComponent.requestRiderList");
-    // Wait till a ride has been selected ...
-    let userRidePromise = new Promise((resolve, reject) => {
-      this.userRideSub = this.userService.user$.subscribe(user => {
-        if ( user.ride ) resolve(user.ride);
-      })
-    });
-
-    // ... and then request the riderList.
-    userRidePromise.then(ride => {
-      this.userRideSub.unsubscribe();
-      this.socket.emit('giveMeRiderList', ride);
+    this.rideSubjectService.ride$.subscribe(ride => {
+      if ( ride ) {
+        this.socket.emit('giveMeRiderList', ride);
+      }
     });
   }
-
 
   setZIndexAndOpacity() {
     this.riderList = this.riderList.map(rider => {
@@ -202,7 +144,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   listenForRiderList() {
     this.socket.on('riderList', riderList => {
-      console.log('riderList:', riderList);
+      // console.log('riderList:', riderList);
       this.riderList = riderList.map(rider => new User(rider));
       // Filter out the user, which will be displayed using a separate marker.
       this.riderList = this.riderList.filter(rider => rider._id !== this.user._id);
@@ -213,7 +155,6 @@ export class MapComponent implements OnInit, OnDestroy {
   listenForJoinedRider() {
     this.socket.on('joinedRider', joinedRider => {
       // If the zIndices are getting too high, it's time to request the whole riderList again.
-      console.log("zCounter:", this.zCounter);
       if ( this.zCounter >= 1000 ) {
         this.zCounter = 0;
         console.log("Counter reached 1000! About to emit giveMeRiderList.");
@@ -224,7 +165,7 @@ export class MapComponent implements OnInit, OnDestroy {
           joinedRider.zIndex = this.zCounter++;
           if ( joinedRider.leader ) joinedRider.zIndex += 500;
           // joinedRider = this.setDummyMovement(joinedRider);
-          console.log("listenForJoinedRider(). rider:", joinedRider);
+          // console.log("listenForJoinedRider(). rider:", joinedRider);
           // The rider can be a new rider, or a disconnected rider who reconnected.
           this.riderList = this.riderList.filter(rider => rider._id !== joinedRider._id);
           this.riderList.push(joinedRider);
@@ -251,7 +192,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   listenForRemovedRider() {
     this.socket.on('removedRider', _id => {
-      console.log("listenForRemovedRider(). _id:", _id);
+      // console.log("listenForRemovedRider(). _id:", _id);
       this.riderList = this.riderList.filter(rider => rider._id !== _id);
 
       // This will be used to set the map bounds.
@@ -261,7 +202,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   listenForDisconnectedRider() {
     this.socket.on('disconnectedRider', disconnectedRider => {
-      console.log("listenForDisconnectedRider(). disconnectedRider:", disconnectedRider);
       let idx = _.findIndex(this.riderList, rider => rider._id === disconnectedRider._id);
       this.riderList[ idx ].disconnected = disconnectedRider.disconnected;
 
@@ -271,7 +211,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   removeLongDisconnectedRiders() {
     this.timer = setInterval(() => {
-      // console.log("removeLongDisconnectedRiders. A new 30-second interval started ...");
       this.riderList = _.filter(this.riderList, rider => {
         // Todo: Use an environment variable for the time? Or a variable that can be set through a UI?
         return !rider.disconnected || (Date.now() - rider.disconnected) < 1800000;
@@ -293,9 +232,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setMapMode(mapMode) {
-    console.log("setMapMode:", mapMode);
-    this.miscService.navBarState$.next('show');
-
     if ( this.positionSub ) this.positionSub.unsubscribe();
     if ( this.riderListSub ) this.riderListSub.unsubscribe();
 
@@ -315,11 +251,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   // Todo: Update bounds only if position has changed more than a certain amount.
   focusOnUser() {
-    if (this.positionSub) this.positionSub.unsubscribe();
-    this.positionSub = this.userService.position$.subscribe(position => {
-          // console.log("MapComponent.focusOnUser() position$.subscribe()");
+    if ( this.positionSub ) this.positionSub.unsubscribe();
+    this.positionSub = this.positionService.position$.subscribe(position => {
           if ( position ) {
-            // console.log("About to extend bounds. Lat:", position.coords.latitude * 1000);
             this.bounds = new this.google.maps.LatLngBounds();
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
             this.latLng = this.bounds.toJSON();
@@ -334,7 +268,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   showAllRiders() {
     console.log("showAllRiders()");
-    if (this.riderListSub) this.riderListSub.unsubscribe();
+    if ( this.riderListSub ) this.riderListSub.unsubscribe();
     this.riderListSub = this.riderList$.subscribe(riderList => {
       if ( !riderList || riderList.length < 0 ) return;
       this.bounds = new this.google.maps.LatLngBounds();
@@ -352,7 +286,6 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if ( this.userSub ) this.userSub.unsubscribe();
     if ( this.userRideSub ) this.userRideSub.unsubscribe();
-    if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
     if ( this.riderListSub ) this.riderListSub.unsubscribe();
 
@@ -360,9 +293,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
     clearInterval(this.timer);
     clearTimeout(this.navBarStateTimer);
-    setTimeout(() => {
-      this.miscService.navBarState$.next('show');
-    }, 200);
 
     // Attempt to ameliorate memory leak.
     google.maps.event.clearInstanceListeners(window);
@@ -370,7 +300,6 @@ export class MapComponent implements OnInit, OnDestroy {
     google.maps.event.clearInstanceListeners(this.sebmGoogleMap);
     google.maps.event.clearInstanceListeners(this.markers);
     google.maps.event.clearInstanceListeners(this.infoWindows);
-
   }
 
 }

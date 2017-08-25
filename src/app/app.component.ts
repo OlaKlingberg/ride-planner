@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { AuthenticationService } from "./_services/authentication.service";
-import { MiscService } from './_services/misc.service';
-import { RiderService } from './_services/rider.service';
-import { DebuggingService } from './_services/debugging.service';
-import { UserService } from './_services/user.service';
+import { AuthenticationService } from "./authentication/authentication.service";
+import { DebuggingService } from './debugger/debugging.service';
+import { UserService } from './user/user.service';
+import { PositionService } from './core/position.service';
+import { NavService } from './nav/nav.service';
 
 @Component({
   selector: 'rp-root',
@@ -20,11 +20,11 @@ export class AppComponent implements OnInit {
   longitude: number;
   accuracy: number;
 
-  constructor(private userService: UserService,
+  constructor(private positionService: PositionService,
+              private userService: UserService,
               private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
-              private riderService: RiderService,                   // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
-              private miscService: MiscService,
+              private navService: NavService,
               public location: Location) {                          // Is used in the template.
   }
 
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
   }
 
   subscribeToPosition() {
-    this.userService.position$.subscribe(position => {
+    this.positionService.position$.subscribe(position => {
       if ( position ) {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
@@ -66,8 +66,9 @@ export class AppComponent implements OnInit {
     }, 2000);
   }
 
+  // Todo: Figure out if I need this.
   showNavBar() {
-    this.miscService.navBarState$.next('show');
+    // this.navService.navBarState$.next('show');
   }
 
 }

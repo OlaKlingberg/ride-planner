@@ -1,68 +1,62 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { MiscService } from '../_services/misc.service';
-import { User } from '../_models/user';
+import { User } from '../user/user';
 import * as $ from 'jquery';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
 
-import { UserService } from '../_services/user.service';
+import { UserService } from '../user/user.service';
+import { navAnimations } from './nav.component.animations';
+import { Router } from '@angular/router';
+import { PositionService } from '../core/position.service';
+import { NavService } from './nav.service';
 
 @Component({
   selector: 'rp-nav',
   templateUrl: './nav.component.html',
   styleUrls: [ './nav.component.scss' ],
-  animations: [
-    trigger('navBar', [
-      state('show', style({
-        opacity: 1,
-        display: "block"
-      })),
-      state('hide', style({
-        opacity: 0,
-        display: "none"
-      })),
-      transition('show => hide', animate('500ms 4s')),
-      // transition('hide => show', animate('10ms'))
-    ])
-  ]
+  animations: navAnimations
 })
 export class NavComponent implements OnInit {
   public user: User = null;
   public ride: string;
   public navBarState: string;
 
-  constructor(private miscService: MiscService,
-              private userService: UserService,
-              public location: Location) {
+  private route: string;
+
+  constructor(private location: Location,               // Used in the template. Has to be initialized?
+              private router: Router,
+              private navService: NavService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
     this.subscribeToUser();
     this.subscribeToNavBarState();
+    this.subscribeToRoute();
+  }
+
+  subscribeToRoute() {
+    this.router.events.subscribe(() => {
+      this.route = this.router.url;
+      this.navBarState = 'show';
+    });
+  }
+
+  subscribeToNavBarState() {
+    this.navService.navBarState$.subscribe(navBarState => {
+      this.navBarState = navBarState;
+      console.log("navBarState:", navBarState);
+    });
   }
 
   subscribeToUser() {
-    // console.log("NavComponent. subscribeToUser()");
     this.userService.user$.subscribe(
         user => this.user = user
     );
   }
 
-  subscribeToNavBarState() {
-    this.miscService.navBarState$.subscribe(navBarState => {
-      console.log("navBarState:", navBarState);
-      this.navBarState = navBarState;
-    });
-  }
-
   closeAccordion() {
     if ( $(window).width() < 768 ) $('.navbar-toggle').click();
   }
+
 
 }

@@ -1,0 +1,55 @@
+<div class="container">
+  <form name="form" (ngSubmit)="f.form.valid && signIn()" #f="ngForm" novalidate>
+    <div class="row">
+      <div class="col-sm-6">
+
+        <div *ngIf="user.position.coords.latitude">
+
+          <div *ngIf="!user.ride">
+            <div *ngIf="availableRides">
+
+              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
+                <label for="ride">Select a ride</label>
+                <select name="ride"
+                        id="ride"
+                        class="form-control"
+                        [(ngModel)]="model.ride"
+                        #ride="ngModel"
+                        required>
+                  <option *ngFor="let ride of availableRides" [value]="ride?.name">{{ride?.name}}</option>
+                </select>
+
+                <div *ngIf="f.submitted && !ride.valid" class="help-block">You must select a ride.</div>
+
+              </div>
+
+              <button class="btn btn-primary">Sign in to ride</button>
+              <br><a class="link" routerLink="../select-action">Create or delete a ride</a>
+
+            </div>
+
+            <div *ngIf="!availableRides">
+              <h3>Sorry, there are currently no rides!</h3>
+              <h4>Do you want to create one?</h4>
+              <a class="btn btn-primary" routerLink='/ride/create'>Create new ride</a>
+            </div>
+          </div>
+
+          <div *ngIf="user.ride">
+            <h3>You are logged in to the ride: {{ user.ride }}</h3>
+            <p>You have to log out from this ride before you can log into another ride.</p>
+
+            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride {{ user.ride }}
+            </button>
+          </div>
+
+        </div>
+
+        <div *ngIf="!user.position.coords.latitude">
+          <h3>Retrieving your location ...</h3>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>

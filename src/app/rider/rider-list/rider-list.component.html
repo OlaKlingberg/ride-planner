@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div *ngIf="ride">
+        <h3>{{ ride }} Ride</h3>
+        <table class="table table-striped table-bordered">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Emergency Contact</th>
+            <th>Emergency Phone</th>
+            <th>Disconnected</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let rider of riderList">
+            <td>{{ rider.lname }}, {{ rider.fname }}</td>
+            <td>{{ rider.phone }}</td>
+            <td>{{ rider.emergencyName }}</td>
+            <td>{{ rider.emergencyPhone }}</td>
+            <td>{{ rider.minutesSinceDisconnected }}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div *ngIf="!ride">
+        <h3>You have to select a ride before you can see who's in it.</h3>
+        <button type="button" class="btn btn-success" routerLink="/ride/select">Go to Ride Selector</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+

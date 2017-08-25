@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { MiscService } from '../core/misc.service';
 import Socket = SocketIOClient.Socket;
 import { Subject } from 'rxjs/Subject';
+import { SocketService } from '../core/socket.service';
 
 @Injectable()
 export class DebuggingService {
@@ -9,8 +9,8 @@ export class DebuggingService {
   public debugMessages$: Subject<any> = new Subject();
 
 
-  constructor(private miscService: MiscService) {
-    this.socket = this.miscService.socket;
+  constructor(private socketService: SocketService) {
+    this.socket = this.socketService.socket;
     this.watchForDebugMessages();
   }
 

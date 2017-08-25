@@ -2,7 +2,6 @@ import {
   AfterContentChecked, Component, OnInit
 } from '@angular/core';
 import { Location } from '@angular/common';
-import { MiscService } from '../core/misc.service';
 import { User } from '../user/user';
 import * as $ from 'jquery';
 
@@ -10,6 +9,7 @@ import { UserService } from '../user/user.service';
 import { navAnimations } from './nav.component.animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PositionService } from '../core/position.service';
+import { NavService } from './nav.service';
 
 @Component({
   selector: 'rp-nav',
@@ -26,7 +26,7 @@ export class NavComponent implements OnInit {
 
   constructor(private positionService: PositionService,
               private router: Router,
-              private miscService: MiscService,
+              private navService: NavService,
               private userService: UserService,
               public location: Location) {
   }
@@ -46,7 +46,7 @@ export class NavComponent implements OnInit {
   }
 
   subscribeToNavBarState() {
-    this.miscService.navBarState$
+    this.navService.navBarState$
         .combineLatest(this.positionService.position$)
         .subscribe(([ navBarState, position ]) => {
           // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.

@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MiscService } from '../../core/misc.service';
 // import { Rider } from '../_models/rider';
 import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
 import { User } from '../../user/user';
 import { RideSubjectService } from '../../ride/ride-subject.service';
 import { UserService } from '../../user/user.service';
+import { SocketService } from '../../core/socket.service';
 
 @Component({
   templateUrl: './rider-list.component.html',
@@ -20,11 +20,11 @@ export class RiderListComponent implements OnInit, OnDestroy {
   public user: User;
   public ride: string;
 
-  constructor(private miscService: MiscService,
+  constructor(private socketService: SocketService,
               private rideSubjectService: RideSubjectService,
               private userService: UserService,
               private router: Router) {
-    this.socket = this.miscService.socket;
+    this.socket = this.socketService.socket;
   }
 
   ngOnInit() {

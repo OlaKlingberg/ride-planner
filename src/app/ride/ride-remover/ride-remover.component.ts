@@ -4,12 +4,12 @@ import { AlertService } from '../../alert/alert.service';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../../user/user.service';
 import { User } from '../../user/user';
-import { MiscService } from '../../core/misc.service';
 import Socket = SocketIOClient.Socket;
 import { environment } from "../../../environments/environment";
 import { Ride } from '../ride';
 import { RideService } from '../ride.service';
 import { RideSubjectService } from '../ride-subject.service';
+import { SocketService } from '../../core/socket.service';
 
 @Component({
   templateUrl: './ride-remover.component.html',
@@ -28,8 +28,8 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
               private rideSubjectService: RideSubjectService,
               private userService: UserService,
               private alertService: AlertService,
-              private miscService: MiscService) {
-    this.socket = this.miscService.socket;
+              private socketService: SocketService) {
+    this.socket = this.socketService.socket;
   }
 
   ngOnInit() {

@@ -3,10 +3,11 @@ import { UserService } from '../user/user.service';
 import { CommonModule } from '@angular/common';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { AlertModule } from '../alert/alert.module';
-import { MiscService } from './misc.service';
 import { PositionService } from './position.service';
 import { RideService } from '../ride/ride.service';
 import { RideSubjectService } from '../ride/ride-subject.service';
+import { SocketService } from './socket.service';
+import { NavService } from '../nav/nav.service';
 
 @NgModule({
   imports: [
@@ -19,11 +20,12 @@ import { RideSubjectService } from '../ride/ride-subject.service';
   ],
   providers: [
     AuthenticationService,
+    NavService,
     PositionService,
+    RideService,        // Todo: Should perhaps be moved to RideModule.
+    RideSubjectService, // Todo: Should perhaps be moved to RideModule.
+    SocketService,
     UserService,
-    RideService,
-    RideSubjectService,
-    MiscService
   ]
 })
 export class CoreModule {

@@ -8,7 +8,6 @@ import Socket = SocketIOClient.Socket;
 import * as _ from 'lodash';
 import * as $ from 'jquery';
 import { environment } from '../../environments/environment';
-import { MiscService } from '../core/misc.service';
 import { User } from '../user/user';
 import {
   trigger,
@@ -20,6 +19,8 @@ import {
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PositionService } from '../core/position.service';
 import { UserService } from '../user/user.service';
+import { SocketService } from '../core/socket.service';
+import { NavService } from '../nav/nav.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -81,15 +82,15 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
 
   constructor(private positionService: PositionService,
-              private miscService: MiscService,
+              private socketService: SocketService,
               private mapsAPILoader: MapsAPILoader,
+              private navService: NavService,
               private userService: UserService) {
-    this.socket = this.miscService.socket;
+    this.socket = this.socketService.socket;
   }
 
   ngOnInit() {
     this.subscribeToUser();
-    // this.subscribeToNavBarState();
     this.listenForSocketConnection();
     this.requestRiderList();
     this.listenForRiderList();
@@ -102,40 +103,14 @@ export class MapComponent implements OnInit, OnDestroy {
       this.google = google;
       this.focusOnUser();
 
-      // Todo: What the hell was my thought behind this?
-      // setTimeout(() => {
-      //   this.router.navigate([ '/map' ]);
-      // }, 6000);
-
-
     });
   }
 
   subscribeToUser() {
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
-      // if (user && user.position && user.position.coords) console.log("User lat:", user.position.coords.latitude * 1000);
     });
   }
-
-  // When the nav bar becomes shown, set a timer to hide it again -- but only if the accordion is closed.
-  // subscribeToNavBarState() {
-  //   this.navBarStateSub = this.miscService.navBarState$
-  //       .combineLatest(this.userService.position$)  // Todo: Do I need to unsubscribe from this?
-  //       .subscribe(([ navBarState, position ]) => {
-  //         // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.
-  //         // Todo: The condition is kind of ugly.
-  //         if ( position && position.coords && position.coords.latitude ) {
-  //           this.navBarState = navBarState;
-  //           setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
-  //             let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
-  //             if ( navBarState === 'show' && !ariaExpanded ) {
-  //               this.miscService.navBarState$.next('hide');
-  //             }
-  //           }, 0);
-  //         }
-  //       });
-  // }
 
   listenForSocketConnection() {
     this.socket.on('socketConnection', () => this.requestRiderList());
@@ -226,7 +201,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   listenForDisconnectedRider() {
     this.socket.on('disconnectedRider', disconnectedRider => {
-      // console.log("listenForDisconnectedRider(). disconnectedRider:", disconnectedRider);
       let idx = _.findIndex(this.riderList, rider => rider._id === disconnectedRider._id);
       this.riderList[ idx ].disconnected = disconnectedRider.disconnected;
 
@@ -236,7 +210,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   removeLongDisconnectedRiders() {
     this.timer = setInterval(() => {
-      // console.log("removeLongDisconnectedRiders. A new 30-second interval started ...");
       this.riderList = _.filter(this.riderList, rider => {
         // Todo: Use an environment variable for the time? Or a variable that can be set through a UI?
         return !rider.disconnected || (Date.now() - rider.disconnected) < 1800000;
@@ -258,9 +231,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setMapMode(mapMode) {
-    this.miscService.navBarState$.next('show');
+    this.navService.navBarState$.next('show');
     setTimeout(() => {
-      this.miscService.navBarState$.next('hide');
+      this.navService.navBarState$.next('hide');
     }, 2000);
 
     if ( this.positionSub ) this.positionSub.unsubscribe();
@@ -284,9 +257,7 @@ export class MapComponent implements OnInit, OnDestroy {
   focusOnUser() {
     if ( this.positionSub ) this.positionSub.unsubscribe();
     this.positionSub = this.positionService.position$.subscribe(position => {
-          // console.log("MapComponent.focusOnUser() position$.subscribe()");
           if ( position ) {
-            // console.log("About to extend bounds. Lat:", position.coords.latitude * 1000);
             this.bounds = new this.google.maps.LatLngBounds();
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
             this.latLng = this.bounds.toJSON();
@@ -328,7 +299,7 @@ export class MapComponent implements OnInit, OnDestroy {
     clearInterval(this.timer);
     clearTimeout(this.navBarStateTimer);
     setTimeout(() => {
-      this.miscService.navBarState$.next('show');
+      this.navService.navBarState$.next('show');
     }, 200);
 
     // Attempt to ameliorate memory leak.

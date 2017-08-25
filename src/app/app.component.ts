@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { AuthenticationService } from "./authentication/authentication.service";
-import { MiscService } from './core/misc.service';
 import { DebuggingService } from './debugger/debugging.service';
 import { UserService } from './user/user.service';
 import { PositionService } from './core/position.service';
+import { NavService } from './nav/nav.service';
 
 @Component({
   selector: 'rp-root',
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
               private userService: UserService,
               private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
-              private miscService: MiscService,
+              private navService: NavService,
               public location: Location) {                          // Is used in the template.
   }
 
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
   }
 
   showNavBar() {
-    this.miscService.navBarState$.next('show');
+    this.navService.navBarState$.next('show');
   }
 
 }

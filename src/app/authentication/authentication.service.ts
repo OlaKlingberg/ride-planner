@@ -6,8 +6,8 @@ import 'rxjs/Rx';
 import { environment } from "../../environments/environment";
 import { User } from "../user/user";
 import Socket = SocketIOClient.Socket;
-import { MiscService } from '../core/misc.service';
 import { UserService } from '../user/user.service';
+import { SocketService } from '../core/socket.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -15,10 +15,10 @@ export class AuthenticationService {
 
 
   constructor(private http: Http,
-              private miscService: MiscService,
+              private socketService: SocketService,
               private userService: UserService,) {
     this.authenticateByToken(); // If the user has a token, log them in automatically.
-    this.socket = this.miscService.socket;
+    this.socket = this.socketService.socket;
     // this.addAdminsToRoomAdmins();
   }
 

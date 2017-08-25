@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import Timer = NodeJS.Timer;
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class PositionService {
@@ -11,6 +12,8 @@ export class PositionService {
   private geoWatch: number;
   private geoWatchTimer: Timer;
   private updateTimer: Timer;
+
+  private positionSub: Subscription;
 
   private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
@@ -22,17 +25,30 @@ export class PositionService {
 
   constructor() {
     this.watchPosition();
-    this.makePositionPromise();
+    // this.makePositionPromise();
   }
 
-  makePositionPromise() {
-    this.positionPromise = new Promise((resolve, reject) => { // Todo: Do I need to handle reject?
-      this.position$.subscribe(position => {
-        // console.log("PositionService.makePositionPromise(). About to resolve the promise.");
+  // makePositionPromise() {
+  //   this.positionPromise = new Promise((resolve, reject) => { // Todo: Do I need to handle reject?
+  //     this.position$.subscribe(position => {
+  //       // console.log("PositionService.makePositionPromise(). About to resolve the promise.");
+  //       if ( position ) resolve(position);
+  //     });
+  //   });
+  // }
+
+  getPositionPromise() {
+    if ( this.positionSub ) this.positionSub.unsubscribe();
+
+    this.positionPromise = new Promise((resolve, reject) => {
+      this.positionSub = this.position$.subscribe(position => {
         if ( position ) resolve(position);
-      });
+      })
     });
+
+    return this.positionPromise;
   }
+
 
   watchPosition() {
     this.geoWatch = navigator.geolocation.watchPosition(position => {

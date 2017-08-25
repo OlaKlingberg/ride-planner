@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../../user/user.service';
 import { User } from '../../user/user';
-import { MiscService } from '../../core/misc.service';
 import Socket = SocketIOClient.Socket;
 import { environment } from "../../../environments/environment";
 import { PositionService } from '../../core/position.service';
 import { RideSubjectService } from '../ride-subject.service';
+import { SocketService } from '../../core/socket.service';
 
 @Component({
   templateUrl: './ride-selector.component.html',
@@ -24,9 +24,8 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private rideSubjectService: RideSubjectService,
               private userService: UserService,
-              private miscService: MiscService,
-              ) {
-    this.socket = this.miscService.socket;
+              private socketService: SocketService,) {
+    this.socket = this.socketService.socket;
   }
 
   ngOnInit() {
@@ -43,25 +42,27 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   getAvailableRides() {
     this.socket.emit('giveMeAvailableRides');
     this.availableRidesListener = this.socket.on('availableRides', availableRides => {
-      if (availableRides.length > 0) this.availableRides = availableRides;
+      if ( availableRides.length > 0 ) this.availableRides = availableRides;
     });
   }
 
   signIn() {
     this.rideSubjectService.ride$.next(this.model.ride);
     environment.storage.setItem('rpRide', this.model.ride);
-    this.router.navigate(['/map']);
+    this.router.navigate([ '/map' ]);
   }
 
   logOutFromRide() {
+    this.socket.emit('leaveRide');
     environment.storage.removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
+    // this.rideSubjectService.makeRidePromise();
+
     let user: User = this.userService.user$.value;
     user.ride = null;
     this.userService.user$.next(user);
-    this.userService.watchWhenToJoinRide();
 
-    this.socket.emit('leaveRide');
+    this.userService.watchWhenToJoinRide();
   }
 
   ngOnDestroy() {

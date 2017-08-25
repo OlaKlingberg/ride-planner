@@ -6,8 +6,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/user.service';
 import Socket = SocketIOClient.Socket;
-import { MiscService } from '../../core/misc.service';
 import { RideSubjectService } from '../../ride/ride-subject.service';
+import { SocketService } from '../../core/socket.service';
 
 @Component({
   templateUrl: './logout.component.html',
@@ -23,22 +23,30 @@ export class LogoutComponent implements OnInit, OnDestroy {
               private alertService: AlertService,
               private rideSubjectService: RideSubjectService,
               private userService: UserService,
-              private miscService: MiscService) {
-    this.socket = this.miscService.socket;
+              private socketService: SocketService) {
+    this.socket = this.socketService.socket;
   }
 
   ngOnInit() {
+    console.log("LogOutComponent.ngOnInit()");
     this.logoutSub = this.authenticationService.logout()
         .subscribe(() => {
+              console.log("LogOutComponent. authenticationService has logged out!");
+
               environment.storage.removeItem('rpToken');
               environment.storage.removeItem('rpRide');
-              this.userService.user$.next(null);
+
               this.rideSubjectService.ride$.next(null);
 
-              this.socket.emit('leaveRide');
+              this.userService.user$.next(null);
+              // this.userService.makeUserPromise(); // Todo: I hate this. There has to be a better way.
 
               this.userService.watchWhenToUpdateUserPosition();
               this.userService.watchWhenToJoinRide();
+
+              this.socket.emit('leaveRide');
+
+              console.log("Just emitted leaveRide");
 
               this.alertService.success('You have been logged out', true);
               this.router.navigate([ '/auth/login' ]);

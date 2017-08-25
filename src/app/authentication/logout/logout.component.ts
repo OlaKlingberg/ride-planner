@@ -28,10 +28,8 @@ export class LogoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("LogOutComponent.ngOnInit()");
     this.logoutSub = this.authenticationService.logout()
         .subscribe(() => {
-              console.log("LogOutComponent. authenticationService has logged out!");
 
               environment.storage.removeItem('rpToken');
               environment.storage.removeItem('rpRide');
@@ -41,12 +39,11 @@ export class LogoutComponent implements OnInit, OnDestroy {
               this.userService.user$.next(null);
               // this.userService.makeUserPromise(); // Todo: I hate this. There has to be a better way.
 
-              this.userService.watchWhenToUpdateUserPosition();
-              this.userService.watchWhenToJoinRide();
+              // this.userService.watchWhenToUpdateUserPosition();
+              // this.userService.watchWhenToJoinRide();
 
               this.socket.emit('leaveRide');
 
-              console.log("Just emitted leaveRide");
 
               this.alertService.success('You have been logged out', true);
               this.router.navigate([ '/auth/login' ]);

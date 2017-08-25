@@ -62,7 +62,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
     user.ride = null;
     this.userService.user$.next(user);
 
-    this.userService.watchWhenToJoinRide();
+    // this.userService.watchWhenToJoinRide();
   }
 
   ngOnDestroy() {

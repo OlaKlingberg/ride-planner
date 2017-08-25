@@ -69,7 +69,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
     let user: User = this.userService.user$.value;
     user.ride = null;
     this.userService.user$.next(user);
-    this.userService.watchWhenToJoinRide();
+    // this.userService.watchWhenToJoinRide();
 
     this.socket.emit('leaveRide');
   }

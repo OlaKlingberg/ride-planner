@@ -4,7 +4,6 @@ import { User } from "./user";
 import { environment } from "../../environments/environment";
 import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
-import { DebuggingService } from '../debugger/debugging.service';
 import { PositionService } from '../core/position.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { RideSubjectService } from '../ride/ride-subject.service';
@@ -15,11 +14,7 @@ export class UserService {
   private token: string;
   private headers: Headers;
   private requestOptions: RequestOptions;
-  public userPromise: Promise<any>;
   public user$: BehaviorSubject<User> = new BehaviorSubject(null);
-
-  private userSub: Subscription;
-  private positionSub: Subscription;
 
   private socket: Socket;
 
@@ -28,9 +23,10 @@ export class UserService {
               private positionService: PositionService,
               private rideSubjectService: RideSubjectService) {
     this.getRideFromStorage();
-    // this.makeUserPromise();
-    this.watchWhenToJoinRide();
-    this.watchWhenToUpdateUserPosition();
+    this.emitJoinRideOnNewRide();
+    this.updateUserPositionOnNewPosition();
+    this.updateUserPositionOnNewUser();
+
     this.socket = this.socketService.socket;
   }
 
@@ -39,57 +35,54 @@ export class UserService {
     if ( ride ) this.rideSubjectService.ride$.next(ride);
   }
 
-  // makeUserPromise() {
-  //   if (this.userSub) this.userSub.unsubscribe();
-  //
-  //   this.userPromise = new Promise((resolve, reject) => {
-  //     this.userSub = this.user$.subscribe(user => {
-  //       if ( user ) resolve(user)
-  //     });
-  //   });
-  // }
-
-  getUserPromise() {
-    let userPromise = new Promise((resolve, reject) => {
-      let userSub = this.user$.subscribe(user => {
-        if ( user ) {
-          resolve(user);
-          userSub.unsubscribe();
-        }
-      })
+  // Call user$.next, whenever there is a new position, provided there is a user.
+  updateUserPositionOnNewPosition() {
+    this.positionService.position$.subscribe(pos => {
+      let user = this.user$.value;
+      if ( user ) {
+        user.position = JSON.parse(JSON.stringify(pos));
+        // console.log("New position, so about to call user$.next(user)");
+        this.user$.next(user);
+      }
     });
-
-    return userPromise;
   }
 
-  watchWhenToUpdateUserPosition() {
-    if (this.positionSub) this.positionSub.unsubscribe();
+  // Call user$.next() whenever user$ changes from null to a user, provided there is a position.
+  updateUserPositionOnNewUser() {
+    let prevUser: User = null;
 
-    this.getUserPromise().then((user: User) => {
-      this.positionSub = this.positionService.position$.subscribe(position => {
-        if (position) {
-          user.position = JSON.parse(JSON.stringify(position));
+    this.user$.subscribe(user => {
+      if ( prevUser === null && user !== null ) {
+        prevUser = user; // Todo: It doesn't matter here that this copies by reference, right?
+        let pos = this.positionService.position$.value;
+        if ( pos ) {
+          user.position = JSON.parse(JSON.stringify(pos));
+          // console.log("New user, so about to call user$.next(user)");
           this.user$.next(user);
-          if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
         }
-      });
+      }
+
+      if ( prevUser !== null && user === null ) {
+        prevUser = null;
+      }
     });
   }
 
-  watchWhenToJoinRide() {
-    Promise.all([ this.getUserPromise(), this.rideSubjectService.getRidePromise(), this.positionService.positionPromise ])
-        .then(userAndRide => {
-          // Todo: Can I be sure that he app has had time to set user.position, just because user and position exist?
-            let user: any = userAndRide[ 0 ];
-            let ride: any = userAndRide[ 1 ];
+  // Emit 'joinRide' when ride$ yields a new non-null value, provided there is a user with a user.position.
+  emitJoinRideOnNewRide() {
+    this.rideSubjectService.ride$.subscribe(ride => {
+      console.log("New ride:", ride);
+      let user = this.user$.value;
+      let token = JSON.parse(environment.storage.getItem('rpToken'));
 
-            let token = JSON.parse(environment.storage.getItem('rpToken'));
-
-            this.socket.emit('joinRide', user, ride, token, () => {
-              user.ride = ride;
-              this.user$.next(user);
-            });
+      if ( ride && user && user.position && token ) {
+        console.log("About to emit joinRide");
+        this.socket.emit('joinRide', user, ride, token, () => {
+          user.ride = ride;
+          this.user$.next(user);
         });
+      }
+    });
   }
 
   create(user: User) {

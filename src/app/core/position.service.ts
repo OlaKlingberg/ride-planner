@@ -2,22 +2,18 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import Timer = NodeJS.Timer;
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class PositionService {
   public position$: BehaviorSubject<any> = new BehaviorSubject(null);
-  public positionPromise: Promise<any>;
 
   private geoWatch: number;
   private geoWatchTimer: Timer;
   private updateTimer: Timer;
 
-  private positionSub: Subscription;
-
   private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
-  private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
+  private dummyUpdateFrequency: number = Math.random() * 2000 + 4000;
   private dummyLatIncrement: number = Math.random() * .0002 - .0001;
   private dummyLngIncrement: number = Math.random() * .0002 - .0001;
   private dummyLatCurrentAdd: number = null;
@@ -25,43 +21,20 @@ export class PositionService {
 
   constructor() {
     this.watchPosition();
-    // this.makePositionPromise();
   }
-
-  // makePositionPromise() {
-  //   this.positionPromise = new Promise((resolve, reject) => { // Todo: Do I need to handle reject?
-  //     this.position$.subscribe(position => {
-  //       // console.log("PositionService.makePositionPromise(). About to resolve the promise.");
-  //       if ( position ) resolve(position);
-  //     });
-  //   });
-  // }
-
-  getPositionPromise() {
-    if ( this.positionSub ) this.positionSub.unsubscribe();
-
-    this.positionPromise = new Promise((resolve, reject) => {
-      this.positionSub = this.position$.subscribe(position => {
-        if ( position ) resolve(position);
-      })
-    });
-
-    return this.positionPromise;
-  }
-
 
   watchPosition() {
-    this.geoWatch = navigator.geolocation.watchPosition(position => {
-          if (this.updateTimer) clearInterval(this.updateTimer);
+    this.geoWatch = navigator.geolocation.watchPosition((position: Position) => {
+          if ( this.updateTimer ) clearInterval(this.updateTimer);
 
           let pos = this.copyPositionObject(position);
 
-          if (environment.dummyPosition) {
+          if ( environment.dummyPosition ) {
             pos.coords.latitude += this.dummyLatInitialAdd;
             pos.coords.longitude += this.dummyLngInitialAdd;
           }
 
-          if (environment.dummyMovement) {
+          if ( environment.dummyMovement ) {
             let startLat = pos.coords.latitude;
             let startLng = pos.coords.longitude;
             this.updateTimer = setInterval(() => {
@@ -76,7 +49,7 @@ export class PositionService {
           }
 
           // Set a timer to rerun watchPosition if it has not yielded results for a while. Logically, this should not be needed, but it often seems to yield a new position.
-          if (this.geoWatchTimer) clearTimeout(this.geoWatchTimer);
+          if ( this.geoWatchTimer ) clearTimeout(this.geoWatchTimer);
           this.startGeoWatchTimer(position);
         },
         err => {
@@ -90,7 +63,7 @@ export class PositionService {
     );
   }
 
-  // Todo: Can I do this with JSON.stringify() and JSON.parse()?
+  // Todo: Why can't I do this with JSON.stringify() and JSON.parse()?
   copyPositionObject(position) {
     return {
       coords: {

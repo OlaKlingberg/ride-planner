@@ -3,6 +3,7 @@ import { FocusDirective } from './focus.directive';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EqualValidator } from './equal-validator.directive';
+import { TooltipModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [],
@@ -14,7 +15,8 @@ import { EqualValidator } from './equal-validator.directive';
     CommonModule,
     FormsModule,
     EqualValidator,
-    FocusDirective
+    FocusDirective,
+    TooltipModule
   ],
   providers: []
 })

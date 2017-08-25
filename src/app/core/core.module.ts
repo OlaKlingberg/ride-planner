@@ -11,17 +11,25 @@ import { NavService } from '../nav/nav.service';
 import { ModalModule, TooltipModule } from 'ngx-bootstrap';
 import { HttpModule } from '@angular/http';
 import { NavModule } from '../nav/nav.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CuesheetService } from '../cuesheet/cuesheet.service';
+import { DebuggingService } from '../debugger/debugging.service';
+import { RideLeaderGuard } from '../_guards/ride-leader.guard';
+import { AdminGuard } from '../_guards/admin.guard';
+import { AuthGuard } from '../_guards/auth.guard';
 
 @NgModule({
   imports: [
-    AlertModule,
     CommonModule,
-    HttpModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    TooltipModule.forRoot(),
   ],
   declarations: [],
   exports: [
-    AlertModule
+    AlertModule,
+    BrowserAnimationsModule,
+    HttpModule,
+    NavModule
   ],
   providers: [
     AuthenticationService,
@@ -31,6 +39,11 @@ import { NavModule } from '../nav/nav.module';
     RideSubjectService, // Todo: Should perhaps be moved to RideModule.
     SocketService,
     UserService,
+    AuthGuard,
+    AdminGuard,
+    RideLeaderGuard,
+    DebuggingService,
+    CuesheetService
   ]
 })
 export class CoreModule {

@@ -20,7 +20,7 @@ import { AuthGuard } from '../_guards/auth.guard';
 
 @NgModule({
   imports: [
-    CommonModule,
+    // CommonModule,
     ModalModule.forRoot(),
     TooltipModule.forRoot(),
   ],

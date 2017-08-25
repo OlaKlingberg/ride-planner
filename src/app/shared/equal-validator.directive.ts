@@ -5,13 +5,13 @@ import { Directive, forwardRef, Attribute } from '@angular/core';
 import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
 
 @Directive({
-  selector: '[validateEqual][formControlName],[validateEqual][formControl],[validateEqual][ngModel]',
+  selector: '[rpValidateEqual][formControlName],[rpValidateEqual][formControl],[rpValidateEqual][ngModel]',
   providers: [
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => EqualValidator), multi: true }
   ]
 })
 export class EqualValidator implements Validator {
-  constructor( @Attribute('validateEqual') public validateEqual: string,
+  constructor( @Attribute('rpValidateEqual') public rpValidateEqual: string,
                @Attribute('reverse') public reverse: string) {
 
   }
@@ -26,25 +26,25 @@ export class EqualValidator implements Validator {
     let v = c.value;
 
     // control value
-    let e = c.root.get(this.validateEqual);
+    let e = c.root.get(this.rpValidateEqual);
 
     // value not equal
     if (e && v !== e.value && !this.isReverse) {
       return {
-        validateEqual: false
+        rpValidateEqual: false
       }
     }
 
     // value equal and reverse
     if (e && v === e.value && this.isReverse) {
-      delete e.errors['validateEqual'];
+      delete e.errors['rpValidateEqual'];
       if (!Object.keys(e.errors).length) e.setErrors(null);
     }
 
     // value not equal and reverse
     if (e && v !== e.value && this.isReverse) {
       e.setErrors({
-        validateEqual: false
+        rpValidateEqual: false
       })
     }
 

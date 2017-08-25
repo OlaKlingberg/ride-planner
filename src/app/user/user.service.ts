@@ -41,7 +41,6 @@ export class UserService {
       let user = this.user$.value;
       if ( user ) {
         user.position = JSON.parse(JSON.stringify(pos));
-        // console.log("New position, so about to call user$.next(user)");
         this.user$.next(user);
       }
     });
@@ -57,7 +56,6 @@ export class UserService {
         let pos = this.positionService.position$.value;
         if ( pos ) {
           user.position = JSON.parse(JSON.stringify(pos));
-          // console.log("New user, so about to call user$.next(user)");
           this.user$.next(user);
         }
       }
@@ -71,12 +69,10 @@ export class UserService {
   // Emit 'joinRide' when ride$ yields a new non-null value, provided there is a user with a user.position.
   emitJoinRideOnNewRide() {
     this.rideSubjectService.ride$.subscribe(ride => {
-      console.log("New ride:", ride);
       let user = this.user$.value;
       let token = JSON.parse(environment.storage.getItem('rpToken'));
 
       if ( ride && user && user.position && token ) {
-        console.log("About to emit joinRide");
         this.socket.emit('joinRide', user, ride, token, () => {
           user.ride = ride;
           this.user$.next(user);

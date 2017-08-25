@@ -9,7 +9,7 @@ import { TooltipModule } from 'ngx-bootstrap';
   imports: [],
   declarations: [
     FocusDirective,
-    EqualValidator
+    EqualValidator,
   ],
   exports: [
     CommonModule,

@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { UserService } from '../user/user.service';
-import { CommonModule } from '@angular/common';
+// import { CommonModule } from '@angular/common';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { AlertModule } from '../alert/alert.module';
 import { PositionService } from './position.service';
@@ -17,6 +17,7 @@ import { DebuggingService } from '../debugger/debugging.service';
 import { RideLeaderGuard } from '../_guards/ride-leader.guard';
 import { AdminGuard } from '../_guards/admin.guard';
 import { AuthGuard } from '../_guards/auth.guard';
+import { throwIfAlreadyLoaded } from '../_guards/module-import-guard';
 
 @NgModule({
   imports: [
@@ -47,4 +48,7 @@ import { AuthGuard } from '../_guards/auth.guard';
   ]
 })
 export class CoreModule {
+  constructor( @Optional() @SkipSelf() parentModule: CoreModule) {
+    throwIfAlreadyLoaded(parentModule, 'CoreModule');
+  }
 }

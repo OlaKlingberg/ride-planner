@@ -6,7 +6,7 @@ import { DebuggerRoutingModule } from './debugger-routing.module';
 @NgModule({
   imports: [
     CommonModule,
-    DebuggerRoutingModule
+    DebuggerRoutingModule,
   ],
   declarations: [
     DebuggerComponent

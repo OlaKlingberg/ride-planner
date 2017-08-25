@@ -1,13 +1,11 @@
-import {
-  AfterContentChecked, Component, OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { User } from '../user/user';
 import * as $ from 'jquery';
 
 import { UserService } from '../user/user.service';
 import { navAnimations } from './nav.component.animations';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { PositionService } from '../core/position.service';
 import { NavService } from './nav.service';
 
@@ -24,45 +22,30 @@ export class NavComponent implements OnInit {
 
   private route: string;
 
-  constructor(private positionService: PositionService,
+  constructor(private location: Location,               // Used in the template. Has to be initialized?
               private router: Router,
               private navService: NavService,
-              private userService: UserService,
-              public location: Location) {
+              private userService: UserService) {
   }
 
   ngOnInit() {
     this.subscribeToUser();
     this.subscribeToNavBarState();
+    this.subscribeToRoute();
+  }
 
-    // this.userService.positionPromise.then(position => {
-    //   console.log("NavComponent: userService.positionPromise.then: position:", position);
-    // });
-
+  subscribeToRoute() {
     this.router.events.subscribe(() => {
       this.route = this.router.url;
-      // console.log(this.route);
+      this.navBarState = 'show';
     });
   }
 
   subscribeToNavBarState() {
-    this.navService.navBarState$
-        .combineLatest(this.positionService.position$)
-        .subscribe(([ navBarState, position ]) => {
-          // Start the timer to hide the nav bar only when the map is shown, which happens when there is a latitude.
-          if ( navBarState === 'show' ) this.navBarState = 'show';
-
-          if ( position && position.coords && position.coords.latitude ) {
-            setTimeout(() => { // Have to wait one tick before checking the value of the aria-expanded attribute.
-              let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
-              if ( navBarState === 'show' && !ariaExpanded && this.route === '/map' ) {
-                this.navBarState = 'hide';
-              }
-            }, 0);
-          }
-        });
-
-
+    this.navService.navBarState$.subscribe(navBarState => {
+      this.navBarState = navBarState;
+      console.log("navBarState:", navBarState);
+    });
   }
 
   subscribeToUser() {
@@ -71,14 +54,9 @@ export class NavComponent implements OnInit {
     );
   }
 
-  // subscribeToNavBarState() {
-  //   this.miscService.navBarState$.subscribe(navBarState => {
-  //     this.navBarState = navBarState;
-  //   });
-  // }
-
   closeAccordion() {
     if ( $(window).width() < 768 ) $('.navbar-toggle').click();
   }
+
 
 }

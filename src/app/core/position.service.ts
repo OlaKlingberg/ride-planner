@@ -23,6 +23,19 @@ export class PositionService {
     this.watchPosition();
   }
 
+  positionPromise() {
+    let positionPromise = new Promise((resolve, reject) => {
+      let positionSub = this.position$.subscribe(pos => {
+        if ( pos ) {
+          resolve(pos);
+          positionSub.unsubscribe();
+        }
+      })
+    });
+
+    return positionPromise;
+  }
+
   watchPosition() {
     this.geoWatch = navigator.geolocation.watchPosition((position: Position) => {
           if ( this.updateTimer ) clearInterval(this.updateTimer);

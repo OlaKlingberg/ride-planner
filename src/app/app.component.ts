@@ -66,8 +66,9 @@ export class AppComponent implements OnInit {
     }, 2000);
   }
 
+  // Todo: Figure out if I need this.
   showNavBar() {
-    this.navService.navBarState$.next('show');
+    // this.navService.navBarState$.next('show');
   }
 
 }

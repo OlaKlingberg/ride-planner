@@ -9,8 +9,11 @@
             [fitBounds]="latLng"
             [maxZoom]="maxZoom"
             [zoomControl]="false"
-            (pinchstart)="setMapMode('stationary')"
-            (panstart)="setMapMode('stationary')"
+            (pinchstart)="showNav(); setMapMode('stationary')"
+            (panstart)="showNav(); setMapMode('stationary')"
+            (pinchend)="hideNav()"
+            (panend)="hideNav()"
+            (tap)="showNav(); hideNav()"
         >
 
           <sebm-google-map-marker class="user-marker"
@@ -60,7 +63,7 @@
         </sebm-google-map>
 
         <div id="map-buttons-container"
-             [@buttons]="navBarState">
+             [@buttons]="buttonState">
           <button class="btn btn-primary btn-md"
                   type="button"
                   *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"

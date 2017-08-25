@@ -5,40 +5,23 @@ import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { Subscription } from 'rxjs/Subscription';
 import Socket = SocketIOClient.Socket;
+import * as $ from 'jquery'
 import * as _ from 'lodash';
-import * as $ from 'jquery';
 import { environment } from '../../environments/environment';
 import { User } from '../user/user';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PositionService } from '../core/position.service';
 import { UserService } from '../user/user.service';
 import { SocketService } from '../core/socket.service';
 import { NavService } from '../nav/nav.service';
+import { RideSubjectService } from '../ride/ride-subject.service';
+import { MapAnimations } from './map.component.animatins';
+import Timer = NodeJS.Timer;
 
 @Component({
   templateUrl: './map.component.html',
   styleUrls: [ './map.component.scss' ],
-  animations: [
-    trigger('buttons', [
-      state('show', style({
-        opacity: 1,
-        display: "block"
-      })),
-      state('hide', style({
-        opacity: 0,
-        display: "none"
-      })),
-      transition('show => hide', animate('500ms 4s')),
-      // transition('hide => show', animate('10ms'))
-    ])
-  ]
+  animations: MapAnimations
 })
 export class MapComponent implements OnInit, OnDestroy {
   public production = environment.production;
@@ -55,7 +38,6 @@ export class MapComponent implements OnInit, OnDestroy {
   private userSub: Subscription;
   private userRideSub: Subscription;
   private positionSub: Subscription;
-  private navBarStateSub: Subscription;
   private riderListSub: Subscription;
 
   private markerUrl: string = "assets/img/rider-markers/";
@@ -73,7 +55,9 @@ export class MapComponent implements OnInit, OnDestroy {
   public riderList: Array<User> = [];
   private riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
 
-  public navBarState: string;
+  public buttonState: string = 'show';
+
+  private hideTimer: Timer;
 
 
   @ViewChildren('markers') markers;
@@ -85,11 +69,13 @@ export class MapComponent implements OnInit, OnDestroy {
               private socketService: SocketService,
               private mapsAPILoader: MapsAPILoader,
               private navService: NavService,
+              private rideSubjectService: RideSubjectService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
   }
 
   ngOnInit() {
+    this.hideNav();
     this.subscribeToUser();
     this.listenForSocketConnection();
     this.requestRiderList();
@@ -98,11 +84,34 @@ export class MapComponent implements OnInit, OnDestroy {
     this.listenForUpdatedRiderPosition();
     this.listenForRemovedRider();
     this.listenForDisconnectedRider();
+    this.loadMapsAPILoader();
     this.removeLongDisconnectedRiders();
+
+  }
+
+  hideNav() {
+    clearTimeout(this.hideTimer);
+    // Wait till the map is shown (which happens when there is a position), sait timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
+    this.positionService.positionPromise().then(() => {
+      this.hideTimer = setTimeout(() => {
+        let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
+        if ( !ariaExpanded ) {
+          this.navService.navBarState$.next('hide');
+          this.buttonState = 'hide';
+        }
+      }, 4000);
+    });
+  }
+
+  showNav() {
+    this.navService.navBarState$.next('show');
+    this.buttonState = 'show';
+  }
+
+  loadMapsAPILoader() {
     this.mapsAPILoader.load().then(() => {
       this.google = google;
       this.focusOnUser();
-
     });
   }
 
@@ -117,20 +126,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   requestRiderList() {
-    // Wait till a ride has been selected ...
-    let userRidePromise = new Promise((resolve, reject) => {
-      this.userRideSub = this.userService.user$.subscribe(user => {
-        if ( user.ride ) resolve(user.ride);
-      })
-    });
-
-    // ... and then request the riderList.
-    userRidePromise.then(ride => {
-      this.userRideSub.unsubscribe();
-      this.socket.emit('giveMeRiderList', ride);
+    this.rideSubjectService.ride$.subscribe(ride => {
+      if ( ride ) {
+        this.socket.emit('giveMeRiderList', ride);
+      }
     });
   }
-
 
   setZIndexAndOpacity() {
     this.riderList = this.riderList.map(rider => {
@@ -231,11 +232,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setMapMode(mapMode) {
-    this.navService.navBarState$.next('show');
-    setTimeout(() => {
-      this.navService.navBarState$.next('hide');
-    }, 2000);
-
     if ( this.positionSub ) this.positionSub.unsubscribe();
     if ( this.riderListSub ) this.riderListSub.unsubscribe();
 
@@ -290,7 +286,6 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if ( this.userSub ) this.userSub.unsubscribe();
     if ( this.userRideSub ) this.userRideSub.unsubscribe();
-    if ( this.navBarStateSub ) this.navBarStateSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
     if ( this.riderListSub ) this.riderListSub.unsubscribe();
 
@@ -298,9 +293,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
     clearInterval(this.timer);
     clearTimeout(this.navBarStateTimer);
-    setTimeout(() => {
-      this.navService.navBarState$.next('show');
-    }, 200);
 
     // Attempt to ameliorate memory leak.
     google.maps.event.clearInstanceListeners(window);
@@ -308,7 +300,6 @@ export class MapComponent implements OnInit, OnDestroy {
     google.maps.event.clearInstanceListeners(this.sebmGoogleMap);
     google.maps.event.clearInstanceListeners(this.markers);
     google.maps.event.clearInstanceListeners(this.infoWindows);
-
   }
 
 }

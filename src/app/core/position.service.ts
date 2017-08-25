@@ -13,7 +13,7 @@ export class PositionService {
 
   private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
-  private dummyUpdateFrequency: number = Math.random() * 2000 + 4000;
+  private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
   private dummyLatIncrement: number = Math.random() * .0002 - .0001;
   private dummyLngIncrement: number = Math.random() * .0002 - .0001;
   private dummyLatCurrentAdd: number = null;
@@ -30,20 +30,11 @@ export class PositionService {
           let pos = this.copyPositionObject(position);
 
           if ( environment.dummyPosition ) {
-            pos.coords.latitude += this.dummyLatInitialAdd;
-            pos.coords.longitude += this.dummyLngInitialAdd;
+            pos = this.setDummyPositions(pos);
           }
 
           if ( environment.dummyMovement ) {
-            let startLat = pos.coords.latitude;
-            let startLng = pos.coords.longitude;
-            this.updateTimer = setInterval(() => {
-              this.dummyLatCurrentAdd += this.dummyLatIncrement;
-              this.dummyLngCurrentAdd += this.dummyLngIncrement;
-              pos.coords.latitude = startLat + this.dummyLatCurrentAdd;
-              pos.coords.longitude = startLng + this.dummyLngCurrentAdd;
-              this.position$.next(pos);
-            }, this.dummyUpdateFrequency);
+            this.setDummyMovements(pos);
           } else {
             this.position$.next(pos);
           }
@@ -61,6 +52,25 @@ export class PositionService {
           maximumAge: 5000
         }
     );
+  }
+
+  setDummyPositions(pos) {
+    pos.coords.latitude += this.dummyLatInitialAdd;
+    pos.coords.longitude += this.dummyLngInitialAdd;
+
+    return pos;
+  }
+
+  setDummyMovements(pos) {
+    let startLat = pos.coords.latitude;
+    let startLng = pos.coords.longitude;
+    this.updateTimer = setInterval(() => {
+      this.dummyLatCurrentAdd += this.dummyLatIncrement;
+      this.dummyLngCurrentAdd += this.dummyLngIncrement;
+      pos.coords.latitude = startLat + this.dummyLatCurrentAdd;
+      pos.coords.longitude = startLng + this.dummyLngCurrentAdd;
+      this.position$.next(pos);
+    }, this.dummyUpdateFrequency);
   }
 
   // Todo: Why can't I do this with JSON.stringify() and JSON.parse()?

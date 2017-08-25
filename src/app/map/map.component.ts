@@ -144,7 +144,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   listenForRiderList() {
     this.socket.on('riderList', riderList => {
-      // console.log('riderList:', riderList);
       this.riderList = riderList.map(rider => new User(rider));
       // Filter out the user, which will be displayed using a separate marker.
       this.riderList = this.riderList.filter(rider => rider._id !== this.user._id);
@@ -164,9 +163,6 @@ export class MapComponent implements OnInit, OnDestroy {
           joinedRider = new User(joinedRider);
           joinedRider.zIndex = this.zCounter++;
           if ( joinedRider.leader ) joinedRider.zIndex += 500;
-          // joinedRider = this.setDummyMovement(joinedRider);
-          // console.log("listenForJoinedRider(). rider:", joinedRider);
-          // The rider can be a new rider, or a disconnected rider who reconnected.
           this.riderList = this.riderList.filter(rider => rider._id !== joinedRider._id);
           this.riderList.push(joinedRider);
 

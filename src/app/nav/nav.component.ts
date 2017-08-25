@@ -44,7 +44,6 @@ export class NavComponent implements OnInit {
   subscribeToNavBarState() {
     this.navService.navBarState$.subscribe(navBarState => {
       this.navBarState = navBarState;
-      console.log("navBarState:", navBarState);
     });
   }
 

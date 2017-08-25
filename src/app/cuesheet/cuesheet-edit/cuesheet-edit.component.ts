@@ -45,7 +45,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
     this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
     this.checkForModalClose();
-
     this.getCuesheet(this.cuesheetId);
   }
 
@@ -311,6 +310,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
 
   openCuesheetDeletionModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
+    console.log("modalRef:", this.modalRef);
   }
 
   deleteCuesheet() {

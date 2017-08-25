@@ -8,11 +8,16 @@ import { RideService } from '../ride/ride.service';
 import { RideSubjectService } from '../ride/ride-subject.service';
 import { SocketService } from './socket.service';
 import { NavService } from '../nav/nav.service';
+import { ModalModule, TooltipModule } from 'ngx-bootstrap';
+import { HttpModule } from '@angular/http';
+import { NavModule } from '../nav/nav.module';
 
 @NgModule({
   imports: [
     AlertModule,
-    CommonModule
+    CommonModule,
+    HttpModule,
+    ModalModule.forRoot()
   ],
   declarations: [],
   exports: [

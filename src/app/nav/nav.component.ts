@@ -22,7 +22,7 @@ export class NavComponent implements OnInit {
 
   private route: string;
 
-  constructor(private location: Location,               // Used in the template. Has to be initialized?
+  constructor(public location: Location,               // Used in the template. Has to be initialized?
               private navService: NavService,
               private router: Router,
               private userService: UserService) {

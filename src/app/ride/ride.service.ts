@@ -1,6 +1,8 @@
 import { Http, RequestOptions, Headers, Response } from "@angular/http";
 import { Injectable } from '@angular/core';
 
+import 'rxjs/add/operator/toPromise';
+
 import { environment } from '../../environments/environment';
 import { Ride } from './ride';
 import { User } from '../user/user';

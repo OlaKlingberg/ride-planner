@@ -1,0 +1,67 @@
+<div id="page">
+  <div class="container" id="cues-container" [@cuesheetContainer]="move">
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber > 0"
+                       [cue]="cuesheet?.cues[cueNumber - 1]"
+                       [cueNumber]="cueNumber - 1"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]"
+                       [cueNumber]="cueNumber"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
+                       [cue]="cuesheet?.cues[cueNumber + 1]"
+                       [cueNumber]="cueNumber + 1"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 2"
+                       [cue]="cuesheet?.cues[cueNumber + 2]"
+                       [cueNumber]="cueNumber + 2"></rp-cuesheet-cue>
+    </div>
+
+  </div>
+
+  <!--<div id="next-cue-mask"></div>-->
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div id="next-cue-mask"></div>
+
+      </div>
+    </div>
+    <div class="row no-padding">
+      <!--<div class="col-xs-12 no-padding">-->
+      <div id="bottom-field" class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-6">
+            <a [routerLink]="['/cuesheets/', cuesheetId ,'view']" class="btn btn-primary btn-block">Overview</a>
+          </div>
+          <div class="col-xs-6">
+            <a [routerLink]="['/map']" class="btn btn-primary btn-block">Map</a>
+          </div>
+        </div>
+        <hr>
+        <div class="row" id="ride-info">
+          <div class="col-xs-12">What info might be good to display here?</div>
+        </div>
+
+      </div>
+      <!--</div>-->
+    </div>
+  </div>
+
+
+</div>
+
+<!--<div id="left-mask" class="mask side-mask"></div>-->
+<!--<div id="right-mask" class="mask side-mask"></div>-->
+<!--<div id="bottom-mask" class="mask"></div>-->

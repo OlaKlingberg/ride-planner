@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -36,8 +36,11 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.cueNumber = +this.route.snapshot.paramMap.get('cueNumber');
-    this.cuesheetId = this.route.snapshot.paramMap.get('cuesheetId');
+    this.route.params.forEach((params: Params) => {
+      this.cuesheetId = params[ 'cuesheetId' ];
+      this.cueNumber = +params[ 'cueNumber' ];
+      this.move = 'still';
+    });
 
     this.getCuesheet(this.cuesheetId);
     this.setSwipeListeners();

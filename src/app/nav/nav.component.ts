@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+
+import { navAnimations } from './nav.component.animations';
+import { NavService } from './nav.service';
 import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 import * as $ from 'jquery';
 
-import { UserService } from '../user/user.service';
-import { navAnimations } from './nav.component.animations';
-import { Router } from '@angular/router';
-import { PositionService } from '../core/position.service';
-import { NavService } from './nav.service';
 
 @Component({
   selector: 'rp-nav',
@@ -16,22 +16,32 @@ import { NavService } from './nav.service';
   animations: navAnimations
 })
 export class NavComponent implements OnInit {
-  public user: User = null;
-  public ride: string;
-  public navBarState: string;
+  navBarState: string;
+  user: User = null;
+  ride: string;
 
   private route: string;
 
   constructor(private location: Location,               // Used in the template. Has to be initialized?
-              private router: Router,
               private navService: NavService,
+              private router: Router,
               private userService: UserService) {
   }
 
   ngOnInit() {
-    this.subscribeToUser();
     this.subscribeToNavBarState();
     this.subscribeToRoute();
+    this.subscribeToUser();
+  }
+
+  closeAccordion() {
+    if ( $(window).width() < 768 ) $('.navbar-toggle').click();
+  }
+
+  subscribeToNavBarState() {
+    this.navService.navBarState$.subscribe(navBarState => {
+      this.navBarState = navBarState;
+    });
   }
 
   subscribeToRoute() {
@@ -41,21 +51,9 @@ export class NavComponent implements OnInit {
     });
   }
 
-  subscribeToNavBarState() {
-    this.navService.navBarState$.subscribe(navBarState => {
-      this.navBarState = navBarState;
-    });
-  }
-
   subscribeToUser() {
     this.userService.user$.subscribe(
         user => this.user = user
     );
   }
-
-  closeAccordion() {
-    if ( $(window).width() < 768 ) $('.navbar-toggle').click();
-  }
-
-
 }

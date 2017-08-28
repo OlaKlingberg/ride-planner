@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserService } from '../user.service';
-import { nameSort } from '../../_lib/util';
+
 import { Subscription } from 'rxjs/Subscription';
+
+import { nameSort } from '../../_lib/util';
+import { UserService } from '../user.service';
 
 @Component({
   templateUrl: './user-list.component.html',

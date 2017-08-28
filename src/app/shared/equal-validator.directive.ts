@@ -1,8 +1,8 @@
-// Probably based on the tutorial:
+// Based on the tutorial:
 //    https://scotch.io/tutorials/how-to-implement-a-custom-validator-directive-confirm-password-in-angular-2
 
-import { Directive, forwardRef, Attribute } from '@angular/core';
-import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
+import { Attribute, Directive, forwardRef } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
 
 @Directive({
   selector: '[rpValidateEqual][formControlName],[rpValidateEqual][formControl],[rpValidateEqual][ngModel]',
@@ -13,12 +13,6 @@ import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
 export class EqualValidator implements Validator {
   constructor( @Attribute('rpValidateEqual') public rpValidateEqual: string,
                @Attribute('reverse') public reverse: string) {
-
-  }
-
-  private get isReverse() {
-    if (!this.reverse) return false;
-    return this.reverse === 'true' ? true: false;
   }
 
   validate(c: AbstractControl): { [key: string]: any } {
@@ -49,5 +43,10 @@ export class EqualValidator implements Validator {
     }
 
     return null;
+  }
+
+  private get isReverse() {
+    if (!this.reverse) return false;
+    return this.reverse === 'true' ? true: false;
   }
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
 import { MapComponent } from './map.component';
 
 @NgModule({
@@ -8,7 +9,6 @@ import { MapComponent } from './map.component';
       path: '',
       component: MapComponent
     }
-  ])],
-  exports: []
+  ])]
 })
 export class MapRoutingModule { }

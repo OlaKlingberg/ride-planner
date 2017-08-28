@@ -1,8 +1,8 @@
 import { environment } from "../../environments/environment";
 
 let latInitialAdd,
-    lngInitialAdd,
     latIncrement,
+    lngInitialAdd,
     lngIncrement,
     timer;
 
@@ -19,15 +19,15 @@ if ( environment.dummyMovement ) {
 
 export class User {
   _id: string;
-  fname: string;
-  lname: string;
+  admin: boolean;
+  disconnected: number;
   email: string;
-  // password: string;
-  leader: boolean;
-  phone: string;
   emergencyName: string;
   emergencyPhone: string;
-  admin: boolean;
+  fname: string;
+  leader: boolean;
+  lname: string;
+  phone: string;
   position: {
     coords: {
       accuracy: number,
@@ -43,25 +43,23 @@ export class User {
     },
     timestamp: null
   };
-
   ride: string;
   socketId: string;
   zIndex: number;
-  disconnected: number;
 
   constructor(obj) {
     this._id = obj._id;
-    this.fname = obj.fname;
-    this.lname = obj.lname;
+    this.admin = obj.admin;
+    this.disconnected = obj.disconnected;
     this.email = obj.email;
-    this.leader = obj.leader;
-    this.phone = obj.phone;
     this.emergencyName = obj.emergencyName;
     this.emergencyPhone = obj.emergencyPhone;
-    this.admin = obj.admin;
+    this.fname = obj.fname;
+    this.leader = obj.leader;
+    this.lname = obj.lname;
+    this.phone = obj.phone;
     this.ride = obj.ride;
     this.socketId = obj.socketId; // Todo: Do I need this?
-    this.disconnected = obj.disconnected;
 
     if ( obj.position ) {
       this.position = {
@@ -75,14 +73,6 @@ export class User {
     }
   }
 
-  get initials() {
-    return this.fname.substr(0, 1) + this.lname.substr(0, 1);
-  }
-
-  get fullName() {
-    return `${this.fname} ${this.lname}`;
-  }
-
   get colorNumber() {
     if ( this.leader ) return 1;  // Leader are red even if disconnected.
     if ( this.disconnected && Date.now() - this.disconnected > 5000 ) return 0; // Disconnected riders are gray.
@@ -92,9 +82,12 @@ export class User {
     return colorNumber % 9 + 2;
   }
 
-  get secondsSinceDisconnected() {
-    if ( !this.disconnected ) return null;
-    return (Date.now() - this.disconnected) / 1000;
+  get fullName() {
+    return `${this.fname} ${this.lname}`;
+  }
+
+  get initials() {
+    return this.fname.substr(0, 1) + this.lname.substr(0, 1);
   }
 
   get minutesSinceDisconnected() {
@@ -107,4 +100,8 @@ export class User {
     return 1;
   }
 
+  get secondsSinceDisconnected() {
+    if ( !this.disconnected ) return null;
+    return (Date.now() - this.disconnected) / 1000;
+  }
 }

@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
+
+import Socket = SocketIOClient.Socket;
+import { Subscription } from 'rxjs/Subscription';
+
 import { AlertService } from "../../alert/alert.service";
 import { AuthenticationService } from '../authentication.service';
-import { Subscription } from 'rxjs/Subscription';
-import { environment } from '../../../environments/environment';
-import { UserService } from '../../user/user.service';
-import Socket = SocketIOClient.Socket;
 import { RideSubjectService } from '../../ride/ride-subject.service';
-import { SocketService } from '../../core/socket.service';
+import { SocketService } from '../../core/socket.service';import { environment } from '../../../environments/environment';
+import { UserService } from '../../user/user.service';
 
 @Component({
   templateUrl: './logout.component.html',
@@ -16,7 +17,6 @@ import { SocketService } from '../../core/socket.service';
 export class LogoutComponent implements OnInit, OnDestroy {
   private logoutSub: Subscription;
   private socket: Socket;
-
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,

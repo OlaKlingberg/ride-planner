@@ -1,21 +1,23 @@
-import { NgModule } from '@angular/core';
-import { FocusDirective } from './focus.directive';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { EqualValidator } from './equal-validator.directive';
+import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+
 import { TooltipModule } from 'ngx-bootstrap';
+
+import { EqualValidator } from './equal-validator.directive';
+import { FocusDirective } from './focus.directive';
 
 @NgModule({
   imports: [],
   declarations: [
-    FocusDirective,
     EqualValidator,
+    FocusDirective,
   ],
   exports: [
     CommonModule,
-    FormsModule,
     EqualValidator,
     FocusDirective,
+    FormsModule,
     TooltipModule
   ],
   providers: []

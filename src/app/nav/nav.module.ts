@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
 import { NavComponent } from './nav.component';
 import { SharedModule } from '../shared/shared.module';
-import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -13,8 +14,7 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     NavComponent
-  ],
-  providers: []
+  ]
 })
 export class NavModule {
 }

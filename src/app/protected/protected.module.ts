@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { ProtectedComponent } from './protected.component';
 import { ProtectedRoutingModule } from './protected-routing.module';
 
@@ -8,9 +9,7 @@ import { ProtectedRoutingModule } from './protected-routing.module';
   ],
   declarations: [
     ProtectedComponent
-  ],
-  exports: [],
-  providers: [],
+  ]
 })
 export class ProtectedModule {
 }

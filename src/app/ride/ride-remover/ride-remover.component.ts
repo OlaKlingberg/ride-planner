@@ -1,55 +1,43 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertService } from '../../alert/alert.service';
-import { Subscription } from 'rxjs/Subscription';
-import { UserService } from '../../user/user.service';
-import { User } from '../../user/user';
+
 import Socket = SocketIOClient.Socket;
+import { Subscription } from 'rxjs/Subscription';
+
+import { AlertService } from '../../alert/alert.service';
 import { environment } from "../../../environments/environment";
 import { Ride } from '../ride';
 import { RideService } from '../ride.service';
 import { RideSubjectService } from '../ride-subject.service';
 import { SocketService } from '../../core/socket.service';
+import { User } from '../../user/user';
+import { UserService } from '../../user/user.service';
 
 @Component({
   templateUrl: './ride-remover.component.html',
   styleUrls: [ './ride-remover.component.scss' ]
 })
 export class RideRemoverComponent implements OnInit, OnDestroy {
-  public model: any = [];
-  private socket: Socket;
-  public user: User = null;
-  private availableRides: Array<string> = null;
-  private userSub: Subscription;
-  private availableRidesListener: any;
+  model: any = [];
+  user: User = null;
 
-  constructor(private router: Router,
+  private availableRides: Array<string> = null;
+  private availableRidesListener: any;
+  private socket: Socket;
+  private userSub: Subscription;
+
+  constructor(private alertService: AlertService,
               private rideService: RideService,
               private rideSubjectService: RideSubjectService,
-              private userService: UserService,
-              private alertService: AlertService,
-              private socketService: SocketService) {
+              private router: Router,
+              private socketService: SocketService,
+              private userService: UserService) {
     this.socket = this.socketService.socket;
   }
 
   ngOnInit() {
-    this.subscribeToUser();
     this.getAvailableRides();
-
-  }
-
-  subscribeToUser() {
-    this.userSub = this.userService.user$.subscribe(user => {
-      this.user = user;
-    });
-  }
-
-  // Todo: I'm not sure I should be using sockets here.
-  getAvailableRides() {
-    this.socket.emit('giveMeAvailableRides');
-    this.availableRidesListener = this.socket.on('availableRides', availableRides => {
-      if ( availableRides.length > 0 ) this.availableRides = availableRides;
-    });
+    this.subscribeToUser();
   }
 
   deleteRide() {
@@ -63,6 +51,14 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
     })
   }
 
+  // Todo: I'm not sure I should be using sockets here.
+  getAvailableRides() {
+    this.socket.emit('giveMeAvailableRides');
+    this.availableRidesListener = this.socket.on('availableRides', availableRides => {
+      if ( availableRides.length > 0 ) this.availableRides = availableRides;
+    });
+  }
+
   logOutFromRide() {
     environment.storage.removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
@@ -72,6 +68,13 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
     // this.userService.watchWhenToJoinRide();
 
     this.socket.emit('leaveRide');
+  }
+
+
+  subscribeToUser() {
+    this.userSub = this.userService.user$.subscribe(user => {
+      this.user = user;
+    });
   }
 
   ngOnDestroy() {

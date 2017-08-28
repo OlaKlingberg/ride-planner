@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
+import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
+import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
 import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
 import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
-import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
-import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
 
 @NgModule({
   imports: [RouterModule.forChild([

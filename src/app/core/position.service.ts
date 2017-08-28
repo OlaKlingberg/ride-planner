@@ -1,26 +1,42 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import Timer = NodeJS.Timer;
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import Timer = NodeJS.Timer;
+
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class PositionService {
-  public position$: BehaviorSubject<any> = new BehaviorSubject(null);
+  position$: BehaviorSubject<any> = new BehaviorSubject(null);
+
+  private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
+  private dummyLatCurrentAdd: number = null;
+  private dummyLatIncrement: number = Math.random() * .0002 - .0001;
+
+  private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
+  private dummyLngCurrentAdd: number = null;
+  private dummyLngIncrement: number = Math.random() * .0002 - .0001;
+
+  private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
 
   private geoWatch: number;
   private geoWatchTimer: Timer;
   private updateTimer: Timer;
 
-  private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
-  private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
-  private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
-  private dummyLatIncrement: number = Math.random() * .0002 - .0001;
-  private dummyLngIncrement: number = Math.random() * .0002 - .0001;
-  private dummyLatCurrentAdd: number = null;
-  private dummyLngCurrentAdd: number = null;
-
   constructor() {
     this.watchPosition();
+  }
+
+  // Todo: Why can't I do this with JSON.stringify() and JSON.parse()?
+  copyPositionObject(position) {
+    return {
+      coords: {
+        accuracy: position.coords.accuracy,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      },
+      timestamp: position.timestamp
+    };
   }
 
   positionPromise() {
@@ -34,6 +50,33 @@ export class PositionService {
     });
 
     return positionPromise;
+  }
+
+  setDummyMovements(pos) {
+    let startLat = pos.coords.latitude;
+    let startLng = pos.coords.longitude;
+    this.updateTimer = setInterval(() => {
+      this.dummyLatCurrentAdd += this.dummyLatIncrement;
+      this.dummyLngCurrentAdd += this.dummyLngIncrement;
+      pos.coords.latitude = startLat + this.dummyLatCurrentAdd;
+      pos.coords.longitude = startLng + this.dummyLngCurrentAdd;
+      this.position$.next(pos);
+    }, this.dummyUpdateFrequency);
+  }
+
+  setDummyPositions(pos) {
+    pos.coords.latitude += this.dummyLatInitialAdd;
+    pos.coords.longitude += this.dummyLngInitialAdd;
+
+    return pos;
+  }
+
+  startGeoWatchTimer(position) {
+    this.geoWatchTimer = setTimeout(() => {
+      navigator.geolocation.clearWatch(this.geoWatch);
+      this.watchPosition();
+      this.startGeoWatchTimer(position);
+    }, 20000);
   }
 
   watchPosition() {
@@ -66,44 +109,4 @@ export class PositionService {
         }
     );
   }
-
-  setDummyPositions(pos) {
-    pos.coords.latitude += this.dummyLatInitialAdd;
-    pos.coords.longitude += this.dummyLngInitialAdd;
-
-    return pos;
-  }
-
-  setDummyMovements(pos) {
-    let startLat = pos.coords.latitude;
-    let startLng = pos.coords.longitude;
-    this.updateTimer = setInterval(() => {
-      this.dummyLatCurrentAdd += this.dummyLatIncrement;
-      this.dummyLngCurrentAdd += this.dummyLngIncrement;
-      pos.coords.latitude = startLat + this.dummyLatCurrentAdd;
-      pos.coords.longitude = startLng + this.dummyLngCurrentAdd;
-      this.position$.next(pos);
-    }, this.dummyUpdateFrequency);
-  }
-
-  // Todo: Why can't I do this with JSON.stringify() and JSON.parse()?
-  copyPositionObject(position) {
-    return {
-      coords: {
-        accuracy: position.coords.accuracy,
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      },
-      timestamp: position.timestamp
-    };
-  }
-
-  startGeoWatchTimer(position) {
-    this.geoWatchTimer = setTimeout(() => {
-      navigator.geolocation.clearWatch(this.geoWatch);
-      this.watchPosition();
-      this.startGeoWatchTimer(position);
-    }, 20000);
-  }
-
 }

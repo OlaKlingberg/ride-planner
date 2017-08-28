@@ -1,8 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AlertService } from "./alert.service";
-import { Subscription } from 'rxjs/Subscription';
-import { alertAnimations } from './alert.component.animations';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
+import { Subscription } from 'rxjs/Subscription';
+
+import { alertAnimations } from './alert.component.animations';
+import { AlertService } from "./alert.service";
 
 @Component({
   selector: 'rp-alert',
@@ -12,7 +13,8 @@ import { alertAnimations } from './alert.component.animations';
 })
 export class AlertComponent implements OnInit, OnDestroy {
   message: any;
-  getMessageSub: Subscription;
+
+  private getMessageSub: Subscription;
 
   constructor(private alertService: AlertService) {
   }

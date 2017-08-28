@@ -1,11 +1,10 @@
+import { Http, Headers, RequestOptions, Response } from "@angular/http";
 import { Injectable } from "@angular/core";
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
 
-import 'rxjs/Rx';
+import Socket = SocketIOClient.Socket;
 
 import { environment } from "../../environments/environment";
 import { User } from "../user/user";
-import Socket = SocketIOClient.Socket;
 import { UserService } from '../user/user.service';
 import { SocketService } from '../core/socket.service';
 
@@ -13,13 +12,11 @@ import { SocketService } from '../core/socket.service';
 export class AuthenticationService {
   private socket: Socket;
 
-
   constructor(private http: Http,
-              private socketService: SocketService,
-              private userService: UserService,) {
+              private userService: UserService,
+              private socketService: SocketService) {
     this.authenticateByToken(); // If the user has a token, log them in automatically.
     this.socket = this.socketService.socket;
-    // this.addAdminsToRoomAdmins();
   }
 
   authenticateByToken() {

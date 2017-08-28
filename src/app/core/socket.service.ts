@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+
 import Socket = SocketIOClient.Socket;
+
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class SocketService {
-  public socket: Socket;
+  socket: Socket;
 
   constructor() {
     this.socket = io(environment.api);  // io is made available through import into index.html.

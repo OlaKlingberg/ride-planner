@@ -1,25 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { RideService } from '../ride.service';
-import { AlertService } from '../../alert/alert.service';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Ride } from '../ride';
+
 import { Subscription } from 'rxjs/Subscription';
+
+import { AlertService } from '../../alert/alert.service';
+import { Ride } from '../ride';
+import { RideService } from '../ride.service';
 
 @Component({
   templateUrl: './ride-creator.component.html',
-  styleUrls: ['./ride-creator.component.scss']
+  styleUrls: [ './ride-creator.component.scss' ]
 })
-export class RideCreatorComponent implements OnInit {
+export class RideCreatorComponent {
+  loading: boolean = false;
   model: any = {};
-  public loading: boolean = false;
-  public ride: Ride;
+  ride: Ride;
+
   private rideSub: Subscription;
 
-  constructor(private rideService: RideService,
-              private alertService: AlertService,
-              private router: Router) { }
-
-  ngOnInit() {
+  constructor(private alertService: AlertService,
+              private rideService: RideService,
+              private router: Router) {
   }
 
   createRide() {

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { ProtectedComponent } from './protected.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [RouterModule.forChild([

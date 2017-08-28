@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
 import { DebuggerComponent } from './debugger.component';
 import { DebuggerRoutingModule } from './debugger-routing.module';
 
@@ -10,9 +11,7 @@ import { DebuggerRoutingModule } from './debugger-routing.module';
   ],
   declarations: [
     DebuggerComponent
-  ],
-  exports: [],
-  providers: []
+  ]
 })
 export class DebuggerModule {
 }

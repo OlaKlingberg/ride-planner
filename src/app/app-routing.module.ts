@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { AuthGuard } from "./_guards/auth.guard";
-import { AdminGuard } from './_guards/admin.guard';
 import { RideLeaderGuard } from './_guards/ride-leader.guard';
 
 const routes: Routes = [
@@ -11,13 +11,28 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'auth',
+    loadChildren: 'app/authentication/authentication.module#AuthenticationModule'
+  },
+  {
+    path: 'cuesheet',
+    canActivate: [AuthGuard],
+    loadChildren: 'app/cuesheet/cuesheet.module#CuesheetModule'
+  },
+  {
+    path: 'debugger',
+    canActivate: [AuthGuard],
+    loadChildren: 'app/debugger/debugger.module#DebuggerModule'
+  },
+  {
     path: 'map',
     canActivate: [AuthGuard],
     loadChildren: 'app/map/map.module#MapModule'
   },
   {
-    path: 'auth',
-    loadChildren: 'app/authentication/authentication.module#AuthenticationModule'
+    path: 'members',
+    canActivate: [RideLeaderGuard],
+    loadChildren: 'app/user/user.module#UserModule'
   },
   {
     path: 'protected',
@@ -30,24 +45,9 @@ const routes: Routes = [
     loadChildren: 'app/ride/ride.module#RideModule'
   },
   {
-    path: 'members',
-    canActivate: [RideLeaderGuard],
-    loadChildren: 'app/user/user.module#UserModule'
-  },
-  {
     path: 'riders',
     canActivate: [RideLeaderGuard],
     loadChildren: 'app/rider/rider.module#RiderModule'
-  },
-  {
-    path: 'debugger',
-    canActivate: [AuthGuard],
-    loadChildren: 'app/debugger/debugger.module#DebuggerModule'
-  },
-  {
-    path: 'cuesheet',
-    canActivate: [AuthGuard],
-    loadChildren: 'app/cuesheet/cuesheet.module#CuesheetModule'
   },
 ];
 

@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { environment } from "../../environments/environment";
 import { Http, RequestOptions, Headers, Response } from "@angular/http";
-import { Cuesheet } from './cuesheet';
-import { UserService } from '../user/user.service';
-import { User } from '../user/user';
+import { Injectable } from '@angular/core';
+
 import { Cue } from './cue';
+import { Cuesheet } from './cuesheet';
+import { environment } from "../../environments/environment";
+import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 
 
 @Injectable()
@@ -18,10 +19,13 @@ export class CuesheetService {
     });
   }
 
-  setHeaders() {
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
-    const headers = new Headers({ 'x-auth': token });
-    return new RequestOptions({ headers });
+  createCue(cuesheetId: any, cue: any, insertBeforeId: string) {
+    const requestOptions = this.setHeaders();
+
+    return this.http.post(`${environment.api}/cuesheets/cues`, { cuesheetId, cue, insertBeforeId }, requestOptions)
+        .map((response: Response) => {
+          return new Cue(response.json());
+        }).toPromise();
   }
 
   createCuesheet(model) {
@@ -32,6 +36,23 @@ export class CuesheetService {
         .map((response: Response) => {
           return new Cuesheet(response.json());
         });
+  }
+
+  deleteCue(cuesheetId: any, cueId: any) {
+    const requestOptions = this.setHeaders();
+
+    return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}/cues/${cueId}`, requestOptions)
+        .map((response: Response) => {
+          return new Cue(response.json());
+        }).toPromise();
+  }
+
+  deleteCuesheet(cuesheetId: any) {
+    const requestOptions = this.setHeaders();
+
+    return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}`, requestOptions)
+        .map((response: Response) => new Cuesheet(response.json().cuesheet))
+        .toPromise(); // Todo: Add error handling.
   }
 
   getAllCuesheets() {
@@ -51,29 +72,10 @@ export class CuesheetService {
         .toPromise();
   }
 
-  updateCuesheet(_id: string, cuesheet: any) {
-    const requestOptions = this.setHeaders();
-
-    return this.http.patch(`${environment.api}/cuesheets/${_id}`, cuesheet, requestOptions)
-        .map((response: Response) => new Cuesheet(response.json().cuesheet))
-        .toPromise();
-  }
-
-  deleteCuesheet(cuesheetId: any) {
-    const requestOptions = this.setHeaders();
-
-    return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}`, requestOptions)
-        .map((response: Response) => new Cuesheet(response.json().cuesheet))
-        .toPromise(); // Todo: Add error handling.
-  }
-
-  createCue(cuesheetId: any, cue: any, insertBeforeId: string) {
-    const requestOptions = this.setHeaders();
-
-    return this.http.post(`${environment.api}/cuesheets/cues`, { cuesheetId, cue, insertBeforeId }, requestOptions)
-        .map((response: Response) => {
-          return new Cue(response.json());
-        }).toPromise();
+  setHeaders() {
+    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const headers = new Headers({ 'x-auth': token });
+    return new RequestOptions({ headers });
   }
 
   updateCue(_id: string, cue: any) {
@@ -85,15 +87,11 @@ export class CuesheetService {
         }).toPromise();
   }
 
-  deleteCue(cuesheetId: any, cueId: any) {
+  updateCuesheet(_id: string, cuesheet: any) {
     const requestOptions = this.setHeaders();
 
-    return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}/cues/${cueId}`, requestOptions)
-        .map((response: Response) => {
-          return new Cue(response.json());
-        }).toPromise();
+    return this.http.patch(`${environment.api}/cuesheets/${_id}`, cuesheet, requestOptions)
+        .map((response: Response) => new Cuesheet(response.json().cuesheet))
+        .toPromise();
   }
-
-
-
 }

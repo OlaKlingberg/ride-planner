@@ -1,17 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import Socket = SocketIOClient.Socket;
-import { User } from '../user/user';
+
 import { SocketService } from '../core/socket.service';
+import { User } from '../user/user';
 
 @Component({
   templateUrl: './debugger.component.html',
   styleUrls: [ './debugger.component.scss' ]
 })
 export class DebuggerComponent implements OnInit, OnDestroy {
-  private user: User;
-  private socket: Socket;
+  time;
+
   public debugMessages: Array<any> = [];
-  public time;
+  private socket: Socket;
 
   constructor(private socketService: SocketService) {
     this.socket = socketService.socket;
@@ -20,6 +22,10 @@ export class DebuggerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.listenForDebugMessages();
     this.clock();
+  }
+
+  clearMessageList() {
+    this.debugMessages = [];
   }
 
   clock() {
@@ -32,10 +38,6 @@ export class DebuggerComponent implements OnInit, OnDestroy {
     this.socket.on('debugging', message => {
       this.debugMessages.push(message);
     });
-  }
-
-  clearMessageList() {
-    this.debugMessages = [];
   }
 
   ngOnDestroy() {

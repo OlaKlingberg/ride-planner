@@ -1,27 +1,27 @@
-import { Component, OnInit, OnDestroy, EventEmitter, AfterViewChecked, AfterViewInit, ElementRef } from '@angular/core';
-import { Cuesheet } from '../cuesheet';
-import { AlertService } from '../../alert/alert.service';
-import { CuesheetService } from '../cuesheet.service';
+import { Component, OnDestroy, EventEmitter, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { Subscription } from 'rxjs/Subscription';
+
+import { AlertService } from '../../alert/alert.service';
+import { Cuesheet } from '../cuesheet';
+import { CuesheetService } from '../cuesheet.service';
 
 @Component({
   templateUrl: './cuesheet-new.component.html',
   styleUrls: [ './cuesheet-new.component.scss' ]
 })
-export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit {
-  model: any = {};
-  loading: boolean = false;
+export class CuesheetNewComponent implements OnDestroy, AfterViewInit {
   cuesheet: Cuesheet;
+  focusTrigger = new EventEmitter<boolean>();
+  loading: boolean = false;
+  model: any = {};
+
   private cuesheetSub: Subscription;
-  public focusTrigger = new EventEmitter<boolean>();
 
   constructor(private alertService: AlertService,
               private cuesheetService: CuesheetService,
               private router: Router) {
-  }
-
-  ngOnInit() {
   }
 
   ngAfterViewInit() {

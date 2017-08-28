@@ -1,54 +1,39 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
-import { CuesheetService } from '../cuesheet.service';
-import { Cuesheet } from '../cuesheet';
-import { Cue } from '../cue';
-import * as $ from 'jquery';
-import * as Hammer from '../../../../node_modules/hammerjs/hammer';
+
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import * as Hammer from '../../../../node_modules/hammerjs/hammer';
+import * as $ from 'jquery';
+
+import { Cue } from '../cue';
+import { Cuesheet } from '../cuesheet';
+import { cuesheetBikeAnimations } from './cuesheet-bike.component.animations';
+import { CuesheetService } from '../cuesheet.service';
 
 @Component({
   templateUrl: './cuesheet-bike.component.html',
   styleUrls: [ './cuesheet-bike.component.scss' ],
-  animations: [
-    trigger('cuesheetContainer', [
-      state('up', style({
-        transform: 'translate(0, -217px)'
-      })),
-      state('down', style({
-        transform: 'translate(0, 217px)'
-      })),
-      transition('still => *', animate('500ms ease-in-out')),
-    ])
-  ]
+  animations: cuesheetBikeAnimations
 })
 export class CuesheetBikeComponent implements OnInit, OnDestroy {
-  public cuesheetId: string = '';
-  public cueNumber: number = null;
-  public total: number = 0;
-  public cuesheet: Cuesheet;
+  cueNumber: number = null;
+  cuesheet: Cuesheet;
+  cuesheetId: string = '';
+  modalRef: BsModalRef;
+  total: number = 0;
+  move: string = 'still';
+
   private cuesContainer: any;
   private mc: any;
-  public move: string = 'still';
-  public modalRef: BsModalRef;
 
   @ViewChild('firstCueModal') firstCueModal: TemplateRef<any>;
   @ViewChild('lastCueModal') lastCueModal: TemplateRef<any>;
 
-
-  constructor(private router: Router,
+  constructor(private cuesheetService: CuesheetService,
+              private modalService: BsModalService,
               private route: ActivatedRoute,
-              private cuesheetService: CuesheetService,
-              private modalService: BsModalService) {
+              private router: Router) {
   }
-
 
   ngOnInit() {
     this.cueNumber = +this.route.snapshot.paramMap.get('cueNumber');
@@ -71,19 +56,6 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
         })
   }
 
-
-
-// Todo: Seems like an ugly solution. Isn't there a better way?
-  setTotalDistances(cuesheet) {
-    cuesheet.cues = cuesheet.cues.map((cue: Cue) => {
-      this.total += cue.distance;
-      cue.total = this.total;
-      return cue;
-    });
-
-    return cuesheet;
-  }
-
   setIcons(cuesheet) {
     cuesheet.cues = cuesheet.cues.map((cue: Cue) => {
       const turn = cue.turn;
@@ -97,6 +69,17 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
         cue.icon = 'stop';
       }
 
+      return cue;
+    });
+
+    return cuesheet;
+  }
+
+// Todo: Seems like an ugly solution. Isn't there a better way?
+  setTotalDistances(cuesheet) {
+    cuesheet.cues = cuesheet.cues.map((cue: Cue) => {
+      this.total += cue.distance;
+      cue.total = this.total;
       return cue;
     });
 

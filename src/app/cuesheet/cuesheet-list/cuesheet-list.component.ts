@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CuesheetService } from '../cuesheet.service';
+
 import { Subscription } from 'rxjs/Subscription';
+
+import { CuesheetService } from '../cuesheet.service';
 
 @Component({
   templateUrl: './cuesheet-list.component.html',
   styleUrls: ['./cuesheet-list.component.scss']
 })
 export class CuesheetListComponent implements OnInit, OnDestroy {
-  public cuesheets: Array<object> = [];
+  cuesheets: Array<object> = [];
+
   private cuesheetSub: Subscription;
 
   constructor(private cuesheetService: CuesheetService) { }

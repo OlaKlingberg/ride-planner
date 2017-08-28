@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+
 import { Cuesheet } from '../cuesheet';
 import { CuesheetService } from '../cuesheet.service';
 
@@ -8,11 +9,11 @@ import { CuesheetService } from '../cuesheet.service';
   styleUrls: [ './cuesheet-view.component.scss' ]
 })
 export class CuesheetViewComponent implements OnInit {
-  public cuesheet: Cuesheet;
-  public total: number = 0;
+  cuesheet: Cuesheet;
+  total: number = 0;
 
-  constructor(private route: ActivatedRoute,
-              private cuesheetService: CuesheetService) {
+  constructor(private cuesheetService: CuesheetService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit() {

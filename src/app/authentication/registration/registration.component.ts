@@ -1,21 +1,18 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from "@angular/router";
-import { UserService } from "../../user/user.service";
+
 import { AlertService } from "../../alert/alert.service";
 import { User } from "../../user/user";
-import { Subscription } from 'rxjs/Subscription';
+import { UserService } from "../../user/user.service";
 
 @Component({
   templateUrl: './registration.component.html',
   styleUrls: [ './registration.component.scss' ]
 })
-export class RegistrationComponent implements OnDestroy {
+export class RegistrationComponent {
   model: any = {};
   loading: boolean = false;
   user: User;
-
-  createSub: Subscription
-  ;
 
   constructor(private router: Router,
               private userService: UserService,
@@ -35,9 +32,4 @@ export class RegistrationComponent implements OnDestroy {
             }
         )
   }
-
-  ngOnDestroy() {
-    if (this.createSub) this.createSub.unsubscribe();
-  }
-
 }

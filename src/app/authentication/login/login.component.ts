@@ -1,11 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthenticationService } from "../authentication.service";
-import { AlertService } from "../../alert/alert.service";
-import { User } from "../../user/user";
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import * as $ from 'jquery';
 import { Subscription } from 'rxjs/Subscription';
+import * as $ from 'jquery';
+
+import { AlertService } from "app/alert/alert.service";
+import { AuthenticationService } from "../authentication.service";
+import { User } from "../../user/user";
 import { UserService } from "app/user/user.service";
 
 @Component({
@@ -15,13 +16,11 @@ import { UserService } from "app/user/user.service";
 export class LoginComponent implements OnInit, OnDestroy {
   model: any = {};
   loading = false;
-  returnUrl: string;
   user: User;
 
-  loginSub: Subscription;
-  userSub: Subscription;
-
-  private counter: number = 0;
+  private loginSub: Subscription;
+  private returnUrl: string;
+  private userSub: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -42,7 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         }
     );
-
   }
 
   login() {
@@ -73,5 +71,4 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.loginSub) this.loginSub.unsubscribe();
     if (this.userSub) this.userSub.unsubscribe();
   }
-
 }

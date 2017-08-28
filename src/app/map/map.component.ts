@@ -1,22 +1,23 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewChildren } from '@angular/core';
 
-import { MapsAPILoader } from 'angular2-google-maps/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
-import { Subscription } from 'rxjs/Subscription';
+import { MapsAPILoader } from 'angular2-google-maps/core';
 import Socket = SocketIOClient.Socket;
+import Timer = NodeJS.Timer;
+import { Subscription } from 'rxjs/Subscription';
 import * as $ from 'jquery'
 import * as _ from 'lodash';
+
 import { environment } from '../../environments/environment';
-import { User } from '../user/user';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { PositionService } from '../core/position.service';
-import { UserService } from '../user/user.service';
-import { SocketService } from '../core/socket.service';
-import { NavService } from '../nav/nav.service';
-import { RideSubjectService } from '../ride/ride-subject.service';
 import { MapAnimations } from './map.component.animatins';
-import Timer = NodeJS.Timer;
+import { NavService } from '../nav/nav.service';
+import { PositionService } from '../core/position.service';
+import { RideSubjectService } from '../ride/ride-subject.service';
+import { SocketService } from '../core/socket.service';
+import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -24,46 +25,32 @@ import Timer = NodeJS.Timer;
   animations: MapAnimations
 })
 export class MapComponent implements OnInit, OnDestroy {
-  public production = environment.production;
-  private fullName: string = '';
-  public maxZoom: number = 18;
-  // public zoom: number = 14;
+  buttonState: string = 'show';
+  colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
+  latLng: LatLngBoundsLiteral;
+  mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
+  markerUrl: string = "assets/img/rider-markers/";
+  maxZoom: number = 18;
+  riderList: Array<User> = [];
+  user: User;
 
-  public user: User;
-
-  private google: any;
   private bounds: LatLngBounds;
-  public latLng: LatLngBoundsLiteral;
-
-  private userSub: Subscription;
-  private userRideSub: Subscription;
+  private google: any;
+  private hideTimer: Timer;
   private positionSub: Subscription;
   private riderListSub: Subscription;
-
-  private markerUrl: string = "assets/img/rider-markers/";
-  private colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
-
+  private riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
   private socket: Socket;
-
   private timer: any;
-  public navBarStateTimer: any;
-
+  private userRideSub: Subscription;
+  private userSub: Subscription;
   private zCounter: number = 0;
 
-  public mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
-
-  public riderList: Array<User> = [];
-  private riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
-
-  public buttonState: string = 'show';
-
-  private hideTimer: Timer;
-
-
-  @ViewChildren('markers') markers;
-  @ViewChildren('infoWindows') infoWindows;
-  @ViewChildren('userInfoWindow') userInfoWindow;
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
+
+  @ViewChildren('infoWindows') infoWindows;
+  @ViewChildren('markers') markers;
+  @ViewChildren('userInfoWindow') userInfoWindow;
 
   constructor(private positionService: PositionService,
               private socketService: SocketService,
@@ -76,22 +63,48 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.hideNav();
-    this.subscribeToUser();
-    this.listenForSocketConnection();
-    this.requestRiderList();
-    this.listenForRiderList();
-    this.listenForJoinedRider();
-    this.listenForUpdatedRiderPosition();
-    this.listenForRemovedRider();
     this.listenForDisconnectedRider();
+    this.listenForJoinedRider();
+    this.listenForRemovedRider();
+    this.listenForRiderList();
+    this.listenForSocketConnection();
+    this.listenForUpdatedRiderPosition();
     this.loadMapsAPILoader();
     this.removeLongDisconnectedRiders();
+    this.requestRiderList();
+    this.subscribeToUser();
+  }
 
+
+  closeInfoWindows(_id) {
+    // This actually works. Apparently, this executes, closing any open infoWindow, before a new one is opened.
+    this.infoWindows.forEach(infoWindow => infoWindow.close());
+    this.userInfoWindow.forEach(userInfoWindow => userInfoWindow.close());
+
+    // If the above hadn't worked, this is how I would have done it.
+    // this.infoWindows.forEach(infoWindow => {
+    //   if (infoWindow._el.nativeElement.attributes['data-index'] !== _id) infoWindow.close();
+    // });
+  }
+
+  focusOnUser() {
+    if ( this.positionSub ) this.positionSub.unsubscribe();
+    this.positionSub = this.positionService.position$.subscribe(position => {
+          if ( position ) {
+            this.bounds = new this.google.maps.LatLngBounds();
+            this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
+            this.latLng = this.bounds.toJSON();
+          }
+        },
+        err => {
+          // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
+          console.log("MapComponent.trackUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
+        });
   }
 
   hideNav() {
     clearTimeout(this.hideTimer);
-    // Wait till the map is shown (which happens when there is a position), sait timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
+    // Wait till the map is shown (which happens when there is a position), set timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
     this.positionService.positionPromise().then(() => {
       this.hideTimer = setTimeout(() => {
         let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
@@ -103,51 +116,12 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  showNav() {
-    this.navService.navBarState$.next('show');
-    this.buttonState = 'show';
-  }
+  listenForDisconnectedRider() {
+    this.socket.on('disconnectedRider', disconnectedRider => {
+      let idx = _.findIndex(this.riderList, rider => rider._id === disconnectedRider._id);
+      this.riderList[ idx ].disconnected = disconnectedRider.disconnected;
 
-  loadMapsAPILoader() {
-    this.mapsAPILoader.load().then(() => {
-      this.google = google;
-      this.focusOnUser();
-    });
-  }
-
-  subscribeToUser() {
-    this.userSub = this.userService.user$.subscribe(user => {
-      this.user = user;
-    });
-  }
-
-  listenForSocketConnection() {
-    this.socket.on('socketConnection', () => this.requestRiderList());
-  }
-
-  requestRiderList() {
-    this.rideSubjectService.ride$.subscribe(ride => {
-      if ( ride ) {
-        this.socket.emit('giveMeRiderList', ride);
-      }
-    });
-  }
-
-  setZIndexAndOpacity() {
-    this.riderList = this.riderList.map(rider => {
-      rider.zIndex = this.zCounter++;
-      if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
-      if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
-      return rider;
-    });
-  }
-
-  listenForRiderList() {
-    this.socket.on('riderList', riderList => {
-      this.riderList = riderList.map(rider => new User(rider));
-      // Filter out the user, which will be displayed using a separate marker.
-      this.riderList = this.riderList.filter(rider => rider._id !== this.user._id);
-      this.setZIndexAndOpacity();
+      this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
     });
   }
 
@@ -172,6 +146,29 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  listenForRemovedRider() {
+    this.socket.on('removedRider', _id => {
+      // console.log("listenForRemovedRider(). _id:", _id);
+      this.riderList = this.riderList.filter(rider => rider._id !== _id);
+
+      // This will be used to set the map bounds.
+      this.riderList$.next(this.riderList);
+    });
+  }
+
+  listenForRiderList() {
+    this.socket.on('riderList', riderList => {
+      this.riderList = riderList.map(rider => new User(rider));
+      // Filter out the user, which will be displayed using a separate marker.
+      this.riderList = this.riderList.filter(rider => rider._id !== this.user._id);
+      this.setZIndexAndOpacity();
+    });
+  }
+
+  listenForSocketConnection() {
+    this.socket.on('socketConnection', () => this.requestRiderList());
+  }
+
   listenForUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
       let idx = _.findIndex(this.riderList, rider => rider._id === updatedRider._id);
@@ -186,22 +183,10 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  listenForRemovedRider() {
-    this.socket.on('removedRider', _id => {
-      // console.log("listenForRemovedRider(). _id:", _id);
-      this.riderList = this.riderList.filter(rider => rider._id !== _id);
-
-      // This will be used to set the map bounds.
-      this.riderList$.next(this.riderList);
-    });
-  }
-
-  listenForDisconnectedRider() {
-    this.socket.on('disconnectedRider', disconnectedRider => {
-      let idx = _.findIndex(this.riderList, rider => rider._id === disconnectedRider._id);
-      this.riderList[ idx ].disconnected = disconnectedRider.disconnected;
-
-      this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
+  loadMapsAPILoader() {
+    this.mapsAPILoader.load().then(() => {
+      this.google = google;
+      this.focusOnUser();
     });
   }
 
@@ -216,15 +201,12 @@ export class MapComponent implements OnInit, OnDestroy {
     }, 30000);
   }
 
-  closeInfoWindows(_id) {
-    // This actually works. Apparently, this executes, closing any open infoWindow, before a new one is opened.
-    this.infoWindows.forEach(infoWindow => infoWindow.close());
-    this.userInfoWindow.forEach(userInfoWindow => userInfoWindow.close());
-
-    // If the above hadn't worked, this is how I would have done it.
-    // this.infoWindows.forEach(infoWindow => {
-    //   if (infoWindow._el.nativeElement.attributes['data-index'] !== _id) infoWindow.close();
-    // });
+  requestRiderList() {
+    this.rideSubjectService.ride$.subscribe(ride => {
+      if ( ride ) {
+        this.socket.emit('giveMeRiderList', ride);
+      }
+    });
   }
 
   setMapMode(mapMode) {
@@ -245,21 +227,13 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Todo: Update bounds only if position has changed more than a certain amount.
-  focusOnUser() {
-    if ( this.positionSub ) this.positionSub.unsubscribe();
-    this.positionSub = this.positionService.position$.subscribe(position => {
-          if ( position ) {
-            this.bounds = new this.google.maps.LatLngBounds();
-            this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
-            this.latLng = this.bounds.toJSON();
-          }
-        },
-        err => {
-          // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
-          console.log("MapComponent.trackUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
-        });
-
+  setZIndexAndOpacity() {
+    this.riderList = this.riderList.map(rider => {
+      rider.zIndex = this.zCounter++;
+      if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
+      if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
+      return rider;
+    });
   }
 
   showAllRiders() {
@@ -279,16 +253,25 @@ export class MapComponent implements OnInit, OnDestroy {
 
   }
 
+  showNav() {
+    this.navService.navBarState$.next('show');
+    this.buttonState = 'show';
+  }
+
+  subscribeToUser() {
+    this.userSub = this.userService.user$.subscribe(user => {
+      this.user = user;
+    });
+  }
+
   ngOnDestroy() {
+    // Todo: Add the subscriptions to an array, which I can loop through here.
     if ( this.userSub ) this.userSub.unsubscribe();
     if ( this.userRideSub ) this.userRideSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
     if ( this.riderListSub ) this.riderListSub.unsubscribe();
-
     this.socket.removeAllListeners();
-
     clearInterval(this.timer);
-    clearTimeout(this.navBarStateTimer);
 
     // Attempt to ameliorate memory leak.
     google.maps.event.clearInstanceListeners(window);

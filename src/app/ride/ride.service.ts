@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { Http, RequestOptions, Headers, Response } from "@angular/http";
-import { UserService } from '../user/user.service';
-import { User } from '../user/user';
+import { Injectable } from '@angular/core';
+
+import { environment } from '../../environments/environment';
 import { Ride } from './ride';
+import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class RideService {
@@ -14,12 +15,6 @@ export class RideService {
     this.userService.user$.subscribe(user => {
       this.user = user;
     });
-  }
-
-  setHeaders() {
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
-    const headers = new Headers({ 'x-auth': token });
-    return new RequestOptions({ headers });
   }
 
   createRide(model) {
@@ -38,6 +33,12 @@ export class RideService {
     return this.http.delete(`${environment.api}/rides/${rideId}`, requestOptions)
         .map((response: Response) => new Ride(response.json().ride))
         .toPromise(); // Todo: Add error handling.
+  }
+
+  setHeaders() {
+    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const headers = new Headers({ 'x-auth': token });
+    return new RequestOptions({ headers });
   }
 
 }

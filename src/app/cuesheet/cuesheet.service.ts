@@ -1,6 +1,8 @@
 import { Http, RequestOptions, Headers, Response } from "@angular/http";
 import { Injectable } from '@angular/core';
 
+import 'rxjs/add/operator/toPromise';
+
 import { Cue } from './cue';
 import { Cuesheet } from './cuesheet';
 import { environment } from "../../environments/environment";

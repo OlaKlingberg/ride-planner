@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, EventEmitter, OnInit, AfterViewInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, AfterViewInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -10,13 +10,14 @@ import { Cue } from '../cue';
 import { Cuesheet } from '../cuesheet';
 import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 import { CuesheetService } from '../cuesheet.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   templateUrl: './cuesheet-edit.component.html',
   styleUrls: [ './cuesheet-edit.component.scss' ],
   animations: cuesheetEditAnimations
 })
-export class CuesheetEditComponent implements OnInit, AfterViewInit {
+export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   cueModel: any = {};
   cuesheet: Cuesheet;
   cuesheetDescriptionInput: boolean = false;
@@ -29,6 +30,8 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   focusTrigger = new EventEmitter<boolean>();
   modalRef: BsModalRef;
   total: number = 0;
+
+  private subscription: Subscription;
 
   @ViewChild('cueForm') cueForm: NgForm;
 
@@ -82,7 +85,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
   }
 
   checkForModalClose() {
-    this.modalService.onHide.subscribe((reason: string) => {
+    this.subscription = this.modalService.onHide.subscribe((reason: string) => {
       this.cueToDelete = null;
     });
   }
@@ -321,5 +324,9 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit {
       this.cuesheet.description = cuesheet.description;
       this.hideInputFields();
     })
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

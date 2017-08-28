@@ -15,7 +15,7 @@ import { UserService } from '../../user/user.service';
   styleUrls: [ './logout.component.scss' ]
 })
 export class LogoutComponent implements OnInit, OnDestroy {
-  private logoutSub: Subscription;
+  private subscription: Subscription;
   private socket: Socket;
 
   constructor(private router: Router,
@@ -28,7 +28,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.logoutSub = this.authenticationService.logout()
+    this.subscription = this.authenticationService.logout()
         .subscribe(() => {
 
               environment.storage.removeItem('rpToken');
@@ -55,7 +55,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.logoutSub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }

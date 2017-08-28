@@ -17,7 +17,7 @@ export class CuesheetNewComponent implements OnDestroy, AfterViewInit {
   loading: boolean = false;
   model: any = {};
 
-  private cuesheetSub: Subscription;
+  private subscription: Subscription;
 
   constructor(private alertService: AlertService,
               private cuesheetService: CuesheetService,
@@ -30,7 +30,7 @@ export class CuesheetNewComponent implements OnDestroy, AfterViewInit {
 
   createCuesheet() {
     this.loading = true;
-    this.cuesheetSub = this.cuesheetService.createCuesheet(this.model)
+    this.subscription = this.cuesheetService.createCuesheet(this.model)
         .subscribe((cuesheet: Cuesheet) => {
               console.log(cuesheet);
               this.alertService.success('The Cue Sheet has been created', true);
@@ -43,6 +43,6 @@ export class CuesheetNewComponent implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    if (this.cuesheetSub) this.cuesheetSub.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

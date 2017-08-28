@@ -11,17 +11,17 @@ import { CuesheetService } from '../cuesheet.service';
 export class CuesheetListComponent implements OnInit, OnDestroy {
   cuesheets: Array<object> = [];
 
-  private cuesheetSub: Subscription;
+  private subscription: Subscription;
 
   constructor(private cuesheetService: CuesheetService) { }
 
   ngOnInit() {
-    this.cuesheetSub = this.cuesheetService.getAllCuesheets()
+    this.subscription = this.cuesheetService.getAllCuesheets()
         .subscribe(cuesheets => this.cuesheets = cuesheets);
   }
 
   ngOnDestroy() {
-    this.cuesheetSub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }

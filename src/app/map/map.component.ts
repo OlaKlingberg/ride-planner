@@ -40,8 +40,8 @@ export class MapComponent implements OnInit, OnDestroy {
   private riderListSub: Subscription;
   private riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
   private socket: Socket;
+  private subscriptions: any = {};
   private timer: any;
-  private userRideSub: Subscription;
   private userSub: Subscription;
   private zCounter: number = 0;
 
@@ -87,8 +87,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   focusOnUser() {
-    if ( this.positionSub ) this.positionSub.unsubscribe();
-    this.positionSub = this.positionService.position$.subscribe(position => {
+    if ( this.subscriptions.positionSub ) this.subscriptions.positionSub.unsubscribe();
+      this.subscriptions.positionSub = this.positionService.position$.subscribe(position => {
           if ( position ) {
             this.bounds = new this.google.maps.LatLngBounds();
             this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
@@ -147,7 +147,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   listenForRemovedRider() {
     this.socket.on('removedRider', _id => {
-      // console.log("listenForRemovedRider(). _id:", _id);
       this.riderList = this.riderList.filter(rider => rider._id !== _id);
 
       // This will be used to set the map bounds.
@@ -201,7 +200,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   requestRiderList() {
-    this.rideSubjectService.ride$.subscribe(ride => {
+    this.subscriptions.rideSub = this.rideSubjectService.ride$.subscribe(ride => {
       if ( ride ) {
         this.socket.emit('giveMeRiderList', ride);
       }
@@ -209,8 +208,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setMapMode(mapMode) {
-    if ( this.positionSub ) this.positionSub.unsubscribe();
-    if ( this.riderListSub ) this.riderListSub.unsubscribe();
+    if ( this.subscriptions.positionSub ) this.subscriptions.positionSub.unsubscribe();
+    if ( this.subscriptions.riderListSub ) this.subscriptions.riderListSub.unsubscribe();
 
     this.mapMode = mapMode;
 
@@ -236,9 +235,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   showAllRiders() {
-    console.log("showAllRiders()");
-    if ( this.riderListSub ) this.riderListSub.unsubscribe();
-    this.riderListSub = this.riderList$.subscribe(riderList => {
+    if ( this.subscriptions.riderListSub ) this.subscriptions.riderListSub.unsubscribe();
+    this.subscriptions.riderListSub = this.riderList$.subscribe(riderList => {
       if ( !riderList || riderList.length < 0 ) return;
       this.bounds = new this.google.maps.LatLngBounds();
       riderList.forEach(rider => {
@@ -258,7 +256,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   subscribeToUser() {
-    this.userSub = this.userService.user$.subscribe(user => {
+    this.subscriptions.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
     });
   }
@@ -267,10 +265,11 @@ export class MapComponent implements OnInit, OnDestroy {
     // Todo: Add the subscriptions to an array, which I can loop through here.
     clearTimeout(this.hideTimer);
     this.navService.navBarState$.next('show');
-    if ( this.userSub ) this.userSub.unsubscribe();
-    if ( this.userRideSub ) this.userRideSub.unsubscribe();
-    if ( this.positionSub ) this.positionSub.unsubscribe();
-    if ( this.riderListSub ) this.riderListSub.unsubscribe();
+
+    for (let key in this.subscriptions) {
+      if (this.subscriptions[key]) this.subscriptions[key].unsubscribe();
+    }
+
     this.socket.removeAllListeners();
     clearInterval(this.timer);
 

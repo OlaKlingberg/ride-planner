@@ -14,13 +14,13 @@ import { AlertService } from "./alert.service";
 export class AlertComponent implements OnInit, OnDestroy {
   message: any;
 
-  private getMessageSub: Subscription;
+  private subscription: Subscription;
 
   constructor(private alertService: AlertService) {
   }
 
   ngOnInit() {
-    this.getMessageSub = this.alertService.getMessage().subscribe(message => {
+    this.subscription = this.alertService.getMessage().subscribe(message => {
       if ( message ) {
         this.message = message;
         this.message.state = 'new';
@@ -37,7 +37,7 @@ export class AlertComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getMessageSub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }

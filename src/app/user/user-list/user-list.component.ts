@@ -12,13 +12,13 @@ import { UserService } from '../user.service';
 export class UserListComponent implements OnInit, OnDestroy {
   users: Array<object>;
 
-  private getAllUsersSub: Subscription;
+  private subscription: Subscription;
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit() {
-    this.getAllUsersSub = this.userService.getAllUsers()
+    this.subscription = this.userService.getAllUsers()
         .subscribe(response => {
           this.users = response.json().users;
           this.users.sort(nameSort);
@@ -26,7 +26,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getAllUsersSub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }

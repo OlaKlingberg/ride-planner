@@ -21,7 +21,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   private availableRides: Array<string> = null;
   private availableRidesListener: any;
   private socket: Socket;
-  private userSub: Subscription;
+  private subscription: Subscription;
 
   constructor(private rideSubjectService: RideSubjectService,
               private router: Router,
@@ -59,13 +59,13 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   subscribeToUser() {
-    this.userSub = this.userService.user$.subscribe(user => {
+    this.subscription = this.userService.user$.subscribe(user => {
       this.user = user;
     });
   }
 
   ngOnDestroy() {
-    this.userSub.unsubscribe();
+    this.subscription.unsubscribe();
     this.socket.removeAllListeners();
   }
 

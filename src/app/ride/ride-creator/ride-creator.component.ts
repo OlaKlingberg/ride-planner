@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -11,12 +11,12 @@ import { RideService } from '../ride.service';
   templateUrl: './ride-creator.component.html',
   styleUrls: [ './ride-creator.component.scss' ]
 })
-export class RideCreatorComponent {
+export class RideCreatorComponent implements OnDestroy {
   loading: boolean = false;
   model: any = {};
   ride: Ride;
 
-  private rideSub: Subscription;
+  private subscription: Subscription;
 
   constructor(private alertService: AlertService,
               private rideService: RideService,
@@ -25,7 +25,7 @@ export class RideCreatorComponent {
 
   createRide() {
     this.loading = true;
-    this.rideSub = this.rideService.createRide(this.model)
+    this.subscription = this.rideService.createRide(this.model)
         .subscribe((ride: Ride) => {
               this.alertService.success(`The ride "${ride.name}" has been created`, true);
               this.router.navigate([ '/ride/select' ]);
@@ -35,6 +35,10 @@ export class RideCreatorComponent {
               console.log(error);
             }
         )
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

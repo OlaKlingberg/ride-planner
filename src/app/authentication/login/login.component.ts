@@ -18,9 +18,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   loading = false;
   user: User;
 
-  private loginSub: Subscription;
   private returnUrl: string;
-  private userSub: Subscription;
+  private subscriptions: Array<Subscription> = [];
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -34,18 +33,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
     // console.log("LoginComponent. About to subscribe to user$. Counter:", this.counter++);
-    this.userSub = this.userService.user$.subscribe(user => {
+    let sub = this.userService.user$.subscribe(user => {
           if ( user ) {
             this.user = user;
             this.router.navigate([ this.returnUrl ]);
           }
         }
     );
+    this.subscriptions.push(sub);
   }
 
   login() {
     this.loading = true;
-    this.loginSub = this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
+    let sub = this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true);
               this.router.navigate([ this.returnUrl ]);
@@ -56,7 +56,8 @@ export class LoginComponent implements OnInit, OnDestroy {
               this.alertService.error(error._body);
               this.loading = false;
             }
-        )
+        );
+    this.subscriptions.push(sub);
   }
 
   // On some phone browsers, the model doesn't sync automatically when a form field is filled in using autocomplete. That's why this function is needed.
@@ -68,7 +69,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.loginSub) this.loginSub.unsubscribe();
-    if (this.userSub) this.userSub.unsubscribe();
+    this.subscriptions.forEach(sub => {
+      return sub.unsubscribe();
+    })
   }
 }

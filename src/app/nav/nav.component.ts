@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { navAnimations } from './nav.component.animations';
 import { NavService } from './nav.service';
@@ -15,12 +17,13 @@ import * as $ from 'jquery';
   styleUrls: [ './nav.component.scss' ],
   animations: navAnimations
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
   navBarState: string;
   user: User = null;
   ride: string;
 
   private route: string;
+  private subscriptions: Array<Subscription> = [];
 
   constructor(public location: Location,               // Used in the template. Has to be initialized?
               private navService: NavService,
@@ -39,21 +42,30 @@ export class NavComponent implements OnInit {
   }
 
   subscribeToNavBarState() {
-    this.navService.navBarState$.subscribe(navBarState => {
+    let sub = this.navService.navBarState$.subscribe(navBarState => {
       this.navBarState = navBarState;
     });
+    this.subscriptions.push(sub);
   }
 
   subscribeToRoute() {
-    this.router.events.subscribe(() => {
+    let sub = this.router.events.subscribe(() => {
       this.route = this.router.url;
       this.navBarState = 'show';
     });
+    this.subscriptions.push(sub);
   }
 
   subscribeToUser() {
-    this.userService.user$.subscribe(
+    let sub = this.userService.user$.subscribe(
         user => this.user = user
     );
+    this.subscriptions.push(sub);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      return sub.unsubscribe();
+    });
   }
 }

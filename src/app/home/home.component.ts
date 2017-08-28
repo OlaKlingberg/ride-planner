@@ -11,8 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class HomeComponent implements OnInit, OnDestroy {
   returnUrl: string;
   user: User;
-  private userSub: Subscription;
-  private counter: number = 0;
+  private subscription: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -26,7 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
     // Todo: This looks complicated and messy. Can it be refactored?
-    this.userSub = this.userService.user$.subscribe(user => {
+    this.subscription = this.userService.user$.subscribe(user => {
       if ((this.returnUrl === '/riders' || this.returnUrl === '/members') && (user && user.leader === true)) {
         this.router.navigate([ this.returnUrl ]);
       }
@@ -39,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.userSub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }

@@ -19,6 +19,7 @@ export class RiderListComponent implements OnInit, OnDestroy {
 
   private rideSub: Subscription;
   private socket: Socket;
+  private subscriptions: Array<Subscription> = [];
   private userSub: Subscription;
 
   constructor(private rideSubjectService: RideSubjectService,
@@ -43,21 +44,25 @@ export class RiderListComponent implements OnInit, OnDestroy {
   }
 
   subscribeToRide() {
-    this.rideSub = this.rideSubjectService.ride$.subscribe(ride => {
+    let sub = this.rideSubjectService.ride$.subscribe(ride => {
       this.ride = ride;
-    })
+    });
+    this.subscriptions.push(sub);
   }
 
   subscribeToUser() {
-    this.userSub = this.userService.user$.subscribe(user => {
+    let sub = this.userService.user$.subscribe(user => {
       this.user = user;
       if (user.ride) this.getRiderList();
     });
+    this.subscriptions.push(sub);
   }
 
   ngOnDestroy() {
-    this.rideSub.unsubscribe();
-    this.userSub.unsubscribe();
+    this.subscriptions.forEach(sub => {
+      return sub.unsubscribe();
+    });
+
     this.socket.removeAllListeners();
   }
 

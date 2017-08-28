@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs/Subscription';
 import * as $ from 'jquery'
 import * as _ from 'lodash';
 
-import { environment } from '../../environments/environment';
 import { MapAnimations } from './map.component.animatins';
 import { NavService } from '../nav/nav.service';
 import { PositionService } from '../core/position.service';
@@ -266,6 +265,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Todo: Add the subscriptions to an array, which I can loop through here.
+    clearTimeout(this.hideTimer);
+    this.navService.navBarState$.next('show');
     if ( this.userSub ) this.userSub.unsubscribe();
     if ( this.userRideSub ) this.userRideSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();

@@ -26,7 +26,7 @@ export class UserService {
     this.emitJoinRideOnNewRide();
     this.getRideFromStorage();
     this.updateUserPositionOnNewPosition();
-    this.updateUserPositionOnNewUser();
+    this.updateUserPositionOnUserLogin();
 
     this.socket = this.socketService.socket;
   }
@@ -78,7 +78,7 @@ export class UserService {
   }
 
   // Call user$.next() whenever user$ changes from null to a user, provided there is a position.
-  updateUserPositionOnNewUser() {
+  updateUserPositionOnUserLogin() {
     let prevUser: User = null;
 
     this.user$.subscribe(user => {

@@ -1,31 +1,29 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import Timer = NodeJS.Timer;
-
 import { environment } from '../../environments/environment';
+import { callLifecycleHooksChildrenFirst } from '@angular/core/src/view/provider';
 
 @Injectable()
 export class PositionService {
   position$: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  private dummyLatCurrentAdd: number = null;
-  private dummyLatIncrement: number = Math.random() * .00004 - .00002;
+  private dummyLatInc: number = Math.random() * .00004 - .00002;
   private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
 
-  private dummyLngCurrentAdd: number = null;
-  private dummyLngIncrement: number = Math.random() * .00004 - .00002;
+  private dummyLngInc: number = Math.random() * .00004 - .00002;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
 
   private dummyUpdateFrequency: number = Math.random() * 0 + 100;
 
-  private geoWatch: number;
-  private geoWatchTimer: Timer;
-  private updateTimer: Timer;
+  private geolocationOptions = {
+    enableHighAccuracy: true,
+    timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
+    maximumAge: 5000
+  };
 
   constructor() {
-    this.retrievePosition();
-    this.watchPosition();
+    this.getPosition();
   }
 
   // Todo: Why can't I do this with JSON.stringify() and JSON.parse()?
@@ -38,6 +36,50 @@ export class PositionService {
       },
       timestamp: position.timestamp
     };
+  }
+
+  geolocationGetCurrentPosition() {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, this.geolocationOptions);
+    });
+  }
+
+  geolocationWatchPosition() {
+    navigator.geolocation.watchPosition((position: Position) => {
+          let pos = this.copyPositionObject(position);
+          if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
+          this.position$.next(pos);
+        },
+        err => {
+          console.log(`watchPosition error: ${err.message}`);
+        },
+        this.geolocationOptions
+    );
+  }
+
+  getPosition() {
+    let position = JSON.parse(environment.storage.getItem('position'));
+
+    if ( position ) {
+      if ( environment.dummyPosition ) position = this.setDummyPositions(position);
+      this.position$.next(position);
+      if ( environment.dummyMovement ) {
+        this.setDummyMovements();
+      } else {
+        this.geolocationWatchPosition();
+      }
+    } else {
+      if ( environment.dummyMovement ) {
+        this.geolocationGetCurrentPosition().then(position => {
+          let pos = this.copyPositionObject(position);
+          if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
+          this.position$.next(pos);
+          this.setDummyMovements();
+        })
+      } else {
+        this.geolocationWatchPosition();
+      }
+    }
   }
 
   positionPromise() {
@@ -53,48 +95,14 @@ export class PositionService {
     return positionPromise;
   }
 
-  processPosition(position) {
-    let pos = this.copyPositionObject(position);
-
-    if ( environment.dummyPosition ) {
-      pos = this.setDummyPositions(pos);
-    }
-
-    if ( environment.dummyMovement ) {
-      this.setDummyMovements(pos);
-    } else {
-      this.position$.next(pos);
-    }
-
-    // Set a timer to rerun watchPosition if it has not yielded results for a while. Logically, this should not be needed, but it often seems to yield a new position.
-    if ( this.geoWatchTimer ) clearTimeout(this.geoWatchTimer);
-    this.startGeoWatchTimer(position);
-  }
-
-  retrievePosition() {
-    let position = JSON.parse(environment.storage.getItem('position'));
-    if (position) {
-      console.log("position:", position);
-      this.processPosition(position);
-      environment.storage.removeItem('position');
-    }
-  }
-
-  setDummyMovements(pos) {
-    let startLat = pos.coords.latitude;
-    let startLng = pos.coords.longitude;
-    if ( this.updateTimer ) clearInterval(this.updateTimer);
-    this.updateTimer = setInterval(() => {
-      this.dummyLatCurrentAdd += this.dummyLatIncrement;
-      this.dummyLngCurrentAdd += this.dummyLngIncrement;
-      pos.coords.latitude = startLat + this.dummyLatCurrentAdd;
-      pos.coords.longitude = startLng + this.dummyLngCurrentAdd;
+  setDummyMovements() {
+    setInterval(() => {
+      let pos = this.position$.value;
+      pos.coords.latitude += this.dummyLatInc;
+      pos.coords.longitude += this.dummyLngInc;
       this.position$.next(pos);
     }, this.dummyUpdateFrequency);
 
-    // setTimeout(() => {
-    //   clearTimeout(this.updateTimer);
-    // }, 60000);
   }
 
   setDummyPositions(pos) {
@@ -104,26 +112,4 @@ export class PositionService {
     return pos;
   }
 
-  startGeoWatchTimer(position) {
-    this.geoWatchTimer = setTimeout(() => {
-      navigator.geolocation.clearWatch(this.geoWatch);
-      this.watchPosition();
-      this.startGeoWatchTimer(position);
-    }, 20000);
-  }
-
-  watchPosition() {
-    this.geoWatch = navigator.geolocation.watchPosition((position: Position) => {
-          this.processPosition(position);
-        },
-        err => {
-          console.log(`watchPosition error: ${err.message}`);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
-          maximumAge: 5000
-        }
-    );
-  }
 }

@@ -71,7 +71,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.listenForSocketConnection();
     this.listenForUpdatedRiderPosition();
     this.loadMapsAPILoader();
-    this.refresh();
+    // this.refresh();
     this.removeLongDisconnectedRiders();
     this.requestRiderList();
     this.subscribeToUser();

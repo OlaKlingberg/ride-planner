@@ -7,6 +7,7 @@ import { NavService } from './nav/nav.service';
 import { PositionService } from './core/position.service';
 import { UserService } from './user/user.service';
 import { User } from './user/user';
+import { RefreshService } from './core/refresh.service';
 
 @Component({
   selector: 'rp-root',
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
               public location: Location,
               private navService: NavService,
               private positionService: PositionService,
+              // private refreshService: RefreshService,
               private userService: UserService) {                   // Is used in the template.
   }
 
@@ -34,6 +36,7 @@ export class AppComponent implements OnInit {
     this.refreshAfterSleep();
     this.subscribeToPosition();
     this.subscribeToUser();
+    // this.refreshService.refresh();
   }
 
   refreshAfterSleep() {

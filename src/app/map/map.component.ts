@@ -17,6 +17,7 @@ import { RideSubjectService } from '../ride/ride-subject.service';
 import { SocketService } from '../core/socket.service';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
+import { RefreshService } from '../core/refresh.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -55,6 +56,7 @@ export class MapComponent implements OnInit, OnDestroy {
               private socketService: SocketService,
               private mapsAPILoader: MapsAPILoader,
               private navService: NavService,
+              private refreshService: RefreshService,
               private rideSubjectService: RideSubjectService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
@@ -69,6 +71,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.listenForSocketConnection();
     this.listenForUpdatedRiderPosition();
     this.loadMapsAPILoader();
+    this.refresh();
     this.removeLongDisconnectedRiders();
     this.requestRiderList();
     this.subscribeToUser();
@@ -186,6 +189,12 @@ export class MapComponent implements OnInit, OnDestroy {
       this.google = google;
       this.focusOnUser();
     });
+  }
+
+  refresh() {
+    setTimeout(() => {
+      this.refreshService.refresh();
+    }, 10000);
   }
 
   removeLongDisconnectedRiders() {

@@ -24,6 +24,7 @@ export class PositionService {
   private updateTimer: Timer;
 
   constructor() {
+    this.retrievePosition();
     this.watchPosition();
   }
 
@@ -52,9 +53,37 @@ export class PositionService {
     return positionPromise;
   }
 
+  processPosition(position) {
+    let pos = this.copyPositionObject(position);
+
+    if ( environment.dummyPosition ) {
+      pos = this.setDummyPositions(pos);
+    }
+
+    if ( environment.dummyMovement ) {
+      this.setDummyMovements(pos);
+    } else {
+      this.position$.next(pos);
+    }
+
+    // Set a timer to rerun watchPosition if it has not yielded results for a while. Logically, this should not be needed, but it often seems to yield a new position.
+    if ( this.geoWatchTimer ) clearTimeout(this.geoWatchTimer);
+    this.startGeoWatchTimer(position);
+  }
+
+  retrievePosition() {
+    let position = JSON.parse(environment.storage.getItem('position'));
+    if (position) {
+      console.log("position:", position);
+      this.processPosition(position);
+      environment.storage.removeItem('position');
+    }
+  }
+
   setDummyMovements(pos) {
     let startLat = pos.coords.latitude;
     let startLng = pos.coords.longitude;
+    if ( this.updateTimer ) clearInterval(this.updateTimer);
     this.updateTimer = setInterval(() => {
       this.dummyLatCurrentAdd += this.dummyLatIncrement;
       this.dummyLngCurrentAdd += this.dummyLngIncrement;
@@ -85,23 +114,7 @@ export class PositionService {
 
   watchPosition() {
     this.geoWatch = navigator.geolocation.watchPosition((position: Position) => {
-          if ( this.updateTimer ) clearInterval(this.updateTimer);
-
-          let pos = this.copyPositionObject(position);
-
-          if ( environment.dummyPosition ) {
-            pos = this.setDummyPositions(pos);
-          }
-
-          if ( environment.dummyMovement ) {
-            this.setDummyMovements(pos);
-          } else {
-            this.position$.next(pos);
-          }
-
-          // Set a timer to rerun watchPosition if it has not yielded results for a while. Logically, this should not be needed, but it often seems to yield a new position.
-          if ( this.geoWatchTimer ) clearTimeout(this.geoWatchTimer);
-          this.startGeoWatchTimer(position);
+          this.processPosition(position);
         },
         err => {
           console.log(`watchPosition error: ${err.message}`);

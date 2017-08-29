@@ -20,6 +20,7 @@ import { RideSubjectService } from '../ride/ride-subject.service';
 import { SocketService } from './socket.service';
 import { throwIfAlreadyLoaded } from '../_guards/module-import-guard';
 import { UserService } from '../user/user.service';
+import { RefreshService } from './refresh.service';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { UserService } from '../user/user.service';
     DebuggingService,
     NavService,
     PositionService,
+    RefreshService,
     RideLeaderGuard,
     RideService,        // Todo: Should perhaps be moved to RideModule.
     RideSubjectService, // Todo: Should perhaps be moved to RideModule.
@@ -50,7 +52,7 @@ import { UserService } from '../user/user.service';
   ]
 })
 export class CoreModule {
-  constructor( @Optional() @SkipSelf() parentModule: CoreModule) {
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     throwIfAlreadyLoaded(parentModule, 'CoreModule');
   }
 }

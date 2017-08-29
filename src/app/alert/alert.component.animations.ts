@@ -20,7 +20,7 @@ export const alertAnimations = [
       style({
         opacity: 0,
       }),
-      animate('300ms 100ms ease-in')
+      animate('200ms ease-in')
     ]),
     transition('new => faded', [
       style({

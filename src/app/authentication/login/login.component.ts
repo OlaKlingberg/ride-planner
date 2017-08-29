@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             error => {
               console.log("LoginComponent.login(). There was an error logging in.");
               console.log(error);
-              this.alertService.error(error._body);
+              this.alertService.error("There was a problem logging in. Please try again later.");
               this.loading = false;
             }
         );

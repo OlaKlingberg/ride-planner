@@ -9,15 +9,15 @@ import { environment } from '../../environments/environment';
 export class PositionService {
   position$: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLatCurrentAdd: number = null;
-  private dummyLatIncrement: number = Math.random() * .0002 - .0001;
+  private dummyLatIncrement: number = Math.random() * .00004 - .00002;
+  private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
 
-  private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
   private dummyLngCurrentAdd: number = null;
-  private dummyLngIncrement: number = Math.random() * .0002 - .0001;
+  private dummyLngIncrement: number = Math.random() * .00004 - .00002;
+  private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
 
-  private dummyUpdateFrequency: number = Math.random() * 2000 + 1000;
+  private dummyUpdateFrequency: number = Math.random() * 0 + 100;
 
   private geoWatch: number;
   private geoWatchTimer: Timer;
@@ -62,6 +62,10 @@ export class PositionService {
       pos.coords.longitude = startLng + this.dummyLngCurrentAdd;
       this.position$.next(pos);
     }, this.dummyUpdateFrequency);
+
+    // setTimeout(() => {
+    //   clearTimeout(this.updateTimer);
+    // }, 60000);
   }
 
   setDummyPositions(pos) {

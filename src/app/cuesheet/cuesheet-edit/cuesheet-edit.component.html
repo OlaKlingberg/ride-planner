@@ -341,10 +341,10 @@
           <div class="col-sm-6">
             <button type="button"
                     [disabled]="!cueForm.pristine || cueToEdit !== null || cueToInsertBefore !== null"
-                    routerLink='/cuesheet/{{cuesheet?._id}}/view'
+                    [routerLink]="['/cuesheet', cuesheetId, 'view']"
                     class='btn btn-primary btn-block'>I'm done with this cue sheet for now
             </button>
-          </div>
+          </div>ƒ
         </div>
 
       </form>

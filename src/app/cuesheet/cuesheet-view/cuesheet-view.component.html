@@ -17,7 +17,7 @@
   <div class="row margin-bottom-10">
     <div class="col-sm-12">
       <hr>
-      <a routerLink="/cuesheet/{{cuesheet?._id}}/bike/0"
+      <a [routerLink]="[ '/cuesheet', cuesheetId, 'bike/0' ]"
          class="btn btn-primary btn-block"
          type="button">Start
       </a>
@@ -43,7 +43,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let cue of cuesheet?.cues; index as i"
-            routerLink="/cuesheet/{{cuesheet?._id}}/bike/{{i}}">
+            [routerLink]="[ '/cuesheet', cuesheetId, 'bike', i ]">
           <td>{{ i + 1 }}</td>
           <td>{{ cue.distance / 100 | number:'1.0-2' }}</td>
           <td>{{ cue.turn }}</td>
@@ -59,7 +59,7 @@
       <a routerLink='/cuesheet' class='btn btn-primary btn-block'>Return to list of cue sheets</a>
     </div>
     <div class="col-sm-6">
-      <a routerLink='/cuesheet/{{cuesheet?._id}}/edit' class='btn btn-primary btn-block'>Edit this cue sheet</a>
+      <a [routerLink]="['/cuesheet', cuesheetId, 'edit']" class='btn btn-primary btn-block'>Edit this cue sheet</a>
     </div>
   </div>
 

@@ -10,6 +10,7 @@ import { CuesheetService } from '../cuesheet.service';
 })
 export class CuesheetViewComponent implements OnInit {
   cuesheet: Cuesheet;
+  cuesheetId: string = '';  // routerLink in the template doesn't work with cuesheet?._id. Hence this solution.
   total: number = 0;
 
   constructor(private cuesheetService: CuesheetService,
@@ -21,9 +22,9 @@ export class CuesheetViewComponent implements OnInit {
   }
 
   getCuesheet() {
-    let id = this.route.snapshot.paramMap.get('id');
+    this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
-    this.cuesheetService.getCuesheet(id)
+    this.cuesheetService.getCuesheet(this.cuesheetId)
         .then(cuesheet => {
           this.setTotalDistances(cuesheet);
         });

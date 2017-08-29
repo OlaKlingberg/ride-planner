@@ -67,11 +67,11 @@
           <button class="btn btn-primary btn-md"
                   type="button"
                   *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"
-                  (click)="setMapMode('showAllRiders')">Track All Riders
+                  (click)="showNav(); hideNav(); setMapMode('showAllRiders')">Track All Riders
           </button>
           <button class="btn btn-info btn-md"
                   *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
-                  (click)="setMapMode('focusOnUser')">Track Me
+                  (click)="showNav(); hideNav(); setMapMode('focusOnUser')">Track Me
           </button>
 
         </div>

@@ -63,23 +63,50 @@ export class PositionService {
     if ( position ) {
       if ( environment.dummyPosition ) position = this.setDummyPositions(position);
       this.position$.next(position);
-      if ( environment.dummyMovement ) {
-        this.setDummyMovements();
-      } else {
-        this.geolocationWatchPosition();
-      }
-    } else {
-      if ( environment.dummyMovement ) {
-        this.geolocationGetCurrentPosition().then(position => {
-          let pos = this.copyPositionObject(position);
-          if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
-          this.position$.next(pos);
-          this.setDummyMovements();
-        })
-      } else {
-        this.geolocationWatchPosition();
-      }
     }
+
+    if ( position && environment.dummyMovement ) {
+      this.setDummyMovements();
+    }
+
+    if ( position && !environment.dummyMovement ) {
+      this.geolocationWatchPosition();
+    }
+
+    if ( !position && environment.dummyMovement ) {
+      // Todo: Call geolocation.getCurrentPosition here directly, instead of putting it in a separate function.
+      this.geolocationGetCurrentPosition().then(position => {
+        let pos = this.copyPositionObject(position);
+        if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
+        this.position$.next(pos);
+        this.setDummyMovements();
+      })
+    }
+
+    if ( !position && !environment.dummyMovement ) {
+      this.geolocationWatchPosition();
+    }
+
+    // if ( position ) {
+    //   if ( environment.dummyPosition ) position = this.setDummyPositions(position);
+    //   this.position$.next(position);
+    //   if ( environment.dummyMovement ) {
+    //     this.setDummyMovements();
+    //   } else {
+    //     this.geolocationWatchPosition();
+    //   }
+    // } else {
+    //   if ( environment.dummyMovement ) {
+    //     this.geolocationGetCurrentPosition().then(position => {
+    //       let pos = this.copyPositionObject(position);
+    //       if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
+    //       this.position$.next(pos);
+    //       this.setDummyMovements();
+    //     });
+    //   } else {
+    //     this.geolocationWatchPosition();
+    //   }
+    // }
   }
 
   positionPromise() {

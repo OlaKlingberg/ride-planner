@@ -6,6 +6,7 @@ import { DebuggingService } from './debugger/debugging.service';
 import { NavService } from './nav/nav.service';
 import { PositionService } from './core/position.service';
 import { UserService } from './user/user.service';
+import { User } from './user/user';
 
 @Component({
   selector: 'rp-root',
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit {
   longitude: number;
   ride: string;
   title: string = 'RidePlanner';
-  userName: string;
+  user: User;
 
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
@@ -62,8 +63,13 @@ export class AppComponent implements OnInit {
 
   subscribeToUser() {
     this.userService.user$.subscribe(user => {
-      this.userName = user ? user.fullName : null;  // Todo: Surely, this ugliness shouldn't be necessary!
-      if ( user ) this.ride = user.ride;
+      if ( user ) {
+        this.ride = user.ride;
+        this.user = new User(user);
+      } else {
+        this.ride = null;
+        this.user = null;
+      }
     });
   }
 

@@ -17,7 +17,7 @@ export class PositionService {
   private dummyLngIncrement: number = Math.random() * .00004 - .00002;
   private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
 
-  private dummyUpdateFrequency: number = Math.random() * 0 + 100;
+  private dummyUpdateFrequency: number = Math.random() * 0 + 1000;
 
   private geoWatch: number;
   private geoWatchTimer: Timer;
@@ -41,10 +41,10 @@ export class PositionService {
 
   positionPromise() {
     let positionPromise = new Promise((resolve, reject) => {
-      let positionSub = this.position$.subscribe(pos => {
+      let subscription = this.position$.subscribe(pos => {
         if ( pos ) {
           resolve(pos);
-          positionSub.unsubscribe();
+          subscription.unsubscribe();
         }
       })
     });

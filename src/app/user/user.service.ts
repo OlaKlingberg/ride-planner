@@ -23,10 +23,11 @@ export class UserService {
               private positionService: PositionService,
               private rideSubjectService: RideSubjectService,
               private socketService: SocketService) {
-    this.emitJoinRideOnNewRide();
     this.getRideFromStorage();
     this.updateUserPositionOnNewPosition();
     this.updateUserPositionOnUserLogin();
+    this.updateUserRideOnNewRide();
+    this.updateUserRideOnUserLogin();
 
     this.socket = this.socketService.socket;
   }
@@ -36,21 +37,6 @@ export class UserService {
     user.email = user.email.toLowerCase();
 
     return this.http.post(`${environment.api}/users`, user);
-  }
-
-  // Emit 'joinRide' when ride$ yields a new non-null value, provided there is a user with a user.position.
-  emitJoinRideOnNewRide() {
-    this.rideSubjectService.ride$.subscribe(ride => {
-      let user = this.user$.value;
-      let token = JSON.parse(environment.storage.getItem('rpToken'));
-
-      if ( ride && user && user.position && token ) {
-        this.socket.emit('joinRide', user, ride, token, () => {
-          user.ride = ride;
-          this.user$.next(user);
-        });
-      }
-    });
   }
 
   getAllUsers() {
@@ -73,6 +59,7 @@ export class UserService {
       if ( user ) {
         user.position = JSON.parse(JSON.stringify(pos));
         this.user$.next(user);
+        if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
       }
     });
   }
@@ -95,5 +82,47 @@ export class UserService {
         prevUser = null;
       }
     });
+  }
+
+  updateUserRideOnNewRide() {
+    this.rideSubjectService.ride$.subscribe(ride => {
+      let user = this.user$.value;
+      if ( user ) {
+        user.ride = ride;
+        this.user$.next(user);
+      }
+    });
+  }
+
+  updateUserRideOnUserLogin() {
+    let prevUser: User = null;
+
+    this.user$.subscribe(user => {
+      if ( prevUser === null && user !== null ) {
+        prevUser = user; // Todo: It doesn't matter here that this copies by reference, right?
+        let ride = this.rideSubjectService.ride$.value;
+        if ( ride ) {
+          let token = JSON.parse(environment.storage.getItem('rpToken'));
+          this.socket.emit('joinRide', user, ride, token, () => {
+            user.ride = ride;
+            this.user$.next(user);
+          });
+        }
+      }
+    });
+  }
+
+  // Todo: Will I be needing this? I do use positionPromise().
+  userPromise() {
+    let userPromise = new Promise((resolve, reject) => {
+      let subscription = this.user$.subscribe(pos => {
+        if ( pos ) {
+          resolve(pos);
+          subscription.unsubscribe();
+        }
+      })
+    });
+
+    return userPromise;
   }
 }

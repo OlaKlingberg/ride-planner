@@ -15,7 +15,7 @@ export class AuthenticationService {
   constructor(private http: Http,
               private userService: UserService,
               private socketService: SocketService) {
-    this.authenticateByToken(); // If the user has a token, log them in automatically.
+    this.authenticateByToken(); // If there is an rpToken, log in the user automatically.
     this.socket = this.socketService.socket;
   }
 

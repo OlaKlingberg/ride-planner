@@ -11,16 +11,17 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { AuthGuard } from '../_guards/auth.guard';
 import { CuesheetService } from '../cuesheet/cuesheet.service';
 import { DebuggingService } from '../debugger/debugging.service';
+import { MapService } from '../map/map.service';
 import { NavModule } from '../nav/nav.module';
 import { NavService } from '../nav/nav.service';
 import { PositionService } from './position.service';
+import { RefreshService } from './refresh.service';
 import { RideLeaderGuard } from '../_guards/ride-leader.guard';
 import { RideService } from '../ride/ride.service';
 import { RideSubjectService } from '../ride/ride-subject.service';
 import { SocketService } from './socket.service';
 import { throwIfAlreadyLoaded } from '../_guards/module-import-guard';
 import { UserService } from '../user/user.service';
-import { RefreshService } from './refresh.service';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { RefreshService } from './refresh.service';
     AuthenticationService,
     CuesheetService,
     DebuggingService,
+    MapService,
     NavService,
     PositionService,
     RefreshService,

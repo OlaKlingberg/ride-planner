@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewChildren } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { MapsAPILoader } from 'angular2-google-maps/core';
 import Socket = SocketIOClient.Socket;
 import Timer = NodeJS.Timer;
-import { Subscription } from 'rxjs/Subscription';
 import * as $ from 'jquery'
 import * as _ from 'lodash';
 
@@ -18,6 +16,7 @@ import { SocketService } from '../core/socket.service';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import { RefreshService } from '../core/refresh.service';
+import { MapService } from './map.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -37,14 +36,9 @@ export class MapComponent implements OnInit, OnDestroy {
   private bounds: LatLngBounds;
   private google: any;
   private hideTimer: Timer;
-  // private positionSub: Subscription;
-  // private riderListSub: Subscription;
-  private riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
   private socket: Socket;
   private subscriptions: any = {};
   private timer: any;
-  // private userSub: Subscription;
-  private zCounter: number = 0;
 
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
 
@@ -53,6 +47,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('userInfoWindow') userInfoWindow;
 
   constructor(private mapsAPILoader: MapsAPILoader,
+              private mapService: MapService,
               private navService: NavService,
               private positionService: PositionService,
               private socketService: SocketService,
@@ -63,18 +58,15 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getRiderList();
     this.hideNav();
-    this.listenForDisconnectedRider();
-    this.listenForJoinedRider();
-    this.listenForRemovedRider();
-    this.listenForRiderList();
-    this.listenForSocketConnection();
+    // this.listenForSocketConnection();
     this.listenForUpdatedRiderPosition();
     this.loadMapsAPILoader();
     this.positionService.getPosition();
-    this.refresh();
+    // this.refresh();
     this.removeLongDisconnectedRiders();
-    this.requestRiderList();
+    // this.requestRiderList();
     this.subscribeToUser();
   }
 
@@ -105,6 +97,12 @@ export class MapComponent implements OnInit, OnDestroy {
         });
   }
 
+  getRiderList() {
+    this.mapService.riderList$.subscribe(riderList => {
+      this.riderList = riderList;
+    });
+  }
+
   hideNav() {
     clearTimeout(this.hideTimer);
     // Wait till the map is shown (which happens when there is a position), set timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
@@ -119,57 +117,9 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  listenForDisconnectedRider() {
-    this.socket.on('disconnectedRider', disconnectedRider => {
-      let idx = _.findIndex(this.riderList, rider => rider._id === disconnectedRider._id);
-      this.riderList[ idx ].disconnected = disconnectedRider.disconnected;
-
-      this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
-    });
-  }
-
-  listenForJoinedRider() {
-    this.socket.on('joinedRider', joinedRider => {
-      // If the zIndices are getting too high, it's time to request the whole riderList again.
-      if ( this.zCounter >= 1000 ) {
-        this.zCounter = 0;
-        console.log("Counter reached 1000! About to emit giveMeRiderList.");
-        this.socket.emit('giveMeRiderList', this.user.ride);
-      } else {
-        if ( joinedRider._id !== this.user._id ) {
-          joinedRider = new User(joinedRider);
-          joinedRider.zIndex = this.zCounter++;
-          if ( joinedRider.leader ) joinedRider.zIndex += 500;
-          this.riderList = this.riderList.filter(rider => rider._id !== joinedRider._id);
-          this.riderList.push(joinedRider);
-
-          this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
-        }
-      }
-    });
-  }
-
-  listenForRemovedRider() {
-    this.socket.on('removedRider', _id => {
-      this.riderList = this.riderList.filter(rider => rider._id !== _id);
-
-      // This will be used to set the map bounds.
-      this.riderList$.next(this.riderList);
-    });
-  }
-
-  listenForRiderList() {
-    this.socket.on('riderList', riderList => {
-      this.riderList = riderList.map(rider => new User(rider));
-      // Filter out the user, which will be displayed using a separate marker.
-      this.riderList = this.riderList.filter(rider => rider._id !== this.user._id);
-      this.setZIndexAndOpacity();
-    });
-  }
-
-  listenForSocketConnection() {
-    this.socket.on('socketConnection', () => this.requestRiderList());
-  }
+  // listenForSocketConnection() {
+  //   this.socket.on('socketConnection', () => this.requestRiderList());
+  // }
 
   listenForUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
@@ -180,7 +130,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
         this.riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
 
-        this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
+        this.mapService.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
       }
     });
   }
@@ -205,16 +155,8 @@ export class MapComponent implements OnInit, OnDestroy {
         return !rider.disconnected || (Date.now() - rider.disconnected) < 1800000;
       });
 
-      this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
+      this.mapService.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
     }, 10000);
-  }
-
-  requestRiderList() {
-    this.subscriptions.rideSub = this.rideSubjectService.ride$.subscribe(ride => {
-      if ( ride ) {
-        this.socket.emit('giveMeRiderList', ride);
-      }
-    });
   }
 
   setMapMode(mapMode) {
@@ -235,29 +177,18 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  setZIndexAndOpacity() {
-    this.riderList = this.riderList.map(rider => {
-      rider.zIndex = this.zCounter++;
-      if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
-      if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
-      return rider;
-    });
-  }
-
   showAllRiders() {
-    if ( this.subscriptions.riderListSub ) this.subscriptions.riderListSub.unsubscribe();
-    this.subscriptions.riderListSub = this.riderList$.subscribe(riderList => {
-      if ( !riderList || riderList.length < 0 ) return;
+      if ( !this.riderList || this.riderList.length < 0 ) return;
       this.bounds = new this.google.maps.LatLngBounds();
-      riderList.forEach(rider => {
+      console.log("showAllRiders(). riderList:", this.riderList);
+
+      this.riderList.forEach(rider => {
         this.bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
       });
       this.bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
       this.latLng = this.bounds.toJSON();
       // Add 10% to the map at the upper edge for what is covered by the phone-browser address bar.
       this.latLng.north += (this.latLng.north - this.latLng.south) / 10;
-    });
-
   }
 
   showNav() {

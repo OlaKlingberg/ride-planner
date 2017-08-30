@@ -74,7 +74,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.subscribeToUser();
   }
 
-
   closeInfoWindows(_id) {
     // This actually works. Apparently, this executes, closing any open infoWindow, before a new one is opened.
     this.infoWindows.forEach(infoWindow => infoWindow.close());
@@ -86,23 +85,9 @@ export class MapComponent implements OnInit, OnDestroy {
     // });
   }
 
-  focusOnUser() {
-    if ( this.positionSub ) this.positionSub.unsubscribe();
-    this.positionSub = this.positionService.position$.subscribe(position => {
-          if ( position ) {
-            let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
-            bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
-            this.latLng = bounds.toJSON();
-          }
-        },
-        err => {
-          // This seems never to be executed, even if navigator.geolocation.watchPosition() times out.
-          console.log("MapComponent.trackUser(). coords$ didn't deliver coords, probably because navigator.geolocation.watchPosition() timed out. err: ", err);
-        });
-  }
-
   getRiderList() {
     this.riderListSub = this.mapService.riderList$.subscribe(riderList => {
+      // console.log("MapComponent.getRiderList(). riderList:", riderList);
       this.riderList = riderList;
     });
   }
@@ -135,15 +120,6 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  refresh() {
-    clearTimeout(this.refreshTimer);
-    this.refreshTimer = setTimeout(() => {
-      console.log("Refresh!");
-      environment.storage.setItem('rpMapMode', this.mapMode);
-      this.refreshService.refresh();
-    }, 10000);
-  }
-
   removeLongDisconnectedRiders() {
     this.intervalTimer = setInterval(() => {
       this.riderList = _.filter(this.riderList, rider => {
@@ -164,36 +140,28 @@ export class MapComponent implements OnInit, OnDestroy {
   setMapMode(mapMode) {
     if ( this.combinedSub ) this.combinedSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
-    if ( this.riderListSub ) this.riderListSub.unsubscribe();
 
     this.mapMode = mapMode;
 
-    switch ( mapMode ) {
-      case 'focusOnUser':
-        this.focusOnUser();
-        this.refresh();
-        break;
-      case 'showAllRiders':
-        this.showAllRiders();
-        this.refresh();
-        break;
-      default:
-        clearTimeout(this.refreshTimer);
-        break;
-    }
-  }
+    clearTimeout(this.refreshTimer);
 
-  showAllRiders() {
+    if ( mapMode === 'stationary') return;
+
+    this.refreshTimer = setTimeout(() => {
+      environment.storage.setItem('rpMapMode', this.mapMode);
+      this.refreshService.refresh();
+    }, 30000);
+
     const combined = Rx.Observable.combineLatest(this.mapService.riderList$, this.userService.user$);
     this.combinedSub = combined.subscribe(value => {
-      const riderList = value[0];
-      const user = value[1];
-      console.log("riderList:", riderList);
-      console.log("user:", user);
+      const riderList = value[ 0 ];
+      const user = value[ 1 ];
+
+      if ( !user.position || !user.position.coords || !user.position.coords.latitude || !user.position.coords.longitude ) return;
 
       let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
 
-      if ( riderList.length > 0 ) {
+      if ( mapMode === 'showAllRiders' && riderList.length > 0 ) {
         riderList.forEach(rider => {
           if ( rider.position.coords.latitude && rider.position.coords.longitude ) {
             bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
@@ -201,14 +169,17 @@ export class MapComponent implements OnInit, OnDestroy {
         });
       }
 
+      // if ( user.position && user.position.coords && user.position.coords.latitude && user.position.coords.longitude) {
       bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
+      // }
+
       this.latLng = bounds.toJSON();
       // Add 10% to the map at the upper edge for what is covered by the phone-browser address bar.
       this.latLng.north += (this.latLng.north - this.latLng.south) / 10;
     });
 
-
   }
+
 
   showNav() {
     this.navService.navBarState$.next('show');
@@ -228,10 +199,10 @@ export class MapComponent implements OnInit, OnDestroy {
     clearTimeout(this.refreshTimer);
     clearInterval(this.intervalTimer);
 
-    if (this.combinedSub.unsubscribe) this.combinedSub.unsubscribe();
-    if (this.positionSub) this.positionSub.unsubscribe();
-    if (this.riderListSub) this.riderListSub.unsubscribe();
-    if (this.userSub) this.userSub.unsubscribe();
+    if ( this.combinedSub.unsubscribe ) this.combinedSub.unsubscribe();
+    if ( this.positionSub ) this.positionSub.unsubscribe();
+    if ( this.riderListSub ) this.riderListSub.unsubscribe();
+    if ( this.userSub ) this.userSub.unsubscribe();
 
     this.socket.removeAllListeners();
 

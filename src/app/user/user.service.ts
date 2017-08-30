@@ -88,6 +88,7 @@ export class UserService {
         if ( pos ) {
           user.position = JSON.parse(JSON.stringify(pos));
           this.user$.next(user);
+          if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
         }
       }
 
@@ -101,8 +102,11 @@ export class UserService {
     this.rideSubjectService.ride$.subscribe(ride => {
       let user = this.user$.value;
       if ( user ) {
-        user.ride = ride;
-        this.user$.next(user);
+        let token = JSON.parse(environment.storage.getItem('rpToken'));
+        this.socket.emit('joinRide', user, ride, token, () => {
+          user.ride = ride;
+          this.user$.next(user);
+        });
       }
     });
   }
@@ -125,7 +129,7 @@ export class UserService {
     });
   }
 
-  // Todo: Will I be needing this? I do use positionPromise().
+  // Todo: Will I be needing this?
   userPromise() {
     let userPromise = new Promise((resolve, reject) => {
       let subscription = this.user$.subscribe(pos => {

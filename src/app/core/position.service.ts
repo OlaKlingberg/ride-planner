@@ -13,7 +13,7 @@ export class PositionService {
   private dummyLngInc: number = Math.random() * .00004 - .00002;
   private dummyLngInitialAdd: number = Math.random() * .002 - .001;
 
-  private dummyUpdateFrequency: number = Math.random() * 0 + 100;
+  private dummyUpdateFrequency: number = Math.random() * 0 + 500;
 
   private geolocationOptions = {
     enableHighAccuracy: true,
@@ -55,7 +55,6 @@ export class PositionService {
     // Case 3
     if ( !position && environment.dummyMovement ) {
       navigator.geolocation.getCurrentPosition((position: Position) => {
-        console.log("getCurrentPosition yielded position!");
             let pos = this.copyPositionObject(position);
             if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
             this.position$.next(pos);
@@ -71,7 +70,6 @@ export class PositionService {
     // Case 4
     if ( !position && !environment.dummyMovement ) {
       navigator.geolocation.watchPosition((position: Position) => {
-        console.log("watchPosition yielded position!");
             let pos = this.copyPositionObject(position);
             if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
             this.position$.next(pos);

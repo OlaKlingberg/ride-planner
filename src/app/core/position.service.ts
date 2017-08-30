@@ -13,7 +13,7 @@ export class PositionService {
   private dummyLngInc: number = Math.random() * .00004 - .00002;
   private dummyLngInitialAdd: number = Math.random() * .002 - .001;
 
-  private dummyUpdateFrequency: number = Math.random() * 0 + 100;
+  private dummyUpdateFrequency: number = Math.random() * 0 + 500;
 
   private geolocationOptions = {
     enableHighAccuracy: true,
@@ -38,8 +38,8 @@ export class PositionService {
   }
 
   getPosition() {
-    let position = JSON.parse(environment.storage.getItem('position'));
-
+    let position = JSON.parse(environment.storage.getItem('rpPosition'));
+    environment.storage.removeItem('rpPosition');
 
     // Case 1
     if ( position && environment.dummyMovement ) {

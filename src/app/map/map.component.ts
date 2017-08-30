@@ -37,13 +37,13 @@ export class MapComponent implements OnInit, OnDestroy {
   private bounds: LatLngBounds;
   private google: any;
   private hideTimer: Timer;
-  private positionSub: Subscription;
-  private riderListSub: Subscription;
+  // private positionSub: Subscription;
+  // private riderListSub: Subscription;
   private riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
   private socket: Socket;
   private subscriptions: any = {};
   private timer: any;
-  private userSub: Subscription;
+  // private userSub: Subscription;
   private zCounter: number = 0;
 
   @ViewChild('sebmGoogleMap') sebmGoogleMap;

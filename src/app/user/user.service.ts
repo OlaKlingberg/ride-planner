@@ -24,6 +24,7 @@ export class UserService {
               private rideSubjectService: RideSubjectService,
               private socketService: SocketService) {
     this.getRideFromStorage();
+    this.getUserFromStorage();
     this.updateUserPositionOnNewPosition();
     this.updateUserPositionOnUserLogin();
     this.updateUserRideOnNewRide();
@@ -52,19 +53,31 @@ export class UserService {
     if ( ride ) this.rideSubjectService.ride$.next(ride);
   }
 
-  // Call user$.next, whenever there is a new position, provided there is a user.
+  // On auto-refresh, this should get the user back faster than the call to the backend with the saved token.
+  getUserFromStorage() {
+    let userString = environment.storage.getItem('rpUser');
+    if ( userString ) {
+      let user = new User(JSON.parse(userString));
+      environment.storage.removeItem('rpUser');
+      setTimeout(() => {
+        this.user$.next(user);
+      }, 0);
+    }
+  }
+
   updateUserPositionOnNewPosition() {
     this.positionService.position$.subscribe(pos => {
-      let user = this.user$.value;
-      if ( user ) {
-        user.position = JSON.parse(JSON.stringify(pos));
-        this.user$.next(user);
-        if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
+      if ( pos ) {
+        let user = this.user$.value;
+        if ( user ) {
+          user.position = JSON.parse(JSON.stringify(pos));
+          this.user$.next(user);
+          if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
+        }
       }
     });
   }
 
-  // Call user$.next() whenever user$ changes from null to a user, provided there is a position.
   updateUserPositionOnUserLogin() {
     let prevUser: User = null;
 

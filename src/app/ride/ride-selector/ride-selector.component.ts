@@ -42,6 +42,11 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
     });
   }
 
+  logIntoRide() {
+    this.rideSubjectService.ride$.next(this.model.ride);
+    environment.storage.setItem('rpRide', this.model.ride);
+    this.router.navigate([ '/map' ]);
+  }
 
   logOutFromRide() {
     this.socket.emit('leaveRide');
@@ -50,12 +55,6 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
     let user: User = this.userService.user$.value;
     user.ride = null;
     this.userService.user$.next(user);
-  }
-
-  signIn() {
-    this.rideSubjectService.ride$.next(this.model.ride);
-    environment.storage.setItem('rpRide', this.model.ride);
-    this.router.navigate([ '/map' ]);
   }
 
   subscribeToUser() {

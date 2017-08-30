@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from "./_guards/auth.guard";
 import { RideLeaderGuard } from './_guards/ride-leader.guard';
+import { SelectivePreloadingStrategy } from './core/selective-preloading-strategy';
 
 const routes: Routes = [
   {
@@ -16,44 +17,53 @@ const routes: Routes = [
   },
   {
     path: 'cuesheet',
-    canActivate: [AuthGuard],
+    canActivate: [ AuthGuard ],
     loadChildren: 'app/cuesheet/cuesheet.module#CuesheetModule'
   },
   {
     path: 'debugger',
-    canActivate: [AuthGuard],
+    canActivate: [ AuthGuard ],
     loadChildren: 'app/debugger/debugger.module#DebuggerModule'
   },
   {
     path: 'map',
-    canActivate: [AuthGuard],
-    loadChildren: 'app/map/map.module#MapModule'
+    canActivate: [ AuthGuard ],
+    loadChildren: 'app/map/map.module#MapModule',
+    data: { preload: true }
   },
   {
     path: 'members',
-    canActivate: [RideLeaderGuard],
+    canActivate: [ RideLeaderGuard ],
     loadChildren: 'app/user/user.module#UserModule'
   },
   {
     path: 'protected',
-    canActivate: [AuthGuard],
+    canActivate: [ AuthGuard ],
     loadChildren: 'app/protected/protected.module#ProtectedModule'
   },
   {
     path: 'ride',
-    canActivate: [AuthGuard],
+    canActivate: [ AuthGuard ],
     loadChildren: 'app/ride/ride.module#RideModule'
   },
   {
     path: 'riders',
-    canActivate: [RideLeaderGuard],
+    canActivate: [ RideLeaderGuard ],
     loadChildren: 'app/rider/rider.module#RiderModule'
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-  providers: []
+  imports: [ RouterModule.forRoot(
+      routes,
+      {
+        preloadingStrategy: SelectivePreloadingStrategy
+      }
+  )],
+  exports: [ RouterModule ],
+  providers: [
+      SelectivePreloadingStrategy
+  ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

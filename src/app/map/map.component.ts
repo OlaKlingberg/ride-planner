@@ -32,7 +32,7 @@ export class MapComponent implements OnInit, OnDestroy {
   markerUrl: string = "assets/img/rider-markers/";
   maxZoom: number = 18;
   riderList: Array<User> = [];
-  user: User;
+  user: User = null;
 
   private bounds: LatLngBounds;
   private google: any;
@@ -195,7 +195,7 @@ export class MapComponent implements OnInit, OnDestroy {
   refresh() {
     setTimeout(() => {
       this.refreshService.refresh();
-    }, 60000);
+    }, 10000);
   }
 
   removeLongDisconnectedRiders() {
@@ -206,7 +206,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
 
       this.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
-    }, 30000);
+    }, 10000);
   }
 
   requestRiderList() {

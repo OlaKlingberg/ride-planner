@@ -37,39 +37,21 @@ export class PositionService {
     };
   }
 
-  geolocationWatchPosition() {
-    navigator.geolocation.watchPosition((position: Position) => {
-          let pos = this.copyPositionObject(position);
-          if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
-          this.position$.next(pos);
-        },
-        err => {
-          console.log(`watchPosition error: ${err.message}`);
-        },
-        this.geolocationOptions
-    );
-  }
-
   getPosition() {
     let position = JSON.parse(environment.storage.getItem('position'));
 
-    // Case 1 and 2
-    if ( position ) {
-      console.log("Case 1 and 2");
-      // if ( environment.dummyPosition ) position = this.setDummyPositions(position);
-      this.position$.next(position);
-    }
 
     // Case 1
     if ( position && environment.dummyMovement ) {
       console.log("Case 1");
+      this.position$.next(position);
       this.setDummyMovements();
     }
 
     // Case 2
     if ( position && !environment.dummyMovement ) {
       console.log("Case 2");
-      this.geolocationWatchPosition();
+      this.position$.next(position);
     }
 
     // Case 3
@@ -91,7 +73,16 @@ export class PositionService {
     // Case 4
     if ( !position && !environment.dummyMovement ) {
       console.log("Case 4");
-      this.geolocationWatchPosition();
+      navigator.geolocation.watchPosition((position: Position) => {
+            let pos = this.copyPositionObject(position);
+            if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
+            this.position$.next(pos);
+          },
+          err => {
+            console.log(`watchPosition error: ${err.message}`);
+          },
+          this.geolocationOptions
+      );
     }
   }
 

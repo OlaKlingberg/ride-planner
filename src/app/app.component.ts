@@ -15,13 +15,13 @@ import { RefreshService } from './core/refresh.service';
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit {
-  accuracy: number;
+  accuracy: number = null;
   debugMessages: Array<any> = [];
   latitude: number = null;
-  longitude: number;
+  longitude: number = null;
   ride: string;
   title: string = 'RidePlanner';
-  user: User;
+  user: User = null;
 
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.

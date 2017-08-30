@@ -5,8 +5,8 @@
 
 export const environment = {
   api: "http://localhost:3051",
-  dummyPosition: false,
-  dummyMovement: true,
+  dummyPosition: true,
+  dummyMovement: false,
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: false,
   storage: sessionStorage

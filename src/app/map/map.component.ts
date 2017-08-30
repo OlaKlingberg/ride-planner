@@ -52,10 +52,10 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('markers') markers;
   @ViewChildren('userInfoWindow') userInfoWindow;
 
-  constructor(private positionService: PositionService,
-              private socketService: SocketService,
-              private mapsAPILoader: MapsAPILoader,
+  constructor(private mapsAPILoader: MapsAPILoader,
               private navService: NavService,
+              private positionService: PositionService,
+              private socketService: SocketService,
               private refreshService: RefreshService,
               private rideSubjectService: RideSubjectService,
               private userService: UserService) {
@@ -71,7 +71,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.listenForSocketConnection();
     this.listenForUpdatedRiderPosition();
     this.loadMapsAPILoader();
-    // this.refresh();
+    this.positionService.getPosition();
+    this.refresh();
     this.removeLongDisconnectedRiders();
     this.requestRiderList();
     this.subscribeToUser();
@@ -194,7 +195,7 @@ export class MapComponent implements OnInit, OnDestroy {
   refresh() {
     setTimeout(() => {
       this.refreshService.refresh();
-    }, 10000);
+    }, 60000);
   }
 
   removeLongDisconnectedRiders() {

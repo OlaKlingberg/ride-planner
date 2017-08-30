@@ -17,7 +17,7 @@ import { RefreshService } from './core/refresh.service';
 export class AppComponent implements OnInit {
   accuracy: number;
   debugMessages: Array<any> = [];
-  latitude: number;
+  latitude: number = null;
   longitude: number;
   ride: string;
   title: string = 'RidePlanner';

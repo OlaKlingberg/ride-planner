@@ -2,17 +2,16 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
-import { callLifecycleHooksChildrenFirst } from '@angular/core/src/view/provider';
 
 @Injectable()
 export class PositionService {
   position$: BehaviorSubject<any> = new BehaviorSubject(null);
 
   private dummyLatInc: number = Math.random() * .00004 - .00002;
-  private dummyLatInitialAdd: number = Math.random() * .001 - .0005;
+  private dummyLatInitialAdd: number = Math.random() * .002 - .001;
 
   private dummyLngInc: number = Math.random() * .00004 - .00002;
-  private dummyLngInitialAdd: number = Math.random() * .001 - .0005;
+  private dummyLngInitialAdd: number = Math.random() * .002 - .001;
 
   private dummyUpdateFrequency: number = Math.random() * 0 + 100;
 
@@ -23,7 +22,7 @@ export class PositionService {
   };
 
   constructor() {
-    this.getPosition();
+    // this.getPosition();
   }
 
   // Todo: Why can't I do this with JSON.stringify() and JSON.parse()?
@@ -36,12 +35,6 @@ export class PositionService {
       },
       timestamp: position.timestamp
     };
-  }
-
-  geolocationGetCurrentPosition() {
-    return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, this.geolocationOptions);
-    });
   }
 
   geolocationWatchPosition() {
@@ -60,53 +53,46 @@ export class PositionService {
   getPosition() {
     let position = JSON.parse(environment.storage.getItem('position'));
 
+    // Case 1 and 2
     if ( position ) {
-      if ( environment.dummyPosition ) position = this.setDummyPositions(position);
+      console.log("Case 1 and 2");
+      // if ( environment.dummyPosition ) position = this.setDummyPositions(position);
       this.position$.next(position);
     }
 
+    // Case 1
     if ( position && environment.dummyMovement ) {
+      console.log("Case 1");
       this.setDummyMovements();
     }
 
+    // Case 2
     if ( position && !environment.dummyMovement ) {
+      console.log("Case 2");
       this.geolocationWatchPosition();
     }
 
+    // Case 3
     if ( !position && environment.dummyMovement ) {
-      // Todo: Call geolocation.getCurrentPosition here directly, instead of putting it in a separate function.
-      this.geolocationGetCurrentPosition().then(position => {
-        let pos = this.copyPositionObject(position);
-        if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
-        this.position$.next(pos);
-        this.setDummyMovements();
-      })
+      console.log("Case 3");
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+            let pos = this.copyPositionObject(position);
+            if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
+            this.position$.next(pos);
+            this.setDummyMovements();
+          },
+          err => {
+            console.log(`watchPosition error: ${err.message}`);
+          },
+          this.geolocationOptions
+      );
     }
 
+    // Case 4
     if ( !position && !environment.dummyMovement ) {
+      console.log("Case 4");
       this.geolocationWatchPosition();
     }
-
-    // if ( position ) {
-    //   if ( environment.dummyPosition ) position = this.setDummyPositions(position);
-    //   this.position$.next(position);
-    //   if ( environment.dummyMovement ) {
-    //     this.setDummyMovements();
-    //   } else {
-    //     this.geolocationWatchPosition();
-    //   }
-    // } else {
-    //   if ( environment.dummyMovement ) {
-    //     this.geolocationGetCurrentPosition().then(position => {
-    //       let pos = this.copyPositionObject(position);
-    //       if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
-    //       this.position$.next(pos);
-    //       this.setDummyMovements();
-    //     });
-    //   } else {
-    //     this.geolocationWatchPosition();
-    //   }
-    // }
   }
 
   positionPromise() {
@@ -133,6 +119,7 @@ export class PositionService {
   }
 
   setDummyPositions(pos) {
+    console.log("Dummy Positions");
     pos.coords.latitude += this.dummyLatInitialAdd;
     pos.coords.longitude += this.dummyLngInitialAdd;
 

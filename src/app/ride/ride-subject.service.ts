@@ -10,7 +10,6 @@ export class RideSubjectService {
     let ridePromise = new Promise((resolve, reject) => {
       let subscription = this.ride$.subscribe(pos => {
         if ( pos ) {
-          console.log("About to resolve ridePromise!");
           resolve(pos);
           subscription.unsubscribe();
         }

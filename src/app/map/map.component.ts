@@ -4,19 +4,21 @@ import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
 import { MapsAPILoader } from 'angular2-google-maps/core';
 import Socket = SocketIOClient.Socket;
+import { Subscription } from 'rxjs/Subscription';
 import Timer = NodeJS.Timer;
 import * as $ from 'jquery'
 import * as _ from 'lodash';
+import * as Rx from 'rxjs';
 
 import { MapAnimations } from './map.component.animatins';
 import { NavService } from '../nav/nav.service';
 import { PositionService } from '../core/position.service';
-import { RideSubjectService } from '../ride/ride-subject.service';
 import { SocketService } from '../core/socket.service';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import { RefreshService } from '../core/refresh.service';
 import { MapService } from './map.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   templateUrl: './map.component.html',
@@ -33,12 +35,15 @@ export class MapComponent implements OnInit, OnDestroy {
   riderList: Array<User> = [];
   user: User = null;
 
-  private bounds: LatLngBounds;
+  private combinedSub: Subscription;
   private google: any;
   private hideTimer: Timer;
+  private intervalTimer: Timer;
+  private positionSub: Subscription;
+  private refreshTimer: any;
+  private riderListSub: Subscription;
   private socket: Socket;
-  private subscriptions: any = {};
-  private timer: any;
+  private userSub: Subscription;
 
   @ViewChild('sebmGoogleMap') sebmGoogleMap;
 
@@ -52,7 +57,6 @@ export class MapComponent implements OnInit, OnDestroy {
               private positionService: PositionService,
               private socketService: SocketService,
               private refreshService: RefreshService,
-              private rideSubjectService: RideSubjectService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
   }
@@ -60,13 +64,13 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getRiderList();
     this.hideNav();
-    // this.listenForSocketConnection();
     this.listenForUpdatedRiderPosition();
-    this.loadMapsAPILoader();
+    this.mapsAPILoader.load().then(() => {
+      this.google = google;
+      this.retrieveMapMode();
+    });
     this.positionService.getPosition();
-    // this.refresh();
     this.removeLongDisconnectedRiders();
-    // this.requestRiderList();
     this.subscribeToUser();
   }
 
@@ -83,12 +87,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   focusOnUser() {
-    if ( this.subscriptions.positionSub ) this.subscriptions.positionSub.unsubscribe();
-      this.subscriptions.positionSub = this.positionService.position$.subscribe(position => {
+    if ( this.positionSub ) this.positionSub.unsubscribe();
+    this.positionSub = this.positionService.position$.subscribe(position => {
           if ( position ) {
-            this.bounds = new this.google.maps.LatLngBounds();
-            this.bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
-            this.latLng = this.bounds.toJSON();
+            let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
+            bounds.extend({ lat: position.coords.latitude, lng: position.coords.longitude });
+            this.latLng = bounds.toJSON();
           }
         },
         err => {
@@ -98,7 +102,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   getRiderList() {
-    this.mapService.riderList$.subscribe(riderList => {
+    this.riderListSub = this.mapService.riderList$.subscribe(riderList => {
       this.riderList = riderList;
     });
   }
@@ -117,10 +121,6 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  // listenForSocketConnection() {
-  //   this.socket.on('socketConnection', () => this.requestRiderList());
-  // }
-
   listenForUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
       let idx = _.findIndex(this.riderList, rider => rider._id === updatedRider._id);
@@ -135,21 +135,17 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadMapsAPILoader() {
-    this.mapsAPILoader.load().then(() => {
-      this.google = google;
-      this.focusOnUser();
-    });
-  }
-
   refresh() {
-    setTimeout(() => {
+    clearTimeout(this.refreshTimer);
+    this.refreshTimer = setTimeout(() => {
+      console.log("Refresh!");
+      environment.storage.setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
     }, 10000);
   }
 
   removeLongDisconnectedRiders() {
-    this.timer = setInterval(() => {
+    this.intervalTimer = setInterval(() => {
       this.riderList = _.filter(this.riderList, rider => {
         // Todo: Use an environment variable for the time? Or a variable that can be set through a UI?
         return !rider.disconnected || (Date.now() - rider.disconnected) < 1800000;
@@ -159,36 +155,59 @@ export class MapComponent implements OnInit, OnDestroy {
     }, 10000);
   }
 
+  retrieveMapMode() {
+    const mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
+    environment.storage.removeItem('rpMapMode');
+    this.setMapMode(mapMode);
+  }
+
   setMapMode(mapMode) {
-    if ( this.subscriptions.positionSub ) this.subscriptions.positionSub.unsubscribe();
-    if ( this.subscriptions.riderListSub ) this.subscriptions.riderListSub.unsubscribe();
+    if ( this.combinedSub ) this.combinedSub.unsubscribe();
+    if ( this.positionSub ) this.positionSub.unsubscribe();
+    if ( this.riderListSub ) this.riderListSub.unsubscribe();
 
     this.mapMode = mapMode;
 
     switch ( mapMode ) {
       case 'focusOnUser':
         this.focusOnUser();
+        this.refresh();
         break;
       case 'showAllRiders':
         this.showAllRiders();
+        this.refresh();
         break;
       default:
+        clearTimeout(this.refreshTimer);
         break;
     }
   }
 
   showAllRiders() {
-      if ( !this.riderList || this.riderList.length < 0 ) return;
-      this.bounds = new this.google.maps.LatLngBounds();
-      console.log("showAllRiders(). riderList:", this.riderList);
+    const combined = Rx.Observable.combineLatest(this.mapService.riderList$, this.userService.user$);
+    this.combinedSub = combined.subscribe(value => {
+      const riderList = value[0];
+      const user = value[1];
+      console.log("riderList:", riderList);
+      console.log("user:", user);
 
-      this.riderList.forEach(rider => {
-        this.bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
-      });
-      this.bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
-      this.latLng = this.bounds.toJSON();
+      let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
+
+      if ( riderList.length > 0 ) {
+        riderList.forEach(rider => {
+          if ( rider.position.coords.latitude && rider.position.coords.longitude ) {
+            bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
+          }
+        });
+      }
+
+      bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
+      this.latLng = bounds.toJSON();
       // Add 10% to the map at the upper edge for what is covered by the phone-browser address bar.
       this.latLng.north += (this.latLng.north - this.latLng.south) / 10;
+    });
+
+
   }
 
   showNav() {
@@ -197,22 +216,24 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   subscribeToUser() {
-    this.subscriptions.userSub = this.userService.user$.subscribe(user => {
+    this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
     });
   }
 
   ngOnDestroy() {
-    // Todo: Add the subscriptions to an array, which I can loop through here.
-    clearTimeout(this.hideTimer);
     this.navService.navBarState$.next('show');
 
-    for (let key in this.subscriptions) {
-      if (this.subscriptions[key]) this.subscriptions[key].unsubscribe();
-    }
+    clearTimeout(this.hideTimer);
+    clearTimeout(this.refreshTimer);
+    clearInterval(this.intervalTimer);
+
+    if (this.combinedSub.unsubscribe) this.combinedSub.unsubscribe();
+    if (this.positionSub) this.positionSub.unsubscribe();
+    if (this.riderListSub) this.riderListSub.unsubscribe();
+    if (this.userSub) this.userSub.unsubscribe();
 
     this.socket.removeAllListeners();
-    clearInterval(this.timer);
 
     // Attempt to ameliorate memory leak.
     google.maps.event.clearInstanceListeners(window);

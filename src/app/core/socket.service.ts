@@ -15,11 +15,9 @@ export class SocketService {
   socketPromise() {
     let socketPromise = new Promise((resolve, reject) => {
       if (this.socket.connected) {
-        console.log("Socket already connected, so will resolve socketPromise now.");
         resolve(true);
       } else {
         this.socket.on('socketConnection', () => {
-          console.log("About to resolve socketPromise!");
           resolve(true);
         });
       }

@@ -31,7 +31,6 @@ export class MapService {
 
   listenForDisconnectedRider() {
     this.socket.on('disconnectedRider', disconnectedRider => {
-      console.log('disconnectedRider');
       this.riderListPromise().then((riderList: Array<User>) => {
         let idx = _.findIndex(riderList, rider => rider._id === disconnectedRider._id);
         if ( idx >= 0) {
@@ -44,7 +43,6 @@ export class MapService {
 
   listenForJoinedRider() {
     this.socket.on('joinedRider', joinedRider => {
-      console.log('joinedRider');
       // If the zIndices are getting too high, it's time to request the whole riderList again.
       if ( this.zCounter >= 1000 ) {
         this.zCounter = 0;
@@ -67,7 +65,6 @@ export class MapService {
 
   listenForRemovedRider() {
     this.socket.on('removedRider', _id => {
-      console.log('removedRider');
       let riders = this.riderList$.value.filter(rider => rider._id !== _id);
 
       // This will be used to set the map bounds.
@@ -77,7 +74,6 @@ export class MapService {
 
   listenForRiderList() {
     this.socket.on('riderList', riderList => {
-      console.log('riderList', riderList);
       riderList = riderList.map(rider => new User(rider));
       riderList = riderList.filter(rider => rider._id !== this.user._id);
       riderList = this.setZIndexAndOpacity(riderList);
@@ -86,10 +82,8 @@ export class MapService {
   }
 
   requestRiderList() {
-    console.log("requestRiderList()");
     Promise.all([this.socketService.socketPromise(), this.rideSubjectService.ridePromise()]).then(values => {
       let ride = values[1];
-      console.log("About to emit giveMeRiderList for ride:", ride);
       this.socket.emit('giveMeRiderList', ride);
     });
 

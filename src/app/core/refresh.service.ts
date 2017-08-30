@@ -15,6 +15,7 @@ export class RefreshService {
   }
 
   refresh() {
+    console.log('RefreshService');
     let position: Position = this.positionService.position$.value;
     let user: User = this.userService.user$.value;
 

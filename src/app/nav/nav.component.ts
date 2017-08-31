@@ -11,6 +11,7 @@ import { UserService } from '../user/user.service';
 import * as $ from 'jquery';
 import { RefreshService } from '../core/refresh.service';
 import { Observable } from 'rxjs/Observable';
+import Timer = NodeJS.Timer;
 
 
 @Component({
@@ -52,14 +53,19 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   subscribeToRoute() {
+    let timer: Timer;
+
     let sub = this.router.events.subscribe(() => {
-      this.route = this.router.url;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        this.route = this.router.url;
+        console.log("route:", this.route);
 
-      console.log("route:", this.route);
+        this.refreshService.checkAutoRefresh().then(autoRefresh => {
+          this.navBarState = autoRefresh && (this.route === '/map') ? 'hide' : 'show';
+        });
+      }, 100);
 
-      this.refreshService.checkAutoRefresh().then(autoRefresh => {
-        this.navBarState = autoRefresh && (this.route === '/map') ? 'hide' : 'show';
-      });
     });
     this.subscriptions.push(sub);
   }

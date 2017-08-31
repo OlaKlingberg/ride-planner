@@ -4,23 +4,27 @@ import Socket = SocketIOClient.Socket;
 
 import { SocketService } from '../core/socket.service';
 import { User } from '../user/user';
+import { DebuggingService } from './debugging.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   templateUrl: './debugger.component.html',
   styleUrls: [ './debugger.component.scss' ]
 })
 export class DebuggerComponent implements OnInit, OnDestroy {
-  time;
-
-  public debugMessages: Array<any> = [];
   private socket: Socket;
+  private subscription: Subscription;
 
-  constructor(private socketService: SocketService) {
+  debugMessages: Array<any> = [];
+  time: string = '';
+
+  constructor(private debuggingService: DebuggingService,
+              private socketService: SocketService) {
     this.socket = socketService.socket;
   }
 
   ngOnInit() {
-    this.listenForDebugMessages();
+    this.watchForDebugMessages();
     this.clock();
   }
 
@@ -34,13 +38,13 @@ export class DebuggerComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  listenForDebugMessages() {
-    this.socket.on('debugging', message => {
+  watchForDebugMessages() {
+    this.subscription = this.debuggingService.debugMessages$.subscribe(message => {
       this.debugMessages.push(message);
     });
   }
 
   ngOnDestroy() {
-    this.socket.removeAllListeners();
+    this.subscription.unsubscribe();
   }
 }

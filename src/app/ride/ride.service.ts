@@ -8,16 +8,24 @@ import { environment } from '../../environments/environment';
 import { Ride } from './ride';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
+// import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { SocketService } from '../core/socket.service';
+import Socket = SocketIOClient.Socket;
+import { RideSubjectService } from './ride-subject.service';
 
 @Injectable()
 export class RideService {
+
+  private socket: Socket;
   private user: User;
 
   constructor(private http: Http,
+              private rideSubjectService: RideSubjectService,
+              private socketService: SocketService,
               private userService: UserService) {
-    this.userService.user$.subscribe(user => {
-      this.user = user;
-    });
+    this.socket = this.socketService.socket;
+    this.onAvailableRides();
+    this.subscribeToUser();
   }
 
   createRide(model) {
@@ -38,10 +46,30 @@ export class RideService {
         .toPromise(); // Todo: Add error handling.
   }
 
+  emitGiveMeAvailableRides() {
+    this.socket.emit('giveMeAvailableRides');
+  }
+
+  emitLeaveRide() {
+    this.socket.emit('leaveRide');
+  }
+
+  onAvailableRides() {
+    this.socket.on('availableRides', (availableRides: Array<string> )=> {
+      this.rideSubjectService.availableRides$.next(availableRides);
+    })
+  }
+
   setHeaders() {
     const token = JSON.parse(environment.storage.getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
+  }
+
+  subscribeToUser() {
+    this.userService.user$.subscribe(user => {
+      this.user = user;
+    });
   }
 
 }

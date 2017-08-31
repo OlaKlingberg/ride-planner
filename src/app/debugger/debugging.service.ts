@@ -12,7 +12,14 @@ export class DebuggingService {
 
   constructor(private socketService: SocketService) {
     this.socket = this.socketService.socket;
+    this.onDebugMessages();
     this.watchForDebugMessages();
+  }
+
+  onDebugMessages() {
+      this.socket.on('debugging', message => {
+        this.debugMessages$.next(message);
+      });
   }
 
   watchForDebugMessages() {

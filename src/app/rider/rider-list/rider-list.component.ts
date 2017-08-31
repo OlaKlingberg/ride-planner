@@ -7,6 +7,7 @@ import { RideSubjectService } from '../../ride/ride-subject.service';
 import { SocketService } from '../../core/socket.service';
 import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
+import { RiderService } from '../rider.service';
 
 @Component({
   templateUrl: './rider-list.component.html',
@@ -14,7 +15,7 @@ import { UserService } from '../../user/user.service';
 })
 export class RiderListComponent implements OnInit, OnDestroy {
   ride: string;
-  riderList: User[];
+  riderList: Array<User>;
   user: User;
 
   private rideSub: Subscription;
@@ -22,7 +23,8 @@ export class RiderListComponent implements OnInit, OnDestroy {
   private subscriptions: Array<Subscription> = [];
   private userSub: Subscription;
 
-  constructor(private rideSubjectService: RideSubjectService,
+  constructor(private riderService: RiderService,
+              private rideSubjectService: RideSubjectService,
               private socketService: SocketService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
@@ -30,17 +32,8 @@ export class RiderListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscribeToRide();
+    this.subscribeToRiderList();
     this.subscribeToUser();
-  }
-
-
-  // Todo: Should these functions be moved to a RiderService?
-  getRiderList() {
-    this.socket.emit('giveMeRiderList', this.user.ride);
-    this.socket.on('riderList', riderList => {
-      riderList = riderList.map(rider => new User(rider));
-      this.riderList = riderList;
-    });
   }
 
   subscribeToRide() {
@@ -50,10 +43,17 @@ export class RiderListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
+  subscribeToRiderList() {
+    let sub = this.riderService.riderList$.subscribe(riderList => {
+      this.riderList = riderList;
+    });
+    this.subscriptions.push(sub);
+  }
+
   subscribeToUser() {
     let sub = this.userService.user$.subscribe(user => {
       this.user = user;
-      if (user.ride) this.getRiderList();
+      if ( user.ride ) this.riderService.emitGiveMeRiderList(user);
     });
     this.subscriptions.push(sub);
   }
@@ -62,8 +62,6 @@ export class RiderListComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => {
       return sub.unsubscribe();
     });
-
-    this.socket.removeAllListeners();
   }
 
 }

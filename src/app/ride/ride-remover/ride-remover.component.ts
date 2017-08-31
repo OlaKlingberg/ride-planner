@@ -22,9 +22,8 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   user: User = null;
 
   private availableRides: Array<string> = null;
-  private availableRidesListener: any;
   private socket: Socket;
-  private subscription: Subscription;
+  private subscriptions: Array<Subscription> = [];
 
   constructor(private alertService: AlertService,
               private rideService: RideService,
@@ -36,7 +35,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getAvailableRides();
+    this.subscribeToAvailableRides();
     this.subscribeToUser();
   }
 
@@ -51,35 +50,33 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
     })
   }
 
-  // Todo: I'm not sure I should be using sockets here.
-  getAvailableRides() {
-    this.socket.emit('giveMeAvailableRides');
-    this.availableRidesListener = this.socket.on('availableRides', availableRides => {
-      if ( availableRides.length > 0 ) this.availableRides = availableRides;
-    });
-  }
-
   logOutFromRide() {
     environment.storage.removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;
     user.ride = null;
     this.userService.user$.next(user);
-    // this.userService.watchWhenToJoinRide();
 
     this.socket.emit('leaveRide');
   }
 
-
-  subscribeToUser() {
-    this.subscription = this.userService.user$.subscribe(user => {
-      this.user = user;
+  subscribeToAvailableRides() {
+    const sub = this.rideSubjectService.availableRides$.subscribe(availableRides => {
+      this.availableRides = availableRides;
     });
   }
 
+  subscribeToUser() {
+    const sub = this.userService.user$.subscribe(user => {
+      this.user = user;
+    });
+    this.subscriptions.push(sub);
+  }
+
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-    this.socket.removeAllListeners();
+    this.subscriptions.forEach(sub => {
+      return sub.unsubscribe();
+    });
   }
 
 }

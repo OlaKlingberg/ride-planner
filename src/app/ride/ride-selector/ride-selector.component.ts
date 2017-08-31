@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from "../../../environments/environment";
 import { RideSubjectService } from '../ride-subject.service';
-import { SocketService } from '../../core/socket.service';
 import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
+import { RideService } from '../ride.service';
 
 @Component({
   templateUrl: './ride-selector.component.html',
@@ -19,27 +18,17 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   user: User = null;
 
   private availableRides: Array<string> = null;
-  private availableRidesListener: any;
-  private socket: Socket;
-  private subscription: Subscription;
+  private subscriptions: Array<Subscription> = [];
 
-  constructor(private rideSubjectService: RideSubjectService,
+  constructor(private rideService: RideService,
+              private rideSubjectService: RideSubjectService,
               private router: Router,
-              private userService: UserService,
-              private socketService: SocketService,) {
-    this.socket = this.socketService.socket;
-  }
+              private userService: UserService) {}
 
   ngOnInit() {
-    this.getAvailableRides();
+    this.rideService.emitGiveMeAvailableRides();
+    this.subscribeToAvailableRides();
     this.subscribeToUser();
-  }
-
-  getAvailableRides() {
-    this.socket.emit('giveMeAvailableRides');
-    this.availableRidesListener = this.socket.on('availableRides', availableRides => {
-      if ( availableRides.length > 0 ) this.availableRides = availableRides;
-    });
   }
 
   logIntoRide() {
@@ -49,7 +38,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   logOutFromRide() {
-    this.socket.emit('leaveRide');
+    this.rideService.emitLeaveRide();
     environment.storage.removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;
@@ -57,15 +46,24 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
     this.userService.user$.next(user);
   }
 
+  subscribeToAvailableRides() {
+    const sub = this.rideSubjectService.availableRides$.subscribe((availableRides: Array<string>) => {
+      this.availableRides = availableRides;
+    });
+    this.subscriptions.push(sub);
+  }
+
   subscribeToUser() {
-    this.subscription = this.userService.user$.subscribe(user => {
+    const subscription: Subscription = this.userService.user$.subscribe(user => {
       this.user = user;
     });
+    this.subscriptions.push(subscription);
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-    this.socket.removeAllListeners();
+    this.subscriptions.forEach(sub => {
+      return sub.unsubscribe();
+    })
   }
 
 }

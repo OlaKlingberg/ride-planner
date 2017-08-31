@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class RideSubjectService {
+  availableRides$: BehaviorSubject<Array<string>> = new BehaviorSubject(null);
   ride$: BehaviorSubject<string> = new BehaviorSubject(null);
 
   ridePromise() {

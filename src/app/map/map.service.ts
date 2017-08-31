@@ -21,15 +21,16 @@ export class MapService {
               private socketService: SocketService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
-    this.listenForDisconnectedRider();
-    this.listenForJoinedRider();
-    this.listenForRemovedRider();
-    this.listenForRiderList();
+    this.onDisconnectedRider();
+    this.onJoinedRider();
+    this.onRemovedRider();
+    this.onRiderList();
+    this.onUpdatedRiderPosition();
     this.requestRiderList();
     this.subscribeToUser();
   }
 
-  listenForDisconnectedRider() {
+  onDisconnectedRider() {
     this.socket.on('disconnectedRider', disconnectedRider => {
       console.log('disconnectedRider');
       this.riderListPromise().then((riderList: Array<User>) => {
@@ -42,7 +43,7 @@ export class MapService {
     });
   }
 
-  listenForJoinedRider() {
+  onJoinedRider() {
     this.socket.on('joinedRider', joinedRider => {
       console.log('joinedRider:', joinedRider.fname, joinedRider.lname);
       // If the zIndices are getting too high, it's time to request the whole riderList again.
@@ -67,7 +68,7 @@ export class MapService {
     });
   }
 
-  listenForRemovedRider() {
+  onRemovedRider() {
     this.socket.on('removedRider', _id => {
       console.log('removedRider');
       let riders = this.riderList$.value.filter(rider => rider._id !== _id);
@@ -77,13 +78,28 @@ export class MapService {
     });
   }
 
-  listenForRiderList() {
+  onRiderList() {
     this.socket.on('riderList', riderList => {
       console.log('riderList:', riderList);
       riderList = riderList.map(rider => new User(rider));
       riderList = riderList.filter(rider => rider._id !== this.user._id);
       riderList = this.setZIndexAndOpacity(riderList);
       this.riderList$.next(riderList);
+    });
+  }
+
+  onUpdatedRiderPosition() {
+    this.socket.on('updatedRiderPosition', updatedRider => {
+      let riderList = this.riderList$.value;
+      let idx = _.findIndex(riderList, rider => rider._id === updatedRider._id);
+      if ( idx >= 0 ) {
+        riderList[ idx ].position.timestamp = updatedRider.position.timestamp;
+        riderList[ idx ].position.coords.accuracy = updatedRider.position.coords.accuracy;
+        riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
+        riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
+
+        this.riderList$.next(riderList);
+      }
     });
   }
 

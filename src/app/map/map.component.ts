@@ -64,7 +64,7 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getRiderList();
     this.hideNav();
-    this.listenForUpdatedRiderPosition();
+    // this.listenForUpdatedRiderPosition();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
       this.retrieveMapMode();
@@ -103,20 +103,6 @@ export class MapComponent implements OnInit, OnDestroy {
           this.buttonState = 'hide';
         }
       }, 4000);
-    });
-  }
-
-  listenForUpdatedRiderPosition() {
-    this.socket.on('updatedRiderPosition', updatedRider => {
-      let idx = _.findIndex(this.riderList, rider => rider._id === updatedRider._id);
-      if ( idx >= 0 ) {
-        this.riderList[ idx ].position.timestamp = updatedRider.position.timestamp;
-        this.riderList[ idx ].position.coords.accuracy = updatedRider.position.coords.accuracy;
-        this.riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
-        this.riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
-
-        this.mapService.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
-      }
     });
   }
 
@@ -174,7 +160,7 @@ export class MapComponent implements OnInit, OnDestroy {
         });
       }
 
-      // if ( user.position && user.position.coords && user.position.coords.latitude && user.position.coords.longitude) {
+      // if ( user.position && user.position.coords && user.position.coords.latitude) {
       bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
       // }
 
@@ -208,8 +194,6 @@ export class MapComponent implements OnInit, OnDestroy {
     if ( this.positionSub ) this.positionSub.unsubscribe();
     if ( this.riderListSub ) this.riderListSub.unsubscribe();
     if ( this.userSub ) this.userSub.unsubscribe();
-
-    this.socket.removeAllListeners();
 
     // Attempt to ameliorate memory leak.
     google.maps.event.clearInstanceListeners(window);

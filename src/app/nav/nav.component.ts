@@ -9,6 +9,7 @@ import { NavService } from './nav.service';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import * as $ from 'jquery';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class NavComponent implements OnInit, OnDestroy {
   private route: string;
   private subscriptions: Array<Subscription> = [];
 
-  constructor(public location: Location,               // Used in the template. Has to be initialized?
+  constructor(public location: Location,               // Used in the template.
               private navService: NavService,
               private router: Router,
               private userService: UserService) {
@@ -51,7 +52,8 @@ export class NavComponent implements OnInit, OnDestroy {
   subscribeToRoute() {
     let sub = this.router.events.subscribe(() => {
       this.route = this.router.url;
-      this.navBarState = 'show';
+      const autoRefresh = environment.storage.getItem('rpAutoRefresh');
+      this.navBarState = autoRefresh ? 'hide' : 'show';
     });
     this.subscriptions.push(sub);
   }

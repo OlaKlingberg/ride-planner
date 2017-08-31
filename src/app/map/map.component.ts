@@ -94,6 +94,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   hideNav() {
     clearTimeout(this.hideTimer);
+
     // Wait till the map is shown (which happens when there is a position), set timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
     this.positionService.positionPromise().then(() => {
       this.hideTimer = setTimeout(() => {
@@ -104,6 +105,7 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       }, 4000);
     });
+
   }
 
   refresh() {
@@ -139,7 +141,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     clearTimeout(this.refreshTimer);
 
-    if ( mapMode === 'stationary') return;
+    if ( mapMode === 'stationary' ) return;
 
     this.refresh();
 
@@ -184,7 +186,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.navService.navBarState$.next('show');
+    // this.navService.navBarState$.next('show');
 
     clearTimeout(this.hideTimer);
     clearTimeout(this.refreshTimer);

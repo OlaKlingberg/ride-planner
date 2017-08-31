@@ -133,6 +133,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   retrieveMapMode() {
     const mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
+    console.log();
     environment.storage.removeItem('rpMapMode');
     this.setMapMode(mapMode);
   }
@@ -161,7 +162,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
       let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
 
-      if ( mapMode === 'showAllRiders' && riderList.length > 0 ) {
+      if ( mapMode === 'showAllRiders' && riderList && riderList.length > 0 ) {
         riderList.forEach(rider => {
           if ( rider.position.coords.latitude && rider.position.coords.longitude ) {
             bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });

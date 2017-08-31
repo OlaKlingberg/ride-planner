@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
+import { RefreshService } from '../core/refresh.service';
 
 @Injectable()
 export class NavService {
-  public navBarState$: BehaviorSubject<string> = new BehaviorSubject(null);
+  public navBarState$: BehaviorSubject<string> = new BehaviorSubject('hide');
 
-  constructor() {
-    const autoRefresh = environment.storage.getItem('rpAutoRefresh');
-    environment.storage.removeItem('prAutRefresh');
+  constructor(private refreshService: RefreshService) {
+    this.refreshService.checkAutoRefresh().then(autoRefresh => {
+      autoRefresh ? this.navBarState$.next('hide') : this.navBarState$.next('show');
+    });
 
-    autoRefresh ? this.navBarState$.next('hide') : this.navBarState$.next('show');
   }
 
 

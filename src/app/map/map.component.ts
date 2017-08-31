@@ -26,7 +26,7 @@ import { environment } from '../../environments/environment';
   animations: MapAnimations
 })
 export class MapComponent implements OnInit, OnDestroy {
-  buttonState: string = 'show';
+  buttonState: string = null;
   colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
   latLng: LatLngBoundsLiteral;
   mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
@@ -54,15 +54,16 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(private mapsAPILoader: MapsAPILoader,
               private mapService: MapService,
               private navService: NavService,
+              private refreshService: RefreshService,
               private positionService: PositionService,
               private socketService: SocketService,
-              private refreshService: RefreshService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
   }
 
   ngOnInit() {
     this.getRiderList();
+    this.hideButtonsOnAutoRefresh();
     this.hideNav();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
@@ -92,6 +93,12 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  hideButtonsOnAutoRefresh() {
+    this.refreshService.checkAutoRefresh().then(autoRefresh => {
+      this.buttonState = autoRefresh ? 'hide' : 'show';
+    });
+  }
+
   hideNav() {
     clearTimeout(this.hideTimer);
 
@@ -112,7 +119,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.refreshTimer = setTimeout(() => {
       environment.storage.setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
-    }, 30000);
+    }, 10000);
   }
 
   removeLongDisconnectedRiders() {
@@ -172,7 +179,6 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
   }
-
 
   showNav() {
     this.navService.navBarState$.next('show');

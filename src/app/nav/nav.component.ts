@@ -9,7 +9,7 @@ import { NavService } from './nav.service';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import * as $ from 'jquery';
-import { environment } from '../../environments/environment';
+import { RefreshService } from '../core/refresh.service';
 
 
 @Component({
@@ -19,7 +19,7 @@ import { environment } from '../../environments/environment';
   animations: navAnimations
 })
 export class NavComponent implements OnInit, OnDestroy {
-  navBarState: string;
+  navBarState: string = 'hide';
   user: User = null;
   ride: string;
 
@@ -28,6 +28,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   constructor(public location: Location,               // Used in the template.
               private navService: NavService,
+              private refreshService: RefreshService,
               private router: Router,
               private userService: UserService) {
   }
@@ -50,10 +51,14 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   subscribeToRoute() {
-    let sub = this.router.events.subscribe(() => {
+    let sub = this.router.events.debounceTime(100).subscribe(() => {
       this.route = this.router.url;
-      const autoRefresh = environment.storage.getItem('rpAutoRefresh');
-      this.navBarState = autoRefresh ? 'hide' : 'show';
+
+      console.log("route:", this.route);
+
+      this.refreshService.checkAutoRefresh().then(autoRefresh => {
+        this.navBarState = autoRefresh && (this.route === '/map') ? 'hide' : 'show';
+      });
     });
     this.subscriptions.push(sub);
   }

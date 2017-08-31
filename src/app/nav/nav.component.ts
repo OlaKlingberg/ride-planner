@@ -10,6 +10,7 @@ import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import * as $ from 'jquery';
 import { RefreshService } from '../core/refresh.service';
+import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -51,7 +52,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   subscribeToRoute() {
-    let sub = this.router.events.debounceTime(100).subscribe(() => {
+    let sub = this.router.events.subscribe(() => {
       this.route = this.router.url;
 
       console.log("route:", this.route);

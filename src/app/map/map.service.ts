@@ -93,7 +93,6 @@ export class MapService {
       console.log("About to emit giveMeRiderList for ride:", ride);
       this.socket.emit('giveMeRiderList', ride);
     });
-
   }
 
   riderListPromise() {

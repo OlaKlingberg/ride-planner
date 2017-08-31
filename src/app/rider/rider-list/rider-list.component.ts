@@ -34,7 +34,7 @@ export class RiderListComponent implements OnInit, OnDestroy {
   }
 
 
-  // Todo: Should these functions be moved to RiderService and just be called from here?
+  // Todo: Should these functions be moved to a RiderService?
   getRiderList() {
     this.socket.emit('giveMeRiderList', this.user.ride);
     this.socket.on('riderList', riderList => {

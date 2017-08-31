@@ -23,12 +23,11 @@ export class UserService {
               private positionService: PositionService,
               private rideSubjectService: RideSubjectService,
               private socketService: SocketService) {
+    this.emitJoinRide();
     this.getRideFromStorage();
     this.getUserFromStorage();
     this.updateUserPositionOnNewPosition();
     this.updateUserPositionOnUserLogin();
-    this.updateUserRideOnNewRide();
-    this.updateUserRideOnUserLogin();
 
     this.socket = this.socketService.socket;
   }
@@ -38,6 +37,21 @@ export class UserService {
     user.email = user.email.toLowerCase();
 
     return this.http.post(`${environment.api}/users`, user);
+  }
+
+  emitJoinRide() {
+    this.rideSubjectService.ride$.subscribe(ride => {
+      if ( ride ) {
+        this.userPositionPromise().then((user: User) => {
+          let token = JSON.parse(environment.storage.getItem('rpToken'));
+          console.log("About to emit joinRide");
+          this.socket.emit('joinRide', user, ride, token, () => {
+            user.ride = ride;
+            this.user$.next(user);
+          });
+        })
+      }
+    });
   }
 
   getAllUsers() {
@@ -82,7 +96,7 @@ export class UserService {
     let prevUser: User = null;
 
     this.user$.subscribe(user => {
-      if ( prevUser === null && user !== null ) {
+      if ( prevUser === null && user ) {
         prevUser = user; // Todo: It doesn't matter here that this copies by reference, right?
         let pos = this.positionService.position$.value;
         if ( pos ) {
@@ -92,39 +106,8 @@ export class UserService {
         }
       }
 
-      if ( prevUser !== null && user === null ) {
+      if ( prevUser && user === null ) {
         prevUser = null;
-      }
-    });
-  }
-
-  updateUserRideOnNewRide() {
-    this.rideSubjectService.ride$.subscribe(ride => {
-      let user = this.user$.value;
-      if ( user ) {
-        let token = JSON.parse(environment.storage.getItem('rpToken'));
-        this.socket.emit('joinRide', user, ride, token, () => {
-          user.ride = ride;
-          this.user$.next(user);
-        });
-      }
-    });
-  }
-
-  updateUserRideOnUserLogin() {
-    let prevUser: User = null;
-
-    this.user$.subscribe(user => {
-      if ( prevUser === null && user !== null ) {
-        prevUser = user; // Todo: It doesn't matter here that this copies by reference, right?
-        let ride = this.rideSubjectService.ride$.value;
-        if ( ride ) {
-          let token = JSON.parse(environment.storage.getItem('rpToken'));
-          this.socket.emit('joinRide', user, ride, token, () => {
-            user.ride = ride;
-            this.user$.next(user);
-          });
-        }
       }
     });
   }
@@ -142,4 +125,18 @@ export class UserService {
 
     return userPromise;
   }
+
+  userPositionPromise() {
+    let userPositionPromise = new Promise((resolve, reject) => {
+      let subscription = this.user$.subscribe(user => {
+        if (user && user.position && user.position.coords && user.position.coords.latitude) {
+          resolve(user);
+          subscription.unsubscribe();
+        }
+      })
+    });
+
+    return userPositionPromise;
+  }
+
 }

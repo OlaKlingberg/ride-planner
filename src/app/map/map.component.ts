@@ -120,6 +120,13 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  refresh() {
+    this.refreshTimer = setTimeout(() => {
+      environment.storage.setItem('rpMapMode', this.mapMode);
+      this.refreshService.refresh();
+    }, 30000);
+  }
+
   removeLongDisconnectedRiders() {
     this.intervalTimer = setInterval(() => {
       this.riderList = _.filter(this.riderList, rider => {
@@ -148,10 +155,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     if ( mapMode === 'stationary') return;
 
-    this.refreshTimer = setTimeout(() => {
-      environment.storage.setItem('rpMapMode', this.mapMode);
-      this.refreshService.refresh();
-    }, 30000);
+    // this.refresh();
 
     const combined = Rx.Observable.combineLatest(this.mapService.riderList$, this.userService.user$);
     this.combinedSub = combined.subscribe(value => {

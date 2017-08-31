@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ViewChildren } from '@angular/
 
 import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
-import { MapsAPILoader } from 'angular2-google-maps/core';
+import { MapsAPILoader } from '@agm/core';
 import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
 import Timer = NodeJS.Timer;

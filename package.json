@@ -16,6 +16,7 @@
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^1.0.0-beta.1",
     "@angular/animations": "^4.3.4",
     "@angular/common": "^4.3.4",
     "@angular/compiler": "^4.3.4",
@@ -31,7 +32,6 @@
     "@types/hammerjs": "^2.0.34",
     "@types/socket.io": "^1.4.28",
     "@types/socket.io-client": "^1.4.29",
-    "angular2-google-maps": "^0.17.0",
     "bootstrap": "^3.3.7",
     "bootswatch": "^3.3.7",
     "core-js": "^2.5.0",

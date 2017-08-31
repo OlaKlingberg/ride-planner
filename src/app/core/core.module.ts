@@ -2,6 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
+import { AgmCoreModule } from '@agm/core';
 import { ModalModule, TooltipModule } from 'ngx-bootstrap';
 
 import { AdminGuard } from '../_guards/admin.guard';
@@ -11,6 +12,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { AuthGuard } from '../_guards/auth.guard';
 import { CuesheetService } from '../cuesheet/cuesheet.service';
 import { DebuggingService } from '../debugger/debugging.service';
+import { environment } from '../../environments/environment';
 import { MapService } from '../map/map.service';
 import { NavModule } from '../nav/nav.module';
 import { NavService } from '../nav/nav.service';
@@ -25,11 +27,15 @@ import { UserService } from '../user/user.service';
 
 @NgModule({
   imports: [
+    AgmCoreModule.forRoot({
+      apiKey: environment.googleMapsKey
+    }),
     ModalModule.forRoot(),
     TooltipModule.forRoot(),
   ],
   declarations: [],
   exports: [
+    AgmCoreModule,
     AlertModule,
     BrowserAnimationsModule,
     HttpModule,

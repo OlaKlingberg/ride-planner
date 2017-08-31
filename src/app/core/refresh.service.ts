@@ -11,18 +11,25 @@ import { User } from '../user/user';
 export class RefreshService {
   private autoRefresh: boolean = null;
 
-
   constructor(private positionService: PositionService,
               private userService: UserService) {
-    this.autoRefresh = environment.storage.getItem('rpAutoRefresh') === 'true';
-    environment.storage.removeItem('rpAutoRefresh');
+    this.checkAutoRefresh();
+  }
+
+  autoRefreshPromise() {
+    return new Promise((resolve, reject) => {
+      // console.log("checkAutoRefresh about to resolve:", this.autoRefresh);
+      resolve(this.autoRefresh);
+    });
   }
 
   checkAutoRefresh() {
-    return new Promise((resolve, reject) => {
-      console.log("checkAutoRefresh about to resolve:", this.autoRefresh);
-      resolve(this.autoRefresh);
-    });
+    this.autoRefresh = environment.storage.getItem('rpAutoRefresh') === 'true';
+    environment.storage.removeItem('rpAutoRefresh');
+
+    setTimeout(() => {
+      this.autoRefresh = false;
+    }, 1000);
   }
 
   refresh() {
@@ -36,9 +43,6 @@ export class RefreshService {
 
     window.location.reload();
   }
-
-
-
 
 
 }

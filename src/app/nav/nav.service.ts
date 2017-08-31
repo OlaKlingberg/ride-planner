@@ -9,7 +9,7 @@ export class NavService {
   public navBarState$: BehaviorSubject<string> = new BehaviorSubject('hide');
 
   constructor(private refreshService: RefreshService) {
-    this.refreshService.checkAutoRefresh().then(autoRefresh => {
+    this.refreshService.autoRefreshPromise().then(autoRefresh => {
       autoRefresh ? this.navBarState$.next('hide') : this.navBarState$.next('show');
     });
 

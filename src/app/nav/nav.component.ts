@@ -61,7 +61,7 @@ export class NavComponent implements OnInit, OnDestroy {
         this.route = this.router.url;
         console.log("route:", this.route);
 
-        this.refreshService.checkAutoRefresh().then(autoRefresh => {
+        this.refreshService.autoRefreshPromise().then(autoRefresh => {
           this.navBarState = autoRefresh && (this.route === '/map') ? 'hide' : 'show';
         });
       }, 100);

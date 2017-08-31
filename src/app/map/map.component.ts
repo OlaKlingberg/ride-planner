@@ -94,7 +94,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   hideButtonsOnAutoRefresh() {
-    this.refreshService.checkAutoRefresh().then(autoRefresh => {
+    this.refreshService.autoRefreshPromise().then(autoRefresh => {
       this.buttonState = autoRefresh ? 'hide' : 'show';
     });
   }

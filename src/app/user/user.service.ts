@@ -23,7 +23,7 @@ export class UserService {
               private positionService: PositionService,
               private rideSubjectService: RideSubjectService,
               private socketService: SocketService) {
-    this.emitJoinRide();
+    this.joinRide();
     this.getRideFromStorage();
     this.getUserFromStorage();
     this.updateUserPositionOnNewPosition();
@@ -39,7 +39,7 @@ export class UserService {
     return this.http.post(`${environment.api}/users`, user);
   }
 
-  emitJoinRide() {
+  joinRide() {
     this.rideSubjectService.ride$.subscribe(ride => {
       if ( ride ) {
         this.userPositionPromise().then((user: User) => {
@@ -48,6 +48,7 @@ export class UserService {
           this.socket.emit('joinRide', user, ride, token, () => {
             user.ride = ride;
             this.user$.next(user);
+            this.socket.emit('giveMeRiderList', ride);
           });
         })
       }

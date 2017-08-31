@@ -7,10 +7,10 @@ import { environment } from '../../environments/environment';
 export class PositionService {
   position$: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  private dummyLatInc: number = Math.random() * .00004 - .00002;
+  private dummyLatInc: number = Math.random() * .0001 - .00005;
   private dummyLatInitialAdd: number = Math.random() * .002 - .001;
 
-  private dummyLngInc: number = Math.random() * .00004 - .00002;
+  private dummyLngInc: number = Math.random() * .0001 - .00005;
   private dummyLngInitialAdd: number = Math.random() * .002 - .001;
 
   private dummyUpdateFrequency: number = Math.random() * 0 + 500;

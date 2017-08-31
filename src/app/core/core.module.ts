@@ -24,6 +24,7 @@ import { RideSubjectService } from '../ride/ride-subject.service';
 import { SocketService } from './socket.service';
 import { throwIfAlreadyLoaded } from '../_guards/module-import-guard';
 import { UserService } from '../user/user.service';
+import { RiderService } from '../rider/rider.service';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { UserService } from '../user/user.service';
     RideLeaderGuard,
     RideService,        // Todo: Should perhaps be moved to RideModule.
     RideSubjectService, // Todo: Should perhaps be moved to RideModule.
+    RiderService,
     SocketService,
     UserService
   ]

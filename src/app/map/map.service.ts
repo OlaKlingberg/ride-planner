@@ -7,7 +7,6 @@ import { User } from '../user/user';
 import { SocketService } from '../core/socket.service';
 import Socket = SocketIOClient.Socket;
 import { UserService } from '../user/user.service';
-import { RideSubjectService } from '../ride/ride-subject.service';
 
 @Injectable()
 export class MapService {
@@ -17,8 +16,7 @@ export class MapService {
   private socket: Socket;
   private zCounter: number = 0;
 
-  constructor(private rideSubjectService: RideSubjectService,
-              private socketService: SocketService,
+  constructor(private socketService: SocketService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
     this.onDisconnectedRider();
@@ -26,7 +24,6 @@ export class MapService {
     this.onRemovedRider();
     this.onRiderList();
     this.onUpdatedRiderPosition();
-    this.requestRiderList();
     this.subscribeToUser();
   }
 
@@ -100,14 +97,6 @@ export class MapService {
 
         this.riderList$.next(riderList);
       }
-    });
-  }
-
-  requestRiderList() {
-    Promise.all([this.socketService.socketPromise(), this.rideSubjectService.ridePromise()]).then(values => {
-      let ride = values[1];
-      console.log("About to emit giveMeRiderList for ride:", ride);
-      this.socket.emit('giveMeRiderList', ride);
     });
   }
 

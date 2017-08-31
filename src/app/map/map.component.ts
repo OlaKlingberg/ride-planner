@@ -64,7 +64,6 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getRiderList();
     this.hideNav();
-    // this.listenForUpdatedRiderPosition();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
       this.retrieveMapMode();
@@ -87,8 +86,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   getRiderList() {
     this.riderListSub = this.mapService.riderList$.subscribe(riderList => {
-      // console.log("MapComponent.getRiderList(). riderList:", riderList);
-      this.riderList = riderList;
+      setTimeout(() => {
+        this.riderList = riderList;
+      }, 0);
     });
   }
 
@@ -141,7 +141,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     if ( mapMode === 'stationary') return;
 
-    // this.refresh();
+    this.refresh();
 
     const combined = Rx.Observable.combineLatest(this.mapService.riderList$, this.userService.user$);
     this.combinedSub = combined.subscribe(value => {

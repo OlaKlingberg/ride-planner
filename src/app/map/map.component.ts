@@ -45,7 +45,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private socket: Socket;
   private userSub: Subscription;
 
-  @ViewChild('sebmGoogleMap') sebmGoogleMap;
+  @ViewChild('agmMap') agmMap;
 
   @ViewChildren('infoWindows') infoWindows;
   @ViewChildren('markers') markers;
@@ -110,7 +110,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.navService.navBarState$.next('hide');
           this.buttonState = 'hide';
         }
-      }, 4000);
+      }, environment.fadeNav);
     });
 
   }
@@ -126,8 +126,7 @@ export class MapComponent implements OnInit, OnDestroy {
   removeLongDisconnectedRiders() {
     this.intervalTimer = setInterval(() => {
       this.riderList = _.filter(this.riderList, rider => {
-        // Todo: Use an environment variable for the time? Or a variable that can be set through a UI?
-        return !rider.disconnected || (Date.now() - rider.disconnected) < 1800000;
+        return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
       });
 
       this.mapService.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
@@ -139,14 +138,14 @@ export class MapComponent implements OnInit, OnDestroy {
     environment.storage.removeItem('rpLatLng');
     const mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
     environment.storage.removeItem('rpMapMode');
-    this.setMapMode(latLng, mapMode);
+    this.setMapMode(mapMode, latLng);
   }
 
-  setMapMode(latLng, mapMode) {
+  setMapMode(mapMode, latLng) {
     if ( this.combinedSub ) this.combinedSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
 
-    this.latLng = latLng;
+    if (latLng) this.latLng = latLng;
     this.mapMode = mapMode;
 
     clearTimeout(this.refreshTimer);
@@ -209,7 +208,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // Attempt to ameliorate memory leak.
     google.maps.event.clearInstanceListeners(window);
     google.maps.event.clearInstanceListeners(document);
-    google.maps.event.clearInstanceListeners(this.sebmGoogleMap);
+    google.maps.event.clearInstanceListeners(this.agmMap);
     google.maps.event.clearInstanceListeners(this.markers);
     google.maps.event.clearInstanceListeners(this.infoWindows);
   }

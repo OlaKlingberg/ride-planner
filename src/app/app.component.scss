@@ -1,7 +1,7 @@
-$myColor: #df691a;
+@import "../_vars.scss";
 
 h1 {
-  color: $myColor;
+  color: $rpOrange;
   float: left;
 }
 

@@ -1,4 +1,6 @@
-.sebm-google-map-container {
+@import "../../_vars.scss";
+
+agm-map {
   height: 100vh;
   width: 100vw;
   position: fixed;
@@ -7,16 +9,42 @@
   z-index: 2;
 }
 
-.info-window {
-  color: navy;
+#map-buttons-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 10;
+  text-align: center;
+  button {
+    margin-bottom: 20px;
+  }
 }
 
-.visibility-hidden {
-  visibility: hidden;
+#not-logged-in-warning {
+  background-color: $rpGray;
+  width: 90vw;
+  margin-left: 5vw;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: fixed;
+  text-align: center;
+  top: 50px;
+  left: 0;
+  z-index: 9;
+}
+
+
+.btn {
+  width: 40%;
 }
 
 .display-none {
   display: none !important;
+}
+
+.info-window {
+  color: navy;
 }
 
 .launching-satellites {
@@ -38,22 +66,12 @@
   }
 }
 
+.visibility-hidden {
+  visibility: hidden;
+}
+
 .transparent {
   opacity: .3;
 }
 
-#map-buttons-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  z-index: 10;
-  text-align: center;
-  button {
-    margin-bottom: 20px;
-  }
-}
 
-.btn {
-  width: 40%;
-}

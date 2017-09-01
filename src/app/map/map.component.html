@@ -5,7 +5,7 @@
       <div [ngClass]="{'visibility-hidden': !latLng}">
 
         <agm-map
-            #sebmGoogleMap
+            #agmMap
             [fitBounds]="latLng"
             [maxZoom]="maxZoom"
             [zoomControl]="false"
@@ -61,6 +61,11 @@
           </agm-marker>
 
         </agm-map>
+
+        <div id="not-logged-in-warning"
+            *ngIf="!user || !user.ride">
+          <h4>You are not logged into any ride,<br> so you won't see any other riders.</h4>
+        </div>
 
         <div id="map-buttons-container"
              [@buttons]="buttonState">

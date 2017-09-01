@@ -7,14 +7,6 @@ import { environment } from '../../environments/environment';
 export class PositionService {
   position$: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  private dummyLatInc: number = Math.random() * .0001 - .00005;
-  private dummyLatInitialAdd: number = Math.random() * .002 - .001;
-
-  private dummyLngInc: number = Math.random() * .0001 - .00005;
-  private dummyLngInitialAdd: number = Math.random() * .002 - .001;
-
-  private dummyUpdateFrequency: number = Math.random() * 0 + 500;
-
   private geolocationOptions = {
     enableHighAccuracy: true,
     timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
@@ -104,17 +96,17 @@ export class PositionService {
   setDummyMovements() {
     setInterval(() => {
       let pos = this.position$.value;
-      pos.coords.latitude += this.dummyLatInc;
-      pos.coords.longitude += this.dummyLngInc;
+      pos.coords.latitude += environment.dummyLatInc;
+      pos.coords.longitude += environment.dummyLngInc;
       this.position$.next(pos);
-    }, this.dummyUpdateFrequency);
+    }, environment.dummyUpdateFrequency);
 
   }
 
   setDummyPositions(pos) {
     console.log("Dummy Positions");
-    pos.coords.latitude += this.dummyLatInitialAdd;
-    pos.coords.longitude += this.dummyLngInitialAdd;
+    pos.coords.latitude += environment.dummyLatInitialAdd;
+    pos.coords.longitude += environment.dummyLngInitialAdd;
 
     return pos;
   }

@@ -21,6 +21,8 @@ export class PositionService {
     maximumAge: 5000
   };
 
+  private alreadyRunFlag: boolean;
+
   constructor() {
   }
 
@@ -37,6 +39,8 @@ export class PositionService {
   }
 
   getPosition() {
+    if ( this.alreadyRunFlag ) return;
+
     let position = JSON.parse(environment.storage.getItem('rpPosition'));
     environment.storage.removeItem('rpPosition');
 
@@ -53,6 +57,7 @@ export class PositionService {
 
     // Case 3
     if ( !position && environment.dummyMovement ) {
+      // Todo: Clear the getCurrentPosition and watchPosition somewhere.
       navigator.geolocation.getCurrentPosition((position: Position) => {
             let pos = this.copyPositionObject(position);
             if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
@@ -79,6 +84,8 @@ export class PositionService {
           this.geolocationOptions
       );
     }
+
+    this.alreadyRunFlag = true;
   }
 
   positionPromise() {

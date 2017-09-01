@@ -69,7 +69,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.google = google;
       this.retrieveState();
     });
-    // this.positionService.getPosition();
+    this.positionService.getPosition();
     this.removeLongDisconnectedRiders();
     this.subscribeToUser();
   }

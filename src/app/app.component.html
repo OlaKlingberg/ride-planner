@@ -1,31 +1,28 @@
-<div (click)="showNavBar()">
-
-  <div class="container hidden-xs"
-       [ngClass]="{'no-header': location.path() === '/map' || ( location.path().includes('cuesheets') && location.path().includes('bike'))}">
-    <div class="row">
-      <div class="col-sm-12">
-        <h1>{{title}}</h1>
-        <div class="user-info">
-          <h5 *ngIf="user">You are logged in as {{ user?.fullName || async }}</h5>
-          <h5 *ngIf="ride">You are logged in to ride {{ ride }}</h5>
-          <!-- Todo: This line throws an error on automatic page refresh. -->
-           <h5 *ngIf="latitude">Lat: {{ latitude | number:'1.4-4' }}. Lng: {{ longitude | number: '1.4-4' }}. Acc: {{ accuracy | number: '1.0-0'}}</h5>
-        </div>
+<div class="container hidden-xs"
+     [ngClass]="{'no-header': location.path() === '/map' || ( location.path().includes('cuesheets') && location.path().includes('bike'))}">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>{{title}}</h1>
+      <div class="user-info">
+        <h5 *ngIf="user">You are logged in as {{ user?.fullName || async }}</h5>
+        <h5 *ngIf="ride">You are logged in to ride {{ ride }}</h5>
+        <h5 *ngIf="latitude">Lat: {{ latitude | number:'1.4-4' }}. Lng: {{ longitude | number: '1.4-4' }}. Acc: {{
+          accuracy | number: '1.0-0'}}</h5>
       </div>
-
     </div>
-  </div>
-
-  <rp-nav></rp-nav>
-  <rp-alert></rp-alert>
-  <router-outlet></router-outlet>
-
-  <div>
-    <ul>
-      <li *ngFor="let message of debugMessages">{{ message }}</li>
-    </ul>
 
   </div>
+</div>
+
+<rp-nav></rp-nav>
+<rp-alert></rp-alert>
+<router-outlet></router-outlet>
+
+<div>
+  <ul>
+    <li *ngFor="let message of debugMessages">{{ message }}</li>
+  </ul>
 
 </div>
+
 

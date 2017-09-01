@@ -22,7 +22,6 @@ export class PositionService {
   };
 
   constructor() {
-    // this.getPosition();
   }
 
   // Todo: Why can't I do this with JSON.stringify() and JSON.parse()?

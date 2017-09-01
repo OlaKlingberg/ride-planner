@@ -21,8 +21,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   private availableRides: Array<string> = null;
   private subscriptions: Array<Subscription> = [];
 
-  constructor(
-      // positionService: PositionService, // Initialize here, so that geolocation coords will be ready when the user gets to the map.
+  constructor(private positionService: PositionService, // Initialize here, so that geolocation coords will be ready when the user gets to the map.
               private rideService: RideService,
               private rideSubjectService: RideSubjectService,
               private router: Router,
@@ -30,6 +29,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.positionService.getPosition();
     this.rideService.emitGiveMeAvailableRides();
     this.subscribeToAvailableRides();
     this.subscribeToUser();

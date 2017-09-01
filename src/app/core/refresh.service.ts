@@ -31,6 +31,7 @@ export class RefreshService {
     }, environment.refreshOnNavigation);
   }
 
+  // Returns a Promise that resolves to true if the app was auto-refreshed.
   autoRefreshPromise() {
     return new Promise((resolve, reject) => {
       resolve(this.autoRefreshFlag);
@@ -41,9 +42,10 @@ export class RefreshService {
     this.autoRefreshFlag = environment.storage.getItem('rpAutoRefreshFlag') === 'true';
     environment.storage.removeItem('rpAutoRefreshFlag');
 
+    // If the user navigates away from map and navigates back, autoRefreshPromise should resolve false;
     setTimeout(() => {
       this.autoRefreshFlag = false;
-    }, 1000); // If the user navigates away from map and navigates back, autoRefreshPromise should resolve false;
+    }, 1000);
   }
 
   refresh() {

@@ -52,6 +52,8 @@ export class NavComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
+  // On normal page navigation, show the nav bar.
+  // After auto-refresh, don't show the nav bar if the page displayed is /map.
   subscribeToRoute() {
     let timer: Timer;
 

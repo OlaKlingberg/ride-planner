@@ -116,7 +116,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   refresh() {
+    console.log("refresh(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
+      console.log("refreshTimer completed");
       environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
       environment.storage.setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
@@ -194,7 +196,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.navService.navBarState$.next('show');
+    this.navService.navBarState$.next('show');  // Shouldn't be needed, but just to be on the safe side.
 
     clearTimeout(this.hideTimer);
     clearTimeout(this.refreshTimer);

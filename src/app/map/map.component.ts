@@ -67,7 +67,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.hideNav();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
-      this.retrieveMapMode();
+      this.retrieveState();
     });
     // this.positionService.getPosition();
     this.removeLongDisconnectedRiders();
@@ -117,9 +117,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
   refresh() {
     this.refreshTimer = setTimeout(() => {
+      environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
       environment.storage.setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
-    }, 10000);
+    }, environment.refreshOnMapPage);
   }
 
   removeLongDisconnectedRiders() {
@@ -133,17 +134,19 @@ export class MapComponent implements OnInit, OnDestroy {
     }, 10000);
   }
 
-  retrieveMapMode() {
+  retrieveState() {
+    const latLng = JSON.parse(environment.storage.getItem('rpLatLng'));
+    environment.storage.removeItem('rpLatLng');
     const mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
-    console.log();
     environment.storage.removeItem('rpMapMode');
-    this.setMapMode(mapMode);
+    this.setMapMode(latLng, mapMode);
   }
 
-  setMapMode(mapMode) {
+  setMapMode(latLng, mapMode) {
     if ( this.combinedSub ) this.combinedSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
 
+    this.latLng = latLng;
     this.mapMode = mapMode;
 
     clearTimeout(this.refreshTimer);

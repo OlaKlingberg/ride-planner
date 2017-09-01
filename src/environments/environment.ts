@@ -9,5 +9,7 @@ export const environment = {
   dummyMovement: true,
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: false,
+  refreshOnMapPage: 10000,
+  refreshOnNavigation: 200000,
   storage: sessionStorage
 };

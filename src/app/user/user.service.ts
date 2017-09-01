@@ -68,11 +68,14 @@ export class UserService {
     if ( ride ) this.rideSubjectService.ride$.next(ride);
   }
 
-  // On auto-refresh, this should get the user back faster than the call to the backend with the saved token.
   getUserFromStorage() {
-    let userString = environment.storage.getItem('rpUser');
-    if ( userString ) {
-      let user = new User(JSON.parse(userString));
+    // If I use the string, rather than the JSON-parsed object, in the conditional below, then a null string evaluates to true!
+    // Todo: Figure out how on earth null can evaluate to true.
+    let userObj = JSON.parse(environment.storage.getItem('rpUser'));
+
+    if ( userObj && userObj.length > 0 ) {
+      console.log("getUserFromStorage(). About to create new user with userString:", userObj);
+      let user = new User(JSON.parse(userObj));
       environment.storage.removeItem('rpUser');
       setTimeout(() => {
         this.user$.next(user);

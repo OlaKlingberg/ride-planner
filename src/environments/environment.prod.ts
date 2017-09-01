@@ -5,7 +5,7 @@ export const environment = {
   dummyMovement: true,
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: true,
-  refreshOnMapPage: 10000,
-  refreshOnNavigation: 20000,
+  refreshOnMapPage: 30000,
+  refreshOnNavigation: 180000,
   storage: sessionStorage
 };

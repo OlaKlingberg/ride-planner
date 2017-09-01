@@ -26,7 +26,6 @@ export class RefreshService {
       if (this.subscription) this.subscription.unsubscribe();
 
       this.subscription = this.router.events.subscribe(event => {
-        console.log("router.url:", this.router.url);
         this.refresh();
       });
     }, environment.refreshOnNavigation);

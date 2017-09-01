@@ -51,9 +51,12 @@ export class LoginComponent implements OnInit, OnDestroy {
               this.router.navigate([ this.returnUrl ]);
             },
             error => {
-              console.log("LoginComponent.login(). There was an error logging in.");
               console.log(error);
-              this.alertService.error("There was a problem logging in. Please try again later.");
+              if (error.status === 401) {
+                this.alertService.error(error._body);
+              } else {
+                this.alertService.error("There was a problem. Please try again later.");
+              }
               this.loading = false;
             }
         );

@@ -8,6 +8,7 @@ import { PositionService } from './core/position.service';
 import { UserService } from './user/user.service';
 import { User } from './user/user';
 import { RefreshService } from './core/refresh.service';
+import set = Reflect.set;
 
 @Component({
   selector: 'rp-root',
@@ -26,9 +27,7 @@ export class AppComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService, // Needs to be injected, to be initialized.
               private debuggingService: DebuggingService,           // Needs to be injected, to be initialized.
               public location: Location,
-              private navService: NavService,
               private positionService: PositionService,
-              // private refreshService: RefreshService,
               private userService: UserService) {                   // Is used in the template.
   }
 
@@ -36,9 +35,10 @@ export class AppComponent implements OnInit {
     this.refreshAfterSleep();
     this.subscribeToPosition();
     this.subscribeToUser();
-    // this.refreshService.refresh();
   }
 
+  // The app sometimes froze on a phone when you woke the phone up after sleep. Until I've figured out the reason, I use this workaround: Refresh the app automatically if the device is being awakened after more than 20s of sleep.
+  // Todo: Test if this workaround is still needed. If so, try to make it unnecessary.
   refreshAfterSleep() {
     let now: number;
     let prev: number = Date.now();
@@ -57,7 +57,9 @@ export class AppComponent implements OnInit {
   subscribeToPosition() {
     this.positionService.position$.subscribe(position => {
       if ( position ) {
-        this.latitude = position.coords.latitude;
+        setTimeout(() => {
+          this.latitude = position.coords.latitude;
+        }, 0);
         this.longitude = position.coords.longitude;
         this.accuracy = position.coords.accuracy;
       }
@@ -76,9 +78,5 @@ export class AppComponent implements OnInit {
     });
   }
 
-  // Todo: Figure out if I need this.
-  showNavBar() {
-    // this.navService.navBarState$.next('show');
-  }
 
 }

@@ -8,6 +8,7 @@ import { RideSubjectService } from '../ride-subject.service';
 import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
 import { RideService } from '../ride.service';
+import { PositionService } from '../../core/position.service';
 
 @Component({
   templateUrl: './ride-selector.component.html',
@@ -20,10 +21,13 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   private availableRides: Array<string> = null;
   private subscriptions: Array<Subscription> = [];
 
-  constructor(private rideService: RideService,
+  constructor(
+      // positionService: PositionService, // Initialize here, so that geolocation coords will be ready when the user gets to the map.
+              private rideService: RideService,
               private rideSubjectService: RideSubjectService,
               private router: Router,
-              private userService: UserService) {}
+              private userService: UserService) {
+  }
 
   ngOnInit() {
     this.rideService.emitGiveMeAvailableRides();

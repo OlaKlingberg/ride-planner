@@ -1,10 +1,16 @@
 <div class="table-container mat-elevation-z8">
   <md-table #table [dataSource]="dataSource" mdSort>
 
-    <!-- Name Column -->
-    <ng-container mdColumnDef="name">
+    <!-- Full Name Column -->
+    <ng-container mdColumnDef="fullName">
       <md-header-cell *mdHeaderCellDef md-sort-header>Name</md-header-cell>
-      <md-cell *mdCellDef="let row">{{ row.fullName }}</md-cell>
+      <md-cell *mdCellDef="let row">{{ row.lname }}, {{ row.fname }}</md-cell>
+    </ng-container>
+
+    <!-- First Name Column -->
+    <ng-container mdColumnDef="fname">
+      <md-header-cell *mdHeaderCellDef md-sort-header>First Name</md-header-cell>
+      <md-cell *mdCellDef="let row">{{ row.fname }}</md-cell>
     </ng-container>
 
     <!-- Phone Column -->
@@ -20,7 +26,7 @@
     </ng-container>
 
     <!-- Emergency Contact Column -->
-    <ng-container mdColumnDef="emergencyContact">
+    <ng-container mdColumnDef="emergencyName">
       <md-header-cell *mdHeaderCellDef md-sort-header>Emergency Contact</md-header-cell>
       <md-cell *mdCellDef="let row">{{ row.emergencyName }}</md-cell>
     </ng-container>

@@ -1,26 +1,29 @@
-/**
- * Data source to provide what data should be rendered in the table. Note that the data source
- * can retrieve its data in any way. In this case, the data source is provided a reference
- * to a common data base, ExampleDatabase. It is not the data source's responsibility to manage
- * the underlying data. Instead, it only needs to take the data and send the table exactly what
- * should be rendered.
- */
 import { DataSource } from '@angular/cdk/collections';
 import { MdSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
-import { TestDatabase } from './test-database';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { UserService } from '../user.service';
 
 export class MemberListDataSource extends DataSource<any> {
+  /** Stream that emits whenever the data has been modified. */
+  dataChange: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
-  constructor(private _testDatabase: TestDatabase,
-              private _sort: MdSort) {
+  get data() {
+    return this.dataChange.value;
+  }
+
+  constructor(private _sort: MdSort,
+              private userService: UserService) {
     super();
+    this.userService.getAllUsers().subscribe(data => {
+      this.dataChange.next(data.json().users);
+    });
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any> {
     const displayDataChanges = [
-      this._testDatabase.dataChange,
+      this.dataChange,
       this._sort.mdSortChange,
     ];
 
@@ -34,24 +37,40 @@ export class MemberListDataSource extends DataSource<any> {
 
   /** Returns a sorted copy of the database data. */
   getSortedData() {
-    const data = this._testDatabase.data.slice();
-    if (!this._sort.active || this._sort.direction == '') { return data; }
+    const data = this.data.slice();
+    if ( !this._sort.active || this._sort.direction == '' ) {
+      return data;
+    }
 
     return data.sort((a, b) => {
-      let propertyA: number|string = '';
-      let propertyB: number|string = '';
+      let propertyA: number | string = '';
+      let propertyB: number | string = '';
 
-      switch (this._sort.active) {
-        case 'name': [propertyA, propertyB] = [a.id, b.id]; break;
-        case 'phone': [propertyA, propertyB] = [a.name, b.name]; break;
-        case 'emergencyContact': [propertyA, propertyB] = [a.progress, b.progress]; break;
-        case 'emergencyPhone': [propertyA, propertyB] = [a.color, b.color]; break;
+      switch ( this._sort.active ) {
+        case 'fullName':
+          [ propertyA, propertyB ] = [ a.lname, b.lname ];
+          break;
+          case 'fname':
+          [ propertyA, propertyB ] = [ a.fname, b.fname ];
+          break;
+        case 'phone':
+          [ propertyA, propertyB ] = [ a.phone, b.phone ];
+          break;
+        case 'email':
+          [ propertyA, propertyB ] = [ a.email, b.email ];
+          break;
+        case 'emergencyName':
+          [ propertyA, propertyB ] = [ a.emergencyName, b.emergencyName ];
+          break;
+        case 'emergencyPhone':
+          [ propertyA, propertyB ] = [ a.emergencyPhone, b.emergencyPhone ];
+          break;
       }
 
       let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
       let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
 
-      return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
+      return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
     });
   }
 }

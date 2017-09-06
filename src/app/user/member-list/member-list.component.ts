@@ -4,9 +4,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import { MemberListDataSource } from './member-list-datasource';
-import { TestDatabase } from './test-database';
 import { UserService } from '../user.service';
-// import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-member-list',
@@ -14,8 +12,7 @@ import { UserService } from '../user.service';
   styleUrls: ['./member-list.component.scss']
 })
 export class MemberListComponent implements OnInit {
-  displayedColumns = ['name', 'phone', 'email', 'emergencyContact', 'emergencyPhone'];
-  testDatabase = new TestDatabase(this.userService);
+  displayedColumns = ['fullName', 'fname', 'phone', 'email', 'emergencyName', 'emergencyPhone'];
   dataSource: MemberListDataSource | null;
 
   @ViewChild(MdSort) sort: MdSort;
@@ -24,6 +21,7 @@ export class MemberListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = new MemberListDataSource(this.testDatabase, this.sort)
+    // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
+    this.dataSource = new MemberListDataSource(this.sort, this.userService)
   }
 }

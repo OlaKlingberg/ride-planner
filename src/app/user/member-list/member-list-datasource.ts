@@ -3,10 +3,26 @@ import { MdSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { UserService } from '../user.service';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/observable/fromEvent';
 
 export class MemberListDataSource extends DataSource<any> {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+
+  _filterChange = new BehaviorSubject('');
+
+  get filter(): string {
+    return this._filterChange.value;
+  }
+
+  set filter(filter: string) {
+    this._filterChange.next(filter);
+  }
 
   get data() {
     return this.dataChange.value;
@@ -25,10 +41,14 @@ export class MemberListDataSource extends DataSource<any> {
     const displayDataChanges = [
       this.dataChange,
       this._sort.mdSortChange,
+      this._filterChange
     ];
 
     return Observable.merge(...displayDataChanges).map(() => {
-      return this.getSortedData();
+      return this.getSortedData().filter(item => {
+        let searchStr = (item.fname + item.lname).toLowerCase();
+        return searchStr.indexOf(this.filter.toLowerCase()) != -1;
+      });
     });
   }
 

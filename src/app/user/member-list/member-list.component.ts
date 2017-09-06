@@ -12,7 +12,7 @@ import { UserService } from '../user.service';
   styleUrls: ['./member-list.component.scss']
 })
 export class MemberListComponent implements OnInit {
-  displayedColumns = ['fullName', 'fname', 'phone', 'email', 'emergencyName', 'emergencyPhone'];
+  displayedColumns = ['fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone'];
   dataSource: MemberListDataSource | null;
 
   @ViewChild(MdSort) sort: MdSort;

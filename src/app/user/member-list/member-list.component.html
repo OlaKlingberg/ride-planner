@@ -7,15 +7,9 @@
       <md-cell *mdCellDef="let row">{{ row.lname }}, {{ row.fname }}</md-cell>
     </ng-container>
 
-    <!-- First Name Column -->
-    <ng-container mdColumnDef="fname">
-      <md-header-cell *mdHeaderCellDef md-sort-header>First Name</md-header-cell>
-      <md-cell *mdCellDef="let row">{{ row.fname }}</md-cell>
-    </ng-container>
-
     <!-- Phone Column -->
     <ng-container mdColumnDef="phone">
-      <md-header-cell *mdHeaderCellDef md-sort-header>Phone</md-header-cell>
+      <md-header-cell *mdHeaderCellDef>Phone</md-header-cell>
       <md-cell *mdCellDef="let row">{{ row.phone }}</md-cell>
     </ng-container>
 
@@ -33,7 +27,7 @@
 
     <!-- Emergency Phone Column -->
     <ng-container mdColumnDef="emergencyPhone">
-      <md-header-cell *mdHeaderCellDef md-sort-header>Emergency Phone</md-header-cell>
+      <md-header-cell *mdHeaderCellDef>Emergency Phone</md-header-cell>
       <md-cell *mdCellDef="let row">{{ row.emergencyPhone }}</md-cell>
     </ng-container>
 

@@ -38,39 +38,36 @@ export class MemberListDataSource extends DataSource<any> {
   /** Returns a sorted copy of the database data. */
   getSortedData() {
     const data = this.data.slice();
-    if ( !this._sort.active || this._sort.direction == '' ) {
+    if ( !this._sort.active || this._sort.direction === '' ) {
       return data;
     }
 
     return data.sort((a, b) => {
-      let propertyA: number | string = '';
-      let propertyB: number | string = '';
+      let primaryA: number | string = '';
+      let primaryB: number | string = '';
+      let secondaryA: number | string = '';
+      let secondaryB: number | string = '';
 
       switch ( this._sort.active ) {
         case 'fullName':
-          [ propertyA, propertyB ] = [ a.lname, b.lname ];
-          break;
-          case 'fname':
-          [ propertyA, propertyB ] = [ a.fname, b.fname ];
-          break;
-        case 'phone':
-          [ propertyA, propertyB ] = [ a.phone, b.phone ];
+          [ primaryA, primaryB, secondaryA, secondaryB ] = [ a.lname, b.lname, a.fname, b.fname ];
           break;
         case 'email':
-          [ propertyA, propertyB ] = [ a.email, b.email ];
+          [ primaryA, primaryB, secondaryA, secondaryB ] = [ a.email, b.email, null, null ];
           break;
         case 'emergencyName':
-          [ propertyA, propertyB ] = [ a.emergencyName, b.emergencyName ];
-          break;
-        case 'emergencyPhone':
-          [ propertyA, propertyB ] = [ a.emergencyPhone, b.emergencyPhone ];
+          [ primaryA, primaryB, secondaryA, secondaryB ] = [ a.emergencyName, b.emergencyName, null, null ];
           break;
       }
 
-      let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-      let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+      let primA = isNaN(+primaryA) ? primaryA : +primaryA;
+      let primB = isNaN(+primaryB) ? primaryB : +primaryB;
+      let secA = isNaN(+secondaryA) ? secondaryA : +secondaryA;
+      let secB = isNaN(+secondaryB) ? secondaryB : +secondaryB;
 
-      return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
+      /** Sort on primary values. If primary values are equal, sort on secondary values. **/
+      return (primA < primB ? -1 : primA > primB ? 1 : secA < secB ? -1 : 1) *
+          (this._sort.direction === 'asc' ? 1 : -1);
     });
   }
 }

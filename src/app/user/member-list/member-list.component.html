@@ -1,0 +1,38 @@
+<div class="table-container mat-elevation-z8">
+  <md-table #table [dataSource]="dataSource" mdSort>
+
+    <!-- Name Column -->
+    <ng-container mdColumnDef="name">
+      <md-header-cell *mdHeaderCellDef md-sort-header>Name</md-header-cell>
+      <md-cell *mdCellDef="let row">{{ row.fullName }}</md-cell>
+    </ng-container>
+
+    <!-- Phone Column -->
+    <ng-container mdColumnDef="phone">
+      <md-header-cell *mdHeaderCellDef md-sort-header>Phone</md-header-cell>
+      <md-cell *mdCellDef="let row">{{ row.phone }}</md-cell>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container mdColumnDef="email">
+      <md-header-cell *mdHeaderCellDef md-sort-header>Email</md-header-cell>
+      <md-cell *mdCellDef="let row">{{ row.email }}</md-cell>
+    </ng-container>
+
+    <!-- Emergency Contact Column -->
+    <ng-container mdColumnDef="emergencyContact">
+      <md-header-cell *mdHeaderCellDef md-sort-header>Emergency Contact</md-header-cell>
+      <md-cell *mdCellDef="let row">{{ row.emergencyName }}</md-cell>
+    </ng-container>
+
+    <!-- Emergency Phone Column -->
+    <ng-container mdColumnDef="emergencyPhone">
+      <md-header-cell *mdHeaderCellDef md-sort-header>Emergency Phone</md-header-cell>
+      <md-cell *mdCellDef="let row">{{ row.emergencyPhone }}</md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns"></md-row>
+
+  </md-table>
+</div>

@@ -4,13 +4,15 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { nameSort } from '../../_lib/util';
 import { UserService } from '../user.service';
+import { User } from '../user';
 
 @Component({
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent implements OnInit, OnDestroy {
-  users: Array<object>;
+  // users: Array<User>;
+  users: User[];
 
   private subscription: Subscription;
 
@@ -19,8 +21,8 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.userService.getAllUsers()
-        .subscribe(response => {
-          this.users = response.json().users;
+        .subscribe(data => {
+          this.users = data.json().users;
           this.users.sort(nameSort);
         }); // Todo: Handle errors.
   }

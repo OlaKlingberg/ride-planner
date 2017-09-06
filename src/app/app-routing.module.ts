@@ -32,7 +32,7 @@ const routes: Routes = [
     data: { preload: true }
   },
   {
-    path: 'members',
+    path: 'users',
     canActivate: [ RideLeaderGuard ],
     loadChildren: 'app/user/user.module#UserModule'
   },

@@ -6,13 +6,9 @@
  * should be rendered.
  */
 import { DataSource } from '@angular/cdk/collections';
-// import { ExampleDatabase } from '../example-database';
 import { MdSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
-import { UserService } from '../user.service';
 import { TestDatabase } from './test-database';
-
-// import { UserData } from '../user-data.interface';
 
 export class MemberListDataSource extends DataSource<any> {
 

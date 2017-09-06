@@ -1,7 +1,5 @@
 /** An example database that the data source uses to retrieve data for the table. */
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-// import { UserData } from './user-data.interface';
-// import { COLORS, NAMES } from './constants';
 import { UserService } from '../user.service';
 
 export class TestDatabase {

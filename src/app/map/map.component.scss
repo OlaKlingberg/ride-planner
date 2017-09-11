@@ -74,4 +74,6 @@ agm-map {
   opacity: .3;
 }
 
-
+/deep/ .info-window {
+  color: navy !important;
+}

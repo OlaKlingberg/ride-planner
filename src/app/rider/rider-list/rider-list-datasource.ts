@@ -2,7 +2,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { MdSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { UserService } from '../user.service';
+import { RiderService } from '../rider.service';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -10,7 +10,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
 
-export class MemberListDataSource extends DataSource<any> {
+export class RiderListDataSource extends DataSource<any> {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
@@ -29,11 +29,12 @@ export class MemberListDataSource extends DataSource<any> {
   }
 
   constructor(private _sort: MdSort,
-              private userService: UserService) {
+              private riderService: RiderService) {
     super();
     // Todo: Do I have a memory leak here? When should I unsubscribe from this?
-    this.userService.getAllUsers().subscribe(data => {
-      this.dataChange.next(data.json().users);
+    // Todo: Do I need this. Can't I use riderService.riderList$ directly instead?
+    this.riderService.riderList$.subscribe(data => {
+      this.dataChange.next(data);
     });
   }
 

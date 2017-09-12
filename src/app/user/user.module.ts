@@ -4,10 +4,11 @@ import { NgModule } from '@angular/core';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserRoutingModule } from './user-routing.module';
 import {
-  MdAutocompleteModule, MdCardModule, MdCheckboxModule, MdFormFieldModule, MdInputModule, MdPaginatorModule,
-  MdRadioModule,
+  MdFormFieldModule,
+  MdInputModule,
   MdSortModule,
-  MdTableModule
+  MdTableModule,
+  MdTooltipModule
 } from '@angular/material';
 import { MemberListComponent } from './member-list/member-list.component';
 import { SharedModule } from '../shared/shared.module';
@@ -16,15 +17,11 @@ import { SharedModule } from '../shared/shared.module';
 @NgModule({
   imports: [
     CommonModule,
-    // MdAutocompleteModule,
     MdFormFieldModule,
     MdInputModule,
-    // MdCardModule,
-    // MdCheckboxModule,
-    // MdPaginatorModule,
-    // MdRadioModule,
     MdSortModule,
     MdTableModule,
+    MdTooltipModule,
     SharedModule,
     UserRoutingModule
   ],

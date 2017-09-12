@@ -1,67 +1,77 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-
-import Socket = SocketIOClient.Socket;
-import { Subscription } from 'rxjs/Subscription';
-
-import { RideSubjectService } from '../../ride/ride-subject.service';
-import { SocketService } from '../../core/socket.service';
-import { User } from '../../user/user';
-import { UserService } from '../../user/user.service';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MdSort } from '@angular/material';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
+import { RiderListDataSource} from './rider-list-datasource';
 import { RiderService } from '../rider.service';
+import { RideSubjectService } from '../../ride/ride-subject.service';
+import { Observable } from 'rxjs/Observable';
+
+
+import { UserService } from '../../user/user.service';
 
 @Component({
   templateUrl: './rider-list.component.html',
   styleUrls: [ './rider-list.component.scss' ]
 })
 export class RiderListComponent implements OnInit, OnDestroy {
-  ride: string;
-  riderList: Array<User>;
-  user: User;
+  displayedColumns = ['fullName', 'phone', 'emergencyName', 'emergencyPhone', 'disconnected'];
+  dataSource: RiderListDataSource | null;
 
-  private rideSub: Subscription;
-  private socket: Socket;
-  private subscriptions: Array<Subscription> = [];
-  private userSub: Subscription;
+  @ViewChild('filter') filter: ElementRef;
+  @ViewChild(MdSort) sort: MdSort;
 
   constructor(private riderService: RiderService,
               private rideSubjectService: RideSubjectService,
-              private socketService: SocketService,
+              // private socketService: SocketService,
               private userService: UserService) {
-    this.socket = this.socketService.socket;
+    // this.socket = this.socketService.socket;
   }
 
   ngOnInit() {
-    this.subscribeToRide();
-    this.subscribeToRiderList();
-    this.subscribeToUser();
+    // this.subscribeToRiderListide();
+    // this.subscribeToRiderList();
+    // this.subscribeToUser();
+    // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
+    this.dataSource = new RiderListDataSource(this.sort, this.riderService);
+    console.log(this.filter);
+
+    Observable.fromEvent(this.filter.nativeElement, 'keyup')
+        .debounceTime(150)
+        .distinctUntilChanged()
+        .subscribe(() => {
+          if (!this.dataSource) { return; }
+          this.dataSource.filter = this.filter.nativeElement.value;
+        });
   }
 
-  subscribeToRide() {
-    let sub = this.rideSubjectService.ride$.subscribe(ride => {
-      this.ride = ride;
-    });
-    this.subscriptions.push(sub);
-  }
-
-  subscribeToRiderList() {
-    let sub = this.riderService.riderList$.subscribe(riderList => {
-      this.riderList = riderList;
-    });
-    this.subscriptions.push(sub);
-  }
-
-  subscribeToUser() {
-    let sub = this.userService.user$.subscribe(user => {
-      this.user = user;
-      if ( user.ride ) this.riderService.emitGiveMeRiderList(user);
-    });
-    this.subscriptions.push(sub);
-  }
+  // subscribeToRide() {
+  //   let sub = this.rideSubjectService.ride$.subscribe(ride => {
+  //     this.ride = ride;
+  //   });
+  //   this.subscriptions.push(sub);
+  // }
+  //
+  // subscribeToRiderList() {
+  //   let sub = this.riderService.riderList$.subscribe(riderList => {
+  //     this.riderList = riderList;
+  //   });
+  //   this.subscriptions.push(sub);
+  // }
+  //
+  // subscribeToUser() {
+  //   let sub = this.userService.user$.subscribe(user => {
+  //     this.user = user;
+  //     if ( user.ride ) this.riderService.emitGiveMeRiderList(user);
+  //   });
+  //   this.subscriptions.push(sub);
+  // }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => {
-      return sub.unsubscribe();
-    });
+    // this.subscriptions.forEach(sub => {
+    //   return sub.unsubscribe();
+    // });
   }
 
 }

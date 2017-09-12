@@ -1,29 +1,57 @@
-<div class="container">
+<div class="container mat-app-background">
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-xs-12">
 
       <div *ngIf="ride">
+
         <h3>{{ ride }} Ride</h3>
-        <table class="table table-striped table-bordered">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Emergency Contact</th>
-            <th>Emergency Phone</th>
-            <th>Disconnected</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let rider of riderList">
-            <td>{{ rider.lname }}, {{ rider.fname }}</td>
-            <td>{{ rider.phone }}</td>
-            <td>{{ rider.emergencyName }}</td>
-            <td>{{ rider.emergencyPhone }}</td>
-            <td>{{ rider.minutesSinceDisconnected }}</td>
-          </tr>
-          </tbody>
-        </table>
+
+        <div class="table-container mat-elevation-z8">
+          <div class="mat-header">
+            <md-form-field floatPlaceholder="never">
+              <input mdInput #filter placeholder="Filter riders">
+            </md-form-field>
+          </div>
+
+          <md-table #table [dataSource]="dataSource" mdSort>
+
+            <ng-container mdColumnDef="fullName">
+              <md-header-cell *mdHeaderCellDef md-sort-header>
+                <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Name</span>
+              </md-header-cell>
+              <md-cell *mdCellDef="let row">{{ row.lname }}, {{ row.fname }}</md-cell>
+            </ng-container>
+
+            <ng-container mdColumnDef="phone">
+              <md-header-cell *mdHeaderCellDef>Phone</md-header-cell>
+              <md-cell *mdCellDef="let row">{{ row.phone }}</md-cell>
+            </ng-container>
+
+            <ng-container mdColumnDef="emergencyName">
+              <md-header-cell *mdHeaderCellDef md-sort-header>
+                <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Emergency Contact</span>
+              </md-header-cell>
+              <md-cell *mdCellDef="let row">{{ row.emergencyName }}</md-cell>
+            </ng-container>
+ø
+            <ng-container mdColumnDef="emergencyPhone">
+              <md-header-cell *mdHeaderCellDef md-sort-header>Emergency Phone</md-header-cell>
+              <md-cell *mdCellDef="let row">{{ row.emergencyPhone }}</md-cell>
+            </ng-container>
+
+            <ng-container mdColumnDef="disconnected">
+              <md-header-cell *mdHeaderCellDef md-sort-header>
+                <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Disconnected</span>
+              </md-header-cell>
+              <md-cell *mdCellDef="let row">{{ row.disconnected }}</md-cell>
+            </ng-container>
+
+            <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+            <md-row *mdRowDef="let row; columns: displayedColumns"></md-row>
+
+          </md-table>
+
+        </div>
 
       </div>
 

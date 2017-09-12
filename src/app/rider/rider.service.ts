@@ -19,6 +19,10 @@ export class RiderService {
     this.socket.emit('giveMeRiderList', user.ride);
   }
 
+  getAllRiders() {
+    return this.riderList$.value;
+  }
+
   onRiderList() {
     this.socket.on('riderList', riderList => {
       riderList = riderList.map(rider => new User(rider));

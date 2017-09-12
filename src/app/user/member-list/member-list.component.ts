@@ -23,7 +23,8 @@ export class MemberListComponent implements OnInit {
 
   ngOnInit() {
     // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
-    this.dataSource = new MemberListDataSource(this.sort, this.userService)
+    this.dataSource = new MemberListDataSource(this.sort, this.userService);
+    console.log(this.filter);
 
     Observable.fromEvent(this.filter.nativeElement, 'keyup')
         .debounceTime(150)

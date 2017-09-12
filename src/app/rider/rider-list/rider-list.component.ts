@@ -18,8 +18,9 @@ import { UserService } from '../../user/user.service';
 export class RiderListComponent implements OnInit, OnDestroy {
   displayedColumns = ['fullName', 'phone', 'emergencyName', 'emergencyPhone', 'disconnected'];
   dataSource: RiderListDataSource | null;
+  ride: string = '';
 
-  @ViewChild('filter') filter: ElementRef;
+  @ViewChild('filter') filter: ElementRef = null;
   @ViewChild(MdSort) sort: MdSort;
 
   constructor(private riderService: RiderService,
@@ -30,20 +31,28 @@ export class RiderListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.ride = this.rideSubjectService.ride$.value;
     // this.subscribeToRiderListide();
     // this.subscribeToRiderList();
     // this.subscribeToUser();
     // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
-    this.dataSource = new RiderListDataSource(this.sort, this.riderService);
-    console.log(this.filter);
 
-    Observable.fromEvent(this.filter.nativeElement, 'keyup')
-        .debounceTime(150)
-        .distinctUntilChanged()
-        .subscribe(() => {
-          if (!this.dataSource) { return; }
-          this.dataSource.filter = this.filter.nativeElement.value;
-        });
+    if (this.ride) {
+      this.dataSource = new RiderListDataSource(this.sort, this.riderService);
+      console.log("ride:", this.ride);
+      console.log("filter:", this.filter);
+
+
+      Observable.fromEvent(this.filter.nativeElement, 'keyup')
+          .debounceTime(150)
+          .distinctUntilChanged()
+          .subscribe(() => {
+            if (!this.dataSource) { return; }
+            this.dataSource.filter = this.filter.nativeElement.value;
+          });
+    }
+
+
   }
 
   // subscribeToRide() {

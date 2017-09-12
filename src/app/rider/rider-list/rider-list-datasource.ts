@@ -59,6 +59,8 @@ export class RiderListDataSource extends DataSource<any> {
 
   /** Returns a sorted copy of the database data. */
   getSortedData() {
+    if ( !this.data ) return [];
+
     const data = this.data.slice();
     if ( !this._sort.active || this._sort.direction === '' ) {
       return data;

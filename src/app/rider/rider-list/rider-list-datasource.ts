@@ -9,6 +9,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
 import { MapService } from '../../map/map.service';
+import { RiderService } from '../rider.service';
 
 export class RiderListDataSource extends DataSource<any> {
   _filterChange = new BehaviorSubject('');
@@ -22,18 +23,18 @@ export class RiderListDataSource extends DataSource<any> {
   }
 
   get data() {
-    return this.mapService.riderList$.value;
+    return this.riderService.riderList$.value;
   }
 
   constructor(private _sort: MdSort,
-              private mapService: MapService) {
+              private riderService: RiderService) {
     super();
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any> {
     const displayDataChanges = [
-      this.mapService.riderList$,
+      this.riderService.riderList$,
       this._sort.mdSortChange,
       this._filterChange
     ];

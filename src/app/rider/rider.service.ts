@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import * as _ from 'lodash';
 import { User } from '../user/user';
 import { SocketService } from '../core/socket.service';
 import Socket = SocketIOClient.Socket;
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class RiderService {
   riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
+  user: User = null;
 
   private socket: Socket;
   private zCounter: number = 0;
 
-  constructor(private socketService: SocketService) {
+  constructor(private socketService: SocketService,
+              private userService: UserService) {
     this.socket = socketService.socket;
     this.onDisconnectedRider();
     this.onJoinedRider();
     this.onRemovedRider();
     this.onRiderList();
     this.onUpdatedRiderPosition();
+    this.subscribeToUser();
   }
 
   onDisconnectedRider() {
@@ -25,7 +30,7 @@ export class RiderService {
       console.log('disconnectedRider');
       this.riderListPromise().then((riderList: Array<User>) => {
         let idx = _.findIndex(riderList, rider => rider._id === disconnectedRider._id);
-        if ( idx >= 0) {
+        if ( idx >= 0 ) {
           riderList[ idx ].disconnected = disconnectedRider.disconnected;
           this.riderList$.next(riderList);
         }
@@ -42,18 +47,16 @@ export class RiderService {
         console.log("Counter reached 1000! About to emit giveMeRiderList.");
         this.socket.emit('giveMeRiderList', this.user.ride);
       } else {
-        if ( joinedRider._id !== this.user._id ) {
-          joinedRider = new User(joinedRider);
-          joinedRider.zIndex = this.zCounter++;
-          if ( joinedRider.leader ) joinedRider.zIndex += 500;
-          this.riderListPromise().then((riderList: Array<User>) => {
-            // console.log("riderList before adding the joined rider:", riderList);
-            riderList = riderList.filter(rider => rider._id !== joinedRider._id);
-            riderList.push(joinedRider);
-            // console.log("Updated riderList:", riderList);
-            this.riderList$.next(riderList);
-          });
-        }
+        // if ( joinedRider._id !== this.user._id ) {
+        joinedRider = new User(joinedRider);
+        // joinedRider.zIndex = this.zCounter++;
+        // if ( joinedRider.leader ) joinedRider.zIndex += 500;
+        this.riderListPromise().then((riderList: Array<User>) => {
+          riderList = riderList.filter(rider => rider._id !== joinedRider._id); // Remove rider, if rider already exists.
+          riderList.push(joinedRider);
+          this.riderList$.next(riderList);
+        });
+        // }
       }
     });
   }
@@ -102,4 +105,9 @@ export class RiderService {
     return riderListPromise;
   }
 
+  subscribeToUser() {
+    this.userService.user$.subscribe(user => {
+      this.user = user;
+    });
+  }
 }

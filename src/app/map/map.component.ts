@@ -19,6 +19,7 @@ import { UserService } from '../user/user.service';
 import { RefreshService } from '../core/refresh.service';
 import { MapService } from './map.service';
 import { environment } from '../../environments/environment';
+import { RiderService } from '../rider/rider.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -44,6 +45,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private riderListSub: Subscription;
   private socket: Socket;
   private userSub: Subscription;
+  // private zCounter: number = 0;
 
   @ViewChild('agmMap') agmMap;
 
@@ -52,9 +54,9 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('userInfoWindow') userInfoWindow;
 
   constructor(private mapsAPILoader: MapsAPILoader,
-              private mapService: MapService,
               private navService: NavService,
               private refreshService: RefreshService,
+              private riderService: RiderService,
               private positionService: PositionService,
               private socketService: SocketService,
               private userService: UserService) {
@@ -62,6 +64,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.subscribeToUser();
     this.getRiderList();
     this.hideButtonsOnAutoRefresh();
     this.hideNav();
@@ -71,7 +74,6 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     this.positionService.getPosition();
     this.removeLongDisconnectedRiders();
-    this.subscribeToUser();
   }
 
   closeInfoWindows(_id) {
@@ -86,9 +88,10 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   getRiderList() {
-    this.riderListSub = this.mapService.riderList$.subscribe(riderList => {
+    this.riderListSub = this.riderService.riderList$.subscribe(riderList => {
       setTimeout(() => {
-        this.riderList = riderList;
+        // Remove the user from riderList. The user will be displayed with a separate marker.
+        if (riderList && this.user) this.riderList = this.setZIndexAndOpacity(riderList.filter(rider => rider._id !== this.user._id))
       }, 0);
     });
   }
@@ -119,7 +122,7 @@ export class MapComponent implements OnInit, OnDestroy {
     console.log("refresh(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
       console.log("refreshTimer completed");
-      if (this.latLng) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
+      if ( this.latLng ) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
       environment.storage.setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
     }, environment.refreshOnMapPage);
@@ -131,7 +134,7 @@ export class MapComponent implements OnInit, OnDestroy {
         return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
       });
 
-      this.mapService.riderList$.next(this.riderList); // riderList$ is used for setting the map bounds.
+      this.riderService.riderList$.next(this.riderList);
     }, 10000);
   }
 
@@ -147,7 +150,7 @@ export class MapComponent implements OnInit, OnDestroy {
     if ( this.combinedSub ) this.combinedSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
 
-    if (latLng) this.latLng = latLng;
+    if ( latLng ) this.latLng = latLng;
     this.mapMode = mapMode;
 
     clearTimeout(this.refreshTimer);
@@ -156,12 +159,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.refresh();
 
-    const combined = Rx.Observable.combineLatest(this.mapService.riderList$, this.userService.user$);
+    const combined = Rx.Observable.combineLatest(this.riderService.riderList$, this.userService.user$);
     this.combinedSub = combined.subscribe(value => {
       const riderList = value[ 0 ];
       const user = value[ 1 ];
 
-      if ( !user.position || !user.position.coords || !user.position.coords.latitude || !user.position.coords.longitude ) return;
+      if ( !user.position || !user.position.coords || !user.position.coords.latitude ) return;
 
       let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
 
@@ -173,15 +176,26 @@ export class MapComponent implements OnInit, OnDestroy {
         });
       }
 
-      // if ( user.position && user.position.coords && user.position.coords.latitude) {
       bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
-      // }
 
       this.latLng = bounds.toJSON();
       // Add 10% to the map at the upper edge for what is covered by the phone-browser address bar.
       this.latLng.north += (this.latLng.north - this.latLng.south) / 10;
     });
 
+  }
+
+  setZIndexAndOpacity(riderList) {
+    let zCounter: number = 0;
+    riderList = riderList.map(rider => {
+      rider.zIndex = zCounter++;
+      if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
+      if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
+
+      return rider;
+    });
+
+    return riderList;
   }
 
   showNav() {

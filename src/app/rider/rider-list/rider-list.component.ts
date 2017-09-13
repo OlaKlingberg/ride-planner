@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import { RiderListDataSource } from './rider-list-datasource';
 import { RideSubjectService } from '../../ride/ride-subject.service';
 import { Observable } from 'rxjs/Observable';
-import { MapService } from '../../map/map.service';
+import { RiderService } from '../rider.service';
 
 @Component({
   templateUrl: './rider-list.component.html',
@@ -20,7 +20,7 @@ export class RiderListComponent implements OnInit {
   @ViewChild('filter') filter: ElementRef = null;
   @ViewChild(MdSort) sort: MdSort;
 
-  constructor(private mapService: MapService,
+  constructor(private riderService: RiderService,
               private rideSubjectService: RideSubjectService) {
   }
 
@@ -30,7 +30,7 @@ export class RiderListComponent implements OnInit {
     if ( !this.ride ) return;
 
     // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
-    this.dataSource = new RiderListDataSource(this.sort, this.mapService);
+    this.dataSource = new RiderListDataSource(this.sort, this.riderService);
 
     Observable.fromEvent(this.filter.nativeElement, 'keyup')
         .debounceTime(150)

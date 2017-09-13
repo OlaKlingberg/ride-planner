@@ -70,7 +70,6 @@ export class MapService {
       console.log('removedRider');
       let riders = this.riderList$.value.filter(rider => rider._id !== _id);
 
-      // This will be used to set the map bounds.
       this.riderList$.next(riders);
     });
   }

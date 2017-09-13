@@ -33,7 +33,8 @@ export class MemberListDataSource extends DataSource<any> {
     super();
     // Todo: Do I have a memory leak here? When should I unsubscribe from this?
     this.userService.getAllUsers().subscribe(data => {
-      this.dataChange.next(data.json().users);
+      console.log("MemberList. data:", data);
+      this.dataChange.next(data);
     });
   }
 

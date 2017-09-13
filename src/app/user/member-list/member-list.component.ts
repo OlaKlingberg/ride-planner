@@ -30,7 +30,7 @@ export class MemberListComponent implements OnInit {
         .debounceTime(150)
         .distinctUntilChanged()
         .subscribe(() => {
-          if (!this.dataSource) { return; }
+          if (!this.dataSource) return;
           this.dataSource.filter = this.filter.nativeElement.value;
         });
   }

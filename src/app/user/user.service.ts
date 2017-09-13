@@ -60,7 +60,8 @@ export class UserService {
     this.headers = new Headers({ 'x-auth': this.token });
     this.requestOptions = new RequestOptions({ headers: this.headers });
 
-    return this.http.get(`${environment.api}/users`, this.requestOptions);
+    return this.http.get(`${environment.api}/users`, this.requestOptions)
+        .map(data => data.json().users);
   }
 
   getRideFromStorage() {

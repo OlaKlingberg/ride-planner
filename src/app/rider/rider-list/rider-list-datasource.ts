@@ -11,9 +11,6 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
 
 export class RiderListDataSource extends DataSource<any> {
-  /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-
   _filterChange = new BehaviorSubject('');
 
   get filter(): string {
@@ -25,23 +22,18 @@ export class RiderListDataSource extends DataSource<any> {
   }
 
   get data() {
-    return this.dataChange.value;
+    return this.riderService.riderList$.value;
   }
 
   constructor(private _sort: MdSort,
               private riderService: RiderService) {
     super();
-    // Todo: Do I have a memory leak here? When should I unsubscribe from this?
-    // Todo: Do I need this. Can't I use riderService.riderList$ directly instead?
-    this.riderService.riderList$.subscribe(data => {
-      this.dataChange.next(data);
-    });
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any> {
     const displayDataChanges = [
-      this.dataChange,
+      this.riderService.riderList$,
       this._sort.mdSortChange,
       this._filterChange
     ];

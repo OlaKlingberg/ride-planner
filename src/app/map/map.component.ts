@@ -119,7 +119,7 @@ export class MapComponent implements OnInit, OnDestroy {
     console.log("refresh(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
       console.log("refreshTimer completed");
-      environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
+      if (this.latLng) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
       environment.storage.setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
     }, environment.refreshOnMapPage);
@@ -202,7 +202,7 @@ export class MapComponent implements OnInit, OnDestroy {
     clearTimeout(this.refreshTimer);
     clearInterval(this.intervalTimer);
 
-    if ( this.combinedSub.unsubscribe ) this.combinedSub.unsubscribe();
+    if ( this.combinedSub ) this.combinedSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();
     if ( this.riderListSub ) this.riderListSub.unsubscribe();
     if ( this.userSub ) this.userSub.unsubscribe();

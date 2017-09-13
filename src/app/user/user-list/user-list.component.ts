@@ -22,7 +22,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.userService.getAllUsers()
         .subscribe(data => {
-          this.users = data.json().users;
+          this.users = data;
           this.users.sort(nameSort);
         }); // Todo: Handle errors.
   }

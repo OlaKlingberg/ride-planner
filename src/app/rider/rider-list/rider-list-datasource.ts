@@ -8,7 +8,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
-import { MapService } from '../../map/map.service';
 import { RiderService } from '../rider.service';
 
 export class RiderListDataSource extends DataSource<any> {

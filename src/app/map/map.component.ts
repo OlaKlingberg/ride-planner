@@ -26,8 +26,6 @@ import { RiderService } from '../rider/rider.service';
   animations: MapAnimations
 })
 export class MapComponent implements OnInit, OnDestroy {
-  boundsOnlyUser: any;
-  boundsAllRiders: any;
   buttonState: string = null;
   colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
   latLng: LatLngBoundsLiteral;
@@ -40,6 +38,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private combinedSub: Subscription;
   private google: any;
   private hideTimer: Timer;
+  private intervalTimer: Timer;
   private positionSub: Subscription;
   private refreshTimer: any;
   private riderListSub: Subscription;
@@ -72,6 +71,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.retrieveState();
     });
     this.positionService.getPosition();
+    this.removeLongDisconnectedRiders();
   }
 
   closeInfoWindows(_id) {
@@ -86,38 +86,62 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   getRiderList() {
-    const combined = Rx.Observable.combineLatest(this.riderService.riderList$, this.userService.user$);
-    this.combinedSub = combined.subscribe(value => {
-      let riderList = value[ 0 ];
-      const user = value[ 1 ];
-
-      // setTimeout(() => {
-      if ( riderList && user && user.position && user.position.coords && user.position.coords.latitude ) {
-        riderList = riderList.filter(rider => rider._id !== this.user._id); // The user will be displayed with a separate marker.
-        riderList = _.filter(riderList, rider => {
-          !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders
-        });
-        this.riderList = this.setZIndexAndOpacity(riderList);
-        this.setBounds(riderList, user);
-      }
-      // }, 0);
-
+    this.riderListSub = this.riderService.riderList$.subscribe(riderList => {
+      setTimeout(() => {
+        // Remove the user from riderList. The user will be displayed with a separate marker.
+        if (riderList && this.user) this.riderList = this.setZIndexAndOpacity(riderList.filter(rider => rider._id !== this.user._id))
+      }, 0);
     });
   }
 
-  setBounds(riderList, user) {
-    let boundsOnlyUser: LatLngBounds = new this.google.maps.LatLngBounds();
-    let boundsAllRiders: LatLngBounds = new this.google.maps.LatLngBounds();
+  hideButtonsOnAutoRefresh() {
+    this.refreshService.autoRefreshPromise().then(autoRefresh => {
+      this.buttonState = autoRefresh ? 'hide' : 'show';
+    });
+  }
 
-    boundsOnlyUser.extend({lat: user.position.coords.latitude, lng: user.position.coords.longitude});
-    boundsAllRiders.extend({lat: user.position.coords.latitude, lng: user.position.coords.longitude});
+  hideNav() {
+    clearTimeout(this.hideTimer);
 
-    riderList.forEach(rider => {
-      if ( rider.position.coords.latitude && rider.position.coords.longitude ) {
-        boundsAllRiders.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
-      }
-    })
+    // Wait till the map is shown (which happens when there is a position), set timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
+    this.positionService.positionPromise().then(() => {
+      this.hideTimer = setTimeout(() => {
+        let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
+        if ( !ariaExpanded ) {
+          this.navService.navBarState$.next('hide');
+          this.buttonState = 'hide';
+        }
+      }, environment.fadeNav);
+    });
 
+  }
+
+  refresh() {
+    console.log("refresh(). About to set refreshTimer");
+    this.refreshTimer = setTimeout(() => {
+      console.log("refreshTimer completed");
+      if ( this.latLng ) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
+      environment.storage.setItem('rpMapMode', this.mapMode);
+      this.refreshService.refresh();
+    }, environment.refreshOnMapPage);
+  }
+
+  removeLongDisconnectedRiders() {
+    this.intervalTimer = setInterval(() => {
+      this.riderList = _.filter(this.riderList, rider => {
+        return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
+      });
+
+      this.riderService.riderList$.next(this.riderList);
+    }, 10000);
+  }
+
+  retrieveState() {
+    const latLng = JSON.parse(environment.storage.getItem('rpLatLng'));
+    environment.storage.removeItem('rpLatLng');
+    const mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
+    environment.storage.removeItem('rpMapMode');
+    this.setMapMode(mapMode, latLng);
   }
 
   setMapMode(mapMode, latLng) {
@@ -156,47 +180,7 @@ export class MapComponent implements OnInit, OnDestroy {
       // Add 10% to the map at the upper edge for what is covered by the phone-browser address bar.
       this.latLng.north += (this.latLng.north - this.latLng.south) / 10;
     });
-  }
 
-
-  hideButtonsOnAutoRefresh() {
-    this.refreshService.autoRefreshPromise().then(autoRefresh => {
-      this.buttonState = autoRefresh ? 'hide' : 'show';
-    });
-  }
-
-  hideNav() {
-    clearTimeout(this.hideTimer);
-
-    // Wait till the map is shown (which happens when there is a position), set timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
-    this.positionService.positionPromise().then(() => {
-      this.hideTimer = setTimeout(() => {
-        let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
-        if ( !ariaExpanded ) {
-          this.navService.navBarState$.next('hide');
-          this.buttonState = 'hide';
-        }
-      }, environment.fadeNav);
-    });
-
-  }
-
-  refresh() {
-    console.log("refresh(). About to set refreshTimer");
-    this.refreshTimer = setTimeout(() => {
-      console.log("refreshTimer completed");
-      if ( this.latLng ) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
-      environment.storage.setItem('rpMapMode', this.mapMode);
-      this.refreshService.refresh();
-    }, environment.refreshOnMapPage);
-  }
-
-  retrieveState() {
-    const latLng = JSON.parse(environment.storage.getItem('rpLatLng'));
-    environment.storage.removeItem('rpLatLng');
-    const mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
-    environment.storage.removeItem('rpMapMode');
-    this.setMapMode(mapMode, latLng);
   }
 
   setZIndexAndOpacity(riderList) {
@@ -228,7 +212,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     clearTimeout(this.hideTimer);
     clearTimeout(this.refreshTimer);
-    // clearInterval(this.intervalTimer);
+    clearInterval(this.intervalTimer);
 
     if ( this.combinedSub ) this.combinedSub.unsubscribe();
     if ( this.positionSub ) this.positionSub.unsubscribe();

@@ -8,7 +8,7 @@ import { UserService } from '../user/user.service';
 
 @Injectable()
 export class RiderService {
-  riderList$: BehaviorSubject<Array<User>> = new BehaviorSubject(null);
+  riderList$: BehaviorSubject<User[]> = new BehaviorSubject(null);
   user: User = null;
 
   private socket: Socket;
@@ -32,6 +32,7 @@ export class RiderService {
         let idx = _.findIndex(riderList, rider => rider._id === disconnectedRider._id);
         if ( idx >= 0 ) {
           riderList[ idx ].disconnected = disconnectedRider.disconnected;
+          // console.log("About to call riderList$.next() in onDisconnectedRider()");
           this.riderList$.next(riderList);
         }
       });
@@ -51,10 +52,12 @@ export class RiderService {
         joinedRider = new User(joinedRider);
         // joinedRider.zIndex = this.zCounter++;
         // if ( joinedRider.leader ) joinedRider.zIndex += 500;
-        this.riderListPromise().then((riderList: Array<User>) => {
+        this.riderListPromise().then((riderList: User[]) => {
           riderList = riderList.filter(rider => rider._id !== joinedRider._id); // Remove rider, if rider already exists.
           riderList.push(joinedRider);
+          // console.log("About to call riderList$.next() in onJoinedRider()");
           this.riderList$.next(riderList);
+          // console.log('joinedRider. riderList:', this.riderList$.value);
         });
         // }
       }
@@ -63,22 +66,27 @@ export class RiderService {
 
   onRemovedRider() {
     this.socket.on('removedRider', _id => {
-      console.log('removedRider');
+      console.log('removedRider. riderList:', this.riderList$.value);
+      console.log('');
       let riders = this.riderList$.value.filter(rider => rider._id !== _id);
 
+      // console.log("About to call riderList$.next() in onRemovedRider()");
       this.riderList$.next(riders);
     });
   }
 
   onRiderList() {
     this.socket.on('riderList', riderList => {
+      // console.log('onRiderList. riderList:', riderList);
       riderList = riderList.map(rider => new User(rider));
+      // console.log("About to call riderList$.next() in onRiderList");
       this.riderList$.next(riderList);
     });
   }
 
   onUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
+      // console.log('updatedRiderPosition. riderList:', this.riderList$.value);
       let riderList = this.riderList$.value;
       let idx = _.findIndex(riderList, rider => rider._id === updatedRider._id);
       if ( idx >= 0 ) {
@@ -87,6 +95,7 @@ export class RiderService {
         riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
         riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
 
+        // console.log("About to call riderList$.next() in onUpdatedRiderPosition(). riderList:", riderList);
         this.riderList$.next(riderList);
       }
     });

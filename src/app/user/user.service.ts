@@ -121,7 +121,7 @@ export class UserService {
   // Todo: Will I be needing this?
   userPromise() {
     let userPromise = new Promise((resolve, reject) => {
-      let subscription = this.user$.subscribe(pos => {
+      const subscription = this.user$.subscribe(pos => {
         if ( pos ) {
           resolve(pos);
           subscription.unsubscribe();
@@ -134,7 +134,7 @@ export class UserService {
 
   userPositionPromise() {
     let userPositionPromise = new Promise((resolve, reject) => {
-      let subscription = this.user$.subscribe(user => {
+      const subscription = this.user$.subscribe(user => {
         if (user && user.position && user.position.coords && user.position.coords.latitude) {
           resolve(user);
           subscription.unsubscribe();

@@ -2,13 +2,13 @@ import { DataSource } from '@angular/cdk/collections';
 import { MdSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { RiderService } from '../rider.service';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
+import { MapService } from '../../map/map.service';
 
 export class RiderListDataSource extends DataSource<any> {
   _filterChange = new BehaviorSubject('');
@@ -22,18 +22,18 @@ export class RiderListDataSource extends DataSource<any> {
   }
 
   get data() {
-    return this.riderService.riderList$.value;
+    return this.mapService.riderList$.value;
   }
 
   constructor(private _sort: MdSort,
-              private riderService: RiderService) {
+              private mapService: MapService) {
     super();
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any> {
     const displayDataChanges = [
-      this.riderService.riderList$,
+      this.mapService.riderList$,
       this._sort.mdSortChange,
       this._filterChange
     ];

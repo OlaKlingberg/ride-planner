@@ -20,15 +20,15 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.userService.getAllUsers()
-        .subscribe(data => {
+    this.userService.getAllUsers()
+        .then(data => {
           this.users = data;
           this.users.sort(nameSort);
         }); // Todo: Handle errors.
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    // this.subscription.unsubscribe();
   }
 
 }

@@ -12,7 +12,7 @@ import 'rxjs/add/observable/fromEvent';
 
 export class MemberListDataSource extends DataSource<any> {
   /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  memberList$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
   _filterChange = new BehaviorSubject('');
 
@@ -25,30 +25,29 @@ export class MemberListDataSource extends DataSource<any> {
   }
 
   get data() {
-    return this.dataChange.value;
+    return this.memberList$.value;
   }
 
   constructor(private _sort: MdSort,
               private userService: UserService) {
     super();
-    // Todo: Do I have a memory leak here? When should I unsubscribe from this?
-    this.userService.getAllUsers().subscribe(data => {
-      console.log("MemberList. data:", data);
-      this.dataChange.next(data);
-    });
+    this.userService.getAllUsers()
+        .then(data => {
+          this.memberList$.next(data);
+        });
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any> {
     const displayDataChanges = [
-      this.dataChange,
+      this.memberList$,
       this._sort.mdSortChange,
       this._filterChange
     ];
 
     return Observable.merge(...displayDataChanges).map(() => {
       return this.getSortedData().filter(item => {
-        let searchStr = (item.fname + item.lname).toLowerCase();
+        let searchStr = (item.fname + ' ' + item.lname).toLowerCase();
         return searchStr.indexOf(this.filter.toLowerCase()) != -1;
       });
     });

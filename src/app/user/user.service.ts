@@ -61,7 +61,8 @@ export class UserService {
     this.requestOptions = new RequestOptions({ headers: this.headers });
 
     return this.http.get(`${environment.api}/users`, this.requestOptions)
-        .map(data => data.json().users);
+        .map(data => data.json().users)
+        .toPromise();
   }
 
   getRideFromStorage() {

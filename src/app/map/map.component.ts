@@ -17,7 +17,6 @@ import { SocketService } from '../core/socket.service';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import { RefreshService } from '../core/refresh.service';
-import { MapService } from './map.service';
 import { environment } from '../../environments/environment';
 import { RiderService } from '../rider/rider.service';
 
@@ -45,7 +44,6 @@ export class MapComponent implements OnInit, OnDestroy {
   private riderListSub: Subscription;
   private socket: Socket;
   private userSub: Subscription;
-  // private zCounter: number = 0;
 
   @ViewChild('agmMap') agmMap;
 

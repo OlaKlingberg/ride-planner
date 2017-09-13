@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12">
 
-      <!--<div *ngIf="ride">-->
+      <div [ngClass]="{'display-none': !ride}">
 
         <h3>{{ ride }}</h3>
 
@@ -53,7 +53,7 @@
 
         </div>
 
-      <!--</div>-->
+      </div>
 
       <div *ngIf="!ride">
         <h3>You have to select a ride before you can see who's in it.</h3>

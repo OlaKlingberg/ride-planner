@@ -29,10 +29,10 @@ export class MapComponent implements OnInit, OnDestroy {
   buttonState: string = null;
   colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
   latLng: LatLngBoundsLiteral;
-  mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
+  mapMode: string = 'focusOnUser';
   markerUrl: string = "assets/img/rider-markers/";
   maxZoom: number = 18;
-  riderList: Array<User> = [];
+  riders: User[] = [];
   user: User = null;
 
   private combinedSub: Subscription;
@@ -63,15 +63,33 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscribeToUser();
-    this.getRiderList();
     this.hideButtonsOnAutoRefresh();
     this.hideNav();
     this.mapsAPILoader.load().then(() => {
       this.google = google;
+      this.getRiders();
       this.retrieveState();
+      this.setRefreshTimer();
     });
     this.positionService.getPosition();
-    this.removeLongDisconnectedRiders();
+  }
+
+  calculateBounds(mapMode = this.mapMode) {
+    this.mapMode = mapMode;
+    let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
+
+    if ( mapMode === 'showAllRiders' && this.riders.length > 0 ) {
+      this.riders.forEach(rider => {
+        if ( rider.position.coords.latitude ) {
+          bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
+        }
+      });
+    }
+
+    bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
+
+    this.latLng = bounds.toJSON();
+    this.latLng.north += (this.latLng.north - this.latLng.south) / 10; // Upper edge might be covered by menu bar.
   }
 
   closeInfoWindows(_id) {
@@ -85,12 +103,20 @@ export class MapComponent implements OnInit, OnDestroy {
     // });
   }
 
-  getRiderList() {
-    this.riderListSub = this.riderService.riderList$.subscribe(riderList => {
-      setTimeout(() => {
-        // Remove the user from riderList. The user will be displayed with a separate marker.
-        if (riderList && this.user) this.riderList = this.setZIndexAndOpacity(riderList.filter(rider => rider._id !== this.user._id))
-      }, 0);
+  getRiders() {
+    const combined = Rx.Observable.combineLatest(this.riderService.riderList$, this.userService.user$);
+    this.combinedSub = combined.subscribe(value => {
+      const riderList = value[ 0 ];
+      const user = value[ 1 ];
+
+      if (user && riderList) {
+        let riders = riderList.filter(rider => rider._id !== user._id); // Filter out user, who will get a special marker.
+        riders = riders.filter(rider => {                               // Filter out long-disconnected riders.
+          return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
+        });
+        this.riders = this.setZIndexAndOpacity(riders);
+        if ( user.position && user.position.coords && user.position.coords.latitude ) this.calculateBounds();
+      }
     });
   }
 
@@ -116,7 +142,14 @@ export class MapComponent implements OnInit, OnDestroy {
 
   }
 
-  refresh() {
+  retrieveState() {
+    this.latLng = JSON.parse(environment.storage.getItem('rpLatLng'));
+    environment.storage.removeItem('rpLatLng');
+    this.mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
+    environment.storage.removeItem('rpMapMode');
+  }
+
+  setRefreshTimer() {
     console.log("refresh(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
       console.log("refreshTimer completed");
@@ -126,66 +159,9 @@ export class MapComponent implements OnInit, OnDestroy {
     }, environment.refreshOnMapPage);
   }
 
-  removeLongDisconnectedRiders() {
-    this.intervalTimer = setInterval(() => {
-      this.riderList = _.filter(this.riderList, rider => {
-        return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
-      });
-
-      this.riderService.riderList$.next(this.riderList);
-    }, 10000);
-  }
-
-  retrieveState() {
-    const latLng = JSON.parse(environment.storage.getItem('rpLatLng'));
-    environment.storage.removeItem('rpLatLng');
-    const mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
-    environment.storage.removeItem('rpMapMode');
-    this.setMapMode(mapMode, latLng);
-  }
-
-  setMapMode(mapMode, latLng) {
-    if ( this.combinedSub ) this.combinedSub.unsubscribe();
-    if ( this.positionSub ) this.positionSub.unsubscribe();
-
-    if ( latLng ) this.latLng = latLng;
-    this.mapMode = mapMode;
-
-    clearTimeout(this.refreshTimer);
-
-    if ( mapMode === 'stationary' ) return;
-
-    this.refresh();
-
-    const combined = Rx.Observable.combineLatest(this.riderService.riderList$, this.userService.user$);
-    this.combinedSub = combined.subscribe(value => {
-      const riderList = value[ 0 ];
-      const user = value[ 1 ];
-
-      if ( !user.position || !user.position.coords || !user.position.coords.latitude ) return;
-
-      let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
-
-      if ( mapMode === 'showAllRiders' && riderList && riderList.length > 0 ) {
-        riderList.forEach(rider => {
-          if ( rider.position.coords.latitude && rider.position.coords.longitude ) {
-            bounds.extend({ lat: rider.position.coords.latitude, lng: rider.position.coords.longitude });
-          }
-        });
-      }
-
-      bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
-
-      this.latLng = bounds.toJSON();
-      // Add 10% to the map at the upper edge for what is covered by the phone-browser address bar.
-      this.latLng.north += (this.latLng.north - this.latLng.south) / 10;
-    });
-
-  }
-
-  setZIndexAndOpacity(riderList) {
+  setZIndexAndOpacity(riders) {
     let zCounter: number = 0;
-    riderList = riderList.map(rider => {
+    riders = riders.map(rider => {
       rider.zIndex = zCounter++;
       if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
       if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
@@ -193,7 +169,7 @@ export class MapComponent implements OnInit, OnDestroy {
       return rider;
     });
 
-    return riderList;
+    return riders;
   }
 
   showNav() {

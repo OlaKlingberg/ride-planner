@@ -9,7 +9,7 @@ export class PositionService {
 
   private geolocationOptions = {
     enableHighAccuracy: true,
-    timeout: 6000,      // Todo: Figure out what value I want here, and what to do on timeout.
+    timeout: 20000,      // Todo: Figure out what value I want here, and what to do on timeout.
     maximumAge: 5000
   };
 
@@ -57,7 +57,7 @@ export class PositionService {
             this.setDummyMovements();
           },
           err => {
-            console.log(`watchPosition error: ${err.message}`);
+            console.log(`getCurrentPosition error: ${err.message}`);
           },
           this.geolocationOptions
       );

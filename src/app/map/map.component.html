@@ -9,8 +9,8 @@
             [fitBounds]="latLng"
             [maxZoom]="maxZoom"
             [zoomControl]="false"
-            (pinchstart)="showNav(); setMapMode('stationary', null)"
-            (panstart)="showNav(); setMapMode('stationary', null)"
+            (pinchstart)="showNav(); calculateBounds('stationary')"
+            (panstart)="showNav(); calculateBounds('stationary')"
             (pinchend)="hideNav()"
             (panend)="hideNav()"
             (tap)="showNav(); hideNav()"
@@ -36,7 +36,7 @@
           </agm-marker>
 
           <agm-marker #markers
-                      *ngFor="let rider of riderList"
+                      *ngFor="let rider of riders"
                       [latitude]="rider.position.coords.latitude"
                       [longitude]="rider.position.coords.longitude"
                       [label]="{text: rider?.initials, color: 'black'}"
@@ -72,11 +72,11 @@
           <button class="btn btn-primary btn-md"
                   type="button"
                   *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"
-                  (click)="showNav(); hideNav(); setMapMode('showAllRiders', null)">Track All Riders
+                  (click)="showNav(); hideNav(); calculateBounds('showAllRiders')">Track All Riders
           </button>
           <button class="btn btn-info btn-md"
                   *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
-                  (click)="showNav(); hideNav(); setMapMode('focusOnUser', null)">Track Me
+                  (click)="showNav(); hideNav(); calculateBounds('focusOnUser')">Track Me
           </button>
 
         </div>

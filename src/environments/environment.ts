@@ -15,7 +15,7 @@ export const environment = {
   fadeNav: 4000,
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: false,
-  refreshOnMapPage: 180000,
+  refreshOnMapPage: 120000,
   refreshOnNavigation: 180000,
   removeLongDisconnectedRiders: 1800000,
   storage: sessionStorage

@@ -33,6 +33,7 @@ export class MapComponent implements OnInit, OnDestroy {
   markerUrl: string = "assets/img/rider-markers/";
   maxZoom: number = 18;
   riders: User[] = [];
+  takingTooLong: boolean = false;
   user: User = null;
 
   private combinedSub: Subscription;
@@ -70,6 +71,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.getRiders();
       this.retrieveState();
       this.setRefreshTimer();
+      this.setTakingTooLongTimer();
     });
     this.positionService.getPosition();
   }
@@ -109,7 +111,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const riderList = value[ 0 ];
       const user = value[ 1 ];
 
-      if (user && riderList) {
+      if ( user && riderList ) {
         let riders = riderList.filter(rider => rider._id !== user._id); // Filter out user, who will get a special marker.
         riders = riders.filter(rider => {                               // Filter out long-disconnected riders.
           return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
@@ -150,13 +152,19 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setRefreshTimer() {
-    console.log("refresh(). About to set refreshTimer");
+    console.log("setRefreshTimer(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
       console.log("refreshTimer completed");
       if ( this.latLng ) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
       environment.storage.setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
     }, environment.refreshOnMapPage);
+  }
+
+  setTakingTooLongTimer() {
+    setTimeout(() => {
+      this.takingTooLong = true;
+    }, 8000);
   }
 
   setZIndexAndOpacity(riders) {
@@ -196,11 +204,13 @@ export class MapComponent implements OnInit, OnDestroy {
     if ( this.userSub ) this.userSub.unsubscribe();
 
     // Attempt to ameliorate memory leak.
-    google.maps.event.clearInstanceListeners(window);
-    google.maps.event.clearInstanceListeners(document);
-    google.maps.event.clearInstanceListeners(this.agmMap);
-    google.maps.event.clearInstanceListeners(this.markers);
-    google.maps.event.clearInstanceListeners(this.infoWindows);
+    if ( google ) {
+      google.maps.event.clearInstanceListeners(window);
+      google.maps.event.clearInstanceListeners(document);
+      google.maps.event.clearInstanceListeners(this.agmMap);
+      google.maps.event.clearInstanceListeners(this.markers);
+      google.maps.event.clearInstanceListeners(this.infoWindows);
+    }
   }
 
 }

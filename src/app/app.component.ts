@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { AuthenticationService } from "./authentication/authentication.service";
 
@@ -9,7 +10,8 @@ import { AuthenticationService } from "./authentication/authentication.service";
 })
 export class AppComponent implements OnInit {
 
-  constructor(private authenticationService: AuthenticationService) {   // Needs to be injected, to be initialized.
+  constructor(public location: Location,
+              private authenticationService: AuthenticationService) {   // Needs to be injected, to be initialized.
   }
 
   ngOnInit() {

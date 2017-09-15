@@ -9,6 +9,7 @@ import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetRoutingModule } from './cuesheet-routing.module';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
 import { SharedModule } from '../shared/shared.module';
+import { CuesheetBikeIframeComponent } from './cuesheet-bike-iframe/cuesheet-bike-iframe.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { SharedModule } from '../shared/shared.module';
       CuesheetEditComponent,
       CuesheetListComponent,
       CuesheetNewComponent,
-      CuesheetViewComponent
+      CuesheetViewComponent,
+      CuesheetBikeIframeComponent
   ]
 })
 export class CuesheetModule { }

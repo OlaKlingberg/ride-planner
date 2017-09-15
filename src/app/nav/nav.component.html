@@ -2,7 +2,7 @@
      [@navBar]="navBarState"
      [ngClass]="{
         'no-header': location.path() === '/map',
-        'no-header cuesheet-bike-page': ( location.path().includes('cuesheets') && location.path().includes('bike'))
+        'page-cuesheet-bike': ( location.path().includes('cuesheet') && location.path().includes('bike'))
       }">
   <div class="container">
     <div class="navbar-header">

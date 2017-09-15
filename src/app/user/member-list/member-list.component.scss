@@ -1,4 +1,5 @@
-/* Structure */
+/** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
+
 .table-container {
   display: flex;
   flex-direction: column;
@@ -33,29 +34,4 @@
   margin-left: 0;
 }
 
-.mat-input-wrapper {
 
-}
-
-.mat-input-flex {
-
-}
-
-.mat-input-inflix {
-
-}
-
-/deep/ .mat-input-element {
-  color: black !important;
-  background-color: white !important;
-  height: 2em !important;
-}
-
-/deep/ .mat-form-field-placeholder {
-  color: darkgray !important;
-  font-size: 1.2em !important;
-}
-
-.mat-input-underline {
-
-}

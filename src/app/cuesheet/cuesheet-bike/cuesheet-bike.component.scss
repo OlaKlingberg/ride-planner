@@ -1,3 +1,5 @@
+/** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
+
 .container {
   max-width: 414px;
 }
@@ -47,6 +49,3 @@
   color: black;
 }
 
-/deep/ nav {
-  margin-bottom: 0 !important;
-}

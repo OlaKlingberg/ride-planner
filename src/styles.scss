@@ -16,3 +16,31 @@
   opacity: .5 !important;
 }
 
+.display-none {
+  display: none !important;
+}
+
+/** Specific pages **/
+.page-cuesheet-bike nav {
+  margin-bottom: 0 !important;
+}
+
+.page-map .info-window {
+  color: red !important;
+}
+
+.page-members {
+  .mat-form-field-placeholder {
+    color: darkgray !important;
+    font-size: 1.2em !important;
+  }
+
+  .mat-input-element {
+    color: black !important;
+    background-color: white !important;
+    height: 2em !important;
+  }
+}
+
+
+

@@ -117,8 +117,9 @@ export class MapComponent implements OnInit, OnDestroy {
           return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
         });
         this.riders = this.setZIndexAndOpacity(riders);
-        if ( user.position && user.position.coords && user.position.coords.latitude ) this.calculateBounds();
       }
+
+      if ( user.position && user.position.coords && user.position.coords.latitude ) this.calculateBounds();
     });
   }
 

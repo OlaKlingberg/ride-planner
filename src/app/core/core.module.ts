@@ -24,6 +24,7 @@ import { SocketService } from './socket.service';
 import { throwIfAlreadyLoaded } from '../_guards/module-import-guard';
 import { UserService } from '../user/user.service';
 import { RiderService } from '../rider/rider.service';
+import { HeaderModule } from '../header/header.module';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { RiderService } from '../rider/rider.service';
     AgmCoreModule,
     AlertModule,
     BrowserAnimationsModule,
+    HeaderModule,
     HttpModule,
     NavModule
   ],
@@ -52,8 +54,8 @@ import { RiderService } from '../rider/rider.service';
     PositionService,
     RefreshService,
     RideLeaderGuard,
-    RideService,        // Todo: Should perhaps be moved to RideModule.
-    RideSubjectService, // Todo: Should perhaps be moved to RideModule.
+    RideService,
+    RideSubjectService,
     RiderService,
     SocketService,
     UserService

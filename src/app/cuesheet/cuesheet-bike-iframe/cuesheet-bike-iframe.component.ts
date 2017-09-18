@@ -115,10 +115,15 @@ export class CuesheetBikeIframeComponent implements OnInit, OnDestroy {
   }
 
   swipeDown() {
+    // console.log("swipeDown(). cueNumber:", this.cueNumber);
     if ( this.cueNumber <= 0 ) {
+      if (this.modalRef) this.modalRef.hide();
       this.modalRef = this.modalService.show(this.firstCueModal);
     } else {
-      if (this.modalRef) this.modalRef.hide();
+      if (this.modalRef) {
+        this.modalRef.hide();
+        this.modalRef = null;
+      }
       this.move = 'down';
       setTimeout(() => {
         this.router.navigate([ `/cuesheet/${this.cuesheetId}/bike-iframe/${this.cueNumber - 1}` ]);
@@ -127,10 +132,15 @@ export class CuesheetBikeIframeComponent implements OnInit, OnDestroy {
   }
 
   swipeUp() {
+    console.log("swipeUp(). cueNumber:", this.cueNumber);
     if ( this.cueNumber >= this.cuesheet.cues.length - 1 ) {
+      if (this.modalRef) this.modalRef.hide();
       this.modalRef = this.modalService.show(this.lastCueModal);
     } else {
-      if (this.modalRef) this.modalRef.hide();
+      if (this.modalRef) {
+        this.modalRef.hide();
+        this.modalRef = null;
+      }
       this.move = 'up';
       setTimeout(() => {
         this.router.navigate([ `/cuesheet/${this.cuesheetId}/bike-iframe/${this.cueNumber + 1}` ]);

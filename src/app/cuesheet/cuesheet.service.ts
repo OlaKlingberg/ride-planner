@@ -1,5 +1,5 @@
 import { Http, RequestOptions, Headers, Response } from "@angular/http";
-import { Injectable } from '@angular/core';
+import { HostListener, Injectable } from '@angular/core';
 
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/toPromise';
@@ -9,16 +9,29 @@ import { Cuesheet } from './cuesheet';
 import { environment } from "../../environments/environment";
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
+import { Subject } from 'rxjs/Subject';
 
 
 @Injectable()
 export class CuesheetService {
+  swipes$: Subject<string> = new Subject();
+
   private user: User;
+
+  @HostListener('window:message', [ '$event' ])
+  onMessage(e) {
+    console.log("e:", e);
+
+  }
 
   constructor(private http: Http,
               private userService: UserService) {
     this.userService.user$.subscribe(user => {
       this.user = user;
+    });
+
+    window.addEventListener("message", (event) => {
+      if (event.data === 'up' || event.data === 'down') this.swipes$.next(event.data);
     });
   }
 
@@ -79,6 +92,14 @@ export class CuesheetService {
     const token = JSON.parse(environment.storage.getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
+  }
+
+  swipeDown(windowRef) {
+    windowRef.postMessage('down', '*');
+  }
+
+  swipeUp(windowRef) {
+    windowRef.postMessage('up', '*');
   }
 
   updateCue(_id: string, cue: any) {

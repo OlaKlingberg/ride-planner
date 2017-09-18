@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
-export const cuesheetBikeAnimations = [
+export const cuesheetBikeIframeAnimations = [
   trigger('cuesheetContainer', [
     state('up', style({
       transform: 'translate(0, -217px)'
@@ -10,4 +10,4 @@ export const cuesheetBikeAnimations = [
     })),
     transition('still => *', animate('500ms ease-in-out')),
   ])
-]
+];

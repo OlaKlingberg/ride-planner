@@ -6,9 +6,11 @@ import { CuesheetEditComponent } from './cuesheet-edit/cuesheet-edit.component';
 import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
 import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
+import { CuesheetBikeIframeComponent } from './cuesheet-bike-iframe/cuesheet-bike-iframe.component';
+import { WindowSizeGuard } from './window-size.guard';
 
 @NgModule({
-  imports: [RouterModule.forChild([
+  imports: [ RouterModule.forChild([
     {
       path: '',
       component: CuesheetListComponent
@@ -27,9 +29,18 @@ import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
     },
     {
       path: ':cuesheetId/bike/:cueNumber',
-      component: CuesheetBikeComponent
+      component: CuesheetBikeComponent,
+      canActivate: [ WindowSizeGuard ]
+    },
+    {
+      path: ':cuesheetId/bike-iframe/:cueNumber',
+      component: CuesheetBikeIframeComponent
     }
-  ])],
-  exports: [RouterModule]
+  ]) ],
+  exports: [ RouterModule ],
+  providers: [
+      WindowSizeGuard
+  ]
 })
-export class CuesheetRoutingModule { }
+export class CuesheetRoutingModule {
+}

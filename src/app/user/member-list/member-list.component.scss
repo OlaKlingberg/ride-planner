@@ -33,15 +33,17 @@
 //  margin-left: 0;
 //}
 
+md-table {
+  background-color: darken($rpGray, 4%);
+  border: 3px solid darken($rpGray, 8%);
+  border-top: 2px solid silver;
+}
+
 .mat-app-background {
   background-color: darken($rpGray, 8%);
   padding: 0;
 }
 
-
-
-md-table {
-  background-color: darken($rpGray, 4%);
-  border: 3px solid darken($rpGray, 8%);
-  border-top: 2px solid silver;
+.modal-table {
+  width: 100%;
 }

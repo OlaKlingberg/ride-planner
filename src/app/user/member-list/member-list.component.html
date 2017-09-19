@@ -1,59 +1,95 @@
-<div class="container mat-app-background page-members">
-  <div class="row">
-    <div class="col-xs-12">
-
-      <div class="table-container mat-elevation-z8">
-
-        <div class="mat-header mat-row">
-          <md-form-field floatPlaceholder="never">
-            <input mdInput #filter placeholder="Filter members by name">
-          </md-form-field>
-        </div>
-
-        <md-table #table [dataSource]="dataSource" mdSort>
-
-          <!-- Full Name Column -->
-          <ng-container mdColumnDef="fullName">
-            <md-header-cell *mdHeaderCellDef md-sort-header>
-              <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Name</span>
-            </md-header-cell>
-            <md-cell *mdCellDef="let row">{{ row.lname }}, {{ row.fname }}</md-cell>
-          </ng-container>
-
-          <!-- Phone Column -->
-          <ng-container mdColumnDef="phone">
-            <md-header-cell *mdHeaderCellDef>Phone</md-header-cell>
-            <md-cell *mdCellDef="let row">{{ row.phone }}</md-cell>
-          </ng-container>
-
-          <!-- Email Column -->
-          <ng-container mdColumnDef="email">
-            <md-header-cell *mdHeaderCellDef md-sort-header><span mdTooltip="Click on header to sort."
-                                                                  [mdTooltipPosition]="'above'">Email</span>
-            </md-header-cell>
-            <md-cell *mdCellDef="let row">{{ row.email }}</md-cell>
-          </ng-container>
-
-          <!-- Emergency Contact Column -->
-          <ng-container mdColumnDef="emergencyName">
-            <md-header-cell *mdHeaderCellDef md-sort-header><span mdTooltip="Click on header to sort."
-                                                                  [mdTooltipPosition]="'above'">Emergency Contact</span>
-            </md-header-cell>
-            <md-cell *mdCellDef="let row">{{ row.emergencyName }}</md-cell>
-          </ng-container>
-
-          <!-- Emergency Phone Column -->
-          <ng-container mdColumnDef="emergencyPhone">
-            <md-header-cell *mdHeaderCellDef>Emergency Phone</md-header-cell>
-            <md-cell *mdCellDef="let row">{{ row.emergencyPhone }}</md-cell>
-          </ng-container>
-
-          <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-          <md-row *mdRowDef="let row; columns: displayedColumns"></md-row>
-
-        </md-table>
-      </div>
-
-    </div>
+<ng-template #memberDetails>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{member.fname}} {{member.lname}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
+  <div class="modal-body">
+    <table class="modal-table">
+      <tr>
+        <td>Phone</td>
+        <td>{{member.phone}}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{member.email}}</td>
+      </tr>
+      <tr>
+        <td>Emergency Contact</td>
+        <td>{{member.emergencyName}}</td>
+      </tr>
+      <tr>
+        <td>Emergency Phone</td>
+        <td>{{member.emergencyPhone}}</td>
+      </tr>
+    </table>
+  </div>
+</ng-template>
+
+<div class="container mat-app-background page-members">
+  <!--<div class="row">-->
+  <!--<div class="col-xs-12">-->
+
+  <div class="table-container mat-elevation-z8">
+
+    <div class="mat-header mat-row">
+      <md-form-field floatPlaceholder="never">
+        <input mdInput #filter placeholder="Filter members by name">
+      </md-form-field>
+    </div>
+
+    <md-table #table [dataSource]="dataSource" mdSort>
+
+      <!-- Full Name Column -->
+      <ng-container mdColumnDef="fullName">
+        <md-header-cell *mdHeaderCellDef md-sort-header>
+          <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Name</span>
+        </md-header-cell>
+        <md-cell *mdCellDef="let row">{{ row.lname }}, {{ row.fname }}
+        </md-cell>
+      </ng-container>
+
+      <!-- Phone Column -->
+      <ng-container mdColumnDef="phone">
+        <md-header-cell *mdHeaderCellDef>Phone</md-header-cell>
+        <md-cell *mdCellDef="let row">{{ row.phone }}</md-cell>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container mdColumnDef="email">
+        <md-header-cell *mdHeaderCellDef md-sort-header><span mdTooltip="Click on header to sort."
+                                                              [mdTooltipPosition]="'above'">Email</span>
+        </md-header-cell>
+        <md-cell *mdCellDef="let row">{{ row.email }}</md-cell>
+      </ng-container>
+
+      <!-- Emergency Contact Column -->
+      <ng-container mdColumnDef="emergencyName">
+        <md-header-cell *mdHeaderCellDef md-sort-header><span mdTooltip="Click on header to sort."
+                                                              [mdTooltipPosition]="'above'">Emergency Contact</span>
+        </md-header-cell>
+        <md-cell *mdCellDef="let row">{{ row.emergencyName }}</md-cell>
+      </ng-container>
+
+      <!-- Emergency Phone Column -->
+      <ng-container mdColumnDef="emergencyPhone">
+        <md-header-cell *mdHeaderCellDef>Emergency Phone</md-header-cell>
+        <md-cell *mdCellDef="let row">{{ row.emergencyPhone }}</md-cell>
+      </ng-container>
+
+      <!-- Show-details button -->
+      <ng-container mdColumnDef="showDetailsButton">
+        <md-header-cell *mdHeaderCellDef></md-header-cell>
+        <md-cell *mdCellDef="let row" (click)="showDetails(memberDetails, row)"><button class="btn btn-primary btn-sm float-right">Details</button></md-cell>
+      </ng-container>
+
+      <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+      <md-row *mdRowDef="let row; columns: displayedColumns"></md-row>
+
+    </md-table>
+  </div>
+
+  <!--</div>-->
+  <!--</div>-->
 </div>

@@ -236,7 +236,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openCuesheetDeletionModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
-    console.log("modalRef:", this.modalRef);
   }
 
 

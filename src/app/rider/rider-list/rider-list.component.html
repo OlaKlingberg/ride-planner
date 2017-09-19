@@ -1,6 +1,39 @@
+<ng-template #riderDetails>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{rider.fname}} {{rider.lname}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="modal-table">
+      <tr>
+        <td>Phone</td>
+        <td>{{rider.phone}}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{rider.email}}</td>
+      </tr>
+      <tr>
+        <td>Emergency Contact</td>
+        <td>{{rider.emergencyName}}</td>
+      </tr>
+      <tr>
+        <td>Emergency Phone</td>
+        <td>{{rider.emergencyPhone}}</td>
+      </tr>
+      <tr *ngIf="rider.disconnected">
+        <td>Disconnected</td>
+        <td>{{ rider.disconnected }}</td>
+      </tr>
+    </table>
+  </div>
+</ng-template>
+
 <div class="container mat-app-background page-riders">
-  <div class="row">
-    <div class="col-xs-12">
+  <!--<div class="row">-->
+    <!--<div class="col-xs-12">-->
 
       <div [ngClass]="{'display-none': !ride}">
 
@@ -47,6 +80,12 @@
               <md-cell *mdCellDef="let row">{{ row.disconnected }}</md-cell>
             </ng-container>
 
+            <!-- Show-details button -->
+            <ng-container mdColumnDef="showDetailsButton">
+              <md-header-cell *mdHeaderCellDef></md-header-cell>
+              <md-cell *mdCellDef="let row" (click)="showDetails(riderDetails, row)"><button class="btn btn-primary btn-sm float-right">Details</button></md-cell>
+            </ng-container>
+
             <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
             <md-row *mdRowDef="let row; columns: displayedColumns"></md-row>
 
@@ -62,7 +101,7 @@
       </div>
 
 
-    </div>
-  </div>
+    <!--</div>-->
+  <!--</div>-->
 </div>
 

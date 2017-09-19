@@ -8,20 +8,24 @@ body {
   //background-color: silver;
 }
 
-.w-100 {
-  width: 100%;
-}
-
-.text-align-center {
-  text-align: center;
+.display-none {
+  display: none !important;
 }
 
 .faded {
   opacity: .5 !important;
 }
 
-.display-none {
-  display: none !important;
+.float-right {
+  float: right;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 /** Specific pages **/
@@ -44,7 +48,7 @@ body {
     color: black !important;
     background-color: white !important;
     height: 2em !important;
-    width: 350px !important;
+    width: 300px !important;
     padding-left: 6px !important;
   }
 

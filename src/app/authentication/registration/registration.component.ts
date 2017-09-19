@@ -37,7 +37,7 @@ export class RegistrationComponent implements OnDestroy {
       let length = ph.length;
 
       // Add spaces to end so string becomes 10 characters long.
-      ph += Array(11 - length).join(' ');
+      if (length < 6) ph += Array(7 - length).join(' ');
 
       // (Re-)insert hyphens into the string.
       ph = `${ph.substr(0, 3)}-${ph.substr(3, 3)}-${ph.substr(6)}`;

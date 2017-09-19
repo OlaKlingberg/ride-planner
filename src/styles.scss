@@ -33,16 +33,23 @@ body {
   color: red !important;
 }
 
-.page-members {
+.page-members, .page-riders {
   .mat-form-field-placeholder {
     color: darkgray !important;
     font-size: 1.2em !important;
+    padding-left: 6px;
   }
 
   .mat-input-element {
     color: black !important;
     background-color: white !important;
     height: 2em !important;
+    width: 350px !important;
+    padding-left: 6px !important;
+  }
+
+  .mat-input-underline {
+    display: none;
   }
 }
 

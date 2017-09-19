@@ -1,37 +1,47 @@
 /** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
+@import '../../../_vars.scss';
+//.table-container {
+//  display: flex;
+//  flex-direction: column;
+//  min-width: 300px;
+//}
+//
+//.mat-header {
+//  min-height: 64px;
+//  display: flex;
+//  align-items: baseline;
+//  padding: 8px 24px 0;
+//  font-size: 20px;
+//  justify-content: space-between;
+//}
+//
+//.mat-table {
+//  overflow: auto;
+//}
+//
+//.mat-form-field {
+//  font-size: 14px;
+//  flex-grow: 1;
+//  margin-left: 32px;
+//}
+//
+//.mat-header-cell .mat-sort-header-sorted {
+//  color: black;
+//}
+//
+//.mat-input-container {
+//  margin-left: 0;
+//}
 
-.table-container {
-  display: flex;
-  flex-direction: column;
-  min-width: 300px;
+.mat-app-background {
+  background-color: darken($rpGray, 8%);
+  padding: 0;
 }
 
-.mat-header {
-  min-height: 64px;
-  display: flex;
-  align-items: baseline;
-  padding: 8px 24px 0;
-  font-size: 20px;
-  justify-content: space-between;
+
+
+md-table {
+  background-color: darken($rpGray, 4%);
+  border: 3px solid darken($rpGray, 8%);
+  border-top: 2px solid silver;
 }
-
-.mat-table {
-  overflow: auto;
-  //max-height: 500px;
-}
-
-.mat-form-field {
-  font-size: 14px;
-  flex-grow: 1;
-  margin-left: 32px;
-}
-
-.mat-header-cell .mat-sort-header-sorted {
-  color: black;
-}
-
-.mat-input-container {
-  margin-left: 0;
-}
-
-

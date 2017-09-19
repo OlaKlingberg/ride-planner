@@ -21,7 +21,7 @@
         <li *ngIf="user"><a routerLink='/ride/select' [routerLinkActive]="['active']">Select Ride</a></li>
         <li *ngIf="user"><a routerLink='/protected' [routerLinkActive]="['active']">Protected</a></li>
         <!--<li *ngIf="user?.leader"><a routerLink='/users' [routerLinkActive]="['active']">Users</a></li>-->
-        <li *ngIf="user?.leader"><a routerLink='/users/members' [routerLinkActive]="['active']">Members</a></li>
+        <li *ngIf="user?.leader"><a routerLink='/members' [routerLinkActive]="['active']">Members</a></li>
         <li *ngIf="user?.leader"><a routerLink='/riders' [routerLinkActive]="['active']">Riders</a></li>
         <li *ngIf="user?.admin"><a routerLink='/debugger' [routerLinkActive]="['active']">Debug</a></li>
         <li *ngIf="!user"><a routerLink='/auth/register' [routerLinkActive]="['active']">Register</a></li>

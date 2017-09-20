@@ -37,6 +37,10 @@ export class MemberListComponent implements OnInit {
           if (!this.dataSource) return;
           this.dataSource.filter = this.filter.nativeElement.value;
         });
+
+    window.addEventListener('resize', () => {
+      this.displayColumns();
+    });
   }
 
   displayColumns() {

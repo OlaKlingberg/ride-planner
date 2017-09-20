@@ -28,8 +28,6 @@
 </ng-template>
 
 <div class="container mat-app-background page-members">
-  <!--<div class="row">-->
-  <!--<div class="col-xs-12">-->
 
   <div class="table-container mat-elevation-z8">
 
@@ -81,7 +79,9 @@
       <!-- Show-details button -->
       <ng-container mdColumnDef="showDetailsButton">
         <md-header-cell *mdHeaderCellDef></md-header-cell>
-        <md-cell *mdCellDef="let row" (click)="showDetails(memberDetails, row)"><button class="btn btn-primary btn-sm float-right">Details</button></md-cell>
+        <md-cell *mdCellDef="let row" (click)="showDetails(memberDetails, row)">
+          <button class="btn btn-primary btn-sm float-right">Details</button>
+        </md-cell>
       </ng-container>
 
       <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
@@ -90,6 +90,4 @@
     </md-table>
   </div>
 
-  <!--</div>-->
-  <!--</div>-->
 </div>

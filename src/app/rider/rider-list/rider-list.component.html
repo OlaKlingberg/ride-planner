@@ -24,84 +24,84 @@
         <td>{{rider.emergencyPhone}}</td>
       </tr>
       <tr *ngIf="rider.disconnected">
-        <td>Disconnected</td>
-        <td>{{ rider.disconnected }}</td>
+        <td>Least heard from</td>
+        <td>{{ rider.minutesSinceDisconnected }} minutes ago</td>
       </tr>
     </table>
   </div>
 </ng-template>
 
 <div class="container mat-app-background page-riders">
-  <!--<div class="row">-->
-    <!--<div class="col-xs-12">-->
 
-      <div [ngClass]="{'display-none': !ride}">
+  <div [ngClass]="{'display-none': !ride}">
 
-        <h3>{{ ride }}</h3>
+    <h3>{{ ride }}</h3>
 
-        <div class="table-container mat-elevation-z8">
+    <div class="table-container mat-elevation-z8">
 
-          <div class="mat-header">
-            <md-form-field floatPlaceholder="never">
-              <input mdInput #filter placeholder="Filter riders by name">
-            </md-form-field>
-          </div>
-
-          <md-table #table [dataSource]="dataSource" mdSort>
-
-            <ng-container mdColumnDef="fullName">
-              <md-header-cell *mdHeaderCellDef md-sort-header>
-                <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Name</span>
-              </md-header-cell>
-              <md-cell *mdCellDef="let row">{{ row.lname }}, {{ row.fname }}</md-cell>
-            </ng-container>
-
-            <ng-container mdColumnDef="phone">
-              <md-header-cell *mdHeaderCellDef>Phone</md-header-cell>
-              <md-cell *mdCellDef="let row">{{ row.phone }}</md-cell>
-            </ng-container>
-
-            <ng-container mdColumnDef="emergencyName">
-              <md-header-cell *mdHeaderCellDef md-sort-header>
-                <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Emergency Contact</span>
-              </md-header-cell>
-              <md-cell *mdCellDef="let row">{{ row.emergencyName }}</md-cell>
-            </ng-container>
-ø
-            <ng-container mdColumnDef="emergencyPhone">
-              <md-header-cell *mdHeaderCellDef>Emergency Phone</md-header-cell>
-              <md-cell *mdCellDef="let row">{{ row.emergencyPhone }}</md-cell>
-            </ng-container>
-
-            <ng-container mdColumnDef="disconnected">
-              <md-header-cell *mdHeaderCellDef md-sort-header>
-                <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Disconnected</span>
-              </md-header-cell>
-              <md-cell *mdCellDef="let row">{{ row.disconnected }}</md-cell>
-            </ng-container>
-
-            <!-- Show-details button -->
-            <ng-container mdColumnDef="showDetailsButton">
-              <md-header-cell *mdHeaderCellDef></md-header-cell>
-              <md-cell *mdCellDef="let row" (click)="showDetails(riderDetails, row)"><button class="btn btn-primary btn-sm float-right">Details</button></md-cell>
-            </ng-container>
-
-            <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-            <md-row *mdRowDef="let row; columns: displayedColumns"></md-row>
-
-          </md-table>
-
-        </div>
-
+      <div class="mat-header">
+        <md-form-field floatPlaceholder="never">
+          <input mdInput #filter placeholder="Filter riders by name">
+        </md-form-field>
       </div>
 
-      <div *ngIf="!ride">
-        <h3>You have to select a ride before you can see who's in it.</h3>
-        <button type="button" class="btn btn-success" routerLink="/ride/select">Go to Ride Selector</button>
-      </div>
+      <md-table #table [dataSource]="dataSource" mdSort>
 
+        <ng-container mdColumnDef="fullName">
+          <md-header-cell *mdHeaderCellDef md-sort-header>
+            <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Name</span>
+          </md-header-cell>
+          <md-cell *mdCellDef="let row">{{ row.lname }}, {{ row.fname }}</md-cell>
+        </ng-container>
 
-    <!--</div>-->
-  <!--</div>-->
+        <ng-container mdColumnDef="phone">
+          <md-header-cell *mdHeaderCellDef>Phone</md-header-cell>
+          <md-cell *mdCellDef="let row">{{ row.phone }}</md-cell>
+        </ng-container>
+
+        <ng-container mdColumnDef="emergencyName">
+          <md-header-cell *mdHeaderCellDef md-sort-header>
+            <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Emergency Contact</span>
+          </md-header-cell>
+          <md-cell *mdCellDef="let row">{{ row.emergencyName }}</md-cell>
+        </ng-container>
+
+        <ng-container mdColumnDef="emergencyPhone">
+          <md-header-cell *mdHeaderCellDef>Emergency Phone</md-header-cell>
+          <md-cell *mdCellDef="let row">{{ row.emergencyPhone }}</md-cell>
+        </ng-container>
+
+        <ng-container mdColumnDef="disconnected">
+          <md-header-cell *mdHeaderCellDef md-sort-header>
+            <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Last heard of</span>
+          </md-header-cell>
+          <md-cell *mdCellDef="let row">
+            <span *ngIf="row.disconnected">{{ row.minutesSinceDisconnected }} minutes ago</span>
+            <span *ngIf="!row.disconnected">now</span>
+          </md-cell>
+        </ng-container>
+
+        <!-- Show-details button -->
+        <ng-container mdColumnDef="showDetailsButton">
+          <md-header-cell *mdHeaderCellDef></md-header-cell>
+          <md-cell *mdCellDef="let row" (click)="showDetails(riderDetails, row)">
+            <button class="btn btn-primary btn-sm float-right">Details</button>
+          </md-cell>
+        </ng-container>
+
+        <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+        <md-row *mdRowDef="let row; columns: displayedColumns"></md-row>
+
+      </md-table>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="!ride">
+    <h3>You have to select a ride before you can see who's in it.</h3>
+    <button type="button" class="btn btn-success" routerLink="/ride/select">Go to Ride Selector</button>
+  </div>
+
 </div>
 

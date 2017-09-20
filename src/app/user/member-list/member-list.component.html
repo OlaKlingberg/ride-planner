@@ -27,11 +27,23 @@
   </div>
 </ng-template>
 
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-primary" (click)="addTenMembers()">Add 10 members</button>
+    </div>
+  </div>
+</div>
+
+
+
 <div class="container mat-app-background page-members">
+
+  <h3 class="padding-left">Members</h3>
 
   <div class="table-container mat-elevation-z8">
 
-    <div class="mat-header mat-row">
+    <div class="mat-header padding-left">
       <md-form-field floatPlaceholder="never">
         <input mdInput #filter placeholder="Filter members by name">
       </md-form-field>

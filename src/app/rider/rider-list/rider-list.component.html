@@ -35,11 +35,11 @@
 
   <div [ngClass]="{'display-none': !ride}">
 
-    <h3>{{ ride }}</h3>
+    <h3 class="padding-left">{{ ride }}</h3>
 
     <div class="table-container mat-elevation-z8">
 
-      <div class="mat-header">
+      <div class="mat-header padding-left">
         <md-form-field floatPlaceholder="never">
           <input mdInput #filter placeholder="Filter riders by name">
         </md-form-field>

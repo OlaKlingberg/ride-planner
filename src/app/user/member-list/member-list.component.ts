@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MdSort } from '@angular/material';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -46,6 +46,11 @@ export class MemberListComponent implements OnInit {
     window.addEventListener('resize', () => {
       this.displayColumns();
     });
+  }
+
+  addTenMembers() {
+
+
   }
 
   displayColumns() {

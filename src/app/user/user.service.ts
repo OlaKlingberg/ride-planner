@@ -41,10 +41,10 @@ export class UserService {
 
   joinRide() {
     this.rideSubjectService.ride$.subscribe(ride => {
+      console.log("joinRide(). ride:", ride);
       if ( ride ) {
         this.userPositionPromise().then((user: User) => {
           let token = JSON.parse(environment.storage.getItem('rpToken'));
-          console.log("About to emit joinRide");
           this.socket.emit('joinRide', user, ride, token, () => {
             user.ride = ride;
             this.user$.next(user);
@@ -71,13 +71,11 @@ export class UserService {
   }
 
   getUserFromStorage() {
-    // If I use the string, rather than the JSON-parsed object, in the conditional below, then a null string evaluates to true!
-    // Todo: Figure out how on earth null can evaluate to true.
-    let userObj = JSON.parse(environment.storage.getItem('rpUser'));
+    let rpUser = JSON.parse(environment.storage.getItem('rpUser'));
 
-    if ( userObj && userObj.length > 0 ) {
-      console.log("getUserFromStorage(). About to create new user with userString:", userObj);
-      let user = new User(JSON.parse(userObj));
+    if ( rpUser && rpUser.length > 0 ) {
+      console.log("getUserFromStorage(). About to create new user with userString:", rpUser);
+      let user = new User(JSON.parse(rpUser));
       environment.storage.removeItem('rpUser');
       setTimeout(() => {
         this.user$.next(user);

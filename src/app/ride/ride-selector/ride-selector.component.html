@@ -5,7 +5,7 @@
 
         <div>
 
-          <div *ngIf="!user.ride">
+          <div *ngIf="!ride">
             <div *ngIf="availableRides">
 
               <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
@@ -35,11 +35,11 @@
             </div>
           </div>
 
-          <div *ngIf="user.ride">
-            <h3>You are logged in to the ride: {{ user.ride }}</h3>
+          <div *ngIf="ride">
+            <h3>You are logged in to the ride: {{ ride }}</h3>
             <p>You have to log out from this ride before you can log into another ride.</p>
 
-            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride <i>{{ user.ride }}</i>
+            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride <i>{{ ride }}</i>
             </button>
           </div>
 

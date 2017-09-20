@@ -67,7 +67,6 @@ export class RiderService {
   onRemovedRider() {
     this.socket.on('removedRider', _id => {
       console.log('removedRider. riderList:', this.riderList$.value);
-      console.log('');
       let riders = this.riderList$.value.filter(rider => rider._id !== _id);
 
       // console.log("About to call riderList$.next() in onRemovedRider()");
@@ -79,7 +78,7 @@ export class RiderService {
     this.socket.on('riderList', riderList => {
       // console.log('onRiderList. riderList:', riderList);
       riderList = riderList.map(rider => new User(rider));
-      // console.log("About to call riderList$.next() in onRiderList");
+      console.log("About to call riderList$.next() in onRiderList");
       this.riderList$.next(riderList);
     });
   }

@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { RiderService } from '../rider.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
+import { PositionService } from '../../core/position.service';
 
 @Component({
   templateUrl: './rider-list.component.html',
@@ -27,12 +28,16 @@ export class RiderListComponent implements OnInit, OnDestroy {
   @ViewChild(MdSort) sort: MdSort;
 
   constructor(private modalService: BsModalService,
+              private positionService: PositionService,
               private riderService: RiderService,
               private rideSubjectService: RideSubjectService) {
     this.displayColumns();
   }
 
   ngOnInit() {
+    // Todo: Refactor? The app won't request riderList until the user has a position, so I have to request a position here, in case the user enters the app on this page. But this doesn't seem like an ideal setup.
+    this.positionService.getPosition();
+
     this.ride = this.rideSubjectService.ride$.value;
 
     if ( !this.ride ) return;
@@ -45,9 +50,9 @@ export class RiderListComponent implements OnInit, OnDestroy {
         .distinctUntilChanged();
 
     this.subscription = keyup$.subscribe(() => {
-          if ( !this.dataSource ) return;
-          this.dataSource.filter = this.filter.nativeElement.value;
-        });
+      if ( !this.dataSource ) return;
+      this.dataSource.filter = this.filter.nativeElement.value;
+    });
 
     // Todo: Refactor this so that I can removeEventListeners OnDestroy.
     window.addEventListener('resize', () => {
@@ -64,13 +69,12 @@ export class RiderListComponent implements OnInit, OnDestroy {
   }
 
   showDetails(template: TemplateRef<any>, row) {
-    console.log(row);
     this.rider = row;
     this.modalRef = this.modalService.show(template);
   }
 
   ngOnDestroy() {
-    if (this.subscription) this.subscription.unsubscribe();
+    if ( this.subscription ) this.subscription.unsubscribe();
   }
 
 }

@@ -16,6 +16,7 @@ import { PositionService } from '../../core/position.service';
 })
 export class RideSelectorComponent implements OnInit, OnDestroy {
   model: any = [];
+  ride: string = '';
   user: User = null;
 
   private availableRides: Array<string> = null;
@@ -32,6 +33,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
     this.positionService.getPosition(); // So the app has it, when the user gets to the map.
     this.rideService.emitGiveMeAvailableRides();
     this.subscribeToAvailableRides();
+    this.subscribeToRide();
     this.subscribeToUser();
   }
 
@@ -55,6 +57,12 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
       this.availableRides = availableRides;
     });
     this.subscriptions.push(sub);
+  }
+
+  subscribeToRide() {
+    const sub = this.rideSubjectService.ride$.subscribe((ride: string) => {
+      this.ride = ride;
+    })
   }
 
   subscribeToUser() {

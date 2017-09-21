@@ -32,6 +32,15 @@ export class UserService {
     this.socket = this.socketService.socket;
   }
 
+  addTenMembers() {
+    this.token = JSON.parse(environment.storage.getItem('rpToken'));
+    this.headers = new Headers({ 'x-auth': this.token });
+    this.requestOptions = new RequestOptions({ headers: this.headers });
+
+    return this.http.get(`${environment.api}/users/add-ten-members`, this.requestOptions)
+        .map(data => data.json().users)
+        .toPromise();
+  }
 
   create(user: User) {
     user.email = user.email.toLowerCase();

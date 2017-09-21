@@ -26,13 +26,13 @@ export class AppComponent implements OnInit {
     setInterval(() => {
       now = Date.now();
 
-      if ( now - prev > 3000 ) {
-        window.location.reload();
+      if ( now - prev > 30000 ) {
+        // window.location.reload();
       }
 
       prev = now;
       now = Date.now();
-    }, 2000);
+    }, 20000);
   }
 
 }

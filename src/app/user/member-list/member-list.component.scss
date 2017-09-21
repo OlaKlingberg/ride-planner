@@ -7,6 +7,37 @@ md-table {
   border-top: 2px solid silver;
 }
 
+.mat-column- {
+  &fullName {
+    color: goldenrod;
+    flex-grow: 3;
+  }
+
+  &phone {
+    color: lightgreen;
+    flex-grow: 2;
+  }
+
+  &email {
+    color: hotpink;
+    flex-grow: 4;
+  }
+
+  &emergencyName {
+    color: coral;
+    flex-grow: 2;
+  }
+
+  &emergencyPhone {
+    color: chartreuse;
+    flex-grow: 2;
+  }
+}
+
+.mat-column-phone {
+
+}
+
 .mat-app-background {
   background-color: darken($rpGray, 8%);
   padding: 0;
@@ -19,3 +50,10 @@ md-table {
 .padding-left {
   padding-left: 24px;
 }
+
+//.page-members {
+  //max-width: 1200px;
+  //margin-left: auto;
+  //margin-right: auto;
+  //padding-top: 1px !important; // Somehow, this triggers a larger padding. Not sure how that works.
+//}

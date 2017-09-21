@@ -49,13 +49,17 @@ export class MemberListComponent implements OnInit {
   }
 
   addTenMembers() {
+    this.userService.addTenMembers()
+        .then(() => {
 
-
+        });
   }
 
   displayColumns() {
-    if ( window.innerWidth >= 800 ) {
+    if ( window.innerWidth >= 900 ) {
       this.displayedColumns = ['fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone'];
+    } else if (window.innerWidth >= 700) {
+      this.displayedColumns = ['fullName', 'phone', 'emergencyName', 'emergencyPhone', 'showDetailsButton']
     } else {
       this.displayedColumns = ['fullName', 'phone', 'showDetailsButton'];
     }

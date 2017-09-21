@@ -197,6 +197,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getCuesheet(cuesheetId) {
     this.cuesheetService.getCuesheet(cuesheetId)
+        .toPromise()
         .then(cuesheet => {
           this.cuesheetModel.cuesheetName = cuesheet.name;
           this.cuesheetModel.cuesheetDescription = cuesheet.description;

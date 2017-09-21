@@ -61,12 +61,13 @@ export class RiderListComponent implements OnInit, OnDestroy {
   }
 
   displayColumns() {
-    if ( window.innerWidth >= 800 ) {
+    if ( window.innerWidth >= 700 ) {
       this.displayedColumns = [ 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'disconnected' ];
     } else {
       this.displayedColumns = [ 'fullName', 'phone', 'showDetailsButton' ];
     }
   }
+
 
   showDetails(template: TemplateRef<any>, row) {
     this.rider = row;

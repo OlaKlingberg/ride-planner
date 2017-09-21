@@ -152,12 +152,12 @@
           <thead>
 
           <tr [ngClass]="{'faded': cuesheetNameInput || cuesheetDescriptionInput}">
-            <th class="col-xs-1">Cue</th>
-            <th class="col-xs-2">At (Miles)</th>
-            <th class="col-xs-1">Turn</th>
-            <th class="col-xs-5">Description</th>
-            <th class="col-xs-1">Total</th>
-            <th class="col-xs-1"></th>
+            <th class="col-cue">Cue</th>
+            <th class="col-at">At (Miles)</th>
+            <th class="col-turn">Turn</th>
+            <th class="col-description">Description</th>
+            <th class="col-total">Total</th>
+            <th class="col-buttons"></th>
           </tr>
 
           </thead>
@@ -344,7 +344,7 @@
                     [routerLink]="['/cuesheet', cuesheetId, 'view']"
                     class='btn btn-primary btn-block'>I'm done with this cue sheet for now
             </button>
-          </div>ƒ
+          </div>
         </div>
 
       </form>

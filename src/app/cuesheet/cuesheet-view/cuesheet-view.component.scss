@@ -1,3 +1,25 @@
+.col- {
+  &cue {
+    width: 10%;
+  }
+
+  &distance {
+    width: 10%;
+  }
+
+  &turn {
+    width: 10%;
+  }
+
+  &description {
+    width: 58%;
+  }
+
+  &total {
+    width: 6%;
+  }
+}
+
 .margin-bottom-10 {
-  margin-bottom: 10px;
+  margin-bottom: 6%;
 }

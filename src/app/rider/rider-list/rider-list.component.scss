@@ -12,9 +12,38 @@ md-table {
   padding: 0;
 }
 
+.mat-column- {
+  &fullName {
+    flex-grow: 3;
+  }
+
+  &phone {
+    flex-grow: 2;
+  }
+
+  &emergencyName {
+    flex-grow: 2;
+  }
+
+  &emergencyPhone {
+    flex-grow: 2;
+  }
+
+  &disconnected {
+    flex-grow: 2;
+  }
+}
+
 .modal-table {
   width: 100%;
 }
+
+//.page-riders {
+//  max-width: 1200px;
+//  margin-left: auto;
+//  margin-right: auto;
+//  padding-top: 1px !important; // Somehow, this triggers a larger padding. Not sure how that works.
+//}
 
 .padding-left {
   padding-left: 24px;

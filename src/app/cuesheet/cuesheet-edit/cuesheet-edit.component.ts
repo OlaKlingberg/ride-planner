@@ -162,14 +162,18 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  editCuesheetName() {
-    this.cuesheetNameInput = true;
-    this.cuesheetDescriptionInput = false;
+  editCuesheetName(shouldAct: boolean) {
+    if ( shouldAct ) {
+      this.cuesheetNameInput = true;
+      this.cuesheetDescriptionInput = false;
+    }
   }
 
-  editCuesheetDescription() {
-    this.cuesheetNameInput = false;
-    this.cuesheetDescriptionInput = true;
+  editCuesheetDescription(shouldAct: boolean) {
+    if ( shouldAct ) {
+      this.cuesheetNameInput = false;
+      this.cuesheetDescriptionInput = true;
+    }
   }
 
   fadeInTr(tr) {

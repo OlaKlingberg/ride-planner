@@ -46,7 +46,7 @@
       <h1 *ngIf="!cuesheetNameInput" id="cuesheet-name-block">
         <div class="col-sm-10">
           <span *ngIf="!cuesheetDescriptionInput"
-                (click)="editCuesheetName()"
+                (click)="editCuesheetName(cueForm.pristine && cueToInsertBefore === null && !cuesheetDescriptionInput)"
                 class="w-100">{{ cuesheetModel.cuesheetName }}
           </span>
           <span *ngIf="cuesheetDescriptionInput"
@@ -90,7 +90,7 @@
       <h4 *ngIf="!cuesheetDescriptionInput" id="cuesheet-description-block">
         <div class="col-sm-10">
           <span *ngIf="!cuesheetNameInput"
-                (click)="editCuesheetDescription()"
+                (click)="editCuesheetDescription(cueForm.pristine && cueToInsertBefore === null && !cuesheetNameInput)"
                 class="w-100">{{ cuesheetModel.cuesheetDescription }}
           </span>
           <span *ngIf="cuesheetNameInput"

@@ -11,9 +11,6 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
 
 export class MemberListDataSource extends DataSource<any> {
-  /** Stream that emits whenever the data has been modified. */
-  memberList$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-
   _filterChange = new BehaviorSubject('');
 
   get filter(): string {
@@ -25,32 +22,31 @@ export class MemberListDataSource extends DataSource<any> {
   }
 
   get data() {
-    return this.memberList$.value;
+    return this.userService.userList$.value;
   }
 
   constructor(private _sort: MdSort,
               private userService: UserService) {
     super();
-    this.userService.getAllUsers()
-        .then(data => {
-          this.memberList$.next(data);
-        });
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any> {
     const displayDataChanges = [
-      this.memberList$,
+      this.userService.userList$,
       this._sort.mdSortChange,
       this._filterChange
     ];
 
-    return Observable.merge(...displayDataChanges).map(() => {
-      return this.getSortedData().filter(item => {
-        let searchStr = (item.fname + ' ' + item.lname).toLowerCase();
-        return searchStr.indexOf(this.filter.toLowerCase()) != -1;
-      });
-    });
+    return Observable
+        .merge(...displayDataChanges)
+        .map(() => {
+          return this.getSortedData().filter(item => {
+
+            return item.fname.toLowerCase().indexOf(this.filter.toLowerCase()) === 0 ||
+                item.lname.toLowerCase().indexOf(this.filter.toLowerCase()) === 0;
+          });
+        });
   }
 
   disconnect() {
@@ -86,7 +82,7 @@ export class MemberListDataSource extends DataSource<any> {
       let secA = isNaN(+secondaryA) ? secondaryA : +secondaryA;
       let secB = isNaN(+secondaryB) ? secondaryB : +secondaryB;
 
-      /** Sort on primary values. If primary values are equal, sort on secondary values. **/
+      /** Sort on primary values (e.g. last name). If primary values are equal, sort on secondary values (e.g. first name). **/
       return (primA < primB ? -1 : primA > primB ? 1 : secA < secB ? -1 : 1) *
           (this._sort.direction === 'asc' ? 1 : -1);
     });

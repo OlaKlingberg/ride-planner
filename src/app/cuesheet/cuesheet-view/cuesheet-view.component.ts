@@ -25,7 +25,6 @@ export class CuesheetViewComponent implements OnInit {
     this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
     this.cuesheetService.getCuesheet(this.cuesheetId)
-        .toPromise()
         .then(cuesheet => {
           this.setTotalDistances(cuesheet);
         });

@@ -1,4 +1,4 @@
-import { Http, RequestOptions, Headers } from "@angular/http";
+import { Http, RequestOptions, Headers, Response } from "@angular/http";
 import { Injectable } from "@angular/core";
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -13,11 +13,9 @@ import { User } from "./user";
 @Injectable()
 export class UserService {
   user$: BehaviorSubject<User> = new BehaviorSubject(null);
+  userList$: BehaviorSubject<User[]> = new BehaviorSubject([]);
 
-  private headers: Headers;
-  private requestOptions: RequestOptions;
   private socket: Socket;
-  private token: string;
 
   constructor(private http: Http,
               private positionService: PositionService,
@@ -32,13 +30,10 @@ export class UserService {
     this.socket = this.socketService.socket;
   }
 
-  addTenMembers() {
-    this.token = JSON.parse(environment.storage.getItem('rpToken'));
-    this.headers = new Headers({ 'x-auth': this.token });
-    this.requestOptions = new RequestOptions({ headers: this.headers });
+  addTwentyMembers() {
+    const requestOptions = this.setHeaders();
 
-    return this.http.get(`${environment.api}/users/add-ten-members`, this.requestOptions)
-        .map(data => data.json().users)
+    return this.http.get(`${environment.api}/users/add-twenty-members`, requestOptions)
         .toPromise();
   }
 
@@ -64,16 +59,6 @@ export class UserService {
     });
   }
 
-  getAllUsers() {
-    this.token = JSON.parse(environment.storage.getItem('rpToken'));
-    this.headers = new Headers({ 'x-auth': this.token });
-    this.requestOptions = new RequestOptions({ headers: this.headers });
-
-    return this.http.get(`${environment.api}/users`, this.requestOptions)
-        .map(data => data.json().users)
-        .toPromise();
-  }
-
   getRideFromStorage() {
     let ride = environment.storage.getItem('rpRide');  // This may or may not exist.
     if ( ride ) this.rideSubjectService.ride$.next(ride);
@@ -90,6 +75,20 @@ export class UserService {
         this.user$.next(user);
       }, 0);
     }
+  }
+
+  requestAllUsers() {
+    const requestOptions = this.setHeaders();
+
+    return this.http.get(`${environment.api}/users`, requestOptions)
+        .map((response: Response) => this.userList$.next(response.json().users.map(user => new User(user))))
+        .toPromise();
+  }
+
+  setHeaders() {
+    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const headers = new Headers({ 'x-auth': token });
+    return new RequestOptions({ headers });
   }
 
   updateUserPositionOnNewPosition() {

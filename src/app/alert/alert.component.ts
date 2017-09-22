@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { alertAnimations } from './alert.component.animations';
 import { AlertService } from "./alert.service";
-import Timer = NodeJS.Timer;
 
 @Component({
   selector: 'rp-alert',
@@ -13,10 +12,10 @@ import Timer = NodeJS.Timer;
   animations: alertAnimations
 })
 export class AlertComponent implements OnInit, OnDestroy {
+  display: boolean = true;
   message: any;
 
   private subscription: Subscription;
-  private timer: Timer;
 
   constructor(private alertService: AlertService) {
   }
@@ -24,6 +23,7 @@ export class AlertComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.alertService.getMessage().subscribe(message => {
       if ( message ) {
+        this.display = true;
         this.message = message;
         this.message.state = 'new';
         setTimeout(() => {
@@ -34,8 +34,14 @@ export class AlertComponent implements OnInit, OnDestroy {
             }, 1000);
           }
         }, 2500);
+      } else {
+        this.message = null;
       }
     });
+  }
+
+  close() {
+    this.display = false;
   }
 
   ngOnDestroy() {

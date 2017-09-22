@@ -53,7 +53,6 @@ export class CuesheetBikeIframeComponent implements OnInit, OnDestroy {
 
   getCuesheet(cuesheetId) {
     this.cuesheetService.getCuesheet(cuesheetId)
-        .toPromise()
         .then((cuesheet: Cuesheet) => {
           return this.setTotalDistances(cuesheet);
         })

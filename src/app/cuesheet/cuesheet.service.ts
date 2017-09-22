@@ -85,15 +85,7 @@ export class CuesheetService {
 
     return this.http.get(`${environment.api}/cuesheets/${_id}`, requestOptions)
         .map((response: Response) => new Cuesheet(response.json().cuesheet))
-        // .toPromise();
-  }
-
-
-  getCuesheetObservable(_id) {
-    const requestOptions = this.setHeaders();
-
-    return this.http.get(`${environment.api}/cuesheets/${_id}`, requestOptions)
-        .map((response: Response) => new Cuesheet(response.json().cuesheet))
+        .toPromise();
   }
 
   setHeaders() {

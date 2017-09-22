@@ -40,8 +40,9 @@ export class RiderListDataSource extends DataSource<any> {
 
     return Observable.merge(...displayDataChanges).map(() => {
       return this.getSortedData().filter(item => {
-        let searchStr = (item.fname + item.lname).toLowerCase();
-        return searchStr.indexOf(this.filter.toLowerCase()) != -1;
+
+        return item.fname.toLowerCase().indexOf(this.filter.toLowerCase()) === 0 ||
+            item.lname.toLowerCase().indexOf(this.filter.toLowerCase()) === 0;
       });
     });
   }

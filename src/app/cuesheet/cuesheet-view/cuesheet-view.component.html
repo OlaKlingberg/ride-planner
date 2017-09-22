@@ -14,7 +14,7 @@
       <p>Created by {{ cuesheet?._creator.fname }} {{ cuesheet?._creator.lname }}</p>
     </div>
   </div>
-  <div class="row margin-bottom-10">
+  <div class="row margin-bottom-sm">
     <div class="col-sm-12">
       <hr>
       <a [routerLink]="[ '/cuesheet', cuesheetId, 'bike', '0' ]"
@@ -23,7 +23,7 @@
       </a>
     </div>
   </div>
-  <div class="row margin-bottom-10">
+  <div class="row margin-bottom-sm">
     <div class="col-sm-12">
       <p>Or tap on a cue to start at that cue.</p>
     </div>
@@ -43,7 +43,8 @@
         </thead>
         <tbody>
         <tr *ngFor="let cue of cuesheet?.cues; index as i"
-            [routerLink]="[ '/cuesheet', cuesheetId, 'bike', i ]">
+            [routerLink]="[ '/cuesheet', cuesheetId, 'bike', i ]"
+            class="pointer">
           <td>{{ i + 1 }}</td>
           <td>{{ cue.distance / 100 | number:'1.0-2' }}</td>
           <td>{{ cue.turn }}</td>

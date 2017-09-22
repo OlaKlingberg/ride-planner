@@ -14,7 +14,7 @@
         </thead>
 
         <tbody>
-        <tr *ngFor="let cuesheet of cuesheets" class="clickable" [routerLink]="['/cuesheet', cuesheet._id, 'view']">
+        <tr *ngFor="let cuesheet of cuesheets" class="pointer" [routerLink]="['/cuesheet', cuesheet._id, 'view']">
           <td>{{ cuesheet.name }}</td>
           <td>{{ cuesheet.description }}</td>
           <td>{{ cuesheet._creator.fname }} {{ cuesheet._creator.lname }}</td>

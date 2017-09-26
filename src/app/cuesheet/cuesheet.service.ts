@@ -18,11 +18,11 @@ export class CuesheetService {
 
   private user: User;
 
-  @HostListener('window:message', [ '$event' ])
-  onMessage(e) {
-    console.log("e:", e);
-
-  }
+  // @HostListener('window:message', [ '$event' ])
+  // onMessage(e) {
+  //   console.log("e:", e);
+  //
+  // }
 
   constructor(private http: Http,
               private userService: UserService) {

@@ -13,6 +13,8 @@ import { CuesheetEditDemoComponent } from './cuesheet-edit/cuesheet-edit-demo.co
 import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
 import { CuesheetListDemoComponent } from './cuesheet-list/cuesheet-list-demo.component';
 import { CuesheetNewDemoComponent } from './cuesheet-new/cuesheet-new-demo.component';
+import { CuesheetBikeIframeDemoComponent } from './cuesheet-bike-iframe/cuesheet-bike-iframe-demo.component';
+import { CuesheetBikeDemoComponent } from './cuesheet-bike/cuesheet-bike-demo.component';
 
 @NgModule({
   imports: [ RouterModule.forChild([
@@ -55,11 +57,20 @@ import { CuesheetNewDemoComponent } from './cuesheet-new/cuesheet-new-demo.compo
     {
       path: ':cuesheetId/bike/:cueNumber',
       component: CuesheetBikeComponent,
-      canActivate: [ WindowSizeGuard ]
+      canActivate: [ WindowSizeGuard, JaneDoeGuard ]
+    },
+    {
+      path: ':cuesheetId/bike/:cueNumber/demo',
+      component: CuesheetBikeDemoComponent
     },
     {
       path: ':cuesheetId/bike-iframe/:cueNumber',
-      component: CuesheetBikeIframeComponent
+      component: CuesheetBikeIframeComponent,
+      canActivate: [ JaneDoeGuard ]
+    },
+    {
+      path: ':cuesheetId/bike-iframe/:cueNumber/demo',
+      component: CuesheetBikeIframeDemoComponent
     }
   ]) ],
   exports: [ RouterModule ],

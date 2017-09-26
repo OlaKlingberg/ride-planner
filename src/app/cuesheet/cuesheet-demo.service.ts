@@ -82,10 +82,28 @@ export class CuesheetDemoService {
     });
   };
 
+  putCuesheetInStorage(cuesheet) {
+    sessionStorage.setItem('rpCuesheet', JSON.stringify(cuesheet));
+  }
+
+  // sendCuesheetToIframe(windowRef, cuesheet) {
+  //   setTimeout(() => {
+  //     windowRef.postMessage(cuesheet, '*');
+  //   }, 5000);
+  // }
+
   setHeaders() {
     const token = JSON.parse(environment.storage.getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
+  }
+
+  swipeDown(windowRef) {
+    windowRef.postMessage('down', '*');
+  }
+
+  swipeUp(windowRef) {
+    windowRef.postMessage('up', '*');
   }
 
   updateCuesheet(updatedCuesheet) {

@@ -14,6 +14,8 @@ import { CuesheetEditDemoComponent } from './cuesheet-edit/cuesheet-edit-demo.co
 import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
 import { CuesheetListDemoComponent } from './cuesheet-list/cuesheet-list-demo.component';
 import { CuesheetNewDemoComponent } from './cuesheet-new/cuesheet-new-demo.component';
+import { CuesheetBikeIframeDemoComponent } from './cuesheet-bike-iframe/cuesheet-bike-iframe-demo.component';
+import { CuesheetBikeDemoComponent } from './cuesheet-bike/cuesheet-bike-demo.component';
 
 @NgModule({
   imports: [
@@ -23,8 +25,10 @@ import { CuesheetNewDemoComponent } from './cuesheet-new/cuesheet-new-demo.compo
   ],
   declarations: [
     CuesheetBikeComponent,
+    CuesheetBikeDemoComponent,
     CuesheetBikeCueComponent,
     CuesheetBikeIframeComponent,
+    CuesheetBikeIframeDemoComponent,
     CuesheetEditComponent,
     CuesheetEditDemoComponent,
     CuesheetListComponent,

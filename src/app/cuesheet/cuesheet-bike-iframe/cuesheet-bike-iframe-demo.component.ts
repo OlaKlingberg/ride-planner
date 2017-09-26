@@ -38,6 +38,7 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log("CuesheetBikeIframeDemoComponent");
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
@@ -52,13 +53,21 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
   }
 
   getCuesheet(cuesheetId) {
+
+    let cuesheet = JSON.parse(sessionStorage.getItem('rpCuesheet'));
+    // console.log("CuesheetBikeIframeDemoComponent.getCuesheet() cuesheet:", cuesheet);
+
+    if (cuesheet) {
+      // console.log("Cuesheet from sessionStorage was used.");
+      this.cuesheet = this.setIcons(this.setTotalDistances(cuesheet));
+      return;
+    }
+
+    console.log("Cuesheet was requested from server. Should never happen.");
     this.cuesheetService.getCuesheet(cuesheetId)
         .then((cuesheet: Cuesheet) => {
-          return this.setTotalDistances(cuesheet);
-        })
-        .then((cuesheet: Cuesheet) => {
-          this.cuesheet = this.setIcons(cuesheet);
-        })
+          this.cuesheet = this.setIcons(this.setTotalDistances(cuesheet));
+        });
   }
 
   setIcons(cuesheet) {
@@ -132,7 +141,7 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
   }
 
   swipeUp() {
-    console.log("swipeUp(). cueNumber:", this.cueNumber);
+    // console.log("swipeUp(). cueNumber:", this.cueNumber);
     if ( this.cueNumber >= this.cuesheet.cues.length - 1 ) {
       if (this.modalRef) this.modalRef.hide();
       this.modalRef = this.modalService.show(this.lastCueModal);
@@ -150,6 +159,7 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // sessionStorage.removeItem('rpCuesheet');
     this.mc.off('swipedown swipeup');
     this.swipeSub.unsubscribe();
   }

@@ -212,8 +212,14 @@ export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestr
   getCuesheet(cuesheetId) {
     this.cuesheetDemoService.getCuesheet(cuesheetId)
         .then(cuesheet => {
-          console.log("CuesheetViewDemoComponent.getCuesheet cuesheet:", cuesheet);
+          this.cuesheetModel.cuesheetName = cuesheet.name;
+          this.cuesheetModel.cuesheetDescription = cuesheet.description;
           this.cuesheet = this.setTotalDistances(cuesheet);
+
+          if ( this.cuesheet.cues.length === 0 ) {
+            this.cueModel.distance = '0';
+            this.cueModel.turn = 'Start';
+          }
         });
   }
 

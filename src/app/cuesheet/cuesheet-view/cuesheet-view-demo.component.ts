@@ -26,7 +26,6 @@ export class CuesheetViewDemoComponent implements OnInit {
   getCuesheet(cuesheetId) {
     this.cuesheetDemoService.getCuesheet(cuesheetId)
         .then(cuesheet => {
-          console.log("CuesheetViewDemoComponent.getCuesheet cuesheet:", cuesheet);
           this.cuesheet = this.setTotalDistances(cuesheet);
         });
   }

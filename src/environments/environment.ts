@@ -16,7 +16,7 @@ export const environment = {
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: false,
   refreshOnMapPage: 120000,
-  refreshOnNavigation: 180000,
+  refreshOnNavigation: 1800000,
   removeLongDisconnectedRiders: 1800000,
   storage: sessionStorage
 };

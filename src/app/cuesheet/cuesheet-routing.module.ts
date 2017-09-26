@@ -8,24 +8,49 @@ import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
 import { CuesheetBikeIframeComponent } from './cuesheet-bike-iframe/cuesheet-bike-iframe.component';
 import { WindowSizeGuard } from './window-size.guard';
+import { JaneDoeGuard } from './jane-doe.guard';
+import { CuesheetEditDemoComponent } from './cuesheet-edit/cuesheet-edit-demo.component';
+import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
+import { CuesheetListDemoComponent } from './cuesheet-list/cuesheet-list-demo.component';
+import { CuesheetNewDemoComponent } from './cuesheet-new/cuesheet-new-demo.component';
 
 @NgModule({
   imports: [ RouterModule.forChild([
     {
       path: '',
-      component: CuesheetListComponent
+      component: CuesheetListComponent,
+      canActivate: [ JaneDoeGuard ]
+    },
+    {
+      path: 'demo',
+      component: CuesheetListDemoComponent
     },
     {
       path: 'new',
-      component: CuesheetNewComponent
+      component: CuesheetNewComponent,
+      canActivate: [ JaneDoeGuard ]
+    },
+    {
+      path: 'new/demo',
+      component: CuesheetNewDemoComponent
     },
     {
       path: ':id/view',
-      component: CuesheetViewComponent
+      component: CuesheetViewComponent,
+      canActivate: [ JaneDoeGuard ]
+    },
+    {
+      path: ':id/view/demo',
+      component: CuesheetViewDemoComponent
     },
     {
       path: ':id/edit',
-      component: CuesheetEditComponent
+      component: CuesheetEditComponent,
+      canActivate: [ JaneDoeGuard ]
+    },
+    {
+      path: ':id/edit/demo',
+      component: CuesheetEditDemoComponent
     },
     {
       path: ':cuesheetId/bike/:cueNumber',
@@ -39,6 +64,7 @@ import { WindowSizeGuard } from './window-size.guard';
   ]) ],
   exports: [ RouterModule ],
   providers: [
+      JaneDoeGuard,
       WindowSizeGuard
   ]
 })

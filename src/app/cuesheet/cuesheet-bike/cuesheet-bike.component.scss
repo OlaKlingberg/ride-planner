@@ -6,13 +6,43 @@ iframe {
   margin: 0 auto;
 }
 
-.wrapper {
-  height: 100vw;
-  background-color: white;
-  padding-top: 50px;
+.button-wrapper {
+  //width: 200px;
 }
 
-.text {
-  color: $rpGray;
-  font-size: larger;
+.col- {
+  &1 {
+    flex: 1 0 0;
+    color: $rpGray;
+    padding-right: 60px;
+    font-size: larger;
+
+  }
+
+  &2 {
+    flex: 1 0 0;
+  }
+
+  &3 {
+    flex: 1 0 0;
+    padding-left: 60px;
+  }
 }
+
+.wrapper- {
+  &inner {
+    display: flex;
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+
+  &outer {
+    display: flex;
+    height: 100vw;
+    background-color: white;
+    padding-top: 50px;
+  }
+
+
+}
+

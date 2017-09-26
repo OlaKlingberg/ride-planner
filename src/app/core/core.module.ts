@@ -25,6 +25,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
 import { UserService } from '../user/user.service';
 import { RiderService } from '../rider/rider.service';
 import { HeaderModule } from '../header/header.module';
+import { CuesheetDemoService } from '../cuesheet/cuesheet-demo.service';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { HeaderModule } from '../header/header.module';
     AdminGuard,
     AlertService,
     AuthenticationService,
+    CuesheetDemoService,
     CuesheetService,
     DebuggingService,
     NavService,

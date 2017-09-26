@@ -4,10 +4,10 @@ import { Cue } from '../cue';
 
 @Component({
   selector: 'rp-cuesheet-cue',
-  templateUrl: './cuesheet-cue.component.html',
-  styleUrls: ['./cuesheet-cue.component.scss']
+  templateUrl: './cuesheet-bike-cue.component.html',
+  styleUrls: ['./cuesheet-bike-cue.component.scss']
 })
-export class CuesheetCueComponent {
+export class CuesheetBikeCueComponent {
   @Input() cue: Cue;
   @Input() cueNumber: number;
 }

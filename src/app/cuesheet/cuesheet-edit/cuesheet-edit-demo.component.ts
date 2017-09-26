@@ -11,13 +11,14 @@ import { Cuesheet } from '../cuesheet';
 import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 import { CuesheetService } from '../cuesheet.service';
 import { Subscription } from 'rxjs/Subscription';
+import { CuesheetDemoService } from '../cuesheet-demo.service';
 
 @Component({
   templateUrl: './cuesheet-edit.component.html',
   styleUrls: [ './cuesheet-edit.component.scss' ],
   animations: cuesheetEditAnimations
 })
-export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestroy {
   cueModel: any = {};
   cuesheet: Cuesheet;
   cuesheetDescriptionInput: boolean = false;
@@ -36,6 +37,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('cueForm') cueForm: NgForm;
 
   constructor(private alertService: AlertService,
+              private cuesheetDemoService: CuesheetDemoService,
               private cuesheetService: CuesheetService,
               private modalService: BsModalService,
               private route: ActivatedRoute,
@@ -91,56 +93,65 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   createCue() {
-    const cueToInsertBeforeId = this.cueToInsertBefore ? this.cuesheet.cues[ this.cueToInsertBefore ]._id : null;
+    let cue = new Cue(this.cueModel);
 
-    this.cuesheetService.createCue(this.cuesheet._id, this.cueModel, cueToInsertBeforeId).then((cue: Cue) => {
-      if ( !cue ) return; // Safety precaution.
-      if ( this.cueToInsertBefore !== null ) {
-        // The cue was inserted in the middle of cuesheet.
-        this.fadeOutTr($('#insert-form-row'));
+    if ( this.cueToInsertBefore !== null ) {
+      // The cue was inserted in the middle of cuesheet.
+      this.fadeOutTr($('#insert-form-row'));
+
+      setTimeout(() => {
+        this.cuesheet.cues.splice(this.cueToInsertBefore, 0, cue);
+        this.cuesheet = this.setTotalDistances(this.cuesheet);
+        this.cueToInsertBefore = null;
+
+        this.cuesheetDemoService.updateCuesheet(this.cuesheet);
 
         setTimeout(() => {
-          this.cuesheet.cues.splice(this.cueToInsertBefore, 0, cue);
-          this.cuesheet = this.setTotalDistances(this.cuesheet);
-          this.cueToInsertBefore = null;
+          this.slideDownTr($('#cue-form-row'));
+        }, 0);
+      }, 200);
+    } else {
+      // The cue was added to the end of the cuesheet.
+      this.fadeOutTr($('#insert-form-row'));
 
-          setTimeout(() => {
-            this.slideDownTr($('#cue-form-row'));
-          }, 0);
-        }, 200);
-      } else {
-        // The cue was added to the end of the cuesheet.
-        this.fadeOutTr($('#insert-form-row'));
+      this.total += this.cueModel.distance;
+      cue.total = this.total;
+      cue.state = 'display';
+      this.cuesheet.cues.push(cue);
 
-        this.total += cue.distance;
-        cue.total = this.total;
-        cue.state = 'display';
-        this.cuesheet.cues.push(cue);
-      }
-    });
+      this.cuesheetDemoService.updateCuesheet(this.cuesheet);
+    }
+
+
   }
 
   deleteCue() {
-    const cueId = this.cuesheet.cues[ this.cueToDelete ]._id;
-    this.cuesheetService.deleteCue(this.cuesheet._id, cueId).then((cue: Cue) => {
-      this.cuesheet.cues[ this.cueToDelete ].state = 'removed'; // Removes the insert and delete buttons, before running the animation that removes the table row.
-      setTimeout(() => {
-        this.cuesheet.cues.splice(this.cueToDelete, 1);
-        this.cueToDelete = null;
-        this.focusTrigger.emit(true);
-      }, 300);
-    });
+    this.cuesheet.cues[ this.cueToDelete ].state = 'removed'; // Removes the insert and delete buttons, before running the animation that removes the table row.
+    setTimeout(() => {
+      this.cuesheet.cues.splice(this.cueToDelete, 1);
+      this.cueToDelete = null;
+      this.focusTrigger.emit(true);
+      this.cuesheetDemoService.updateCuesheet(this.cuesheet);
+    }, 300);
   }
 
   deleteCuesheet() {
-    this.cuesheetService.deleteCuesheet(this.cuesheet._id).then((cuesheet: Cuesheet) => {
-      if ( cuesheet ) {
-        this.alertService.success(`The cue sheet ${cuesheet.name} has been deleted.`);
-        this.router.navigate([ '/cuesheet' ]);
-      } else {
-        this.alertService.error("Oops! Something went wrong!");
-      }
-    });
+    this.cuesheetDemoService.deleteCuesheet(this.cuesheet._id);
+
+    this.alertService.success(`The cue sheet ${this.cuesheet.name} has been deleted.`);
+    this.router.navigate([ '/cuesheet' ]);
+
+  }
+
+  displayCuesheet(cuesheet) {
+    this.cuesheetModel.cuesheetName = cuesheet.name;
+    this.cuesheetModel.cuesheetDescription = cuesheet.description;
+    this.cuesheet = this.setTotalDistances(cuesheet);
+
+    if ( this.cuesheet.cues.length === 0 ) {
+      this.cueModel.distance = '0';
+      this.cueModel.turn = 'Start';
+    }
   }
 
   editCue(i, shouldAct) {
@@ -152,7 +163,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cueModel.turn = this.cuesheet.cues[ i ].turn;
         this.cueModel.description = this.cuesheet.cues[ i ].description;
 
-        // this.cueToInsertBefore = null;
         this.cueToEdit = i;
 
         setTimeout(() => {
@@ -200,16 +210,10 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getCuesheet(cuesheetId) {
-    this.cuesheetService.getCuesheet(cuesheetId)
+    this.cuesheetDemoService.getCuesheet(cuesheetId)
         .then(cuesheet => {
-          this.cuesheetModel.cuesheetName = cuesheet.name;
-          this.cuesheetModel.cuesheetDescription = cuesheet.description;
+          console.log("CuesheetViewDemoComponent.getCuesheet cuesheet:", cuesheet);
           this.cuesheet = this.setTotalDistances(cuesheet);
-
-          if ( this.cuesheet.cues.length === 0 ) {
-            this.cueModel.distance = '0';
-            this.cueModel.turn = 'Start';
-          }
         });
   }
 
@@ -258,7 +262,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // Todo: Seems like an ugly solution. Isn't there a better way?
   setTotalDistances(cuesheet) {
     this.total = 0;
     cuesheet.cues = cuesheet.cues.map(cue => {
@@ -278,9 +281,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         .find('td > div')
         .slideDown(300, () => {
           this.focusTrigger.emit(true);
-          // Todo: Figure out what the two lines below are for. The don't seem to be needed, and they throw an error.
-          // const $set = $(this);
-          // $set.replaceWith($set.contents());
         });
   }
 
@@ -294,39 +294,28 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         });
   }
 
-  // Todo: Do I need this here? I do need it on the login-form.
-  syncModel() {
-
-  }
-
   updateCue() {
-    this.cuesheetService.updateCue(this.cuesheet.cues[ this.cueToEdit ]._id.toString(), this.cueModel)
-        .then((cue: Cue) => {
+    const cue = new Cue(this.cueModel);
 
-          if ( !cue ) return; // Safety precaution.
+    this.fadeOutTr($('#insert-form-row'));
 
-          this.fadeOutTr($('#insert-form-row'));
+    setTimeout(() => {
+      this.cuesheet.cues.splice(this.cueToEdit, 1, cue);
+      this.cuesheet = this.setTotalDistances(this.cuesheet);
+      this.cueToEdit = null;
+      setTimeout(() => {
+        this.slideDownTr($('#cue-form-row'));
+      }, 0);
+    }, 200);
 
-          setTimeout(() => {
-            this.cuesheet.cues.splice(this.cueToEdit, 1, cue);
-            this.cuesheet = this.setTotalDistances(this.cuesheet);
-            this.cueToEdit = null;
-            setTimeout(() => {
-              this.slideDownTr($('#cue-form-row'));
-            }, 0);
-          }, 200);
-        });
+    this.cuesheetDemoService.updateCuesheet(this.cuesheet);
   }
 
   updateCuesheet() {
-    this.cuesheetService.updateCuesheet(this.cuesheetId, {
-      name: this.cuesheetModel.cuesheetName,
-      description: this.cuesheetModel.cuesheetDescription
-    }).then(cuesheet => {
-      this.cuesheet.name = cuesheet.name;
-      this.cuesheet.description = cuesheet.description;
-      this.hideInputFields();
-    })
+    this.cuesheet.name = this.cuesheetModel.cuesheetName;
+    this.cuesheet.description = this.cuesheetModel.cuesheetDescription;
+    this.cuesheetDemoService.updateCuesheet(this.cuesheet);
+    this.hideInputFields();
   }
 
   ngOnDestroy() {

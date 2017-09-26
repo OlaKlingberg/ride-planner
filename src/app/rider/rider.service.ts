@@ -78,7 +78,6 @@ export class RiderService {
     this.socket.on('riderList', riderList => {
       // console.log('onRiderList. riderList:', riderList);
       riderList = riderList.map(rider => new User(rider));
-      console.log("About to call riderList$.next() in onRiderList");
       this.riderList$.next(riderList);
     });
   }

@@ -1,33 +1,28 @@
-<div class="wrapper">
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-3 text">
-        <div>This view is meant to be used on your phone while biking.</div>
-        <br/>
-        <div>On your phone, you would swipe up or down to go to the next or previous cue. Here, you can use the buttons below.
-        </div>
-        <hr/>
-        <div class="row">
-          <div class="col-xs-12 col-lg-6 col-lg-offset-3">
-            <button class="btn btn-block btn-primary" (click)="swipeUp()">Swipe Up</button>
-          </div>
-        </div>
-        <br />
-        <div class="row">
-          <div class="col-xs-12 col-lg-6 col-lg-offset-3">
-            <button class="btn btn-block btn-primary" (click)="swipeDown()">Swipe Down</button>
-          </div>
-        </div>
-        <hr />
-        <div class="row">
-          <div class="col-xs-12 col-lg-6 col-lg-offset-3">
-            <button class="btn btn-block btn-primary" (click)="returnToOverview()">Return To<br />Overview</button>
-          </div>
-        </div>
+<div class="wrapper-outer">
+
+  <div class="wrapper-inner">
+    <div class="col-1">
+      <div>This view is meant to be used on your phone while biking.</div>
+      <br/>
+      <div>On your phone, you would swipe up or down to go to the next or previous cue. Here, you can also use the
+        buttons to the right.
       </div>
-      <div class="col-xs-6">
-        <iframe [src]="url" frameborder="0" #iframe></iframe>
+    </div>
+
+    <div class="col-2">
+      <iframe [src]="url" frameborder="0" #iframe></iframe>
+    </div>
+
+    <div class="col-3">
+      <div class="button-wrapper">
+        <button class="btn btn-block btn-primary" (click)="swipeUp()">Swipe Up</button>
+        <br/>
+        <button class="btn btn-block btn-primary" (click)="swipeDown()">Swipe Down</button>
+        <hr/>
+        <button class="btn btn-block btn-primary" (click)="returnToOverview()">Return To<br/>Overview</button>
       </div>
     </div>
   </div>
+
 </div>
+

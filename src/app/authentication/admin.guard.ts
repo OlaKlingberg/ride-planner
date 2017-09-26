@@ -25,6 +25,7 @@ export class AdminGuard implements CanActivate {
 
     // User is not admin, so redirect to home page.
     this.router.navigate(['./'], { queryParams: { returnUrl: state.url } });
+
     return false;
   }
 }

@@ -62,12 +62,24 @@ export class CuesheetDemoService {
   }
 
   getCuesheet(_id) {
+    let cuesheet = JSON.parse(sessionStorage.getItem('rpCuesheet'));
+    sessionStorage.removeItem('rpCuesheet');
+    console.log("CuesheetDemoService.getCuesheet() sessionStorage.rpCuesheet:", cuesheet);
+
+    if ( cuesheet ) {
+      console.log("There was a cuesheet");
+      return Promise.resolve(new Cuesheet(cuesheet));
+    }
+
+    console.log("No cuesheet");
+
+
     return this.cuesheetsPromise().then((cuesheets: Cuesheet[]) => {
-      let cuesheet = cuesheets.filter(cuesheet => cuesheet._id === _id)[0];
+      let cuesheet = cuesheets.filter(cuesheet => cuesheet._id === _id)[ 0 ];
 
       // Todo: This is hard to read. Can I refactor?
-      if (cuesheet) {
-        if (cuesheet.cues.length >= 1 && !cuesheet.cues[0].turn ) {
+      if ( cuesheet ) {
+        if ( cuesheet.cues.length >= 1 && !cuesheet.cues[ 0 ].turn ) {
           const requestOptions = this.setHeaders();
 
           return this.http.get(`${environment.api}/cuesheets/${_id}`, requestOptions)
@@ -85,12 +97,6 @@ export class CuesheetDemoService {
   putCuesheetInStorage(cuesheet) {
     sessionStorage.setItem('rpCuesheet', JSON.stringify(cuesheet));
   }
-
-  // sendCuesheetToIframe(windowRef, cuesheet) {
-  //   setTimeout(() => {
-  //     windowRef.postMessage(cuesheet, '*');
-  //   }, 5000);
-  // }
 
   setHeaders() {
     const token = JSON.parse(environment.storage.getItem('rpToken'));

@@ -11,14 +11,14 @@ import * as _ from 'lodash';
 import * as Rx from 'rxjs';
 
 import { MapAnimations } from './map.component.animatins';
-import { NavService } from '../nav/nav.service';
-import { PositionService } from '../core/position.service';
-import { SocketService } from '../core/socket.service';
-import { User } from '../user/user';
-import { UserService } from '../user/user.service';
-import { RefreshService } from '../core/refresh.service';
-import { environment } from '../../environments/environment';
-import { RiderService } from '../rider/rider.service';
+import { NavService } from '../../nav/nav.service';
+import { PositionService } from '../../core/position.service';
+import { SocketService } from '../../core/socket.service';
+import { User } from '../../user/user';
+import { UserService } from '../../user/user.service';
+import { RefreshService } from '../../core/refresh.service';
+import { environment } from '../../../environments/environment';
+import { RiderService } from '../../rider/rider.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -77,7 +77,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   calculateBounds(mapMode = this.mapMode) {
-    console.log("calculateBounds: mapMode:", mapMode);
     this.mapMode = mapMode;
 
     if (mapMode === 'stationary') return;

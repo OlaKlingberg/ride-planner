@@ -124,7 +124,7 @@ export class CuesheetBikeIframeComponent implements OnInit, OnDestroy {
       }
       this.move = 'down';
       setTimeout(() => {
-        this.router.navigate([ `/cuesheet/${this.cuesheetId}/bike-iframe/${this.cueNumber - 1}` ]);
+        this.router.navigate([ `/cuesheet/iframe/${this.cuesheetId}/bike/${this.cueNumber - 1}` ]);
       }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
     }
   }
@@ -141,7 +141,7 @@ export class CuesheetBikeIframeComponent implements OnInit, OnDestroy {
       }
       this.move = 'up';
       setTimeout(() => {
-        this.router.navigate([ `/cuesheet/${this.cuesheetId}/bike-iframe/${this.cueNumber + 1}` ]);
+        this.router.navigate([ `/cuesheet/iframe/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
         // this.move = 'still';
       }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
     }

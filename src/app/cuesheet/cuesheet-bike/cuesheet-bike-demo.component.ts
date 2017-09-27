@@ -28,7 +28,7 @@ export class CuesheetBikeDemoComponent implements OnInit {
 
       this.cuesheetId = this.cuesheetId.replace(/[^\w]/g, '');
 
-      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${window.location.origin}/cuesheet/${this.cuesheetId}/bike-iframe/${this.cueNumber}`);
+      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${window.location.origin}/cuesheet/iframe/${this.cuesheetId}/bike/${this.cueNumber}`);
     });
   }
 

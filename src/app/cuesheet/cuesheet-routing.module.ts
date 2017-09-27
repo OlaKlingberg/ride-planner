@@ -66,12 +66,12 @@ import { SmallWindowGuard } from './small-window.guard';
       canActivate: [ LargeWindowGuard ]
     },
     {
-      path: ':cuesheetId/bike-iframe/:cueNumber',
+      path: 'iframe/:cuesheetId/bike/:cueNumber',
       component: CuesheetBikeIframeComponent,
       canActivate: [ JaneDoeGuard, SmallWindowGuard ]
     },
     {
-      path: ':cuesheetId/bike-iframe/:cueNumber/demo',
+      path: 'iframe/:cuesheetId/bike/:cueNumber/demo',
       component: CuesheetBikeIframeDemoComponent,
       canActivate: [ SmallWindowGuard ]
     }

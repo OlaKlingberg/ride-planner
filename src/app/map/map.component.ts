@@ -77,7 +77,11 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   calculateBounds(mapMode = this.mapMode) {
+    console.log("calculateBounds: mapMode:", mapMode);
     this.mapMode = mapMode;
+
+    if (mapMode === 'stationary') return;
+
     let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
 
     if ( mapMode === 'showAllRiders' && this.riders.length > 0 ) {

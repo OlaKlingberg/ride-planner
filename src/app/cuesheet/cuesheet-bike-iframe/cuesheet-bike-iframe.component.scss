@@ -1,4 +1,5 @@
 /** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
+@import '../../../_vars.scss';
 
 .container {
   max-width: 414px;
@@ -22,7 +23,7 @@
   width: 100%;
   margin-left: 0;
 
-  background-color: #2b3e50;
+  background-color: $rpGray;
   opacity: .7;
 }
 
@@ -33,7 +34,7 @@
   padding-top: 20px;
   height: 400px;
   width: 100%;
-  background-color: silver;
+  background-color: darken($rpGray, 6%);
 }
 
 #page {
@@ -42,12 +43,16 @@
   //background-color: paleturquoise;
 }
 
+.margin-top-none {
+  margin-top: 0px;
+}
+
 .no-padding {
   padding: 0;
 }
 
 #ride-info {
   margin-top: 20px;
-  color: black;
+  color: white;
 }
 

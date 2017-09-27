@@ -46,6 +46,7 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
       this.move = 'still';
     });
 
+    console.log("cuesheetId:", this.cuesheetId);
     this.getCuesheet(this.cuesheetId);
     this.setSwipeListeners();
     this.subscribeToSwipes();
@@ -54,9 +55,13 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
   }
 
   getCuesheet(cuesheetId) {
-    this.cuesheetDemoService.getCuesheet(cuesheetId).then((cuesheet: Cuesheet) => {
-      this.cuesheet = this.setIcons(this.setTotalDistances(cuesheet));
-    })
+    this.cuesheetDemoService.getCuesheet(cuesheetId)
+        .then((cuesheet: Cuesheet) => {
+          console.log("getCuesheet() cuesheet:", cuesheet);
+          console.log(typeof cuesheet);
+          // console.log("getCuesheet() cuesheet stringified-parsed:", JSON.parse(JSON.stringify(cuesheet)));
+          this.cuesheet = this.setIcons(this.setTotalDistances(cuesheet));
+        })
   }
 
   setIcons(cuesheet) {
@@ -114,10 +119,10 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
 
   swipeDown() {
     if ( this.cueNumber <= 0 ) {
-      if (this.modalRef) this.modalRef.hide();
+      if ( this.modalRef ) this.modalRef.hide();
       this.modalRef = this.modalService.show(this.firstCueModal);
     } else {
-      if (this.modalRef) {
+      if ( this.modalRef ) {
         this.modalRef.hide();
         this.modalRef = null;
       }
@@ -130,10 +135,10 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
 
   swipeUp() {
     if ( this.cueNumber >= this.cuesheet.cues.length - 1 ) {
-      if (this.modalRef) this.modalRef.hide();
+      if ( this.modalRef ) this.modalRef.hide();
       this.modalRef = this.modalService.show(this.lastCueModal);
     } else {
-      if (this.modalRef) {
+      if ( this.modalRef ) {
         this.modalRef.hide();
         this.modalRef = null;
       }

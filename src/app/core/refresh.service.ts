@@ -52,8 +52,6 @@ export class RefreshService {
     let position: Position = this.positionService.position$.value;
     let user: User = this.userService.user$.value;
 
-    if (user.email === 'jane.doe@example.com') return;
-
     environment.storage.setItem('rpAutoRefreshFlag', 'true');
     environment.storage.setItem('rpPosition', JSON.stringify(position));
     environment.storage.setItem('rpUser', JSON.stringify(user));

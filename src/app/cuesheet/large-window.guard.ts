@@ -3,7 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class WindowSizeGuard implements CanActivate {
+export class LargeWindowGuard implements CanActivate {
   constructor(private router: Router) {
 
   }

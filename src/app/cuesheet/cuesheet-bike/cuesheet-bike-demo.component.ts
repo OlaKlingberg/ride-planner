@@ -22,7 +22,6 @@ export class CuesheetBikeDemoComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log("CuesheetBikeDemoComponent");
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
@@ -30,18 +29,8 @@ export class CuesheetBikeDemoComponent implements OnInit {
       this.cuesheetId = this.cuesheetId.replace(/[^\w]/g, '');
 
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${window.location.origin}/cuesheet/${this.cuesheetId}/bike-iframe/${this.cueNumber}`);
-
-      // this.getCuesheet(this.cuesheetId);
     });
   }
-
-  // getCuesheet(_id) {
-  //   this.cuesheetDemoService.getCuesheet(_id).then((cuesheet: Cuesheet) => {
-  //     // console.log("CuesheetBikeDemoComponent.getCuesheet() cuesheet:", cuesheet);
-  //     // this.cuesheetDemoService.putCuesheetInStorage(cuesheet);
-  //     // this.cuesheetDemoService.sendCuesheetToIframe(this.iframe.nativeElement.contentWindow, cuesheet);
-  //   })
-  // }
 
   returnToOverview() {
     this.router.navigate([`/cuesheet/${this.cuesheetId}/view`])

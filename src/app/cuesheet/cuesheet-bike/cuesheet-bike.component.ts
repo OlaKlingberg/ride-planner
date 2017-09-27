@@ -22,7 +22,6 @@ export class CuesheetBikeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("CuesheetBikeComponent");
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];

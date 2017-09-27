@@ -57,13 +57,10 @@ export class CuesheetDemoService {
   }
 
   getCuesheet(_id) {
-    console.log("_id:", _id);
     return this.cuesheetListInStoragePromise().then(() => {
       let cuesheets = JSON.parse(sessionStorage.getItem('rpCuesheets'));
-      console.log("rpCuesheets:", cuesheets);
 
       let cuesheet = cuesheets.filter(cuesheet => cuesheet._id === _id)[ 0 ];
-      console.log("filtered:", cuesheet);
 
       if ( cuesheet ) {
         if ( cuesheet.cues.length >= 1 && !cuesheet.cues[ 0 ].turn ) {

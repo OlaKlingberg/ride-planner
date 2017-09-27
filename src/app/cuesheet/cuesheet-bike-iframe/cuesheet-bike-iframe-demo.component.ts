@@ -46,7 +46,6 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
       this.move = 'still';
     });
 
-    console.log("cuesheetId:", this.cuesheetId);
     this.getCuesheet(this.cuesheetId);
     this.setSwipeListeners();
     this.subscribeToSwipes();
@@ -57,9 +56,6 @@ export class CuesheetBikeIframeDemoComponent implements OnInit, OnDestroy {
   getCuesheet(cuesheetId) {
     this.cuesheetDemoService.getCuesheet(cuesheetId)
         .then((cuesheet: Cuesheet) => {
-          console.log("getCuesheet() cuesheet:", cuesheet);
-          console.log(typeof cuesheet);
-          // console.log("getCuesheet() cuesheet stringified-parsed:", JSON.parse(JSON.stringify(cuesheet)));
           this.cuesheet = this.setIcons(this.setTotalDistances(cuesheet));
         })
   }

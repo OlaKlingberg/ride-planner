@@ -312,9 +312,9 @@ export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestr
       setTimeout(() => {
         this.slideDownTr($('#cue-form-row'));
       }, 0);
-    }, 200);
 
-    this.cuesheetDemoService.updateCuesheet(this.cuesheet);
+      this.cuesheetDemoService.updateCuesheet(this.cuesheet);
+    }, 200);
   }
 
   updateCuesheet() {

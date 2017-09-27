@@ -85,7 +85,7 @@ export class PositionService {
   }
 
   positionPromise() {
-    let positionPromise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let subscription = this.position$.subscribe(pos => {
         if ( pos ) {
           resolve(pos);
@@ -93,8 +93,6 @@ export class PositionService {
         }
       })
     });
-
-    return positionPromise;
   }
 
   setDummyMovements() {

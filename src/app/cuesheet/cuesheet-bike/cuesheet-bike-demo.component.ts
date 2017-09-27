@@ -31,19 +31,17 @@ export class CuesheetBikeDemoComponent implements OnInit {
 
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${window.location.origin}/cuesheet/${this.cuesheetId}/bike-iframe/${this.cueNumber}`);
 
-      this.getCuesheet(this.cuesheetId);
+      // this.getCuesheet(this.cuesheetId);
     });
   }
 
-  getCuesheet(_id) {
-    this.cuesheetDemoService.getCuesheet(_id).then((cuesheet: Cuesheet) => {
-      // console.log("CuesheetBikeDemoComponent.getCuesheet() cuesheet:", cuesheet);
-
-      this.cuesheetDemoService.putCuesheetInStorage(cuesheet);
-
-      // this.cuesheetDemoService.sendCuesheetToIframe(this.iframe.nativeElement.contentWindow, cuesheet);
-    })
-  }
+  // getCuesheet(_id) {
+  //   this.cuesheetDemoService.getCuesheet(_id).then((cuesheet: Cuesheet) => {
+  //     // console.log("CuesheetBikeDemoComponent.getCuesheet() cuesheet:", cuesheet);
+  //     // this.cuesheetDemoService.putCuesheetInStorage(cuesheet);
+  //     // this.cuesheetDemoService.sendCuesheetToIframe(this.iframe.nativeElement.contentWindow, cuesheet);
+  //   })
+  // }
 
   returnToOverview() {
     this.router.navigate([`/cuesheet/${this.cuesheetId}/view`])

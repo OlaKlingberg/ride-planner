@@ -18,10 +18,9 @@ export class CuesheetListDemoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.subscription = this.cuesheetDemoService.cuesheets$.subscribe(cuesheets => {
+    this.cuesheetDemoService.getCuesheetList().then((cuesheets: Cuesheet[]) => {
       this.cuesheets = cuesheets;
-      // console.log("CuesheetListDemo.ngOnInit(). cuesheets:", cuesheets);
-    });
+    })
   }
 
   ngOnDestroy() {

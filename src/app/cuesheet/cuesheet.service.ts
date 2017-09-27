@@ -18,12 +18,6 @@ export class CuesheetService {
 
   private user: User;
 
-  // @HostListener('window:message', [ '$event' ])
-  // onMessage(e) {
-  //   console.log("e:", e);
-  //
-  // }
-
   constructor(private http: Http,
               private userService: UserService) {
     this.userService.user$.subscribe(user => {
@@ -71,7 +65,7 @@ export class CuesheetService {
         .toPromise(); // Todo: Add error handling.
   }
 
-  getAllCuesheets() {
+  getCuesheetList () {
     const requestOptions = this.setHeaders();
 
     return this.http.get(`${environment.api}/cuesheets`, requestOptions)

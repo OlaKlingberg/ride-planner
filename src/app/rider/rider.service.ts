@@ -41,7 +41,7 @@ export class RiderService {
 
   onJoinedRider() {
     this.socket.on('joinedRider', joinedRider => {
-      console.log('joinedRider:', joinedRider.fname, joinedRider.lname);
+      // console.log('joinedRider:', joinedRider.fname, joinedRider.lname);
       // If the zIndices are getting too high, it's time to request the whole riderList again.
       if ( this.zCounter >= 1000 ) {
         this.zCounter = 0;

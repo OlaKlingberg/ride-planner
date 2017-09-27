@@ -13,15 +13,12 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class CuesheetDemoService {
-  public cuesheets$: BehaviorSubject<Cuesheet[]> = new BehaviorSubject([]);
+  private cuesheetListInStorageFlag$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private cuesheetService: CuesheetService,
               private http: Http,
               private router: Router) {
-    this.cuesheetService.getAllCuesheets().toPromise().then(cuesheets => {
-
-      this.cuesheets$.next(cuesheets);
-    });
+    this.setCuesheetListInStorage();
   }
 
   createCuesheet(model) {
@@ -35,55 +32,47 @@ export class CuesheetDemoService {
 
     model._id = Math.floor(Math.random() * 1000000).toString();
 
-    let cuesheets = this.cuesheets$.value;
+    let cuesheets = JSON.parse(sessionStorage.getItem('rpCuesheets'));
     cuesheets.push(new Cuesheet(model));
-    this.cuesheets$.next(cuesheets);
+    sessionStorage.setItem('rpCuesheets', JSON.stringify(cuesheets));
 
     return model;
   }
 
-  cuesheetsPromise() {
-    let cuesheetsPromise = new Promise((resolve, reject) => {
-      const subscription = this.cuesheets$.subscribe(cuesheets => {
-        if ( cuesheets.length >= 1 ) {
-          resolve(cuesheets);
+  cuesheetListInStoragePromise() {
+    return new Promise((resolve, reject) => {
+      const subscription = this.cuesheetListInStorageFlag$.subscribe(flag => {
+        if ( flag ) {
+          resolve();
           subscription.unsubscribe();
         }
       })
     });
-
-    return cuesheetsPromise;
   }
 
   deleteCuesheet(id) {
-    let cuesheets = this.cuesheets$.value;
+    let cuesheets = JSON.parse(sessionStorage.getItem('rpCuesheets'));
     cuesheets = cuesheets.filter(cuesheet => cuesheet._id !== id);
-    this.cuesheets$.next(cuesheets);
+    sessionStorage.setItem('rpCuesheets', JSON.stringify(cuesheets));
   }
 
   getCuesheet(_id) {
-    let cuesheet = JSON.parse(sessionStorage.getItem('rpCuesheet'));
-    sessionStorage.removeItem('rpCuesheet');
-    console.log("CuesheetDemoService.getCuesheet() sessionStorage.rpCuesheet:", cuesheet);
+    return this.cuesheetListInStoragePromise().then(() => {
+      let cuesheets = JSON.parse(sessionStorage.getItem('rpCuesheets'));
 
-    if ( cuesheet ) {
-      console.log("There was a cuesheet");
-      return Promise.resolve(new Cuesheet(cuesheet));
-    }
-
-    console.log("No cuesheet");
-
-
-    return this.cuesheetsPromise().then((cuesheets: Cuesheet[]) => {
       let cuesheet = cuesheets.filter(cuesheet => cuesheet._id === _id)[ 0 ];
 
-      // Todo: This is hard to read. Can I refactor?
       if ( cuesheet ) {
         if ( cuesheet.cues.length >= 1 && !cuesheet.cues[ 0 ].turn ) {
           const requestOptions = this.setHeaders();
 
           return this.http.get(`${environment.api}/cuesheets/${_id}`, requestOptions)
               .map((response: Response) => new Cuesheet(response.json().cuesheet))
+              .do((cuesheet: Cuesheet) => {
+                cuesheets = cuesheets.filter(oldCuesheet => oldCuesheet._id !== cuesheet._id);
+                cuesheets.unshift(cuesheet);
+                sessionStorage.setItem('rpCuesheets', JSON.stringify(cuesheets));
+              })
               .toPromise();
         } else {
           return Promise.resolve(cuesheet);
@@ -94,9 +83,26 @@ export class CuesheetDemoService {
     });
   };
 
-  putCuesheetInStorage(cuesheet) {
-    sessionStorage.setItem('rpCuesheet', JSON.stringify(cuesheet));
+  getCuesheetList(): Promise<Cuesheet[]> {
+    return this.cuesheetListInStoragePromise().then(() => {
+      return JSON.parse(sessionStorage.getItem('rpCuesheets'));
+    });
   }
+
+  setCuesheetListInStorage() {
+    let cuesheets = sessionStorage.getItem('rpCuesheets');
+
+    if (cuesheets) {
+      this.cuesheetListInStorageFlag$.next(true);
+    } else {
+      this.cuesheetService.getCuesheetList().toPromise().then(cuesheets => {
+        sessionStorage.setItem('rpCuesheets', JSON.stringify(cuesheets));
+
+        this.cuesheetListInStorageFlag$.next(true);
+      });
+    }
+  }
+
 
   setHeaders() {
     const token = JSON.parse(environment.storage.getItem('rpToken'));
@@ -113,10 +119,10 @@ export class CuesheetDemoService {
   }
 
   updateCuesheet(updatedCuesheet) {
-    let cuesheets = this.cuesheets$.value;
+    let cuesheets = JSON.parse(sessionStorage.getItem('rpCuesheets'));
     cuesheets = cuesheets.filter(cuesheet => cuesheet._id !== updatedCuesheet._id);
     cuesheets.unshift(updatedCuesheet);
-    this.cuesheets$.next(cuesheets);
+    sessionStorage.setItem('rpCuesheets', JSON.stringify(cuesheets));
   }
 
 

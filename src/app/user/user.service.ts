@@ -45,7 +45,7 @@ export class UserService {
 
   joinRide() {
     this.rideSubjectService.ride$.subscribe(ride => {
-      console.log("joinRide(). ride:", ride);
+      // console.log("joinRide(). ride:", ride);
       if ( ride ) {
         this.userPositionPromise().then((user: User) => {
           let token = JSON.parse(environment.storage.getItem('rpToken'));
@@ -68,7 +68,7 @@ export class UserService {
     let rpUser = JSON.parse(environment.storage.getItem('rpUser'));
 
     if ( rpUser && rpUser.length > 0 ) {
-      console.log("getUserFromStorage(). About to create new user with userString:", rpUser);
+      // console.log("getUserFromStorage(). About to create new user with userString:", rpUser);
       let user = new User(JSON.parse(rpUser));
       environment.storage.removeItem('rpUser');
       setTimeout(() => {
@@ -126,7 +126,7 @@ export class UserService {
 
   // Todo: Will I be needing this?
   userPromise() {
-    let userPromise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const subscription = this.user$.subscribe(pos => {
         if ( pos ) {
           resolve(pos);
@@ -134,12 +134,10 @@ export class UserService {
         }
       })
     });
-
-    return userPromise;
   }
 
   userPositionPromise() {
-    let userPositionPromise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const subscription = this.user$.subscribe(user => {
         if (user && user.position && user.position.coords && user.position.coords.latitude) {
           resolve(user);
@@ -147,8 +145,6 @@ export class UserService {
         }
       })
     });
-
-    return userPositionPromise;
   }
 
 }

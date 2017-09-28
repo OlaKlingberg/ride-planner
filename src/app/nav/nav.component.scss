@@ -1,3 +1,5 @@
+@import "../../_vars.scss";
+
 nav {
   z-index: 10;
 
@@ -5,14 +7,10 @@ nav {
     padding-top: 10px;
     padding-bottom: 10px;
   }
-
-  &.page-cuesheet-bike {
-    margin-bottom: 0 !important;
-  }
 }
 
 .active {
-  background-color: saddlebrown !important;
+  background-color: darken($rpOrange, 10%) !important;
 }
 
 .no-header {

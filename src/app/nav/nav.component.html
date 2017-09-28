@@ -1,9 +1,7 @@
 <nav class="navbar navbar-inverse"
      [@navBar]="navBarState"
-     [ngClass]="{
-        'no-header': location.path() === '/map',
-        'page-cuesheet-bike': ( location.path().includes('cuesheet') && location.path().includes('bike'))
-      }">
+      [ngClass]="{'margin-bottom-0': deviceSize === 'xs'}">
+
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"

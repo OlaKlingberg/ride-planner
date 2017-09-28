@@ -29,6 +29,10 @@ body {
   float: right;
 }
 
+.margin-bottom-0 {
+  margin-bottom: 0;
+}
+
 .margin-bottom-sm {
   margin-bottom: 12px;
 }
@@ -58,10 +62,6 @@ body {
 }
 
 /** Specific pages **/
-.page-cuesheet-bike nav {
-  margin-bottom: 0 !important;
-}
-
 .page-map .info-window {
   color: red !important;
 }

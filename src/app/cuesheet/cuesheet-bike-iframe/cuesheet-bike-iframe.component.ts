@@ -49,7 +49,8 @@ export class CuesheetBikeIframeComponent implements OnInit, OnDestroy {
     this.setSwipeListeners();
     this.subscribeToSwipes();
 
-    $('#navbar').removeClass('in'); // Todo: This is surely not the best way of doing this ...
+    // Todo: This doesn't seem to make any difference, and I don't remember why I put it here.
+    // $('#navbar').removeClass('in'); // Todo: This is surely not the best way of doing this ...
   }
 
   getCuesheet(cuesheetId) {
@@ -90,7 +91,7 @@ export class CuesheetBikeIframeComponent implements OnInit, OnDestroy {
   }
 
   setSwipeListeners() {
-    this.cuesContainer = $('#page').get(0); // Todo: Is it okay to use jQuery for this? (It works.) Should I use viewChild instead?
+    this.cuesContainer = $('#page-cuesheet-bike-iframe').get(0); // Todo: Is it okay to use jQuery for this? (It works.) Should I use viewChild instead?
     this.mc = Hammer(this.cuesContainer);
 
     // // mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL }); // Todo: Figure out why DIRECTION_ALL doesn't exist on Hammer.

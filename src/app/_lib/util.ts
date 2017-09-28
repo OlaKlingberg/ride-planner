@@ -1,3 +1,6 @@
+import * as $ from 'jquery';
+
+// Todo: I no longer use this. Should I delete it, or should I move the new sorting logic here?
 function nameSort(a, b) {
   if ( a.lname < b.lname ) return -1; // Sort first on last name ...
   if ( a.lname > b.lname ) return 1;
@@ -5,4 +8,9 @@ function nameSort(a, b) {
   return 1;
 }
 
-export { nameSort }
+function getBootstrapDeviceSize() {
+  return $('#users-device-size').find('div:visible').first().attr('id');
+}
+
+
+export { nameSort, getBootstrapDeviceSize };

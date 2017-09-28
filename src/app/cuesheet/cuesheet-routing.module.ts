@@ -7,7 +7,7 @@ import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
 import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
 import { CuesheetBikeIframeComponent } from './cuesheet-bike-iframe/cuesheet-bike-iframe.component';
-import { LargeWindowGuard } from './large-window.guard';
+import { LargeWindowGuard } from '../core/large-window.guard';
 import { JaneDoeGuard } from './jane-doe.guard';
 import { CuesheetEditDemoComponent } from './cuesheet-edit/cuesheet-edit-demo.component';
 import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
@@ -15,7 +15,7 @@ import { CuesheetListDemoComponent } from './cuesheet-list/cuesheet-list-demo.co
 import { CuesheetNewDemoComponent } from './cuesheet-new/cuesheet-new-demo.component';
 import { CuesheetBikeIframeDemoComponent } from './cuesheet-bike-iframe/cuesheet-bike-iframe-demo.component';
 import { CuesheetBikeDemoComponent } from './cuesheet-bike/cuesheet-bike-demo.component';
-import { SmallWindowGuard } from './small-window.guard';
+import { SmallWindowGuard } from '../core/small-window.guard';
 
 @NgModule({
   imports: [ RouterModule.forChild([

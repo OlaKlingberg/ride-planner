@@ -16,14 +16,12 @@ export class LargeWindowGuard implements CanActivate {
     // console.log("state:", state);
 
     if ( window.innerWidth >= 800) {
-      console.log("LargeWindowGuard passed");
       return true;
     } else {
       let url = 'cuesheet/iframe';
       for (let i = 0; i < next.url.length; i++) {
         url += `/${next.url[i]}`;
       }
-      console.log("LargeWindowGuard didn't pass. Rerouting to url:", url);
 
       this.router.navigate([url]);
 

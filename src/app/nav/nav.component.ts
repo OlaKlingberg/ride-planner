@@ -10,8 +10,9 @@ import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import * as $ from 'jquery';
 import { RefreshService } from '../core/refresh.service';
-import { Observable } from 'rxjs/Observable';
 import Timer = NodeJS.Timer;
+
+import { getBootstrapDeviceSize } from '../_lib/util';
 
 
 @Component({
@@ -21,6 +22,7 @@ import Timer = NodeJS.Timer;
   animations: navAnimations
 })
 export class NavComponent implements OnInit, OnDestroy {
+  deviceSize: string;
   navBarState: string = 'hide';
   user: User = null;
   ride: string;
@@ -39,7 +41,15 @@ export class NavComponent implements OnInit, OnDestroy {
     this.subscribeToNavBarState();
     this.subscribeToRoute();
     this.subscribeToUser();
+
+    window.addEventListener('resize', this.setDeviceSize);
+    this.deviceSize = getBootstrapDeviceSize();
   }
+
+  // I can't use an arrow function here, because I need to bind "this."
+  setDeviceSize = function () {
+    this.deviceSize = getBootstrapDeviceSize();
+  }.bind(this);
 
   closeAccordion() {
     if ( $(window).width() < 768 ) $('.navbar-toggle').click();
@@ -82,5 +92,7 @@ export class NavComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => {
       return sub.unsubscribe();
     });
+
+    removeEventListener('resize', this.setDeviceSize);
   }
 }

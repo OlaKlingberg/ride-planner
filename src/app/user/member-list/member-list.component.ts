@@ -52,10 +52,7 @@ export class MemberListComponent implements OnInit {
       this.dataSource.filter = this.filter.nativeElement.value;
     });
 
-    // Todo: Refactor this so that I can removeEventListeners OnDestroy.
-    window.addEventListener('resize', () => {
-      this.displayColumns();
-    });
+    window.addEventListener('resize', this.displayColumns);
 
     this.userService.requestAllUsers();
   }
@@ -77,7 +74,7 @@ export class MemberListComponent implements OnInit {
         });
   }
 
-  displayColumns() {
+  displayColumns = function () {
     if ( window.innerWidth >= 900 ) {
       this.displayedColumns = [ 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
     } else if ( window.innerWidth >= 700 ) {
@@ -85,7 +82,7 @@ export class MemberListComponent implements OnInit {
     } else {
       this.displayedColumns = [ 'fullName', 'phone', 'showDetailsButton' ];
     }
-  }
+  }.bind(this);
 
   showDetails(template: TemplateRef<any>, row) {
     console.log(row);
@@ -95,6 +92,7 @@ export class MemberListComponent implements OnInit {
 
   ngOnDestroy() {
     if ( this.subscription ) this.subscription.unsubscribe();
+    window.removeEventListener('resize', this.displayColumns);
   }
 
 }

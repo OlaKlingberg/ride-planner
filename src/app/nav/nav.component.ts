@@ -63,16 +63,16 @@ export class NavComponent implements OnInit, OnDestroy {
     if ( $(window).width() < 768 ) $('.navbar-toggle').click();
   }
 
-  checkDisplayNavbar() {
-    console.log(this.location.path());
-    if (this.location.path().includes('/iframe/')) return this.navBarState = 'show';
-
-    if (this.location.path().includes('/map')) return this.navBarState = 'hide';
-
-    if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.navBarState = 'hide';
-
-    this.navBarState = 'true';
-  }
+  // checkDisplayNavbar() {
+  //   console.log(this.location.path());
+  //   if (this.location.path().includes('/iframe/')) return this.navBarState = 'show';
+  //
+  //   if (this.location.path().includes('/map')) return this.navBarState = 'hide';
+  //
+  //   if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.navBarState = 'hide';
+  //
+  //   this.navBarState = 'true';
+  // }
 
   subscribeToNavBarState() {
     let sub = this.navService.navBarState$.subscribe(navBarState => {

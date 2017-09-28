@@ -33,7 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
   // Todo: Does this really belong in the AppComponent? Can I move it somewhere else?
   checkDisplayNavbar() {
     console.log(this.location.path());
-    if (this.location.path().includes('/iframe/')) return this.displayNavbar = true;
+    if (this.location.path().includes('/iframe')) return this.displayNavbar = true;
+
 
     if (this.location.path().includes('/map')) return this.displayNavbar = false;
 

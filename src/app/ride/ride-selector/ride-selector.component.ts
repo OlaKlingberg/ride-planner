@@ -53,7 +53,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   subscribeToAvailableRides() {
-    const sub = this.rideSubjectService.availableRides$.subscribe((availableRides: Array<string>) => {
+    const sub: Subscription = this.rideSubjectService.availableRides$.subscribe((availableRides: Array<string>) => {
       this.availableRides = availableRides;
     });
     this.subscriptions.push(sub);
@@ -62,14 +62,15 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   subscribeToRide() {
     const sub = this.rideSubjectService.ride$.subscribe((ride: string) => {
       this.ride = ride;
-    })
+    });
+    this.subscriptions.push(sub);
   }
 
   subscribeToUser() {
-    const subscription: Subscription = this.userService.user$.subscribe(user => {
+    const sub: Subscription = this.userService.user$.subscribe(user => {
       this.user = user;
     });
-    this.subscriptions.push(subscription);
+    this.subscriptions.push(sub);
   }
 
   ngOnDestroy() {

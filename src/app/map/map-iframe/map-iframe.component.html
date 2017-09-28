@@ -1,8 +1,9 @@
-<div class="container page-map">
-  <div class="row">
-    <div class="col-md-12">
+<div class="page-map">
 
-      <div [ngClass]="{'visibility-hidden': !latLng}">
+  <!-- Map -->
+  <div class="container" [ngClass]="{'visibility-hidden': !latLng}">
+    <div class="row">
+      <div class="col-md-12">
 
         <agm-map
             #agmMap
@@ -13,8 +14,7 @@
             (panstart)="showNav(); calculateBounds('stationary')"
             (pinchend)="hideNav()"
             (panend)="hideNav()"
-            (tap)="showNav(); hideNav()"
-        >
+            (tap)="showNav(); hideNav()">
 
           <agm-marker class="user-marker"
                       *ngIf="user && user.position"
@@ -28,8 +28,7 @@
                       (markerClick)="closeInfoWindows(user._id)">
 
             <agm-info-window #userInfoWindow
-                             attr.data-index={{user._id}}
-            >
+                             attr.data-index={{user._id}}>
               <div class="info-window">This is you!</div>
             </agm-info-window>
 
@@ -44,12 +43,10 @@
                       [iconUrl]="markerUrl + colors[rider.colorNumber] + '.png'"
                       [zIndex]="rider.zIndex"
                       [opacity]="rider.opacity"
-                      (markerClick)="closeInfoWindows(rider._id)"
-          >
+                      (markerClick)="closeInfoWindows(rider._id)">
 
             <agm-info-window #infoWindows
-                             attr.data-index={{rider?._id}}
-            >
+                             attr.data-index={{rider?._id}}>
               <div class="info-window">{{rider.fname}} {{ rider.lname}}
                 <span *ngIf="rider.phone"><br/>{{rider.phone}}</span>
                 <span *ngIf="rider.disconnected"><br/>Last heard from {{ rider.minutesSinceDisconnected }} minute<span
@@ -62,37 +59,50 @@
 
         </agm-map>
 
-        <div id="not-logged-in-warning"
-             *ngIf="!user || !user.ride">
-          <h4>You are not logged into any ride,<br> so you won't see any other riders.</h4>
-        </div>
-
-        <div *ngIf="user && user.ride"
-             id="map-buttons-container"
-             [@buttons]="buttonState">
-          <button class="btn btn-primary btn-md"
-                  type="button"
-                  *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"
-                  (click)="showNav(); hideNav(); calculateBounds('showAllRiders')">Track All Riders
-          </button>
-          <button class="btn btn-info btn-md"
-                  *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
-                  (click)="showNav(); hideNav(); calculateBounds('focusOnUser')">Track Me
-          </button>
-
-        </div>
-
       </div>
+    </div>
+  </div>
+  <!-- End Map -->
 
-      <div [ngClass]="{'launching-satellites': !latLng, 'display-none': latLng}">
+  <!-- While waiting for map -->
+  <div class="container" [ngClass]="{'launching-satellites': !latLng, 'display-none': latLng}">
+    <div class="row">
+      <div class="col-md-12">
+
         <div *ngIf="!takingTooLong">
           <h3>Adjusting satellites ...</h3>
         </div>
         <div *ngIf="takingTooLong">
           <h3>There was a problem locating your position.<br/>Please try again in a minute or two.</h3>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
+  <!-- End: While waiting for map. -->
+
+  <!-- Not-logged-in warning -->
+  <div id="not-logged-in-warning"
+       *ngIf="!user || !user.ride"
+       [ngClass]="{'visibility-hidden': !latLng}">
+    <h4>You are not logged into any ride,<br> so you won't see any other riders.</h4>
+  </div>
+  <!-- End: Not-logged-in warning -->
+
+  <!-- Buttons -->
+  <div *ngIf="user && user.ride"
+       id="map-buttons-container"
+       [@buttons]="buttonState">
+    <button class="btn btn-primary btn-md"
+            type="button"
+            *ngIf="mapMode === 'focusOnUser' || mapMode === 'stationary'"
+            (click)="showNav(); hideNav(); calculateBounds('showAllRiders')">Track All Riders
+    </button>
+    <button class="btn btn-info btn-md"
+            *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
+            (click)="showNav(); hideNav(); calculateBounds('focusOnUser')">Track Me
+    </button>
+  </div>
+  <!-- End Buttons -->
+
 </div>

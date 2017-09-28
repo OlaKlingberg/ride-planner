@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -21,14 +21,14 @@ import { getBootstrapDeviceSize } from '../_lib/util';
   styleUrls: [ './nav.component.scss' ],
   animations: navAnimations
 })
-export class NavComponent implements OnInit, OnDestroy {
+export class NavComponent implements OnInit {
   deviceSize: string;
+  displayNavBar: boolean;
   navBarState: string = 'hide';
   user: User = null;
-  ride: string;
+  // ride: string;
 
   private route: string;
-  private subscriptions: Array<Subscription> = [];
 
   constructor(public location: Location,               // Used in the template.
               private navService: NavService,
@@ -45,12 +45,11 @@ export class NavComponent implements OnInit, OnDestroy {
     window.addEventListener('resize', this.setDeviceSize);
     this.deviceSize = getBootstrapDeviceSize();
 
-    // let sub = this.router.events.subscribe(event => {
-    //   if (event instanceof NavigationEnd ) {
-    //     this.checkDisplayNavbar();
-    //   }
-    // });
-    // this.subscriptions.push(sub);
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd ) {
+        this.checkDisplayNavbar();
+      }
+    });
 
   }
 
@@ -59,27 +58,24 @@ export class NavComponent implements OnInit, OnDestroy {
     this.deviceSize = getBootstrapDeviceSize();
   }.bind(this);
 
+  checkDisplayNavbar() {
+    if (this.location.path().includes('/iframe')) return this.displayNavBar = true;
+
+    if (this.location.path().includes('/map')) return this.displayNavBar = false;
+
+    if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.displayNavBar = false;
+
+    this.displayNavBar = true;
+  }
+
   closeAccordion() {
     if ( $(window).width() < 768 ) $('.navbar-toggle').click();
   }
 
-  // checkDisplayNavbar() {
-  //   console.log(this.location.path());
-  //   if (this.location.path().includes('/iframe/')) return this.navBarState = 'show';
-  //
-  //   if (this.location.path().includes('/map')) return this.navBarState = 'hide';
-  //
-  //   if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.navBarState = 'hide';
-  //
-  //   this.navBarState = 'true';
-  // }
-
   subscribeToNavBarState() {
     let sub = this.navService.navBarState$.subscribe(navBarState => {
-      console.log("NavComponent.subscribeToNavBarState(). navBarState:", navBarState);
       this.navBarState = navBarState;
     });
-    this.subscriptions.push(sub);
   }
 
   // On normal page navigation, show the nav bar.
@@ -98,21 +94,11 @@ export class NavComponent implements OnInit, OnDestroy {
       }, 100);
 
     });
-    this.subscriptions.push(sub);
   }
 
   subscribeToUser() {
     let sub = this.userService.user$.subscribe(
         user => this.user = user
     );
-    this.subscriptions.push(sub);
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(sub => {
-      return sub.unsubscribe();
-    });
-
-    removeEventListener('resize', this.setDeviceSize);
   }
 }

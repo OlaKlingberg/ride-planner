@@ -8,21 +8,16 @@ export class SmallWindowGuard implements CanActivate {
 
   }
 
-  canActivate(
-      next: ActivatedRouteSnapshot,
-      state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate(next: ActivatedRouteSnapshot,
+              state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if ( window.innerWidth < 800) {
+    if ( window.innerWidth < 800 ) {
       return true;
     } else {
-      // const url = `cuesheet/${next.url[0]}/bike/${next.url[2]}`;
+      let urlSegments: string[] = state.url.split('/').filter(segment => segment !== 'iframe');
+      let url: string = urlSegments.join('/');
 
-      let url = 'cuesheet';
-      for (let i = 1; i < next.url.length; i++) {
-        url += `/${next.url[i]}`;
-      }
-
-      this.router.navigate([url]);
+      this.router.navigate([ url ]);
 
       return false;
     }

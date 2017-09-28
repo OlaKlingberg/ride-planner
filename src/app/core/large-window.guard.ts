@@ -8,26 +8,20 @@ export class LargeWindowGuard implements CanActivate {
 
   }
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate(next: ActivatedRouteSnapshot,
+              state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    // console.log("next:", next);
-    // console.log("state:", state);
-
-    if ( window.innerWidth >= 800) {
+    if ( window.innerWidth >= 800 ) {
       return true;
     } else {
-      let url = 'cuesheet/iframe';
-      for (let i = 0; i < next.url.length; i++) {
-        url += `/${next.url[i]}`;
-      }
+      let urlSegments: string[] = state.url.split('/');
+      urlSegments.splice(2, 0, 'iframe');
 
-      this.router.navigate([url]);
+      let url = urlSegments.join('/');
+
+      this.router.navigate([ url ]);
 
       return false;
     }
-
-
   }
 }

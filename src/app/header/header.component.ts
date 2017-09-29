@@ -8,7 +8,7 @@ import { NavigationEnd, Router } from '@angular/router';
 @Component({
   selector: 'rp-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: [ './header.component.scss' ]
 })
 export class HeaderComponent implements OnInit {
   accuracy: number = null;
@@ -22,26 +22,28 @@ export class HeaderComponent implements OnInit {
   constructor(public location: Location,
               private positionService: PositionService,
               private router: Router,
-              private userService: UserService
-  ) { }
+              private userService: UserService) {
+  }
 
   ngOnInit() {
     this.subscribeToPosition();
     this.subscribeToUser();
 
     this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd ) {
+      if ( event instanceof NavigationEnd ) {
         this.checkDisplayHeader();
       }
     });
   }
 
   checkDisplayHeader() {
-    if (this.location.path().includes('/map')) return this.displayHeader = false;
+    if ( this.location.path().includes('/frame') ||
+        this.location.path().includes('/map') ||
+        ( this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) ) return this.displayHeader = false;
 
-    if (this.location.path().includes('/iframe')) return this.displayHeader = true;
+    // if (this.location.path().includes('/map')) return this.displayHeader = false;
 
-    if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.displayHeader = false;
+    // if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.displayHeader = false;
 
     this.displayHeader = true;
   }

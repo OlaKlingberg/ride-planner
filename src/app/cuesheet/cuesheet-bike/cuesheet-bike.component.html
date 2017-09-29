@@ -1,29 +1,87 @@
-<div class="wrapper-outer">
+<!-- Todo: Replace these two templates with one that takes dynamic content. (I couldn't make it work.) -->
+<!-- Modal shown when user tries to scroll before first cue. -->
+<ng-template #firstCueModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">This is the first cue</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</ng-template>
 
-  <div class="wrapper-inner">
-    <div class="col-1">
-      <div>This view is meant to be used on your phone while biking.</div>
-      <br/>
-      <div>On your phone, you would swipe up or down to go to the next or previous cue. Here, you can also use the
-        buttons to the right.
+<!-- Modal shown when user tries to scroll before first cue. -->
+<ng-template #lastCueModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">This is the last cue</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</ng-template>
+
+
+<div id="page-cuesheet-bike">
+
+  <div class="container" id="cues-container" [@cuesheetContainer]="move">
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber > 0"
+                       [cue]="cuesheet?.cues[cueNumber - 1]"
+                       [cueNumber]="cueNumber - 1"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]"
+                       [cueNumber]="cueNumber"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
+                       [cue]="cuesheet?.cues[cueNumber + 1]"
+                       [cueNumber]="cueNumber + 1"></rp-cuesheet-cue>
+    </div>
+
+
+    <div class="cue">
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 2"
+                       [cue]="cuesheet?.cues[cueNumber + 2]"
+                       [cueNumber]="cueNumber + 2"></rp-cuesheet-cue>
+    </div>
+
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div id="next-cue-mask"></div>
+
       </div>
     </div>
+    <div class="row no-padding">
+      <div id="bottom-field" class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-6">
+            <a [routerLink]="['/cuesheet', cuesheetId ,'view']" class="btn btn-primary btn-block">Overview</a>
+          </div>
+          <div class="col-xs-6">
+            <a routerLink="/map" class="btn btn-primary btn-block">Map</a>
+          </div>
+        </div>
+        <hr>
+        <div class="row" id="ride-info">
+          <div class="col-xs-12">
+            <h3 class="margin-top-none center">{{ cuesheet?.name }}</h3>
+          </div>
+        </div>
 
-    <div class="col-2">
-      <img src="/assets/img/other/iphone.png" class="iphone">
-      <iframe [src]="url" frameborder="0" #iframe></iframe>
-    </div>
-
-    <div class="col-3">
-      <div class="button-wrapper">
-        <button class="btn btn-block btn-primary" (click)="swipeUp()">Swipe Up</button>
-        <br/>
-        <button class="btn btn-block btn-primary" (click)="swipeDown()">Swipe Down</button>
-        <hr/>
-        <button class="btn btn-block btn-primary" (click)="returnToOverview()">Return To<br/>Overview</button>
       </div>
     </div>
   </div>
 
+
 </div>
+
+
 

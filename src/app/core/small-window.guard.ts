@@ -14,14 +14,14 @@ export class SmallWindowGuard implements CanActivate {
     if ( window.innerWidth < 800 ) {
       return true;
     } else {
-      let urlSegments: string[] = state.url.split('/').filter(segment => segment !== 'iframe');
-      let url: string = urlSegments.join('/');
+      let urlSegments: string[] = state.url.split('/');
+      urlSegments.splice(2, 0, 'frame');
+
+      let url = urlSegments.join('/');
 
       this.router.navigate([ url ]);
 
       return false;
     }
-
-
   }
 }

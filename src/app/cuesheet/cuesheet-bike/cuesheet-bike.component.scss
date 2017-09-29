@@ -1,64 +1,57 @@
-@import "../../../_vars.scss";
+/** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
+@import '../../../_vars.scss';
 
-iframe {
-  height: 736px;
-  width: 414px;
-  //width: 336px;
-  //width: 290px;
-  margin: 0 auto;
+.container {
+  max-width: 414px;
+}
+
+#cues-container {
   position: relative;
-  top: -710px;
-  left: -38px;
-  transform: scale(.7, .7);
+  top: -200px;
 }
 
-.button-wrapper {
-  //width: 200px;
+.cue {
+  height: 200px;
+  border-bottom: 1px solid gray;
+  margin-bottom: 17px;
 }
 
-.col- {
-  &1 {
-    flex: 1;
-    color: $rpGray;
-    padding: 170px 20px 0 20px;
-    font-size: larger;
-    //background-color: silver;
+#next-cue-mask {
+  position: relative;
+  top: -654px;
+  height: 230px;
+  width: 100%;
+  margin-left: 0;
 
-  }
-
-  &2 {
-    flex: initial;
-    //background-color: paleturquoise;
-    width: 340px;
-  }
-
-  &3 {
-    flex: 1;
-    padding: 170px 20px 0 20px;
-    //background-color: palegoldenrod;
-  }
+  background-color: $rpGray;
+  opacity: .7;
 }
 
-.iphone {
-  //height: 680px;
-  width: 338px;
+#bottom-field {
+  position: relative;
+  top: -664px;
+  z-index: 2;
+  padding-top: 20px;
+  height: 400px;
+  width: 100%;
+  background-color: darken($rpGray, 6%);
 }
 
-.wrapper- {
-  &inner {
-    display: flex;
-    margin: 0 auto;
-    max-width: 1000px;
-  }
+#page-cuesheet-bike {
+  max-height: 800px;
+  overflow: hidden;
+}
 
-  &outer {
-    height: 100%;
-    display: flex;
-    height: 100vh;
-    background-color: silver;
-    padding-top: 50px;
-  }
+.margin-top-none {
+  margin-top: 0px;
+}
 
+.no-padding {
+  padding: 0;
+}
 
+#ride-info {
+  margin-top: 20px;
+  color: white;
 }
 

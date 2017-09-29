@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { MapComponent } from './map/map.component';
+import { MapFrameComponent } from './map-frame/map-frame.component';
 import { LargeWindowGuard } from '../core/large-window.guard';
-import { MapIframeComponent } from './map-iframe/map-iframe.component';
+import { MapComponent } from './map/map.component';
 import { SmallWindowGuard } from '../core/small-window.guard';
 
 @NgModule({
@@ -11,12 +11,12 @@ import { SmallWindowGuard } from '../core/small-window.guard';
     {
       path: '',
       component: MapComponent,
-      canActivate: [ LargeWindowGuard ]
+      canActivate: [ SmallWindowGuard ]
     },
     {
-      path: 'iframe',
-      component: MapIframeComponent,
-      canActivate: [ SmallWindowGuard ]
+      path: 'frame',
+      component: MapFrameComponent,
+      canActivate: [ LargeWindowGuard ]
     }
   ])],
   exports: [

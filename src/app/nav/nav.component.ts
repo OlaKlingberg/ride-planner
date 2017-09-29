@@ -59,11 +59,11 @@ export class NavComponent implements OnInit {
   }.bind(this);
 
   checkDisplayNavbar() {
-    if (this.location.path().includes('/iframe')) return this.displayNavBar = true;
+    if (this.location.path().includes('/frame')) return this.displayNavBar = false;
 
-    if (this.location.path().includes('/map')) return this.displayNavBar = false;
+    // if (this.location.path().includes('/map')) return this.displayNavBar = false;
 
-    if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.displayNavBar = false;
+    // if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.displayNavBar = false;
 
     this.displayNavBar = true;
   }

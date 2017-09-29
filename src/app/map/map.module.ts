@@ -6,10 +6,9 @@ import { AgmCoreModule } from '@agm/core';
 import { MapComponent } from './map/map.component';
 import { MapRoutingModule } from './map-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { MapIframeComponent } from './map-iframe/map-iframe.component';
+import { MapFrameComponent } from './map-frame/map-frame.component';
 
 @NgModule({
-
   imports: [
     AgmCoreModule,
     MapRoutingModule,
@@ -17,9 +16,8 @@ import { MapIframeComponent } from './map-iframe/map-iframe.component';
     HttpModule
   ],
   declarations: [
-    MapComponent,
-    MapIframeComponent
+    MapFrameComponent,
+    MapComponent
   ]
 })
-export class MapModule {
-}
+export class MapModule { }

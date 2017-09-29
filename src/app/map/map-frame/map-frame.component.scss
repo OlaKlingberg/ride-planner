@@ -1,0 +1,68 @@
+@import "../../../_vars.scss";
+
+iframe {
+  height: 736px;
+  width: 414px;
+  //width: 336px;
+  //width: 290px;
+  margin: 0 auto;
+  position: relative;
+  top: -710px;
+  left: -38px;
+  transform: scale(.7, .7);
+}
+
+.button-wrapper {
+  //width: 200px;
+}
+
+.col- {
+  &1 {
+    flex: 1;
+    color: $rpGray;
+    padding: 170px 20px 0 20px;
+    font-size: larger;
+    //background-color: silver;
+
+  }
+
+  &2 {
+    flex: initial;
+    //background-color: paleturquoise;
+    width: 340px;
+  }
+
+  &3 {
+    flex: 1;
+    padding: 170px 20px 0 20px;
+    //background-color: palegoldenrod;
+  }
+}
+
+.iphone {
+  //height: 680px;
+  width: 338px;
+}
+
+.wrapper- {
+  &inner {
+    display: flex;
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+
+  &outer {
+    height: 100%;
+    display: flex;
+    height: 100vh;
+    background-color: silver;
+    padding-top: 50px;
+  }
+
+
+}
+
+
+
+
+

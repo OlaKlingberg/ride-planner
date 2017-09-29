@@ -14,10 +14,8 @@ export class LargeWindowGuard implements CanActivate {
     if ( window.innerWidth >= 800 ) {
       return true;
     } else {
-      let urlSegments: string[] = state.url.split('/');
-      urlSegments.splice(2, 0, 'iframe');
-
-      let url = urlSegments.join('/');
+      let urlSegments: string[] = state.url.split('/').filter(segment => segment !== 'frame');
+      let url: string = urlSegments.join('/');
 
       this.router.navigate([ url ]);
 

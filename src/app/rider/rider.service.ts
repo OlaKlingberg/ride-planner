@@ -5,6 +5,7 @@ import { User } from '../user/user';
 import { SocketService } from '../core/socket.service';
 import Socket = SocketIOClient.Socket;
 import { UserService } from '../user/user.service';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class RiderService {
@@ -25,6 +26,11 @@ export class RiderService {
     this.subscribeToUser();
   }
 
+  addTenRiders() {
+    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    this.socket.emit('addTenRiders', this.user, token);
+  }
+
   onDisconnectedRider() {
     this.socket.on('disconnectedRider', disconnectedRider => {
       console.log('disconnectedRider');
@@ -41,7 +47,7 @@ export class RiderService {
 
   onJoinedRider() {
     this.socket.on('joinedRider', joinedRider => {
-      // console.log('joinedRider:', joinedRider.fname, joinedRider.lname);
+      console.log('joinedRider:', joinedRider.fname, joinedRider.lname);
       // If the zIndices are getting too high, it's time to request the whole riderList again.
       if ( this.zCounter >= 1000 ) {
         this.zCounter = 0;
@@ -66,7 +72,7 @@ export class RiderService {
 
   onRemovedRider() {
     this.socket.on('removedRider', _id => {
-      console.log('removedRider. riderList:', this.riderList$.value);
+      console.log("removedRider _id:", _id);
       let riders = this.riderList$.value.filter(rider => rider._id !== _id);
 
       // console.log("About to call riderList$.next() in onRemovedRider()");
@@ -76,7 +82,7 @@ export class RiderService {
 
   onRiderList() {
     this.socket.on('riderList', riderList => {
-      // console.log('onRiderList. riderList:', riderList);
+      console.log('onRiderList. riderList:', riderList);
       riderList = riderList.map(rider => new User(rider));
       this.riderList$.next(riderList);
     });
@@ -84,7 +90,7 @@ export class RiderService {
 
   onUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
-      // console.log('updatedRiderPosition. riderList:', this.riderList$.value);
+      // console.log("updatedRiderPosition _id:", updatedRider._id);
       let riderList = this.riderList$.value;
       let idx = _.findIndex(riderList, rider => rider._id === updatedRider._id);
       if ( idx >= 0 ) {
@@ -97,6 +103,10 @@ export class RiderService {
         this.riderList$.next(riderList);
       }
     });
+  }
+
+  removeDummyRiders(ride) {
+    this.socket.emit('removeDummyRiders', ride);
   }
 
   riderListPromise() {

@@ -11,6 +11,19 @@ agm-map {
   z-index: 2;
 }
 
+#create-dummy-riders {
+  position: fixed;
+  left: 0;
+  top: 46px;
+  z-index: 9;
+
+  width: 90vw;
+  margin-left: 5vw;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+}
+
 #map-buttons-container {
   position: fixed;
   bottom: 0;
@@ -26,24 +39,25 @@ agm-map {
 #not-logged-in-warning {
   position: fixed;
   left: 0;
-  top: 36px;
+  top: 50px;
   z-index: 9;
 
   width: 90vw;
   margin-left: 5vw;
+  padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
   text-align: center;
+  background-color: $rpGray;
 
   h4 {
-    background-color: $rpGray;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     margin-bottom: 6px;
   }
 }
 
-.btn {
+.btn-40 {
   width: 40%;
 }
 

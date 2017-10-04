@@ -27,6 +27,7 @@ import { RiderService } from '../../rider/rider.service';
 export class MapComponent implements OnInit, OnDestroy {
   buttonState: string = null;
   colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
+  dummyRiders: boolean = false;
   latLng: LatLngBoundsLiteral;
   mapMode: string = 'focusOnUser';
   markerUrl: string = "assets/img/rider-markers/";
@@ -73,6 +74,11 @@ export class MapComponent implements OnInit, OnDestroy {
       this.setTakingTooLongTimer();
     });
     this.positionService.getPosition();
+  }
+
+  addTenRiders() {
+    this.riderService.addTenRiders();
+    this.dummyRiders = true;
   }
 
   calculateBounds(mapMode = this.mapMode) {
@@ -145,6 +151,11 @@ export class MapComponent implements OnInit, OnDestroy {
       }, environment.fadeNav);
     });
 
+  }
+
+  removeDummyRiders() {
+    this.riderService.removeDummyRiders(this.user.ride);
+    this.dummyRiders = false;
   }
 
   retrieveState() {

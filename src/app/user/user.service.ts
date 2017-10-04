@@ -48,8 +48,9 @@ export class UserService {
       // console.log("joinRide(). ride:", ride);
       if ( ride ) {
         this.userPositionPromise().then((user: User) => {
-          let token = JSON.parse(environment.storage.getItem('rpToken'));
+          const token = JSON.parse(environment.storage.getItem('rpToken'));
           this.socket.emit('joinRide', user, ride, token, () => {
+            // console.log("user:", user);
             user.ride = ride;
             this.user$.next(user);
             this.socket.emit('giveMeRiderList', ride);
@@ -98,6 +99,7 @@ export class UserService {
         if ( user ) {
           user.position = JSON.parse(JSON.stringify(pos));
           this.user$.next(user);
+          // console.log("user.position:", user.position);
           if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
         }
       }

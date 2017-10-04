@@ -1,8 +1,9 @@
 <div class="page-members">
 
+  <!-- Modal with member details -->
   <ng-template #memberDetails>
     <div class="modal-header">
-      <h4 class="modal-title pull-left">{{member.fname}} {{member.lname}}</h4>
+      <h4 class="modal-title pull-left">{{member.fname}} {{member.lname}}<span *ngIf="member.leader">, Ride Leader</span></h4>
       <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -28,6 +29,7 @@
       </table>
     </div>
   </ng-template>
+  <!-- End: Modal with member details. -->
 
   <div class="container" *ngIf="userService.userList$.value.length === 1">
     <div class="row">
@@ -77,6 +79,14 @@
           </div>
 
           <md-table #table [dataSource]="dataSource" mdSort>
+
+            <!-- Leader -->
+            <ng-container mdColumnDef="leader">
+              <md-header-cell *mdHeaderCellDef md-sort-header>
+                <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Leader</span>
+              </md-header-cell>
+              <md-cell *mdCellDef="let row"><span *ngIf="row.leader" class="glyphicon glyphicon-ok"></span></md-cell>
+            </ng-container>
 
             <!-- Full Name Column -->
             <ng-container mdColumnDef="fullName">

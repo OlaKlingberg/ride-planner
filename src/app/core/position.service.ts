@@ -38,20 +38,20 @@ export class PositionService {
 
     // Case 1
     if ( rpPosition && environment.dummyMovement ) {
-      console.log("getPosition(). Case 1");
+      // console.log("getPosition(). Case 1");
       this.position$.next(rpPosition);
       this.setDummyMovements();
     }
 
     // Case 2
     if ( rpPosition && !environment.dummyMovement ) {
-      console.log("getPosition(). Case 2");
+      // console.log("getPosition(). Case 2");
       this.position$.next(rpPosition);
     }
 
     // Case 3
     if ( !rpPosition && environment.dummyMovement ) {
-      console.log("getPosition(). Case 3");
+      // console.log("getPosition(). Case 3");
       navigator.geolocation.getCurrentPosition((position: Position) => {
             let pos = this.copyPositionObject(position);
             if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
@@ -67,7 +67,7 @@ export class PositionService {
 
     // Case 4
     if ( !rpPosition && !environment.dummyMovement ) {
-      console.log("getPosition(). Case 4");
+      // console.log("getPosition(). Case 4");
       if (this.positionWatcher) navigator.geolocation.clearWatch(this.positionWatcher);
       this.positionWatcher = navigator.geolocation.watchPosition((position: Position) => {
             let pos = this.copyPositionObject(position);

@@ -60,12 +60,15 @@ export class MemberListDataSource extends DataSource<any> {
     }
 
     return data.sort((a, b) => {
-      let primaryA: number | string = '';
-      let primaryB: number | string = '';
+      let primaryA: number | string | boolean = '';
+      let primaryB: number | string | boolean = '';
       let secondaryA: number | string = '';
       let secondaryB: number | string = '';
 
       switch ( this._sort.active ) {
+        case 'leader':
+          [ primaryB, primaryA, secondaryA, secondaryB ] = [ a.leader, b.leader, a.lname, b.lname ];
+          break;
         case 'fullName':
           [ primaryA, primaryB, secondaryA, secondaryB ] = [ a.lname, b.lname, a.fname, b.fname ];
           break;

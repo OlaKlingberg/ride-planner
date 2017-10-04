@@ -58,7 +58,7 @@ export class MemberListComponent implements OnInit {
   }
 
   addTwentyMembers() {
-    if (this.userService.userList$.value.length >= 181) {
+    if ( this.userService.userList$.value.length >= 181 ) {
       return this.alertService.error("In his demo, you can't have more than 200 members. That should be enough to try sorting and filtering functionality.");
     }
 
@@ -75,12 +75,14 @@ export class MemberListComponent implements OnInit {
   }
 
   displayColumns = function () {
-    if ( window.innerWidth >= 900 ) {
-      this.displayedColumns = [ 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
-    } else if ( window.innerWidth >= 700 ) {
-      this.displayedColumns = [ 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'showDetailsButton' ]
+    if ( window.innerWidth >= 1000 ) {
+      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
+    } else if ( window.innerWidth >= 800 ) {
+      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'showDetailsButton' ]
+    } else if ( window.innerWidth >= 500 ) {
+        this.displayedColumns = [ 'leader', 'fullName', 'phone', 'showDetailsButton']
     } else {
-      this.displayedColumns = [ 'fullName', 'phone', 'showDetailsButton' ];
+      this.displayedColumns = [ 'leader', 'fullName', 'showDetailsButton' ];
     }
   }.bind(this);
 

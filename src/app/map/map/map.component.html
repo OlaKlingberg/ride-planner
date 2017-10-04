@@ -90,16 +90,28 @@
   </div>
   <!-- End: Not-logged-in warning -->
 
+  <!-- Create dummy riders -->
+  <div id="create-dummy-riders"
+       *ngIf="user && user.ride"
+       [@buttons]="buttonState"
+       [ngClass]="{'visibility-hidden': !latLng}">
+    <button class="btn btn-primary" [ngClass]="{'btn-40': dummyRiders}" (click)="addTenRiders()">Create 10 <br *ngIf="dummyRiders">Dummy Riders</button>
+    <button class="btn btn-info btn-40" *ngIf="dummyRiders" (click)="removeDummyRiders()">Remove All<br>Dummy Riders</button>
+  </div>
+
+  <!-- End: Create dummy riders -->
+
+
   <!-- Buttons -->
   <div *ngIf="user"
        id="map-buttons-container"
        [@buttons]="buttonState">
-    <button class="btn btn-primary btn-md"
+    <button class="btn btn-primary btn-md btn-40"
             type="button"
             *ngIf="user.ride && ( mapMode === 'focusOnUser' || mapMode === 'stationary' )"
             (click)="showNav(); hideNav(); calculateBounds('showAllRiders')">Track All Riders
     </button>
-    <button class="btn btn-info btn-md"
+    <button class="btn btn-info btn-md btn-40"
             *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
             (click)="showNav(); hideNav(); calculateBounds('focusOnUser')">Track Me
     </button>

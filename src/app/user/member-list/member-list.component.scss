@@ -8,6 +8,10 @@ md-table {
 }
 
 .mat-column- {
+  &leader {
+    flex-grow: 1;
+  }
+
   &fullName {
     color: goldenrod;
     flex-grow: 3;

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import { Subscription } from 'rxjs/Subscription';
+import { Http, Response } from '@angular/http';
 
 @Component({
   templateUrl: './home.component.html',
@@ -14,11 +15,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
+              private http: Http,
               private router: Router,
               private userService: UserService) {
   }
-
-
 
   ngOnInit() {
     // Get return url from route parameters or default to '/'

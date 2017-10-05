@@ -96,5 +96,4 @@ export class MemberListComponent implements OnInit {
     if ( this.subscription ) this.subscription.unsubscribe();
     window.removeEventListener('resize', this.displayColumns);
   }
-
 }

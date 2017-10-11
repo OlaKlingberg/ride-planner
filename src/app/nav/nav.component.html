@@ -1,8 +1,8 @@
-<ng-container *ngIf="displayNavBar">
+<ng-container *ngIf="display">
 
 <nav class="navbar navbar-inverse"
      [@navBar]="navBarState"
-     [ngClass]="{'margin-bottom-0': deviceSize === 'xs'}">
+      [ngClass]="{'margin-bottom-0': marginBottomNone}">
 
   <div class="container">
     <div class="navbar-header">

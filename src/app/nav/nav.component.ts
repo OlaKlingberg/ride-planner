@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
-
 import { navAnimations } from './nav.component.animations';
 import { NavService } from './nav.service';
 import { User } from '../user/user';
@@ -23,10 +21,10 @@ import { getBootstrapDeviceSize } from '../_lib/util';
 })
 export class NavComponent implements OnInit {
   deviceSize: string;
-  displayNavBar: boolean;
+  display: boolean = true;
+  marginBottomNone: boolean =  false;
   navBarState: string = 'hide';
   user: User = null;
-  // ride: string;
 
   private route: string;
 
@@ -47,7 +45,7 @@ export class NavComponent implements OnInit {
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd ) {
-        this.checkDisplayNavbar();
+        this.checkHowToDisplay();
       }
     });
 
@@ -58,14 +56,9 @@ export class NavComponent implements OnInit {
     this.deviceSize = getBootstrapDeviceSize();
   }.bind(this);
 
-  checkDisplayNavbar() {
-    if (this.location.path().includes('/frame')) return this.displayNavBar = false;
-
-    // if (this.location.path().includes('/map')) return this.displayNavBar = false;
-
-    // if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.displayNavBar = false;
-
-    this.displayNavBar = true;
+  checkHowToDisplay() {
+    this.display = !this.location.path().includes('/frame');
+    this.marginBottomNone = this.location.path() === '/members' || this.location.path() === '/riders';
   }
 
   closeAccordion() {

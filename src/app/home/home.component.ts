@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
       if (this.returnUrl === '/debugger' && (user && user.admin === true)) {
 
-        this.router.navigate([ this.returnUrl ])
+        this.router.navigate([ this.returnUrl ]);
       }
 
     })

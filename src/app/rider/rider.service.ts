@@ -59,6 +59,7 @@ export class RiderService {
         // joinedRider.zIndex = this.zCounter++;
         // if ( joinedRider.leader ) joinedRider.zIndex += 500;
         this.riderListPromise().then((riderList: User[]) => {
+          // console.log("riderList:", riderList);
           riderList = riderList.filter(rider => rider._id !== joinedRider._id); // Remove rider, if rider already exists.
           riderList.push(joinedRider);
           // console.log("About to call riderList$.next() in onJoinedRider()");
@@ -90,7 +91,6 @@ export class RiderService {
 
   onUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
-      // console.log("updatedRiderPosition _id:", updatedRider._id);
       let riderList = this.riderList$.value;
       let idx = _.findIndex(riderList, rider => rider._id === updatedRider._id);
       if ( idx >= 0 ) {

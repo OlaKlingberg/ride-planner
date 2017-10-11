@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewChildren } from '@angular/core';
+import { Location } from '@angular/common';
 
 import LatLngBounds = google.maps.LatLngBounds;
 import LatLngBoundsLiteral = google.maps.LatLngBoundsLiteral;
@@ -52,7 +53,8 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('markers') markers;
   @ViewChildren('userInfoWindow') userInfoWindow;
 
-  constructor(private mapsAPILoader: MapsAPILoader,
+  constructor(private location: Location,
+              private mapsAPILoader: MapsAPILoader,
               private navService: NavService,
               private refreshService: RefreshService,
               private riderService: RiderService,
@@ -84,7 +86,7 @@ export class MapComponent implements OnInit, OnDestroy {
   calculateBounds(mapMode = this.mapMode) {
     this.mapMode = mapMode;
 
-    if (mapMode === 'stationary') return;
+    if ( mapMode === 'stationary' ) return;
 
     let bounds: LatLngBounds = new this.google.maps.LatLngBounds();
 
@@ -125,6 +127,7 @@ export class MapComponent implements OnInit, OnDestroy {
           return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
         });
         this.riders = this.setZIndexAndOpacity(riders);
+        // console.log("MapComponent.riders:", riders);
       }
 
       if ( user.position && user.position.coords && user.position.coords.latitude ) this.calculateBounds();
@@ -139,12 +142,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
   hideNav() {
     clearTimeout(this.hideTimer);
-
-    // Wait till the map is shown (which happens when there is a position), set timer for 4s, check that the accordion is not expanded. If it's not, hide the navbar.
+    // Wait till the map is shown (which happens when there is a position), set timer for 4s, check that the accordion is not expanded and that the user is till on the map page, and then hide the navbar.
     this.positionService.positionPromise().then(() => {
       this.hideTimer = setTimeout(() => {
         let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
-        if ( !ariaExpanded ) {
+        if ( !ariaExpanded && this.location.path() === '/map' ) {
           this.navService.navBarState$.next('hide');
           this.buttonState = 'hide';
         }

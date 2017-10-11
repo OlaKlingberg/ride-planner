@@ -12,7 +12,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   accuracy: number = null;
-  displayHeader: boolean;
+  display: boolean;
   latitude: number = null;
   longitude: number = null;
   ride: string;
@@ -31,21 +31,21 @@ export class HeaderComponent implements OnInit {
 
     this.router.events.subscribe(event => {
       if ( event instanceof NavigationEnd ) {
-        this.checkDisplayHeader();
+        this.checkWhetherToDisplay();
       }
     });
   }
 
-  checkDisplayHeader() {
+  checkWhetherToDisplay() {
     if ( this.location.path().includes('/frame') ||
         this.location.path().includes('/map') ||
-        ( this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) ) return this.displayHeader = false;
+        ( this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) ) return this.display = false;
 
     // if (this.location.path().includes('/map')) return this.displayHeader = false;
 
     // if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.displayHeader = false;
 
-    this.displayHeader = true;
+    this.display = true;
   }
 
   subscribeToPosition() {

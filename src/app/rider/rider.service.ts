@@ -26,9 +26,11 @@ export class RiderService {
     this.subscribeToUser();
   }
 
-  addTenRiders() {
+  addFiveRiders() {
+    console.log("Number of members:", this.userService.userList$.value);
+
     const token = JSON.parse(environment.storage.getItem('rpToken'));
-    this.socket.emit('addTenRiders', this.user, token);
+    this.socket.emit('addFiveRiders', this.user, token);
   }
 
   onDisconnectedRider() {
@@ -83,7 +85,6 @@ export class RiderService {
 
   onRiderList() {
     this.socket.on('riderList', riderList => {
-      console.log('onRiderList. riderList:', riderList);
       riderList = riderList.map(rider => new User(rider));
       this.riderList$.next(riderList);
     });

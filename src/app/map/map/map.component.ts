@@ -78,9 +78,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.positionService.getPosition();
   }
 
-  addTenRiders() {
-    this.riderService.addTenRiders();
-    this.dummyRiders = true;
+  addFiveRiders() {
+    this.riderService.addFiveRiders();
   }
 
   calculateBounds(mapMode = this.mapMode) {
@@ -157,7 +156,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   removeDummyRiders() {
     this.riderService.removeDummyRiders(this.user.ride);
-    this.dummyRiders = false;
+    setTimeout(() => {
+      this.dummyRiders = false;
+    }, 100);
   }
 
   retrieveState() {
@@ -189,6 +190,7 @@ export class MapComponent implements OnInit, OnDestroy {
       rider.zIndex = zCounter++;
       if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
       if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
+      if ( rider.dummy ) this.dummyRiders = true;
 
       return rider;
     });

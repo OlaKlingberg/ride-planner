@@ -106,7 +106,6 @@ export class PositionService {
   }
 
   setDummyPositions(pos) {
-    console.log("Dummy Positions");
     pos.coords.latitude += environment.dummyLatInitialAdd;
     pos.coords.longitude += environment.dummyLngInitialAdd;
 

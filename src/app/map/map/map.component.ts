@@ -84,6 +84,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   calculateBounds(mapMode = this.mapMode) {
+    console.log("calculateBounds()");
     this.mapMode = mapMode;
 
     if ( mapMode === 'stationary' ) return;
@@ -98,10 +99,16 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     }
 
+    console.log("user.position.coords.latitude:", this.user.position.coords.latitude);
     bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
 
-    this.latLng = bounds.toJSON();
-    this.latLng.north += (this.latLng.north - this.latLng.south) / 10; // Upper edge might be covered by menu bar.
+    console.log("bounds:", bounds);
+    console.log("bounds.toJSON()", bounds.toJSON());
+    setTimeout(() => {
+      this.latLng = bounds.toJSON();
+      this.latLng.north += (this.latLng.north - this.latLng.south) / 10; // Upper edge might be covered by menu bar.
+    }, 0);  // Todo: Figure out why I need to wait a tick here. Seems to solve the problem with latLng not getting a value in the view -- but why?
+
   }
 
   closeInfoWindows(_id) {

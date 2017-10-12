@@ -56,7 +56,7 @@ export class PositionService {
     if ( !rpPosition && environment.dummyMovement ) {
       console.log("getPosition(). Case 3");
       navigator.geolocation.getCurrentPosition((position: Position) => {
-        console.log("position:", position);
+        console.log("Case 3. position:", position);
             let pos = this.copyPositionObject(position);
             if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
             this.position$.next(pos);
@@ -74,7 +74,7 @@ export class PositionService {
       console.log("getPosition(). Case 4");
       if (this.positionWatcher) navigator.geolocation.clearWatch(this.positionWatcher);
       this.positionWatcher = navigator.geolocation.watchPosition((position: Position) => {
-        console.log("position:", position);
+        console.log("Case 4. position:", position);
             let pos = this.copyPositionObject(position);
             if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
             this.position$.next(pos);

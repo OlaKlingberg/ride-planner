@@ -69,6 +69,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.hideButtonsOnAutoRefresh();
     this.hideNav();
     this.mapsAPILoader.load().then(() => {
+      console.log("mapsAPILoader loaded!");
       this.google = google;
       this.getRiders();
       this.retrieveState();

@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 export class PositionService {
   position$: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  private alreadyRunFlag: boolean;
+  // private alreadyRunFlag: boolean = false;
   private geolocationOptions = {
     enableHighAccuracy: true,
     timeout: 20000,      // Todo: Figure out what value I want here, and what to do on timeout.
@@ -31,28 +31,32 @@ export class PositionService {
   }
 
   getPosition() {
-    if ( this.alreadyRunFlag ) return;
+    console.log("position$.value:", this.position$.value);
+    if (this.position$.value) return this.position$.value;
+
+    // if ( this.alreadyRunFlag ) return;
 
     let rpPosition = JSON.parse(environment.storage.getItem('rpPosition'));
     environment.storage.removeItem('rpPosition');
 
     // Case 1
     if ( rpPosition && environment.dummyMovement ) {
-      // console.log("getPosition(). Case 1");
+      console.log("getPosition(). Case 1. rpPosition:", rpPosition);//
       this.position$.next(rpPosition);
       this.setDummyMovements();
     }
 
     // Case 2
     if ( rpPosition && !environment.dummyMovement ) {
-      // console.log("getPosition(). Case 2");
+      console.log("getPosition(). Case 2. rpPosition:", rpPosition);
       this.position$.next(rpPosition);
     }
 
     // Case 3
     if ( !rpPosition && environment.dummyMovement ) {
-      // console.log("getPosition(). Case 3");
+      console.log("getPosition(). Case 3");
       navigator.geolocation.getCurrentPosition((position: Position) => {
+        console.log("position:", position);
             let pos = this.copyPositionObject(position);
             if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
             this.position$.next(pos);
@@ -67,9 +71,10 @@ export class PositionService {
 
     // Case 4
     if ( !rpPosition && !environment.dummyMovement ) {
-      // console.log("getPosition(). Case 4");
+      console.log("getPosition(). Case 4");
       if (this.positionWatcher) navigator.geolocation.clearWatch(this.positionWatcher);
       this.positionWatcher = navigator.geolocation.watchPosition((position: Position) => {
+        console.log("position:", position);
             let pos = this.copyPositionObject(position);
             if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
             this.position$.next(pos);
@@ -81,7 +86,7 @@ export class PositionService {
       );
     }
 
-    this.alreadyRunFlag = true;
+    // this.alreadyRunFlag = true;
   }
 
   positionPromise() {

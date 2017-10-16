@@ -12,6 +12,7 @@ import { RideSubjectService } from '../ride-subject.service';
 import { SocketService } from '../../core/socket.service';
 import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './ride-remover.component.html',
@@ -29,6 +30,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
               private rideService: RideService,
               private rideSubjectService: RideSubjectService,
               private router: Router,
+              private settingsService: SettingsService,
               private socketService: SocketService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
@@ -51,7 +53,8 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   }
 
   logOutFromRide() {
-    environment.storage.removeItem('rpRide');
+    // environment.storage.removeItem('rpRide');
+    eval(this.settingsService.storage$.value).removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;
     user.ride = null;

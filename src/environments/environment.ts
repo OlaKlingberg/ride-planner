@@ -5,20 +5,19 @@
 
 export const environment = {
   api: "http://localhost:3051",
-  dummyPosition: true,
-  dummyMovement: false,
-  dummyLatInc:          Math.random() * .0002 - .0001,
-  dummyLatInitialAdd:   Math.random() * .00006 - .00003,
-  dummyLngInc:          Math.random() * .0002 - .0001,
-  dummyLngInitialAdd:   Math.random() * .00006 - .00003,
-  dummyUpdateFrequency: Math.random() * 3000 + 500,
-  // dummyUpdateFrequency: 4000,
-  fadeNav: 4000,
+  // dummyPosition: true,
+  // dummyMovement: false,
+  // dummyLatInc:          Math.random() * .0002 - .0001,
+  // dummyLatInitialAdd:   Math.random() * .00006 - .00003,
+  // dummyLngInc:          Math.random() * .0002 - .0001,
+  // dummyLngInitialAdd:   Math.random() * .00006 - .00001,
+  // dummyUpdateFrequency: Math.random() * 3000 + 500,
+  // fadeNav: 4000,
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: false,
-  refreshOnMapPage: 180000,
-  refreshOnNavigation: 1800000,
-  removeLongDisconnectedRiders: 1800000,
+  // refreshOnMapPage: 180000,
+  // refreshOnNavigation: 1800000,
+  // removeLongDisconnectedRiders: 1800000,
   storage: sessionStorage
 };
 

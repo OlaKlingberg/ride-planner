@@ -1,21 +1,21 @@
 import { environment } from "../../environments/environment";
 
-let latInitialAdd,
-    latIncrement,
-    lngInitialAdd,
-    lngIncrement,
-    timer;
+// let latInitialAdd,
+//     latIncrement,
+//     lngInitialAdd,
+//     lngIncrement,
+//     timer;
 
-if ( environment.dummyPosition ) {
-  latInitialAdd = Math.random() * .001 - .0005;
-  lngInitialAdd = Math.random() * .001 - .0005;
-}
-
-if ( environment.dummyMovement ) {
-  latIncrement = Math.random() * .0001 - .00005;
-  lngIncrement = Math.random() * .0001 - .00005;
-  timer = Math.random() * 3000 + 500;
-}
+// if ( environment.dummyPosition ) {
+//   latInitialAdd = Math.random() * .001 - .0005;
+//   lngInitialAdd = Math.random() * .001 - .0005;
+// }
+//
+// if ( environment.dummyMovement ) {
+//   latIncrement = Math.random() * .0001 - .00005;
+//   lngIncrement = Math.random() * .0001 - .00005;
+//   timer = Math.random() * 3000 + 500;
+// }
 
 export class User {
   _id: string;
@@ -81,7 +81,7 @@ export class User {
     // Base the colorNumber on the first letter of the first name + the second letter of the last name.
     let colorNumber = this.fname.charCodeAt(0) + this.lname.charCodeAt(0);
     if ( this.lname.length >= 2 ) colorNumber += this.lname.charCodeAt(1);
-    return colorNumber % 9 + 2;
+    return colorNumber % 40 + 2;
   }
 
   get fullName() {

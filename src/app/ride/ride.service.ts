@@ -12,6 +12,7 @@ import { UserService } from '../user/user.service';
 import { SocketService } from '../core/socket.service';
 import Socket = SocketIOClient.Socket;
 import { RideSubjectService } from './ride-subject.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class RideService {
@@ -21,6 +22,7 @@ export class RideService {
 
   constructor(private http: Http,
               private rideSubjectService: RideSubjectService,
+              private settingsService: SettingsService,
               private socketService: SocketService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
@@ -61,7 +63,8 @@ export class RideService {
   }
 
   setHeaders() {
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    // const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }

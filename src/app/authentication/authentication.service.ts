@@ -7,6 +7,7 @@ import { environment } from "../../environments/environment";
 import { User } from "../user/user";
 import { UserService } from '../user/user.service';
 import { SocketService } from '../core/socket.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,13 +15,15 @@ export class AuthenticationService {
 
   constructor(private http: Http,
               private userService: UserService,
+              private settingsService: SettingsService,
               private socketService: SocketService) {
     this.authenticateByToken(); // If there is an rpToken, log in the user automatically.
     this.socket = this.socketService.socket;
   }
 
   authenticateByToken() {
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    // const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     if ( token ) {
       const headers = new Headers({ 'x-auth': token });
       const requestOptions = new RequestOptions({ headers });
@@ -42,14 +45,16 @@ export class AuthenticationService {
           let user: User = new User(response.json());
 
           if ( user && token ) {
-            environment.storage.setItem('rpToken', JSON.stringify(token));
+            // environment.storage.setItem('rpToken', JSON.stringify(token));
+            eval(this.settingsService.storage$.value).setItem('rpToken', JSON.stringify(token));
             this.userService.user$.next(user);
           }
         });
   }
 
   logout() {
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    // const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     const requestOptions = new RequestOptions({ headers });
 

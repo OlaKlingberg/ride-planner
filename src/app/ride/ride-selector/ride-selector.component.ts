@@ -9,6 +9,7 @@ import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
 import { RideService } from '../ride.service';
 import { PositionService } from '../../core/position.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './ride-selector.component.html',
@@ -26,6 +27,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
               private rideService: RideService,
               private rideSubjectService: RideSubjectService,
               private router: Router,
+              private settingsService: SettingsService,
               private userService: UserService) {
   }
 
@@ -39,13 +41,15 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
 
   logIntoRide() {
     this.rideSubjectService.ride$.next(this.model.ride);
-    environment.storage.setItem('rpRide', this.model.ride);
+    // environment.storage.setItem('rpRide', this.model.ride);
+    eval(this.settingsService.storage$.value).setItem('rpRide', this.model.ride);
     this.router.navigate([ '/map' ]);
   }
 
   logOutFromRide() {
     this.rideService.emitLeaveRide();
-    environment.storage.removeItem('rpRide');
+    // environment.storage.removeItem('rpRide');
+    eval(this.settingsService.storage$.value).removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;
     user.ride = null;

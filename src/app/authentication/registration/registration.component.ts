@@ -61,7 +61,7 @@ export class RegistrationComponent implements OnDestroy {
     this.loading = true;
     this.subscription = this.userService.create(this.model)
         .subscribe(() => {
-              this.alertService.success('Registration successful', true);
+              this.alertService.success('Registration successful', true, true);
               this.router.navigate([ '/auth/login' ]);
             },
             error => {

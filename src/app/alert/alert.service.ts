@@ -24,17 +24,17 @@ export class AlertService {
     });
   }
 
-  error(message: string, keepAfterNavigationChange = false) {
+  error(message: string, autoRemove = false, keepAfterNavigationChange = false) {
     this.keepAfterNavigationChange = keepAfterNavigationChange;
-    this.subject.next({ type: 'error', text: message });
+    this.subject.next({ type: 'error', text: message, autoRemove });
   }
 
   getMessage(): Observable<any> {
     return this.subject.asObservable();
   }
 
-  success(message: string, keepAfterNavigationChange = false) {
+  success(message: string, autoRemove = true, keepAfterNavigationChange = false) {
     this.keepAfterNavigationChange = keepAfterNavigationChange;
-    this.subject.next({ type: 'success', text: message });
+    this.subject.next({ type: 'success', text: message, autoRemove });
   }
 }

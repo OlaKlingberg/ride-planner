@@ -9,6 +9,7 @@ import { PositionService } from '../core/position.service';
 import { RideSubjectService } from '../ride/ride-subject.service';
 import { SocketService } from '../core/socket.service';
 import { User } from "./user";
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,7 @@ export class UserService {
   constructor(private http: Http,
               private positionService: PositionService,
               private rideSubjectService: RideSubjectService,
+              private settingsService: SettingsService,
               private socketService: SocketService) {
     this.joinRide();
     this.getRideFromStorage();
@@ -48,7 +50,8 @@ export class UserService {
       // console.log("joinRide(). ride:", ride);
       if ( ride ) {
         this.userPositionPromise().then((user: User) => {
-          const token = JSON.parse(environment.storage.getItem('rpToken'));
+          // const token = JSON.parse(environment.storage.getItem('rpToken'));
+          const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
           this.socket.emit('joinRide', user, ride, token, () => {
             // console.log("user:", user);
             user.ride = ride;
@@ -61,17 +64,20 @@ export class UserService {
   }
 
   getRideFromStorage() {
-    let ride = environment.storage.getItem('rpRide');  // This may or may not exist.
+    // let ride = environment.storage.getItem('rpRide');  // This may or may not exist.
+    let ride = eval(this.settingsService.storage$.value).getItem('rpRide');  // This may or may not exist.
     if ( ride ) this.rideSubjectService.ride$.next(ride);
   }
 
   getUserFromStorage() {
-    let rpUser = JSON.parse(environment.storage.getItem('rpUser'));
+    // let rpUser = JSON.parse(environment.storage.getItem('rpUser'));
+    let rpUser = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpUser'));
 
     if ( rpUser && rpUser.length > 0 ) {
       // console.log("getUserFromStorage(). About to create new user with userString:", rpUser);
       let user = new User(JSON.parse(rpUser));
-      environment.storage.removeItem('rpUser');
+      // environment.storage.removeItem('rpUser');
+      eval(this.settingsService.storage$.value).removeItem('rpUser');
       setTimeout(() => {
         this.user$.next(user);
       }, 0);
@@ -87,7 +93,8 @@ export class UserService {
   }
 
   setHeaders() {
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    // const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }

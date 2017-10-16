@@ -6,6 +6,7 @@ import { SocketService } from '../core/socket.service';
 import Socket = SocketIOClient.Socket;
 import { UserService } from '../user/user.service';
 import { environment } from '../../environments/environment';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class RiderService {
@@ -15,7 +16,8 @@ export class RiderService {
   private socket: Socket;
   private zCounter: number = 0;
 
-  constructor(private socketService: SocketService,
+  constructor(private settingsService: SettingsService,
+              private socketService: SocketService,
               private userService: UserService) {
     this.socket = socketService.socket;
     this.onDisconnectedRider();
@@ -29,7 +31,8 @@ export class RiderService {
   addFiveRiders() {
     console.log("Number of members:", this.userService.userList$.value);
 
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    // const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     this.socket.emit('addFiveRiders', this.user, token);
   }
 

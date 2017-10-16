@@ -9,6 +9,7 @@ import { Http, RequestOptions, Headers, Response } from "@angular/http";
 
 import { environment } from "../../environments/environment";
 import { Router } from '@angular/router';
+import { SettingsService } from '../settings/settings.service';
 
 
 @Injectable()
@@ -17,7 +18,8 @@ export class CuesheetDemoService {
 
   constructor(private cuesheetService: CuesheetService,
               private http: Http,
-              private router: Router) {
+              private router: Router,
+              private settingsService: SettingsService) {
     this.setCuesheetListInStorage();
   }
 
@@ -105,7 +107,8 @@ export class CuesheetDemoService {
 
 
   setHeaders() {
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    // const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }

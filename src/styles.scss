@@ -37,6 +37,14 @@ body {
   margin-bottom: 12px;
 }
 
+.margin-right-sm {
+  margin-right: 12px;
+}
+
+//.margin-top-sm {
+//  margin-top: 12px;
+//}
+
 .padding-bottom-md {
   padding-bottom: 24px;
 }
@@ -48,6 +56,10 @@ body {
 .padding-right-md {
   padding-right: 24px;
 }
+
+//.padding-top-sm {
+//  padding-top: 12px;
+//}
 
 .pointer {
   cursor: pointer;
@@ -85,6 +97,15 @@ body {
     display: none;
   }
 }
+
+.page-settings {
+  .mat-slider-wrapper {
+    left: 0 !important;
+  }
+}
+
+
+
 
 
 

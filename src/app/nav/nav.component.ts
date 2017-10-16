@@ -58,7 +58,9 @@ export class NavComponent implements OnInit {
 
   checkHowToDisplay() {
     this.display = !this.location.path().includes('/frame');
-    this.marginBottomNone = this.location.path() === '/members' || this.location.path() === '/riders';
+    this.marginBottomNone = this.location.path() === '/members' ||
+        this.location.path() === '/riders' ||
+        this.location.path() === '/settings';
   }
 
   closeAccordion() {

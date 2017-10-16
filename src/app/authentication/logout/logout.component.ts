@@ -9,6 +9,7 @@ import { AuthenticationService } from '../authentication.service';
 import { RideSubjectService } from '../../ride/ride-subject.service';
 import { SocketService } from '../../core/socket.service';import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/user.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './logout.component.html',
@@ -23,6 +24,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
               private alertService: AlertService,
               private rideSubjectService: RideSubjectService,
               private userService: UserService,
+              private settingsService: SettingsService,
               private socketService: SocketService) {
     this.socket = this.socketService.socket;
   }
@@ -31,8 +33,10 @@ export class LogoutComponent implements OnInit, OnDestroy {
     this.subscription = this.authenticationService.logout()
         .subscribe(() => {
 
-              environment.storage.removeItem('rpToken');
-              environment.storage.removeItem('rpRide');
+              // environment.storage.removeItem('rpToken');
+              eval(this.settingsService.storage$.value).removeItem('rpToken');
+              // environment.storage.removeItem('rpRide');
+              eval(this.settingsService.storage$.value).removeItem('rpRide');
 
               this.rideSubjectService.ride$.next(null);
 
@@ -45,7 +49,7 @@ export class LogoutComponent implements OnInit, OnDestroy {
               this.socket.emit('leaveRide');
 
 
-              this.alertService.success('You have been logged out', true);
+              this.alertService.success('You have been logged out', true, true);
               this.router.navigate([ '/auth/login' ]);
             },
             error => {

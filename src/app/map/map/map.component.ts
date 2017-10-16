@@ -19,6 +19,7 @@ import { UserService } from '../../user/user.service';
 import { RefreshService } from '../../core/refresh.service';
 import { environment } from '../../../environments/environment';
 import { RiderService } from '../../rider/rider.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -27,7 +28,11 @@ import { RiderService } from '../../rider/rider.service';
 })
 export class MapComponent implements OnInit, OnDestroy {
   buttonState: string = null;
-  colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
+  // colors: Array<string> = [ 'gray', 'red', 'white', 'orange', 'brown', 'blue', 'green', 'lightblue', 'pink', 'purple', 'yellow' ];
+
+  colors: Array<string> = [ 'gray', 'red', '9E60EF', '55BFC4', '56BF62', '56C195', '69BC57', '91BA58', '98D28A', '548AC6', '4848A4', '6262ED', '917875', 'A2CACA', 'AC8F74', 'AF5E5A', 'B0F4DA', 'B2F7B5', 'B2F49D', 'B7B758', 'B27F59', 'B59B59', 'C2C6EF', 'C3DBED', 'C3E5CD', 'C3EAE9', 'C4E8DD', 'CDF29E', 'D5B0D3', 'D5C2F2', 'DAAB73', 'E05FF2', 'EEC3F4', 'EFED9E', 'F4B3A8', 'F7C4E5', 'F7D3A9', 'F9C2D5', 'F45DD1', 'FCC3CA', 'FCEE22', 'FF9FA6' ];
+
+
   dummyRiders: boolean = false;
   latLng: LatLngBoundsLiteral;
   mapMode: string = 'focusOnUser';
@@ -42,7 +47,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private hideTimer: Timer;
   private intervalTimer: Timer;
   private positionSub: Subscription;
-  private refreshTimer: any;
+  private refreshTimer: Timer;
   private riderListSub: Subscription;
   private socket: Socket;
   private userSub: Subscription;
@@ -59,6 +64,7 @@ export class MapComponent implements OnInit, OnDestroy {
               private refreshService: RefreshService,
               private riderService: RiderService,
               private positionService: PositionService,
+              private settingsService: SettingsService,
               private socketService: SocketService,
               private userService: UserService) {
     this.socket = this.socketService.socket;
@@ -69,7 +75,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.hideButtonsOnAutoRefresh();
     this.hideNav();
     this.mapsAPILoader.load().then(() => {
-      console.log("mapsAPILoader loaded!");
       this.google = google;
       this.getRiders();
       this.retrieveState();
@@ -84,7 +89,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   calculateBounds(mapMode = this.mapMode) {
-    console.log("calculateBounds()");
     this.mapMode = mapMode;
 
     if ( mapMode === 'stationary' ) return;
@@ -99,11 +103,8 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     }
 
-    console.log("user.position.coords.latitude:", this.user.position.coords.latitude);
     bounds.extend({ lat: this.user.position.coords.latitude, lng: this.user.position.coords.longitude });
 
-    console.log("bounds:", bounds);
-    console.log("bounds.toJSON()", bounds.toJSON());
     setTimeout(() => {
       this.latLng = bounds.toJSON();
       this.latLng.north += (this.latLng.north - this.latLng.south) / 10; // Upper edge might be covered by menu bar.
@@ -131,7 +132,8 @@ export class MapComponent implements OnInit, OnDestroy {
       if ( user && riderList ) {
         let riders = riderList.filter(rider => rider._id !== user._id); // Filter out user, who will get a special marker.
         riders = riders.filter(rider => {                               // Filter out long-disconnected riders.
-          return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
+          // return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
+          return !rider.disconnected || (Date.now() - rider.disconnected) < this.settingsService.removeLongDisconnectedRider$.value['removeLongDisconnectedRiders'] * 60000;
         });
         this.riders = this.setZIndexAndOpacity(riders);
         // console.log("MapComponent.riders:", riders);
@@ -157,7 +159,8 @@ export class MapComponent implements OnInit, OnDestroy {
           this.navService.navBarState$.next('hide');
           this.buttonState = 'hide';
         }
-      }, environment.fadeNav);
+        // }, environment.fadeNav);
+      }, this.settingsService.fadeNav$.value * 1000);
     });
 
   }
@@ -170,20 +173,27 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   retrieveState() {
-    this.latLng = JSON.parse(environment.storage.getItem('rpLatLng'));
-    environment.storage.removeItem('rpLatLng');
-    this.mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
-    environment.storage.removeItem('rpMapMode');
+    this.latLng = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpLatLng'));
+    console.log("latLng:", this.latLng);
+    // environment.storage.removeItem('rpLatLng');
+    eval(this.settingsService.storage$.value).removeItem('rpLatLng');
+    // this.mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
+    this.mapMode = eval(this.settingsService.storage$.value).getItem('rpMapMode') || 'focusOnUser';
+    // environment.storage.removeItem('rpMapMode');
+    eval(this.settingsService.storage$.value).removeItem('rpMapMode');
   }
 
   setRefreshTimer() {
     console.log("setRefreshTimer(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
       console.log("refreshTimer completed");
-      if ( this.latLng ) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
-      environment.storage.setItem('rpMapMode', this.mapMode);
+      // if ( this.latLng ) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
+      if ( this.latLng ) eval(this.settingsService.storage$.value).setItem('rpLatLng', JSON.stringify(this.latLng));
+      // environment.storage.setItem('rpMapMode', this.mapMode);
+      eval(this.settingsService.storage$.value).setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
-    }, environment.refreshOnMapPage);
+    // }, environment.refreshOnMapPage);
+    }, this.settingsService.refreshMapPage$.value * 60000);
   }
 
   setTakingTooLongTimer() {

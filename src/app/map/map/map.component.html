@@ -22,7 +22,7 @@
                       [longitude]="user.position.coords.longitude"
                       [label]="{text: user?.initials, color: 'white'}"
                       [markerDraggable]="false"
-                      [iconUrl]="markerUrl + 'black.png'"
+                      [iconUrl]="markerUrl + 'map-marker-black.png'"
                       [zIndex]="1000"
                       [opacity]="user.opacity"
                       (markerClick)="closeInfoWindows(user._id)">
@@ -40,7 +40,7 @@
                       [longitude]="rider.position.coords.longitude"
                       [label]="{text: rider?.initials, color: 'black'}"
                       [markerDraggable]="false"
-                      [iconUrl]="markerUrl + colors[rider.colorNumber] + '.png'"
+                      [iconUrl]="markerUrl + 'map-marker-' + colors[rider.colorNumber] + '.png'"
                       [zIndex]="rider.zIndex"
                       [opacity]="rider.opacity"
                       (markerClick)="closeInfoWindows(rider._id)">

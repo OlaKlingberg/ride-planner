@@ -27,7 +27,7 @@ export class AlertComponent implements OnInit, OnDestroy {
         this.message = message;
         this.message.state = 'new';
         setTimeout(() => {
-          if ( this.message && this.message.type === 'success' ) {
+          if ( this.message && this.message.autoRemove ) {
             this.message.state = 'faded';
             setTimeout(() => {
               this.message = null;

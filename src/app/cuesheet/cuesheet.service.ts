@@ -10,6 +10,7 @@ import { environment } from "../../environments/environment";
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import { Subject } from 'rxjs/Subject';
+import { SettingsService } from '../settings/settings.service';
 
 
 @Injectable()
@@ -19,6 +20,7 @@ export class CuesheetService {
   private user: User;
 
   constructor(private http: Http,
+              private settingsService: SettingsService,
               private userService: UserService) {
     this.userService.user$.subscribe(user => {
       this.user = user;
@@ -83,7 +85,7 @@ export class CuesheetService {
   }
 
   setHeaders() {
-    const token = JSON.parse(environment.storage.getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }

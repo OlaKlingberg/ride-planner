@@ -35,7 +35,7 @@ export class CuesheetNewDemoComponent implements OnDestroy, AfterViewInit {
 
     const cuesheet = this.cuesheetDemoService.createCuesheet(this.model);
 
-    this.alertService.success('The Cue Sheet has been created', true);
+    this.alertService.success('The Cue Sheet has been created', true, true);
     this.router.navigate([ `/cuesheet/${cuesheet._id}/edit` ]);
   }
 

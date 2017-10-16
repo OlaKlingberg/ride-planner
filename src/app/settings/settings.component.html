@@ -1,0 +1,118 @@
+<form name="form" #f="ngForm">
+
+<div class="container mat-app-background page-settings form-inline">
+  <md-card>
+    <md-card-content>
+      <h2>Settings {{dummyPos}}</h2>
+
+      <section class="section-styling">
+        <label class='margin-right-sm'>Mode</label><br>
+        <md-radio-group [(ngModel)]='settings.demoMode' name="demoMode">
+          <md-radio-button class='margin-right-sm' value='no'>Live</md-radio-button>
+          <md-radio-button class='margin-right-sm' value='yes'>Demo</md-radio-button>
+        </md-radio-group>
+      </section>
+
+      <section class="section-styling">
+        <label class='margin-right-sm'>Storage</label><br>
+        <md-radio-group [(ngModel)]='settings.storage' name="storage">
+          <md-radio-button class='margin-right-sm' value='sessionStorage'>Session</md-radio-button>
+          <md-radio-button class='margin-right-sm' value='localStorage'>Local</md-radio-button>
+        </md-radio-group>
+      </section>
+
+      <section class="section-styling">
+        <label class='margin-right-sm'>Dummy Positions</label><br>
+        <md-radio-group [(ngModel)]="settings.dummyPos" name="dummyPos">
+          <md-radio-button class='margin-right-sm' value='yes'>Yes</md-radio-button>
+          <md-radio-button class='margin-right-sm' value='no'>No</md-radio-button>
+        </md-radio-group>
+      </section>
+
+      <section class="section-styling">
+        <label class='margin-right-sm'>Dummy Movements</label><br>
+        <md-radio-group [(ngModel)]='settings.dummyMov' name="dummyMov">
+          <md-radio-button class='margin-right-sm' value='yes'>Yes</md-radio-button>
+          <md-radio-button class='margin-right-sm' value='no'>No</md-radio-button>
+        </md-radio-group>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input mdInput class="input-sm" type="number" step=".01" [(ngModel)]="settings.dummyUpdateFreq" name="dummyUpdateFreq">
+          <label class="move-down">Dummy Position Update Frequency<br>(in seconds)</label>
+        </md-form-field>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input class="input-sm" type="number" step="1" [(ngModel)]="settings.dummyPosAddMin" name="dummyPosAddMin">
+          <label class="move-down">Dummy Position Add Minimum<br>(in 1/100,000 of a degree)</label>
+        </md-form-field>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input class="input-sm" type="number" step="1" [(ngModel)]="settings.dummyPosAddMax" name="dummyPosAddMax">
+          <label class="move-down">Dummy Position Add Maximum<br>(in 1/100,000 of a degree)</label>
+        </md-form-field>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input class="input-sm" type="number" step="1" [(ngModel)]="settings.dummyMovIncMin" name="dummyMovIncMin">
+          <label class="move-down">Dummy Movement Increments Minimum<br>(in 1/100,000 of a degree)</label><br>
+        </md-form-field>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input class="input-sm" type="number" step="1" [(ngModel)]="settings.dummyMovIncMax" name="dummyMovIncMax">
+          <label class="move-down">Dummy Movement Increments Maximum<br>(in 1/100,000 of a degree)</label><br>
+        </md-form-field>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input class="input-sm" type="number" step="1" [(ngModel)]='settings.removeLongDisconnectedRiders' name="removeLongDisconnectedRiders">
+          <label class="move-down">Remove riders who have been disconnected for ...<br>(in minutes)</label><br>
+        </md-form-field>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input type="number" class="input-sm" step="1" [(ngModel)]=settings.fadeNav name="fadeNav">
+          <label class="move-down">Fade nav bar on map after ...<br>(in seconds)</label><br>
+        </md-form-field>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input type="number" class="input-sm" step=".5" [(ngModel)]=settings.refreshMapPage name="refreshMapPage">
+          <label class="move-down">Refresh map every ...<br>(in minutes)</label><br>
+        </md-form-field>
+      </section>
+
+      <section class="section-styling">
+        <md-form-field>
+          <input type="number" class="input-sm" step="1" [(ngModel)]=settings.refreshOnNavigationAfter name="refreshOnNavigationAfter">
+          <label class="move-down">Refresh on navigation after ...<br>(in minutes)</label><br>
+        </md-form-field>
+      </section>
+
+      <br>
+
+      <div *ngIf="!f.form.pristine && !showRefreshButton" class="buttons-container">
+        <button type="submit" class="btn btn-primary btn-md btn-40" (click)="save()">Save Changes</button>
+        <button type="button" class="btn btn-warning btn-md btn-40" (click)="cancel()">Cancel</button>
+      </div>
+
+
+
+      <button *ngIf="showRefreshButton" type="submit" class="btn btn-primary" (click)="refresh()">Refresh the Browser</button>
+
+    </md-card-content>
+  </md-card>
+</div>
+
+</form>

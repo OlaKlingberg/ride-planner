@@ -32,7 +32,7 @@ export class CuesheetNewComponent implements OnDestroy, AfterViewInit {
     this.loading = true;
     this.subscription = this.cuesheetService.createCuesheet(this.model)
         .subscribe((cuesheet: Cuesheet) => {
-              this.alertService.success('The Cue Sheet has been created', true);
+              this.alertService.success('The Cue Sheet has been created', true, true);
               this.router.navigate([ `/cuesheet/${cuesheet._id}/edit` ]);
             },
             error => {

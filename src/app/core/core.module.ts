@@ -26,6 +26,7 @@ import { UserService } from '../user/user.service';
 import { RiderService } from '../rider/rider.service';
 import { HeaderModule } from '../header/header.module';
 import { CuesheetDemoService } from '../cuesheet/cuesheet-demo.service';
+import { SettingsService } from '../settings/settings.service';
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import { CuesheetDemoService } from '../cuesheet/cuesheet-demo.service';
     RideService,
     RideSubjectService,
     RiderService,
+    SettingsService,
     SocketService,
     UserService
   ]

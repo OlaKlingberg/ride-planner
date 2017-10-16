@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class PositionService {
@@ -15,10 +16,10 @@ export class PositionService {
   };
   private positionWatcher: any;
 
-  constructor() {
+  constructor(private settingsService: SettingsService) {
   }
 
-  // Todo: Why can't I do this with JSON.stringify() and JSON.parse()?
+  // Todo: Why can't I do this with JSON.stringify() and JSON.parse()? (Have I tried?)
   copyPositionObject(position) {
     return {
       coords: {
@@ -31,36 +32,42 @@ export class PositionService {
   }
 
   getPosition() {
-    console.log("position$.value:", this.position$.value);
     if (this.position$.value) return this.position$.value;
+    console.log("getPosition(), this.settingsService.dummyPos$.value:", this.settingsService.dummyPos$.value);
 
     // if ( this.alreadyRunFlag ) return;
 
-    let rpPosition = JSON.parse(environment.storage.getItem('rpPosition'));
-    environment.storage.removeItem('rpPosition');
+    // let rpPosition = JSON.parse(environment.storage.getItem('rpPosition'));
+    let rpPosition = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpPosition'));
+    // environment.storage.removeItem('rpPosition');
+    eval(this.settingsService.storage$.value).removeItem('rpPosition');
 
     // Case 1
-    if ( rpPosition && environment.dummyMovement ) {
+    // if ( rpPosition && this.settingsService.settings$.value['dummyMov'] === 'yes' ) {
+    if ( rpPosition && this.settingsService.dummyMov$.value ) {
       console.log("getPosition(). Case 1. rpPosition:", rpPosition);//
       this.position$.next(rpPosition);
-      this.setDummyMovements();
+      this.setDummyMovs();
     }
 
     // Case 2
-    if ( rpPosition && !environment.dummyMovement ) {
+    // if ( rpPosition && this.settingsService.settings$.value['dummyMov'] !== 'yes' ) {
+    if ( rpPosition && !this.settingsService.dummyMov$.value ) {
       console.log("getPosition(). Case 2. rpPosition:", rpPosition);
       this.position$.next(rpPosition);
     }
 
     // Case 3
-    if ( !rpPosition && environment.dummyMovement ) {
+    // if ( !rpPosition && this.settingsService.settings$.value['dummyMov'] === 'yes' ) {
+    if ( !rpPosition && this.settingsService.dummyMov$.value ) {
       console.log("getPosition(). Case 3");
       navigator.geolocation.getCurrentPosition((position: Position) => {
         console.log("Case 3. position:", position);
             let pos = this.copyPositionObject(position);
-            if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
+            console.log("dummyPos$:", this.settingsService.dummyPos$.value);
+            if ( this.settingsService.dummyPos$.value ) pos = this.setDummyPos(pos);
             this.position$.next(pos);
-            this.setDummyMovements();
+            this.setDummyMovs();
           },
           err => {
             console.log(`getCurrentPosition error: ${err.message}`);
@@ -70,13 +77,15 @@ export class PositionService {
     }
 
     // Case 4
-    if ( !rpPosition && !environment.dummyMovement ) {
+    // if ( !rpPosition && this.settingsService.settings$.value['dummyMov'] !== 'yes' ) {
+    if ( !rpPosition && !this.settingsService.dummyMov$.value ) {
       console.log("getPosition(). Case 4");
       if (this.positionWatcher) navigator.geolocation.clearWatch(this.positionWatcher);
       this.positionWatcher = navigator.geolocation.watchPosition((position: Position) => {
         console.log("Case 4. position:", position);
             let pos = this.copyPositionObject(position);
-            if ( environment.dummyPosition ) pos = this.setDummyPositions(pos);
+            // if ( this.settingsService.settings$.value['dummyPos'] === 'yes' ) pos = this.setDummyPos(pos);
+            if ( this.settingsService.dummyPos$.value ) pos = this.setDummyPos(pos);
             this.position$.next(pos);
           },
           err => {
@@ -100,19 +109,28 @@ export class PositionService {
     });
   }
 
-  setDummyMovements() {
+  setDummyMovs() {
+    let dummyMovIncLat = this.settingsService.dummyMovIncLat$.value;
+    let dummyMovIncLng = this.settingsService.dummyMovIncLng$.value;
+
     setInterval(() => {
       let pos = this.position$.value;
-      pos.coords.latitude += environment.dummyLatInc;
-      pos.coords.longitude += environment.dummyLngInc;
+      // pos.coords.latitude += environment.dummyLatInc;
+      pos.coords.latitude += dummyMovIncLat;
+      // pos.coords.longitude += environment.dummyLngInc;
+      pos.coords.longitude += dummyMovIncLng;
       this.position$.next(pos);
-    }, environment.dummyUpdateFrequency);
+    }, this.settingsService.dummyUpdateFreq$.value * 1000);
 
   }
 
-  setDummyPositions(pos) {
-    pos.coords.latitude += environment.dummyLatInitialAdd;
-    pos.coords.longitude += environment.dummyLngInitialAdd;
+  setDummyPos(pos) {
+    // console.log("setDummyPos() settings$:", this.settingsService.settings$.value);
+    // pos.coords.latitude += environment.dummyLatInitialAdd;
+    // console.log("setDummyPos(). dummyPosAdd:", this.settingsService.settings$.value['dummyPosAdd']);
+    pos.coords.longitude += this.settingsService.dummyPosAddLat$.value;
+    // pos.coords.longitude += environment.dummyLngInitialAdd;
+    pos.coords.longitude += this.settingsService.dummyPosAddLng$.value;
 
     return pos;
   }

@@ -27,7 +27,7 @@ export class RideCreatorComponent implements OnDestroy {
     this.loading = true;
     this.subscription = this.rideService.createRide(this.model)
         .subscribe((ride: Ride) => {
-              this.alertService.success(`The ride "${ride.name}" has been created`, true);
+              this.alertService.success(`The ride "${ride.name}" has been created`, true, true);
               this.router.navigate([ '/ride/select' ]);
             },
             error => {

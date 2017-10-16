@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from "./authentication/auth.guard";
 import { RideLeaderGuard } from './ride/ride-leader.guard';
 import { SelectivePreloadingStrategy } from './core/selective-preloading-strategy';
+import { AdminGuard } from './authentication/admin.guard';
 
 const routes: Routes = [
   {
@@ -51,6 +52,11 @@ const routes: Routes = [
     canActivate: [ RideLeaderGuard ],
     loadChildren: 'app/rider/rider.module#RiderModule'
   },
+  {
+    path: 'settings',
+    canActivate: [ AdminGuard ],
+    loadChildren: 'app/settings/settings.module#SettingsModule'
+  }
 ];
 
 @NgModule({

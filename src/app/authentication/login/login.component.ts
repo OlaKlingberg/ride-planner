@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loading = true;
     let sub = this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
-              this.alertService.success("You have been successfully logged in!", true);
+              this.alertService.success("You have been successfully logged in!", true, true);
               this.router.navigate([ this.returnUrl ]);
             },
             error => {

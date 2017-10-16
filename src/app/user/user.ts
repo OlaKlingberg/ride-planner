@@ -1,22 +1,3 @@
-import { environment } from "../../environments/environment";
-
-// let latInitialAdd,
-//     latIncrement,
-//     lngInitialAdd,
-//     lngIncrement,
-//     timer;
-
-// if ( environment.dummyPosition ) {
-//   latInitialAdd = Math.random() * .001 - .0005;
-//   lngInitialAdd = Math.random() * .001 - .0005;
-// }
-//
-// if ( environment.dummyMovement ) {
-//   latIncrement = Math.random() * .0001 - .00005;
-//   lngIncrement = Math.random() * .0001 - .00005;
-//   timer = Math.random() * 3000 + 500;
-// }
-
 export class User {
   _id: string;
   admin: boolean;

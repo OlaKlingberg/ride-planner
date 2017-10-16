@@ -5,7 +5,6 @@ import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertService } from '../../alert/alert.service';
-import { environment } from "../../../environments/environment";
 import { Ride } from '../ride';
 import { RideService } from '../ride.service';
 import { RideSubjectService } from '../ride-subject.service';
@@ -53,7 +52,6 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   }
 
   logOutFromRide() {
-    // environment.storage.removeItem('rpRide');
     eval(this.settingsService.storage$.value).removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;

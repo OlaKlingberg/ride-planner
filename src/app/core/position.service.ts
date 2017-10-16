@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { environment } from '../../environments/environment';
 import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class PositionService {
   position$: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  // private alreadyRunFlag: boolean = false;
   private geolocationOptions = {
     enableHighAccuracy: true,
     timeout: 20000,      // Todo: Figure out what value I want here, and what to do on timeout.
@@ -35,15 +33,10 @@ export class PositionService {
     if (this.position$.value) return this.position$.value;
     console.log("getPosition(), this.settingsService.dummyPos$.value:", this.settingsService.dummyPos$.value);
 
-    // if ( this.alreadyRunFlag ) return;
-
-    // let rpPosition = JSON.parse(environment.storage.getItem('rpPosition'));
     let rpPosition = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpPosition'));
-    // environment.storage.removeItem('rpPosition');
     eval(this.settingsService.storage$.value).removeItem('rpPosition');
 
     // Case 1
-    // if ( rpPosition && this.settingsService.settings$.value['dummyMov'] === 'yes' ) {
     if ( rpPosition && this.settingsService.dummyMov$.value ) {
       console.log("getPosition(). Case 1. rpPosition:", rpPosition);//
       this.position$.next(rpPosition);
@@ -51,14 +44,12 @@ export class PositionService {
     }
 
     // Case 2
-    // if ( rpPosition && this.settingsService.settings$.value['dummyMov'] !== 'yes' ) {
     if ( rpPosition && !this.settingsService.dummyMov$.value ) {
       console.log("getPosition(). Case 2. rpPosition:", rpPosition);
       this.position$.next(rpPosition);
     }
 
     // Case 3
-    // if ( !rpPosition && this.settingsService.settings$.value['dummyMov'] === 'yes' ) {
     if ( !rpPosition && this.settingsService.dummyMov$.value ) {
       console.log("getPosition(). Case 3");
       navigator.geolocation.getCurrentPosition((position: Position) => {
@@ -77,14 +68,12 @@ export class PositionService {
     }
 
     // Case 4
-    // if ( !rpPosition && this.settingsService.settings$.value['dummyMov'] !== 'yes' ) {
     if ( !rpPosition && !this.settingsService.dummyMov$.value ) {
       console.log("getPosition(). Case 4");
       if (this.positionWatcher) navigator.geolocation.clearWatch(this.positionWatcher);
       this.positionWatcher = navigator.geolocation.watchPosition((position: Position) => {
         console.log("Case 4. position:", position);
             let pos = this.copyPositionObject(position);
-            // if ( this.settingsService.settings$.value['dummyPos'] === 'yes' ) pos = this.setDummyPos(pos);
             if ( this.settingsService.dummyPos$.value ) pos = this.setDummyPos(pos);
             this.position$.next(pos);
           },
@@ -94,8 +83,6 @@ export class PositionService {
           this.geolocationOptions
       );
     }
-
-    // this.alreadyRunFlag = true;
   }
 
   positionPromise() {
@@ -115,9 +102,7 @@ export class PositionService {
 
     setInterval(() => {
       let pos = this.position$.value;
-      // pos.coords.latitude += environment.dummyLatInc;
       pos.coords.latitude += dummyMovIncLat;
-      // pos.coords.longitude += environment.dummyLngInc;
       pos.coords.longitude += dummyMovIncLng;
       this.position$.next(pos);
     }, this.settingsService.dummyUpdateFreq$.value * 1000);
@@ -125,11 +110,7 @@ export class PositionService {
   }
 
   setDummyPos(pos) {
-    // console.log("setDummyPos() settings$:", this.settingsService.settings$.value);
-    // pos.coords.latitude += environment.dummyLatInitialAdd;
-    // console.log("setDummyPos(). dummyPosAdd:", this.settingsService.settings$.value['dummyPosAdd']);
     pos.coords.longitude += this.settingsService.dummyPosAddLat$.value;
-    // pos.coords.longitude += environment.dummyLngInitialAdd;
     pos.coords.longitude += this.settingsService.dummyPosAddLng$.value;
 
     return pos;

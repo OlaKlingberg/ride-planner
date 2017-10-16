@@ -31,7 +31,6 @@ export class RefreshService {
       this.subscription = this.router.events.subscribe(event => {
         this.refresh();
       });
-    // }, environment.refreshOnNavigation);
     }, this.settingsService.refreshOnNavigationAfter$.value * 60000);
   }
 
@@ -43,9 +42,7 @@ export class RefreshService {
   }
 
   checkAutoRefresh() {
-    // this.autoRefreshFlag = environment.storage.getItem('rpAutoRefreshFlag') === 'true';
     this.autoRefreshFlag = eval(this.settingsService.storage$.value).getItem('rpAutoRefreshFlag') === 'true';
-    // environment.storage.removeItem('rpAutoRefreshFlag');
     eval(this.settingsService.storage$.value).removeItem('rpAutoRefreshFlag');
 
     // If the user navigates away from map and navigates back, autoRefreshPromise should resolve false;
@@ -58,11 +55,8 @@ export class RefreshService {
     let position: Position = this.positionService.position$.value;
     let user: User = this.userService.user$.value;
 
-    // environment.storage.setItem('rpAutoRefreshFlag', 'true');
     eval(this.settingsService.storage$.value).setItem('rpAutoRefreshFlag', 'true');
-    // environment.storage.setItem('rpPosition', JSON.stringify(position));
     eval(this.settingsService.storage$.value).setItem('rpPosition', JSON.stringify(position));
-    // environment.storage.setItem('rpUser', JSON.stringify(user));
     eval(this.settingsService.storage$.value).setItem('rpUser', JSON.stringify(user));
 
     window.location.reload();

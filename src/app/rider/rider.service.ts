@@ -5,7 +5,6 @@ import { User } from '../user/user';
 import { SocketService } from '../core/socket.service';
 import Socket = SocketIOClient.Socket;
 import { UserService } from '../user/user.service';
-import { environment } from '../../environments/environment';
 import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
@@ -31,7 +30,6 @@ export class RiderService {
   addFiveRiders() {
     console.log("Number of members:", this.userService.userList$.value);
 
-    // const token = JSON.parse(environment.storage.getItem('rpToken'));
     const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     this.socket.emit('addFiveRiders', this.user, token);
   }
@@ -43,7 +41,6 @@ export class RiderService {
         let idx = _.findIndex(riderList, rider => rider._id === disconnectedRider._id);
         if ( idx >= 0 ) {
           riderList[ idx ].disconnected = disconnectedRider.disconnected;
-          // console.log("About to call riderList$.next() in onDisconnectedRider()");
           this.riderList$.next(riderList);
         }
       });
@@ -59,17 +56,11 @@ export class RiderService {
         console.log("Counter reached 1000! About to emit giveMeRiderList.");
         this.socket.emit('giveMeRiderList', this.user.ride);
       } else {
-        // if ( joinedRider._id !== this.user._id ) {
         joinedRider = new User(joinedRider);
-        // joinedRider.zIndex = this.zCounter++;
-        // if ( joinedRider.leader ) joinedRider.zIndex += 500;
         this.riderListPromise().then((riderList: User[]) => {
-          // console.log("riderList:", riderList);
           riderList = riderList.filter(rider => rider._id !== joinedRider._id); // Remove rider, if rider already exists.
           riderList.push(joinedRider);
-          // console.log("About to call riderList$.next() in onJoinedRider()");
           this.riderList$.next(riderList);
-          // console.log('joinedRider. riderList:', this.riderList$.value);
         });
         // }
       }
@@ -81,7 +72,6 @@ export class RiderService {
       console.log("removedRider _id:", _id);
       let riders = this.riderList$.value.filter(rider => rider._id !== _id);
 
-      // console.log("About to call riderList$.next() in onRemovedRider()");
       this.riderList$.next(riders);
     });
   }
@@ -103,7 +93,6 @@ export class RiderService {
         riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
         riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
 
-        // console.log("About to call riderList$.next() in onUpdatedRiderPosition(). riderList:", riderList);
         this.riderList$.next(riderList);
       }
     });

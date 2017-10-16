@@ -8,7 +8,6 @@ import { environment } from '../../environments/environment';
 import { Ride } from './ride';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
-// import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SocketService } from '../core/socket.service';
 import Socket = SocketIOClient.Socket;
 import { RideSubjectService } from './ride-subject.service';
@@ -63,7 +62,6 @@ export class RideService {
   }
 
   setHeaders() {
-    // const token = JSON.parse(environment.storage.getItem('rpToken'));
     const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });

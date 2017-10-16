@@ -17,7 +17,6 @@ import { SocketService } from '../../core/socket.service';
 import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
 import { RefreshService } from '../../core/refresh.service';
-import { environment } from '../../../environments/environment';
 import { RiderService } from '../../rider/rider.service';
 import { SettingsService } from '../../settings/settings.service';
 
@@ -132,7 +131,6 @@ export class MapComponent implements OnInit, OnDestroy {
       if ( user && riderList ) {
         let riders = riderList.filter(rider => rider._id !== user._id); // Filter out user, who will get a special marker.
         riders = riders.filter(rider => {                               // Filter out long-disconnected riders.
-          // return !rider.disconnected || (Date.now() - rider.disconnected) < environment.removeLongDisconnectedRiders;
           return !rider.disconnected || (Date.now() - rider.disconnected) < this.settingsService.removeLongDisconnectedRider$.value['removeLongDisconnectedRiders'] * 60000;
         });
         this.riders = this.setZIndexAndOpacity(riders);
@@ -159,7 +157,6 @@ export class MapComponent implements OnInit, OnDestroy {
           this.navService.navBarState$.next('hide');
           this.buttonState = 'hide';
         }
-        // }, environment.fadeNav);
       }, this.settingsService.fadeNav$.value * 1000);
     });
 
@@ -175,11 +172,8 @@ export class MapComponent implements OnInit, OnDestroy {
   retrieveState() {
     this.latLng = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpLatLng'));
     console.log("latLng:", this.latLng);
-    // environment.storage.removeItem('rpLatLng');
     eval(this.settingsService.storage$.value).removeItem('rpLatLng');
-    // this.mapMode = environment.storage.getItem('rpMapMode') || 'focusOnUser';
     this.mapMode = eval(this.settingsService.storage$.value).getItem('rpMapMode') || 'focusOnUser';
-    // environment.storage.removeItem('rpMapMode');
     eval(this.settingsService.storage$.value).removeItem('rpMapMode');
   }
 
@@ -187,12 +181,9 @@ export class MapComponent implements OnInit, OnDestroy {
     console.log("setRefreshTimer(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
       console.log("refreshTimer completed");
-      // if ( this.latLng ) environment.storage.setItem('rpLatLng', JSON.stringify(this.latLng));
       if ( this.latLng ) eval(this.settingsService.storage$.value).setItem('rpLatLng', JSON.stringify(this.latLng));
-      // environment.storage.setItem('rpMapMode', this.mapMode);
       eval(this.settingsService.storage$.value).setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
-    // }, environment.refreshOnMapPage);
     }, this.settingsService.refreshMapPage$.value * 60000);
   }
 

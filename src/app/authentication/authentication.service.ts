@@ -22,7 +22,6 @@ export class AuthenticationService {
   }
 
   authenticateByToken() {
-    // const token = JSON.parse(environment.storage.getItem('rpToken'));
     const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     if ( token ) {
       const headers = new Headers({ 'x-auth': token });
@@ -45,7 +44,6 @@ export class AuthenticationService {
           let user: User = new User(response.json());
 
           if ( user && token ) {
-            // environment.storage.setItem('rpToken', JSON.stringify(token));
             eval(this.settingsService.storage$.value).setItem('rpToken', JSON.stringify(token));
             this.userService.user$.next(user);
           }
@@ -53,7 +51,6 @@ export class AuthenticationService {
   }
 
   logout() {
-    // const token = JSON.parse(environment.storage.getItem('rpToken'));
     const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     const requestOptions = new RequestOptions({ headers });

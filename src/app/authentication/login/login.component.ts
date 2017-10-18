@@ -9,11 +9,14 @@ import { AuthenticationService } from "../authentication.service";
 import { User } from "../../user/user";
 import { UserService } from "app/user/user.service";
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ]
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  demoMode: boolean;
   model: any = {};
   loading = false;
   user: User;
@@ -26,13 +29,18 @@ export class LoginComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService,
               private alertService: AlertService,
               private userService: UserService) {
+    this.demoMode = environment.demoMode;
   }
 
   ngOnInit() {
+    if (this.demoMode) {
+      this.model.email = "jane.doe@example.com";
+      this.model.password = 'secret'
+    }
+
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
-    // console.log("LoginComponent. About to subscribe to user$. Counter:", this.counter++);
     let sub = this.userService.user$.subscribe(user => {
           if ( user ) {
             this.user = user;

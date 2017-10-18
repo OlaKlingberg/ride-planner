@@ -54,7 +54,6 @@ const routes: Routes = [
   },
   {
     path: 'settings',
-    canActivate: [ AdminGuard ],
     loadChildren: 'app/settings/settings.module#SettingsModule'
   }
 ];

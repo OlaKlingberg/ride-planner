@@ -6,11 +6,14 @@ import { User } from "../../user/user";
 import { UserService } from "../../user/user.service";
 import { Subscription } from 'rxjs/Subscription';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   templateUrl: './registration.component.html',
   styleUrls: [ './registration.component.scss' ]
 })
 export class RegistrationComponent implements OnDestroy {
+  demoMode: boolean;
   model: any = {};
   loading: boolean = false;
   user: User;
@@ -23,6 +26,7 @@ export class RegistrationComponent implements OnDestroy {
   constructor(private router: Router,
               private userService: UserService,
               private alertService: AlertService) {
+    this.demoMode = environment.demoMode;
   }
 
   formatPhone($event, field) {

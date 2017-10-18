@@ -66,7 +66,7 @@ export class MemberListComponent implements OnInit {
     this.userService.addDummyMembers()
         .then(res => {
           this.userService.requestAllUsers();
-          this.alertService.success('Twenty members have been added.');
+          this.alertService.success('Twenty members have been added. They will be removed in an hour.');
           this.loading = false;
         })
         .catch(e => {

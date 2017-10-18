@@ -34,7 +34,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   dummyRiders: boolean = false;
   latLng: LatLngBoundsLiteral;
-  mapMode: string = 'focusOnUser';
+  mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
   markerUrl: string = "assets/img/rider-markers/";
   maxZoom: number = 18;
   riders: User[] = [];
@@ -83,8 +83,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.positionService.getPosition();
   }
 
-  addFiveRiders() {
-    this.riderService.addFiveRiders();
+  addDummyRiders() {
+    this.riderService.addDummyRiders();
   }
 
   calculateBounds(mapMode = this.mapMode) {

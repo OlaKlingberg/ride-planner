@@ -27,11 +27,11 @@ export class RiderService {
     this.subscribeToUser();
   }
 
-  addFiveRiders() {
-    console.log("Number of members:", this.userService.userList$.value);
+  addDummyRiders() {
+    // console.log("Number of members:", this.userService.userList$.value);
 
     const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
-    this.socket.emit('addFiveRiders', this.user, token);
+    this.socket.emit('addDummyRiders', this.user, token);
   }
 
   onDisconnectedRider() {

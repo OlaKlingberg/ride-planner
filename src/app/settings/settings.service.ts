@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { environment } from "../../environments/environment";
+
 import { Settings } from './settings';
 
 @Injectable()
@@ -25,11 +27,8 @@ export class SettingsService {
 
     let settings = rpSettings === null ? new Settings({}) : new Settings(rpSettings);
 
-    // Todo: Isn't it better to put each prop on one line, since i want to modify some of them?
-    // for (let prop in settings) {
-    //   let obs = `${prop}$`;
-    //   if (this[obs]) this[obs].next(settings[prop]);
-    // }
+    // Todo: Remove this line when I have created another solution for setting demo/live mode than using an environment variable.
+    settings.demoMode = environment.demoMode ? 'yes' : 'no';
 
     settings.demoMode === 'yes' ? this.dummyPos$.next(true) : false;
     settings.dummyPos === 'yes' ? this.dummyPos$.next(true) : false;

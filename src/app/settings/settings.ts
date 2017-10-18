@@ -34,7 +34,6 @@ export class Settings {
     let dummyPosAdd = ((this.dummyPosAddMax - this.dummyPosAddMin) * Math.random() + this.dummyPosAddMin) / 100000;
     dummyPosAdd *= Math.sign(Math.random() - .5);
 
-    // console.log("dummyPosAdd:", dummyPosAdd);
     return dummyPosAdd;
   }
 

@@ -57,13 +57,13 @@ export class MemberListComponent implements OnInit {
     this.userService.requestAllUsers();
   }
 
-  addTwentyMembers() {
+  addDummyMembers() {
     if ( this.userService.userList$.value.length >= 181 ) {
       return this.alertService.error("In his demo, you can't have more than 200 members. That should be enough to try sorting and filtering functionality.");
     }
 
     this.loading = true;
-    this.userService.addTwentyMembers()
+    this.userService.addDummyMembers()
         .then(res => {
           this.userService.requestAllUsers();
           this.alertService.success('Twenty members have been added.');

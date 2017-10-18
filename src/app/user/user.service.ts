@@ -23,6 +23,7 @@ export class UserService {
               private rideSubjectService: RideSubjectService,
               private settingsService: SettingsService,
               private socketService: SocketService) {
+    this.emitConnectedLoggedInUser();
     this.joinRide();
     this.getRideFromStorage();
     this.getUserFromStorage();
@@ -32,10 +33,10 @@ export class UserService {
     this.socket = this.socketService.socket;
   }
 
-  addTwentyMembers() {
+  addDummyMembers() {
     const requestOptions = this.setHeaders();
 
-    return this.http.get(`${environment.api}/users/add-twenty-members`, requestOptions)
+    return this.http.get(`${environment.api}/users/add-dummy-members`, requestOptions)
         .toPromise();
   }
 
@@ -43,6 +44,22 @@ export class UserService {
     user.email = user.email.toLowerCase();
 
     return this.http.post(`${environment.api}/users`, user);
+  }
+
+  emitConnectedLoggedInUser() {
+    this.user$.subscribe(user => {
+      console.log("user:", user);
+       this.socketService.socketPromise()
+           .then(() => {
+             if (user) {
+               console.log("About to emit AddConnectedLoggedInUser");
+               this.socket.emit('AddConnectedLoggedInUser', user.email);
+             } else {
+               console.log("About to emit RemoveConnectedLoggedInUser");
+               this.socket.emit('RemoveConnectedLoggedInUser')
+             }
+           });
+    });
   }
 
   joinRide() {

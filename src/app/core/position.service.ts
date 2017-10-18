@@ -105,6 +105,7 @@ export class PositionService {
       pos.coords.latitude += dummyMovIncLat;
       pos.coords.longitude += dummyMovIncLng;
       this.position$.next(pos);
+      console.log("dummyUpdateFreq$.value:", this.settingsService.dummyUpdateFreq$.value);
     }, this.settingsService.dummyUpdateFreq$.value * 1000);
 
   }

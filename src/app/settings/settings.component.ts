@@ -22,7 +22,6 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.settings = new Settings(this.settingsService.settings$.value);
     this.currentStorage = this.settings.storage;
-    // this.user = this.userService.user$.value;
   }
 
   cancel() {

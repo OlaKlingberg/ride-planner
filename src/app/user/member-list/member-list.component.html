@@ -57,7 +57,7 @@
       <div class="col-xs-12">
         <h3 class="padding-left-md padding-right-md">
           Members
-          <span class="float-right" *ngIf="userService.userList$.value.length > 10">
+          <span class="float-right" *ngIf="numberOfUsers > 10">
             <button class="btn btn-primary center-block"
                     (click)="addDummyMembers()"
                     [disabled]="loading">Add another 20 members

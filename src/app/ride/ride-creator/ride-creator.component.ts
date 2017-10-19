@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -6,21 +6,35 @@ import { Subscription } from 'rxjs/Subscription';
 import { AlertService } from '../../alert/alert.service';
 import { Ride } from '../ride';
 import { RideService } from '../ride.service';
+import { UserService } from '../../user/user.service';
+import { User } from '../../user/user';
+
+import { environment } from '../../../environments/environment';
 
 @Component({
   templateUrl: './ride-creator.component.html',
   styleUrls: [ './ride-creator.component.scss' ]
 })
-export class RideCreatorComponent implements OnDestroy {
+export class RideCreatorComponent implements OnInit, OnDestroy {
+  demoMode: boolean;
   loading: boolean = false;
   model: any = {};
   ride: Ride;
+  user: User;
 
   private subscription: Subscription;
 
   constructor(private alertService: AlertService,
               private rideService: RideService,
-              private router: Router) {
+              private router: Router,
+              private userService: UserService) {
+    this.demoMode = environment.demoMode;
+  }
+
+  ngOnInit() {
+    this.userService.userPromise().then(user => {
+      this.user = new User(user);
+    });
   }
 
   createRide() {

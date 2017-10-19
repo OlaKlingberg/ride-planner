@@ -13,6 +13,8 @@ import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class UserService {
+  // Todo: Does it make sense to provide both user and user$?
+  // user: User;
   user$: BehaviorSubject<User> = new BehaviorSubject(null);
   userList$: BehaviorSubject<User[]> = new BehaviorSubject([]);
 
@@ -27,6 +29,7 @@ export class UserService {
     this.joinRide();
     this.getRideFromStorage();
     this.getUserFromStorage();
+    // this.subscribeToUser();
     this.updateUserPositionOnNewPosition();
     this.updateUserPositionOnUserLogin();
 
@@ -109,6 +112,12 @@ export class UserService {
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }
+
+  // subscribeToUser() {
+  //   this.user$.subscribe(user => {
+  //     this.user = user;
+  //   });
+  // }
 
   updateUserPositionOnNewPosition() {
     this.positionService.position$.subscribe(pos => {

@@ -8,9 +8,12 @@ import { User } from "../user/user";
 import { UserService } from '../user/user.service';
 import { SocketService } from '../core/socket.service';
 import { SettingsService } from '../settings/settings.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthenticationService {
+  connectedLoggedInUsers$: BehaviorSubject<any> = new BehaviorSubject(null);
+
   private socket: Socket;
 
   constructor(private http: Http,
@@ -37,6 +40,16 @@ export class AuthenticationService {
     }
   }
 
+  getUnusedDemoUsers() {
+    const requestOptions = this.setHeaders();
+
+    return this.http.get(`${environment.api}/users/demo-users`, requestOptions)
+        .map((response: Response) => {
+          return response.json();
+        })
+        .toPromise();
+  }
+
   login(email: string, password: string) {
     return this.http.post(`${environment.api}/users/login`, { email, password })
         .map((response: Response) => {
@@ -58,6 +71,11 @@ export class AuthenticationService {
     return this.http.get(`${environment.api}/users/logout`, requestOptions);
   }
 
+  setHeaders() {
+    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
+    const headers = new Headers({ 'x-auth': token });
+    return new RequestOptions({ headers });
+  }
 
 }
 

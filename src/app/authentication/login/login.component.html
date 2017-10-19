@@ -11,35 +11,31 @@
     </div>
   </div> <!-- End of: Already logged in. -->
 
-  <div *ngIf="demoMode && !user" class="row"> <!-- demoMode -->
+  <div *ngIf="demoMode && !user" class="row jumbotron"> <!-- demoMode -->
     <div class="col-xs-12">
 
       <div class="row">
         <div class="col-xs-12">
-          <h2>Login</h2>
-          <h4>In this demo version of the site, you can only log in with one of these demo accounts.</h4>
+          <h2>Demo version</h2>
+          <h4>In this demo, you can only log in with one of these currently unused demo accounts.</h4>
         </div>
       </div>
 
       <div class="row ">
-        <div class="col-xs-6">
 
-          <ul class="list-unstyled margin-bottom-0">
-            <li>jane.doe@example.com</li>
-            <li>kevin.doe@example.com</li>
-            <li>linda.doe@example.com</li>
-          </ul>
-        </div>
+
         <div class="col-xs-6">
           <ul class="list-unstyled margin-bottom-0">
-            <li>marc.doe@example.com</li>
-            <li>nancy.doe@example.com</li>
-            <li>oscar.doe@example.com</li>
+            <ng-container *ngFor="let email of demoUserEmails; index as i">
+              <li *ngIf="i < 4">{{email}}</li>
+            </ng-container>
           </ul>
         </div>
+
+
       </div>
 
-      <div class="row margin-bottom-md">
+      <div class="row">
         <div class="col-xs-12">
           <h4>The password for all of them is: <i>secret</i></h4>
         </div>
@@ -51,6 +47,8 @@
 
   <div *ngIf="!user" class="row">
     <div class="col-xs-12">
+      <h2>Login</h2>
+
       <form name="form" (ngSubmit)="syncModel() && f.form.valid && login()" #f="ngForm" novalidate>
 
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
@@ -67,10 +65,16 @@
           <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
         </div>
 
+        <div class="form-group">
+          <button [disabled]="loading" class="btn btn-primary">Log In</button>
+          <img *ngIf="loading"
+               src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+          <a routerLink="/auth/login" class="btn btn-link">Cancel</a>
+        </div>
+
       </form>
     </div>
   </div>
-
 
 
 </div>

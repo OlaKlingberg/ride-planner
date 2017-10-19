@@ -16,6 +16,8 @@ import { environment } from '../../../environments/environment';
   styleUrls: [ './login.component.scss' ]
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  // connectedLoggedInUsers: any;
+  demoUserEmails: string[];
   demoMode: boolean;
   model: any = {};
   loading = false;
@@ -33,10 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.demoMode) {
-      this.model.email = "jane.doe@example.com";
-      this.model.password = 'secret'
-    }
+    if ( this.demoMode ) this.getDemoUsers();
 
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
@@ -51,6 +50,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
+  getDemoUsers() {
+    this.authenticationService.getUnusedDemoUsers().then(demoUserEmails => {
+      console.log("demoUsers:", demoUserEmails);
+      this.demoUserEmails = demoUserEmails;
+
+      this.model.email = demoUserEmails[0];
+      this.model.password = 'secret';
+    });
+  }
+
   login() {
     this.loading = true;
     let sub = this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
@@ -60,7 +69,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             },
             error => {
               console.log(error);
-              if (error.status === 401) {
+              if ( error.status === 401 ) {
                 this.alertService.error(error._body);
               } else {
                 this.alertService.error("There was a problem. Please try again later.");
@@ -73,8 +82,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // On some phone browsers, the model doesn't sync automatically when a form field is filled in using autocomplete. That's why this function is needed.
   syncModel() {
-    this.model.email = $('#email')[0].value;
-    this.model.password = $('#password')[0].value;
+    this.model.email = $('#email')[ 0 ].value;
+    this.model.password = $('#password')[ 0 ].value;
 
     return true;
   }

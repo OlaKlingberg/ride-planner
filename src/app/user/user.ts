@@ -2,6 +2,7 @@ export class User {
   _id: string;
   admin: boolean;
   disconnected: number;
+  demo: boolean;
   dummy: boolean;
   email: string;
   emergencyName: string;
@@ -33,6 +34,7 @@ export class User {
     this._id = obj._id;
     this.admin = obj.admin;
     this.disconnected = obj.disconnected;
+    this.demo = obj.demo;
     this.dummy = obj.dummy;
     this.email = obj.email;
     this.emergencyName = obj.emergencyName;

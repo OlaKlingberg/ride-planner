@@ -12,12 +12,14 @@ import { SocketService } from '../../core/socket.service';
 import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
 import { SettingsService } from '../../settings/settings.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   templateUrl: './ride-remover.component.html',
   styleUrls: [ './ride-remover.component.scss' ]
 })
 export class RideRemoverComponent implements OnInit, OnDestroy {
+  demoMode: boolean;
   model: any = [];
   user: User = null;
 
@@ -32,6 +34,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
               private settingsService: SettingsService,
               private socketService: SocketService,
               private userService: UserService) {
+    this.demoMode = environment.demoMode;
     this.socket = this.socketService.socket;
   }
 

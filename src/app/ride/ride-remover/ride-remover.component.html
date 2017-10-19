@@ -29,10 +29,9 @@
 
 <!-- Main page -->
 <div class="container">
-  <form name="form" #f="ngForm" novalidate>
-    <div class="row">
-      <div class="col-sm-6">
-
+  <div *ngIf="!(demoMode && user?.demo)" class="row">
+    <div class="col-sm-6">
+      <form name="form" #f="ngForm" novalidate>
 
         <div *ngIf="!user.ride">
           <div *ngIf="availableRides">
@@ -62,7 +61,7 @@
           </div>
 
           <div *ngIf="!availableRides">
-            <h3>There's nothing to delete! There are no rides.</h3>
+          <h3>There's nothing to delete! There are no rides.</h3>
             <h4>Do you want to create one?</h4>
             <button type="button" class="btn btn-primary" routerLink='../create'>Create a ride</button>
           </div>
@@ -75,9 +74,19 @@
           <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride {{ user.ride }}
           </button>
         </div>
-
-
-      </div>
+      </form>
     </div>
-  </form>
+  </div>
+
+
+  <div *ngIf="demoMode && user?.demo" class="row">
+    <div class="col-xs-12">
+      <h2>Demo Mode</h2>
+      <h5>This site is currently in demo mode, which means that you can't delete rides.</h5>
+      <h5>You may log into a rid instead.</h5>
+    </div>
+    <div class="col-xs-4 col-md-2">
+      <button type="button" class="btn btn-primary btn-block" routerLink='../select'>Login to a ride</button>
+    </div>
+  </div>
 </div>

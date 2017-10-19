@@ -23,6 +23,7 @@ export class MemberListComponent implements OnInit {
   loading: boolean = false;
   member: User;
   modalRef: BsModalRef;
+  numberOfUsers: number;
   socket: Socket;
 
   private subscription: Subscription;
@@ -39,6 +40,8 @@ export class MemberListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.numberOfUsers = this.userService.userList$.value.length;
+
     // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
     this.dataSource = new MemberListDataSource(this.sort, this.userService);
     console.log("dataSource:", this.dataSource);

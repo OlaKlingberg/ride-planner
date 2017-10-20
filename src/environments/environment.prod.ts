@@ -1,4 +1,4 @@
-// Master
+// Live
 export const environment = {
   api: "https://ride-planner-backend.herokuapp.com",
   demoMode: false,

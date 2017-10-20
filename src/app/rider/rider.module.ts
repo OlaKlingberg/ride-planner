@@ -4,11 +4,11 @@ import { NgModule } from '@angular/core';
 import { RiderListComponent } from './rider-list/rider-list.component';
 import { RiderRoutingModule } from './rider-routing.module';
 import {
-  MdTooltipModule,
-  MdFormFieldModule,
-  MdInputModule,
-  MdSortModule,
-  MdTableModule
+  MatTooltipModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSortModule,
+  MatTableModule
 } from '@angular/material';
 
 import { SharedModule } from '../shared/shared.module';

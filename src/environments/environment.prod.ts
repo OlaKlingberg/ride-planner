@@ -3,5 +3,4 @@ export const environment = {
   demoMode: false,
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: true,
-  storage: sessionStorage
 };

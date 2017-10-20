@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { RiderListComponent } from './rider-list/rider-list.component';
 import { RiderRoutingModule } from './rider-routing.module';
 import {
-  // MdFormFieldModule,
+  MdFormFieldModule,
   MdInputModule,
   MdSortModule,
   MdTableModule,
@@ -15,7 +15,7 @@ import { SharedModule } from '../shared/shared.module';
 @NgModule({
   imports: [
     CommonModule,
-    // MdFormFieldModule,
+    MdFormFieldModule,
     MdInputModule,
     MdSortModule,
     MdTableModule,

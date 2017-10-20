@@ -4,16 +4,16 @@ import { NgModule } from '@angular/core';
 
 import { SettingsComponent } from './settings.component';
 import { SettingsRoutingModule } from './settings-routing.module';
-import { MdCardModule, MdCheckboxModule, MdRadioModule, MdSliderModule } from '@angular/material';
+import { MatCardModule, MatCheckboxModule, MatRadioModule, MatSliderModule } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    MdCardModule,
-    MdCheckboxModule,
-    MdRadioModule,
-    MdSliderModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatSliderModule,
     SettingsRoutingModule,
     SharedModule
   ],

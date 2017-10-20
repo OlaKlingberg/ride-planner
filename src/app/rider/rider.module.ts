@@ -10,16 +10,17 @@ import {
   MdSortModule,
   MdTableModule
 } from '@angular/material';
+
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    MdTooltipModule,
-    MdFormFieldModule,
-    MdInputModule,
-    MdSortModule,
-    MdTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule,
+    MatTableModule,
+    MatTooltipModule,
     SharedModule,
     RiderRoutingModule
   ],

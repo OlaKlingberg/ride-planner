@@ -1,5 +1,5 @@
 import { DataSource } from '@angular/cdk/collections';
-import { MdSort } from '@angular/material';
+import { MatSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
@@ -25,7 +25,7 @@ export class RiderListDataSource extends DataSource<any> {
     return this.riderService.riderList$.value;
   }
 
-  constructor(private _sort: MdSort,
+  constructor(private _sort: MatSort,
               private riderService: RiderService) {
     super();
   }
@@ -34,7 +34,7 @@ export class RiderListDataSource extends DataSource<any> {
   connect(): Observable<any> {
     const displayDataChanges = [
       this.riderService.riderList$,
-      this._sort.mdSortChange,
+      this._sort.sortChange,
       this._filterChange
     ];
 

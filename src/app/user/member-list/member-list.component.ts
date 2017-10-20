@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { MdSort } from '@angular/material';
+import { MatSort } from '@angular/material';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -29,7 +29,7 @@ export class MemberListComponent implements OnInit {
   private subscription: Subscription;
 
   @ViewChild('filter') filter: ElementRef;
-  @ViewChild(MdSort) sort: MdSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private alertService: AlertService,
               private modalService: BsModalService,

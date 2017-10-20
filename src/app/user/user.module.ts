@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { UserRoutingModule } from './user-routing.module';
 import {
-  MdFormFieldModule,
-  MdInputModule,
-  MdSortModule,
-  MdTableModule,
-  MdTooltipModule
+  MatFormFieldModule,
+  MatInputModule,
+  MatSortModule,
+  MatTableModule,
+  MatTooltipModule
 } from '@angular/material';
 import { MemberListComponent } from './member-list/member-list.component';
 import { SharedModule } from '../shared/shared.module';
@@ -16,11 +16,11 @@ import { SharedModule } from '../shared/shared.module';
 @NgModule({
   imports: [
     CommonModule,
-    MdFormFieldModule,
-    MdInputModule,
-    MdSortModule,
-    MdTableModule,
-    MdTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule,
+    MatTableModule,
+    MatTooltipModule,
     SharedModule,
     UserRoutingModule
   ],

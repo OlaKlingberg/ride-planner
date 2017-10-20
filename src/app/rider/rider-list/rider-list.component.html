@@ -40,59 +40,59 @@
     <div class="table-container mat-elevation-z8">
 
       <div class="mat-header padding-left-md">
-        <md-form-field floatPlaceholder="never">
-          <input mdInput #filter placeholder="Filter by first or last name">
-        </md-form-field>
+        <mat-form-field floatPlaceholder="never">
+          <input matInput #filter placeholder="Filter by first or last name">
+        </mat-form-field>
       </div>
 
-      <md-table #table [dataSource]="dataSource" mdSort>
+      <mat-table #table [dataSource]="dataSource" matSort>
 
-        <ng-container mdColumnDef="fullName">
-          <md-header-cell *mdHeaderCellDef md-sort-header>
-            <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Name</span>
-          </md-header-cell>
-          <md-cell *mdCellDef="let row">{{ row.lname }}, {{ row.fname }}</md-cell>
+        <ng-container matColumnDef="fullName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Name</span>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.lname }}, {{ row.fname }}</mat-cell>
         </ng-container>
 
-        <ng-container mdColumnDef="phone">
-          <md-header-cell *mdHeaderCellDef>Phone</md-header-cell>
-          <md-cell *mdCellDef="let row">{{ row.phone }}</md-cell>
+        <ng-container matColumnDef="phone">
+          <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.phone }}</mat-cell>
         </ng-container>
 
-        <ng-container mdColumnDef="emergencyName">
-          <md-header-cell *mdHeaderCellDef md-sort-header>
-            <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Emergency Contact</span>
-          </md-header-cell>
-          <md-cell *mdCellDef="let row">{{ row.emergencyName }}</md-cell>
+        <ng-container matColumnDef="emergencyName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Emergency Contact</span>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.emergencyName }}</mat-cell>
         </ng-container>
 
-        <ng-container mdColumnDef="emergencyPhone">
-          <md-header-cell *mdHeaderCellDef>Emergency Phone</md-header-cell>
-          <md-cell *mdCellDef="let row">{{ row.emergencyPhone }}</md-cell>
+        <ng-container matColumnDef="emergencyPhone">
+          <mat-header-cell *matHeaderCellDef>Emergency Phone</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{ row.emergencyPhone }}</mat-cell>
         </ng-container>
 
-        <ng-container mdColumnDef="disconnected">
-          <md-header-cell *mdHeaderCellDef md-sort-header>
-            <span mdTooltip="Click on header to sort." [mdTooltipPosition]="'above'">Last heard of</span>
-          </md-header-cell>
-          <md-cell *mdCellDef="let row">
+        <ng-container matColumnDef="disconnected">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Last heard of</span>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
             <span *ngIf="row.disconnected">{{ row.minutesSinceDisconnected }} minutes ago</span>
             <span *ngIf="!row.disconnected">now</span>
-          </md-cell>
+          </mat-cell>
         </ng-container>
 
         <!-- Show-details button -->
-        <ng-container mdColumnDef="showDetailsButton">
-          <md-header-cell *mdHeaderCellDef></md-header-cell>
-          <md-cell *mdCellDef="let row" (click)="showDetails(riderDetails, row)">
+        <ng-container matColumnDef="showDetailsButton">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let row" (click)="showDetails(riderDetails, row)">
             <button class="btn btn-primary btn-sm float-right">Details</button>
-          </md-cell>
+          </mat-cell>
         </ng-container>
 
-        <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-        <md-row *mdRowDef="let row; columns: displayedColumns"></md-row>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 
-      </md-table>
+      </mat-table>
 
     </div>
 

@@ -83,7 +83,7 @@
 
   <!-- Not-logged-in warning -->
   <div id="not-logged-in-warning"
-       *ngIf="!user || !user.ride"
+       *ngIf="oneSecondPassed && !user?.ride"
        [ngClass]="{'visibility-hidden': !latLng}">
     <h4>You have not selected a ride,<br> so you won't see other riders.</h4>
     <button class="btn btn-primary" routerLink="/ride/select">Select Ride</button>

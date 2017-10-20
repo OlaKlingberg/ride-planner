@@ -11,6 +11,5 @@ export const MapAnimations = [
       display: "none"
     })),
     transition('show => hide', animate('500ms')),
-    // transition('hide => show', animate('10ms'))
   ])
 ];

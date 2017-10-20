@@ -51,7 +51,6 @@ export class UserService {
 
   emitConnectedLoggedInUser() {
     this.user$.subscribe(user => {
-      console.log("user:", user);
        this.socketService.socketPromise()
            .then(() => {
              if (user) {

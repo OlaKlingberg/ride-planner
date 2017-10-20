@@ -35,7 +35,7 @@ export class MapComponent implements OnInit, OnDestroy {
   mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
   markerUrl: string = "assets/img/rider-markers/";
   maxZoom: number = 18;
-  oneSecondPassed: boolean = false;
+  oneSecondPassed = null;
   riders: User[] = [];
   takingTooLong: boolean = false;
   user: User = null;
@@ -220,8 +220,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   waitOneSecond() {
     setTimeout(() => {
-      this.oneSecondPassed = true;
-    }, 1000);
+      console.log("oneSecondPassed = true");
+      this.oneSecondPassed = {something: 'or other'};
+    }, 10000);
   }
 
   ngOnDestroy() {

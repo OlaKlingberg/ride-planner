@@ -45,7 +45,7 @@ export class SettingsComponent implements OnInit {
 
     localStorage.setItem('rpSettings', JSON.stringify(this.settings));
 
-    this.alertService.success("Settings have been saved – but you must refresh the browser for them to take effect.", false)
+    this.alertService.success("Settings have been saved – but you must refresh the browser for them to take effect.", false);
 
     this.showRefreshButton = true;
   }

@@ -14,6 +14,10 @@ const targetEnvironmentFileName = 'environment.prod.ts';
 // because build should fail if you don't provide the correct values
 // for your production environment
 const defaultEnvValues = {
+  api: "",
+  demoMode: true,
+  googleMapsKey: "",
+  production: true
 };
 
 // Load template file

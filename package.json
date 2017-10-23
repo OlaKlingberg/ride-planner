@@ -5,13 +5,14 @@
   "@angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "build:prod": "ng build --aot -prod",
+    "build": "ng build --aot -prod",
+    "prebuild": "./scripts/prebuild.js",
     "start": "node server.js",
     "dev": "ng serve --port 3050",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --aot -prod",
+    "postinstall": "chmod +x ./scripts/*.js ;ng build --aot -prod",
     "deploy": "git push heroku master"
   },
   "private": true,

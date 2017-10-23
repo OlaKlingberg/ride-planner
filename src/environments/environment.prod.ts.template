@@ -1,0 +1,7 @@
+// Demo
+export const environment = {
+  api: "<%= API %>",
+  demoMode: true,
+  googleMapsKey: "<%= GOOGLE_MAPS_KEY %>",
+  production: true
+};

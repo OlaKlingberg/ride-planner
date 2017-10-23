@@ -39,6 +39,7 @@
     "bootstrap": "^3.3.7",
     "bootswatch": "^3.3.7",
     "core-js": "^2.5.0",
+    "ejs": "^2.5.7",
     "express": "^4.15.4",
     "fs-extra": "^4.0.1",
     "hammerjs": "^2.0.8",

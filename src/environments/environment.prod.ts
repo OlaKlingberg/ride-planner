@@ -8,9 +8,9 @@
 
 // Demo
 export const environment = {
-  api: "",
-  demoMode: false,
-  googleMapsKey: "",
+  api: "https://ride-planner-demo-backend.herokuapp.com",
+  demoMode: true,
+  googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: true
 };
 

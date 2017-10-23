@@ -8,6 +8,9 @@
 
 // Demo
 export const environment = {
-
+  api: "",
+  demoMode: false,
+  googleMapsKey: "",
+  production: true
 };
 

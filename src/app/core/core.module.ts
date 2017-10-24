@@ -13,7 +13,7 @@ import { AuthGuard } from '../authentication/auth.guard';
 import { CuesheetService } from '../cuesheet/cuesheet.service';
 import { DebuggingService } from '../debugger/debugging.service';
 import { environment } from '../../environments/environment';
-import { EnvService } from './env.service';
+// import { EnvService } from './env.service';
 import { NavModule } from '../nav/nav.module';
 import { NavService } from '../nav/nav.service';
 import { PositionService } from './position.service';
@@ -54,7 +54,6 @@ import { SettingsService } from '../settings/settings.service';
     CuesheetDemoService,
     CuesheetService,
     DebuggingService,
-    EnvService,
     NavService,
     PositionService,
     RefreshService,

@@ -30,8 +30,6 @@ const environmentTemplate = fs.readFileSync(
 const output = ejs.render(environmentTemplate, Object.assign({}, defaultEnvValues, process.env));
 // Write environment file
 
-console.log("Hello! ______________________________")
-
 fs.writeFileSync(path.join(environmentFilesDirectory, targetEnvironmentFileName), output);
 
 process.exit(0);

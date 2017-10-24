@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// Currently not used, as it didn't seem to work on Heroku.
+
 const fs = require('fs');
 const path = require('path');
 

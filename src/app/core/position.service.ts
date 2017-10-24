@@ -15,6 +15,7 @@ export class PositionService {
   private positionWatcher: any;
 
   constructor(private settingsService: SettingsService) {
+    // console.log("PositionService.constructor()");
   }
 
   // Todo: Why can't I do this with JSON.stringify() and JSON.parse()? (Have I tried?)
@@ -31,7 +32,7 @@ export class PositionService {
 
   getPosition() {
     if (this.position$.value) return this.position$.value;
-    console.log("getPosition(), this.settingsService.dummyPos$.value:", this.settingsService.dummyPos$.value);
+    // console.log("getPosition(), this.settingsService.dummyPos$.value:", this.settingsService.dummyPos$.value);
 
     let rpPosition = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpPosition'));
     eval(this.settingsService.storage$.value).removeItem('rpPosition');
@@ -51,7 +52,7 @@ export class PositionService {
 
     // Case 3
     if ( !rpPosition && this.settingsService.dummyMov$.value ) {
-      console.log("getPosition(). Case 3");
+      // console.log("getPosition(). Case 3");
       navigator.geolocation.getCurrentPosition((position: Position) => {
         console.log("Case 3. position:", position);
             let pos = this.copyPositionObject(position);
@@ -69,7 +70,7 @@ export class PositionService {
 
     // Case 4
     if ( !rpPosition && !this.settingsService.dummyMov$.value ) {
-      console.log("getPosition(). Case 4");
+      // console.log("getPosition(). Case 4");
       if (this.positionWatcher) navigator.geolocation.clearWatch(this.positionWatcher);
       this.positionWatcher = navigator.geolocation.watchPosition((position: Position) => {
         console.log("Case 4. position:", position);

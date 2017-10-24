@@ -11,7 +11,7 @@ export class SocketService {
   constructor() {
     this.socket = io(environment.api);  // io is made available through import into index.html.
 
-    console.log("socket:", this.socket);
+    // console.log("socket:", this.socket);
     // this.listenForConnection();
   }
 
@@ -22,9 +22,6 @@ export class SocketService {
   // }
 
 
-
-
-  // Todo: Should I remove this? Apparently, I'm not using it.
   socketPromise() {
     let socketPromise = new Promise((resolve, reject) => {
       if (this.socket.connected) {

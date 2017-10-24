@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { AuthenticationService } from "./authentication/authentication.service";
 import { Subscription } from 'rxjs/Subscription';
+import { EnvService } from './core/env.service';
 
 @Component({
   selector: 'rp-root',
@@ -13,7 +14,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
 
-  constructor(private authenticationService: AuthenticationService) {   // Needs to be injected, to be initialized.
+  constructor(private authenticationService: AuthenticationService,
+              private EnvService: EnvService) {   // Needs to be injected, to be initialized.
   }
 
   ngOnInit() {
@@ -38,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscription) this.subscription.unsubscribe();
+    if ( this.subscription ) this.subscription.unsubscribe();
   }
 
 }

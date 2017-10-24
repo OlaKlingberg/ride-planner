@@ -6,13 +6,12 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build --aot -prod",
-    "prebuild": "./scripts/prebuild.js",
     "start": "node server.js",
     "dev": "ng serve --port 3050",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "chmod 777 ./scripts/*.js && ng build --aot -prod"
+    "postinstall": "ng build --aot -prod"
   },
   "private": true,
   "dependencies": {

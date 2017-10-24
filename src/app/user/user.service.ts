@@ -54,10 +54,10 @@ export class UserService {
        this.socketService.socketPromise()
            .then(() => {
              if (user) {
-               console.log("About to emit AddConnectedLoggedInUser");
+               // console.log("About to emit AddConnectedLoggedInUser");
                this.socket.emit('AddConnectedLoggedInUser', user.email);
              } else {
-               console.log("About to emit RemoveConnectedLoggedInUser");
+               // console.log("About to emit RemoveConnectedLoggedInUser");
                this.socket.emit('RemoveConnectedLoggedInUser')
              }
            });

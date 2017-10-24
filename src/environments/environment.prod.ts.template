@@ -1,3 +1,5 @@
+// Currently not used, as it didn't seem to work on Heroku.
+
 // Demo
 export const environment = {
   api: "<%= API %>",

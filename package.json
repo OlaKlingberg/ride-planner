@@ -12,7 +12,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "chmod +x ./scripts/*.js"
+    "postinstall": "chmod 777 ./scripts/*.js && ng build --aot -prod"
   },
   "private": true,
   "dependencies": {

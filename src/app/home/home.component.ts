@@ -5,7 +5,7 @@ import { UserService } from '../user/user.service';
 import { Subscription } from 'rxjs/Subscription';
 import { SettingsService } from '../settings/settings.service';
 
-import { environment, api, demoMode } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Component({
   templateUrl: './home.component.html',
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.api = api;
+    this.api = environment.api;
     this.demoMode = this.settingsService.demoMode;
 
     // Get return url from route parameters or default to '/'

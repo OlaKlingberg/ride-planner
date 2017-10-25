@@ -13,8 +13,8 @@ if (window.location.host === "https://ride-planner-demo.herokuapp.com") {
 }
 
 export const environment = {
-  api,
-  demoMode,
+  api: api,
+  demoMode: demoMode,
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
   production: true
 };

@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
   styleUrls: [ './home.component.scss' ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
- api: string;
+  api: string;
   demoMode: boolean;
   returnUrl: string;
   user: User;
@@ -34,10 +34,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // Todo: This looks complicated and messy. Can it be refactored?
     this.subscription = this.userService.user$.subscribe(user => {
-      if ((this.returnUrl === '/riders' || this.returnUrl === '/members') && (user && user.leader === true)) {
+      if ( (this.returnUrl === '/riders' || this.returnUrl === '/members') && (user && user.leader === true) ) {
         this.router.navigate([ this.returnUrl ]);
       }
-      if (this.returnUrl === '/debugger' && (user && user.admin === true)) {
+      if ( this.returnUrl === '/debugger' && (user && user.admin === true) ) {
 
         this.router.navigate([ this.returnUrl ]);
       }

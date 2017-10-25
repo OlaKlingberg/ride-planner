@@ -1,4 +1,4 @@
-const environment = {
+let environment = {
   api: "",
   demoMode: false,
   googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
@@ -16,6 +16,7 @@ if (window.location.host === "https://ride-planner-demo.herokuapp.com") {
   environment.demoMode = true;
 }
 
+Object.freeze(environment);
 
 export { environment }
 

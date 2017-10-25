@@ -1,5 +1,5 @@
-let api;
-let demoMode;
+export let api;
+export let demoMode;
 
 // Todo: Hardcoding these tests might not be the best solution.
 if (window.location.host === "https://ride-planner.herokuapp.com") {

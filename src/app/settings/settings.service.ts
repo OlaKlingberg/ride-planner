@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Settings } from './settings';
 
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
-
+import { environment } from '../../environments/environment';
 @Injectable()
 export class SettingsService {
 
@@ -30,10 +28,18 @@ export class SettingsService {
 
     let settings = rpSettings === null ? new Settings({}) : new Settings(rpSettings);
 
-    if (window.location.host === 'ride-planner.herokuapp.com') this.settings.demoMode = 'no';
-    if (window.location.host === 'ride-planner-demo.herokuapp.com') this.settings.demoMode = 'yes';
+    // if (window.location.host === 'ride-planner.herokuapp.com') this.settings.demoMode =  'no';
+    // if (window.location.host === 'ride-planner-demo.herokuapp.com') this.settings.demoMode = 'yes';
 
-    this.demoMode = settings.demoMode === 'yes';
+    // if (environment.production) this.demoMode = environment.demoMode;
+
+    if (environment.demoMode === null) {
+      this.demoMode = settings.demoMode === 'yes';
+    } else {
+      this.demoMode = environment.demoMode;
+      settings.demoMode = environment.demoMode ? 'yes' : 'no';
+    }
+
     this.dummyPos = settings.dummyPos === 'yes';
     this.dummyPosAddLat = settings.dummyPosAdd;
     this.dummyPosAddLng = settings.dummyPosAdd;

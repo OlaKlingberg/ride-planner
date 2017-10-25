@@ -96,12 +96,13 @@
        [@buttons]="buttonState"
        [ngClass]="{'visibility-hidden': !latLng}">
     <button class="btn btn-primary"
-            *ngIf="riders.length < 100"
+            *ngIf="riders.length < 40"
             [ngClass]="{'btn-40': dummyRiders}"
             (click)="addDummyRiders()">Create 5 <br *ngIf="dummyRiders">Dummy Riders
     </button>
     <button class="btn btn-info btn-40" *ngIf="dummyRiders" (click)="removeDummyRiders()">Remove All<br>Dummy Riders
     </button>
+    <h4 *ngIf="dummyRidersNotice" class="dummy-riders-notice">The dummy riders will disappear after five minutes.</h4>
   </div>
   <!-- End: Create dummy riders -->
 

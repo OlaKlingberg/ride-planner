@@ -10,6 +10,7 @@ import { User } from "../../user/user";
 import { UserService } from "app/user/user.service";
 
 import { environment } from '../../../environments/environment';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -27,11 +28,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   private subscriptions: Array<Subscription> = [];
 
   constructor(private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private authenticationService: AuthenticationService,
               private alertService: AlertService,
+              private authenticationService: AuthenticationService,
+              private router: Router,
+              private settingsService: SettingsService,
               private userService: UserService) {
-    this.demoMode = environment.demoMode;
+    this.demoMode = this.settingsService.demoMode;
   }
 
   ngOnInit() {

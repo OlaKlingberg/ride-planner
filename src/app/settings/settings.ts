@@ -16,7 +16,7 @@ export class Settings {
 
   constructor(obj) {
     this.demoMode = obj.demoMode || 'no';
-    this.dummyPos = obj.dummyPos || 'no';
+    this.dummyPos = obj.demoMode || 'no';
     this.dummyPosAddMin = obj.dummyPosAddMin || 2;
     this.dummyPosAddMax = obj.dummyPosAddMax || 5;
     this.dummyMov = obj.dummyMov || 'no';

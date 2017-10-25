@@ -41,13 +41,13 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
 
   logIntoRide() {
     this.rideSubjectService.ride$.next(this.model.ride);
-    eval(this.settingsService.storage$.value).setItem('rpRide', this.model.ride);
+    eval(this.settingsService.storage).setItem('rpRide', this.model.ride);
     this.router.navigate([ '/map' ]);
   }
 
   logOutFromRide() {
     this.rideService.emitLeaveRide();
-    eval(this.settingsService.storage$.value).removeItem('rpRide');
+    eval(this.settingsService.storage).removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;
     user.ride = null;

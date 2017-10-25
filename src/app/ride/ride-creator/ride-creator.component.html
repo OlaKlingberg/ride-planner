@@ -1,5 +1,5 @@
 <div class="container">
-  <div *ngIf="!(demoMode && user?.demo)" class="row">
+  <div *ngIf="!demoMode || !user?.demo" class="row">
     <div class="col-xs-12">
       <form name="form" (ngSubmit)="f.form.valid && createRide()" #f="ngForm" novalidate>
 

@@ -69,7 +69,7 @@ export class UserService {
       // console.log("joinRide(). ride:", ride);
       if ( ride ) {
         this.userPositionPromise().then((user: User) => {
-          const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
+          const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
           this.socket.emit('joinRide', user, ride, token, () => {
             // console.log("user:", user);
             user.ride = ride;
@@ -82,16 +82,16 @@ export class UserService {
   }
 
   getRideFromStorage() {
-    let ride = eval(this.settingsService.storage$.value).getItem('rpRide');  // This may or may not exist.
+    let ride = eval(this.settingsService.storage).getItem('rpRide');  // This may or may not exist.
     if ( ride ) this.rideSubjectService.ride$.next(ride);
   }
 
   getUserFromStorage() {
-    let rpUser = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpUser'));
+    let rpUser = JSON.parse(eval(this.settingsService.storage).getItem('rpUser'));
 
     if ( rpUser && rpUser.length > 0 ) {
       let user = new User(JSON.parse(rpUser));
-      eval(this.settingsService.storage$.value).removeItem('rpUser');
+      eval(this.settingsService.storage).removeItem('rpUser');
       setTimeout(() => {
         this.user$.next(user);
       }, 0);
@@ -107,7 +107,7 @@ export class UserService {
   }
 
   setHeaders() {
-    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }

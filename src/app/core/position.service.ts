@@ -34,30 +34,30 @@ export class PositionService {
     if (this.position$.value) return this.position$.value;
     // console.log("getPosition(), this.settingsService.dummyPos$.value:", this.settingsService.dummyPos$.value);
 
-    let rpPosition = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpPosition'));
-    eval(this.settingsService.storage$.value).removeItem('rpPosition');
+    let rpPosition = JSON.parse(eval(this.settingsService.storage).getItem('rpPosition'));
+    eval(this.settingsService.storage).removeItem('rpPosition');
 
     // Case 1
-    if ( rpPosition && this.settingsService.dummyMov$.value ) {
+    if ( rpPosition && this.settingsService.dummyMov ) {
       console.log("getPosition(). Case 1. rpPosition:", rpPosition);//
       this.position$.next(rpPosition);
       this.setDummyMovs();
     }
 
     // Case 2
-    if ( rpPosition && !this.settingsService.dummyMov$.value ) {
+    if ( rpPosition && !this.settingsService.dummyMov ) {
       console.log("getPosition(). Case 2. rpPosition:", rpPosition);
       this.position$.next(rpPosition);
     }
 
     // Case 3
-    if ( !rpPosition && this.settingsService.dummyMov$.value ) {
+    if ( !rpPosition && this.settingsService.dummyMov ) {
       // console.log("getPosition(). Case 3");
       navigator.geolocation.getCurrentPosition((position: Position) => {
         console.log("Case 3. position:", position);
             let pos = this.copyPositionObject(position);
-            console.log("dummyPos$:", this.settingsService.dummyPos$.value);
-            if ( this.settingsService.dummyPos$.value ) pos = this.setDummyPos(pos);
+            console.log("dummyPos:", this.settingsService.dummyPos);
+            if ( this.settingsService.dummyPos ) pos = this.setDummyPos(pos);
             this.position$.next(pos);
             this.setDummyMovs();
           },
@@ -69,13 +69,13 @@ export class PositionService {
     }
 
     // Case 4
-    if ( !rpPosition && !this.settingsService.dummyMov$.value ) {
+    if ( !rpPosition && !this.settingsService.dummyMov ) {
       // console.log("getPosition(). Case 4");
       if (this.positionWatcher) navigator.geolocation.clearWatch(this.positionWatcher);
       this.positionWatcher = navigator.geolocation.watchPosition((position: Position) => {
         console.log("Case 4. position:", position);
             let pos = this.copyPositionObject(position);
-            if ( this.settingsService.dummyPos$.value ) pos = this.setDummyPos(pos);
+            if ( this.settingsService.dummyPos ) pos = this.setDummyPos(pos);
             this.position$.next(pos);
           },
           err => {
@@ -98,22 +98,22 @@ export class PositionService {
   }
 
   setDummyMovs() {
-    let dummyMovIncLat = this.settingsService.dummyMovIncLat$.value;
-    let dummyMovIncLng = this.settingsService.dummyMovIncLng$.value;
+    let dummyMovIncLat = this.settingsService.dummyMovIncLat;
+    let dummyMovIncLng = this.settingsService.dummyMovIncLng;
 
     setInterval(() => {
       let pos = this.position$.value;
       pos.coords.latitude += dummyMovIncLat;
       pos.coords.longitude += dummyMovIncLng;
       this.position$.next(pos);
-      console.log("dummyUpdateFreq$.value:", this.settingsService.dummyUpdateFreq$.value);
-    }, this.settingsService.dummyUpdateFreq$.value * 1000);
+      console.log("dummyUpdateFreq$.value:", this.settingsService.dummyUpdateFreq);
+    }, this.settingsService.dummyUpdateFreq * 1000);
 
   }
 
   setDummyPos(pos) {
-    pos.coords.longitude += this.settingsService.dummyPosAddLat$.value;
-    pos.coords.longitude += this.settingsService.dummyPosAddLng$.value;
+    pos.coords.longitude += this.settingsService.dummyPosAddLat;
+    pos.coords.longitude += this.settingsService.dummyPosAddLng;
 
     return pos;
   }

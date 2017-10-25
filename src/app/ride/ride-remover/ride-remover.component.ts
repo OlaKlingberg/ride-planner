@@ -34,7 +34,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
               private settingsService: SettingsService,
               private socketService: SocketService,
               private userService: UserService) {
-    this.demoMode = environment.demoMode;
+    this.demoMode = this.settingsService.demoMode;
     this.socket = this.socketService.socket;
   }
 
@@ -55,7 +55,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   }
 
   logOutFromRide() {
-    eval(this.settingsService.storage$.value).removeItem('rpRide');
+    eval(this.settingsService.storage).removeItem('rpRide');
     this.rideSubjectService.ride$.next(null);
     let user: User = this.userService.user$.value;
     user.ride = null;

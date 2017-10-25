@@ -25,7 +25,7 @@ export class AuthenticationService {
   }
 
   authenticateByToken() {
-    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     if ( token ) {
       const headers = new Headers({ 'x-auth': token });
       const requestOptions = new RequestOptions({ headers });
@@ -57,14 +57,14 @@ export class AuthenticationService {
           let user: User = new User(response.json());
 
           if ( user && token ) {
-            eval(this.settingsService.storage$.value).setItem('rpToken', JSON.stringify(token));
+            eval(this.settingsService.storage).setItem('rpToken', JSON.stringify(token));
             this.userService.user$.next(user);
           }
         });
   }
 
   logout() {
-    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     const requestOptions = new RequestOptions({ headers });
 
@@ -72,7 +72,7 @@ export class AuthenticationService {
   }
 
   setHeaders() {
-    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }

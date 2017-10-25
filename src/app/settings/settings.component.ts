@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from './settings.service';
 import { Settings } from './settings';
-import { UserService } from '../user/user.service';
-import { User } from '../user/user';
 import { AlertService } from '../alert/alert.service';
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-settings',
@@ -12,6 +11,7 @@ import { AlertService } from '../alert/alert.service';
 })
 export class SettingsComponent implements OnInit {
   currentStorage: string;
+  production: boolean = true;
   settings: Settings;
   showRefreshButton: boolean = false;
 
@@ -20,12 +20,15 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.settings = new Settings(this.settingsService.settings$.value);
+    this.production = environment.production;
+    this.settings = new Settings(this.settingsService.settings);
     this.currentStorage = this.settings.storage;
   }
 
   cancel() {
-    this.settings = new Settings(this.settingsService.settings$.value);
+    setTimeout(() => {
+      this.settings = new Settings(this.settingsService.settings);
+    }, 0);
   }
 
   refresh() {
@@ -33,6 +36,8 @@ export class SettingsComponent implements OnInit {
   }
 
   save() {
+    if ( this.settings.dummyUpdateFreq < .5 ) this.settings.dummyUpdateFreq = .5;
+
     if ( this.settings.storage !== this.currentStorage ) {
       const keys = [ 'rpCuesheets', 'rpDemoMode', 'rpLatLng', 'rpMapMode', 'rpRefreshFlag', 'rpRide', 'rpToken', 'rpUser' ];
 
@@ -44,6 +49,7 @@ export class SettingsComponent implements OnInit {
     }
 
     localStorage.setItem('rpSettings', JSON.stringify(this.settings));
+    console.log("Just saved in localStorage. rpSettings:", this.settings);
 
     this.alertService.success("Settings have been saved – but you must refresh the browser for them to take effect.", false);
 

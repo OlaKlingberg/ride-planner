@@ -33,8 +33,8 @@ export class LogoutComponent implements OnInit, OnDestroy {
     this.subscription = this.authenticationService.logout()
         .subscribe(() => {
 
-              eval(this.settingsService.storage$.value).removeItem('rpToken');
-              eval(this.settingsService.storage$.value).removeItem('rpRide');
+              eval(this.settingsService.storage).removeItem('rpToken');
+              eval(this.settingsService.storage).removeItem('rpRide');
 
               this.rideSubjectService.ride$.next(null);
 

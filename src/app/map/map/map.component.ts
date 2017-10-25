@@ -19,6 +19,7 @@ import { UserService } from '../../user/user.service';
 import { RefreshService } from '../../core/refresh.service';
 import { RiderService } from '../../rider/rider.service';
 import { SettingsService } from '../../settings/settings.service';
+import { AlertService } from '../../alert/alert.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -31,6 +32,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
 
   dummyRiders: boolean = false;
+  dummyRidersNotice: boolean = false;
   latLng: LatLngBoundsLiteral;
   mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
   markerUrl: string = "assets/img/rider-markers/";
@@ -56,7 +58,8 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('markers') markers;
   @ViewChildren('userInfoWindow') userInfoWindow;
 
-  constructor(private location: Location,
+  constructor(private alertService: AlertService,
+              private location: Location,
               private mapsAPILoader: MapsAPILoader,
               private navService: NavService,
               private refreshService: RefreshService,
@@ -84,7 +87,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   addDummyRiders() {
-    this.riderService.addDummyRiders();
+    this.riderService.addDummyRiders(() => {
+      this.dummyRidersNotice = true;
+      setTimeout(() => {
+        this.dummyRidersNotice = false;
+      }, 2900);
+    });
   }
 
   calculateBounds(mapMode = this.mapMode) {
@@ -131,7 +139,7 @@ export class MapComponent implements OnInit, OnDestroy {
       if ( user && riderList ) {
         let riders = riderList.filter(rider => rider._id !== user._id); // Filter out user, who will get a special marker.
         riders = riders.filter(rider => {                               // Filter out long-disconnected riders.
-          return !rider.disconnected || (Date.now() - rider.disconnected) < this.settingsService.removeLongDisconnectedRider$.value['removeLongDisconnectedRiders'] * 60000;
+          return !rider.disconnected || (Date.now() - rider.disconnected) < this.settingsService.removeLongDisconnectedRider * 60000;
         });
         this.riders = this.setZIndexAndOpacity(riders);
         // console.log("MapComponent.riders:", riders);
@@ -157,7 +165,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.navService.navBarState$.next('hide');
           this.buttonState = 'hide';
         }
-      }, this.settingsService.fadeNav$.value * 1000);
+      }, this.settingsService.fadeNav * 1000);
     });
 
   }
@@ -170,21 +178,21 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   retrieveState() {
-    this.latLng = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpLatLng'));
+    this.latLng = JSON.parse(eval(this.settingsService.storage).getItem('rpLatLng'));
     console.log("latLng:", this.latLng);
-    eval(this.settingsService.storage$.value).removeItem('rpLatLng');
-    this.mapMode = eval(this.settingsService.storage$.value).getItem('rpMapMode') || 'focusOnUser';
-    eval(this.settingsService.storage$.value).removeItem('rpMapMode');
+    eval(this.settingsService.storage).removeItem('rpLatLng');
+    this.mapMode = eval(this.settingsService.storage).getItem('rpMapMode') || 'focusOnUser';
+    eval(this.settingsService.storage).removeItem('rpMapMode');
   }
 
   setRefreshTimer() {
     console.log("setRefreshTimer(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
       console.log("refreshTimer completed");
-      if ( this.latLng ) eval(this.settingsService.storage$.value).setItem('rpLatLng', JSON.stringify(this.latLng));
-      eval(this.settingsService.storage$.value).setItem('rpMapMode', this.mapMode);
+      if ( this.latLng ) eval(this.settingsService.storage).setItem('rpLatLng', JSON.stringify(this.latLng));
+      eval(this.settingsService.storage).setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
-    }, this.settingsService.refreshMapPage$.value * 60000);
+    }, this.settingsService.refreshMapPage * 60000);
   }
 
   setTakingTooLongTimer() {
@@ -199,7 +207,7 @@ export class MapComponent implements OnInit, OnDestroy {
       rider.zIndex = zCounter++;
       if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
       if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
-      if ( rider.dummy ) this.dummyRiders = true;
+        this.dummyRiders = true;
 
       return rider;
     });
@@ -221,7 +229,7 @@ export class MapComponent implements OnInit, OnDestroy {
   waitOneSecond() {
     setTimeout(() => {
       console.log("oneSecondPassed = true");
-      this.oneSecondPassed = {something: 'or other'};
+      this.oneSecondPassed = { something: 'or other' };
     }, 10000);
   }
 

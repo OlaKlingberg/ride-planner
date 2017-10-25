@@ -107,7 +107,7 @@ export class CuesheetDemoService {
 
 
   setHeaders() {
-    const token = JSON.parse(eval(this.settingsService.storage$.value).getItem('rpToken'));
+    const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
     return new RequestOptions({ headers });
   }

@@ -3,24 +3,28 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import { Subscription } from 'rxjs/Subscription';
-import { Http, Response } from '@angular/http';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   templateUrl: './home.component.html',
   styleUrls: [ './home.component.scss' ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  demoMode: boolean;
   returnUrl: string;
   user: User;
+
   private subscription: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private http: Http,
               private router: Router,
+              private settingsService: SettingsService,
               private userService: UserService) {
   }
 
   ngOnInit() {
+    this.demoMode = this.settingsService.demoMode;
+
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 

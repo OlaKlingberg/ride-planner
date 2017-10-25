@@ -7,6 +7,7 @@ import { UserService } from "../../user/user.service";
 import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../../environments/environment';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './registration.component.html',
@@ -23,10 +24,11 @@ export class RegistrationComponent implements OnDestroy {
   @ViewChild('phoneField') phoneField: ElementRef;
   @ViewChild('emergencyPhoneField') emergencyPhoneField: ElementRef;
 
-  constructor(private router: Router,
-              private userService: UserService,
-              private alertService: AlertService) {
-    this.demoMode = environment.demoMode;
+  constructor(private alertService: AlertService,
+              private router: Router,
+              private settingsService: SettingsService,
+              private userService: UserService) {
+    this.demoMode = this.settingsService.demoMode;
   }
 
   formatPhone($event, field) {

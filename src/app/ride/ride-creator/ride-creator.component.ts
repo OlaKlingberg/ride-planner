@@ -10,6 +10,7 @@ import { UserService } from '../../user/user.service';
 import { User } from '../../user/user';
 
 import { environment } from '../../../environments/environment';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './ride-creator.component.html',
@@ -27,13 +28,17 @@ export class RideCreatorComponent implements OnInit, OnDestroy {
   constructor(private alertService: AlertService,
               private rideService: RideService,
               private router: Router,
+              private settingsService: SettingsService,
               private userService: UserService) {
-    this.demoMode = environment.demoMode;
+    this.demoMode = this.settingsService.demoMode;
   }
 
   ngOnInit() {
     this.userService.userPromise().then(user => {
       this.user = new User(user);
+
+      console.log("demoMode:", this.demoMode);
+      console.log("user.demo:", this.user.demo);
     });
   }
 

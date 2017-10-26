@@ -30,13 +30,13 @@ export class SettingsService {
 
     if (window.location.host === 'ride-planner.herokuapp.com') {
       this.api = 'https://ride-planner-backend.herokuapp.com';
-      this.settings.demoMode =  'no';
+      this.demoMode =  false;
 
     }
 
     if (window.location.host === 'ride-planner-demo.herokuapp.com') {
       this.api = 'https://ride-planner-demo-backend.herokuapp.com';
-      this.settings.demoMode = 'yes';
+      this.demoMode = true;
     }
 
     if (window.location.host === 'localhost:3050') {

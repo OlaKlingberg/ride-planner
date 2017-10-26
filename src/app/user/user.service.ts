@@ -39,14 +39,14 @@ export class UserService {
   addDummyMembers() {
     const requestOptions = this.setHeaders();
 
-    return this.http.get(`${environment.api}/users/add-dummy-members`, requestOptions)
+    return this.http.get(`${this.settingsService.api}/users/add-dummy-members`, requestOptions)
         .toPromise();
   }
 
   create(user: User) {
     user.email = user.email.toLowerCase();
 
-    return this.http.post(`${environment.api}/users`, user);
+    return this.http.post(`${this.settingsService.api}/users`, user);
   }
 
   emitConnectedLoggedInUser() {
@@ -101,7 +101,7 @@ export class UserService {
   requestAllUsers() {
     const requestOptions = this.setHeaders();
 
-    return this.http.get(`${environment.api}/users`, requestOptions)
+    return this.http.get(`${this.settingsService.api}/users`, requestOptions)
         .map((response: Response) => this.userList$.next(response.json().users.map(user => new User(user))))
         .toPromise();
   }

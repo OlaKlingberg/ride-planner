@@ -30,7 +30,7 @@ export class AuthenticationService {
       const headers = new Headers({ 'x-auth': token });
       const requestOptions = new RequestOptions({ headers });
 
-      this.http.get(`${environment.api}/users/authenticate-by-token`, requestOptions)
+      this.http.get(`${this.settingsService.api}/users/authenticate-by-token`, requestOptions)
           .subscribe(response => {
             if ( response.status === 200 ) {
               let user: User = new User(response.json());
@@ -43,7 +43,7 @@ export class AuthenticationService {
   getUnusedDemoUsers() {
     const requestOptions = this.setHeaders();
 
-    return this.http.get(`${environment.api}/users/demo-users`, requestOptions)
+    return this.http.get(`${this.settingsService.api}/users/demo-users`, requestOptions)
         .map((response: Response) => {
           return response.json();
         })
@@ -51,7 +51,7 @@ export class AuthenticationService {
   }
 
   login(email: string, password: string) {
-    return this.http.post(`${environment.api}/users/login`, { email, password })
+    return this.http.post(`${this.settingsService.api}/users/login`, { email, password })
         .map((response: Response) => {
           let token = response.headers.get('x-auth');
           let user: User = new User(response.json());
@@ -68,7 +68,7 @@ export class AuthenticationService {
     const headers = new Headers({ 'x-auth': token });
     const requestOptions = new RequestOptions({ headers });
 
-    return this.http.get(`${environment.api}/users/logout`, requestOptions);
+    return this.http.get(`${this.settingsService.api}/users/logout`, requestOptions);
   }
 
   setHeaders() {

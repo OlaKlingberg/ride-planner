@@ -33,7 +33,7 @@ export class RideService {
     if ( this.user ) model._creator = this.user._id; // Todo: User *should* exist here, but what if not?
     const requestOptions = this.setHeaders();
 
-    return this.http.post(`${environment.api}/rides`, model, requestOptions)
+    return this.http.post(`${this.settingsService.api}/rides`, model, requestOptions)
         .map((response: Response) => {
           return new Ride(response.json());
         });
@@ -42,7 +42,7 @@ export class RideService {
   deleteRide(rideId: any) {
     const requestOptions = this.setHeaders();
 
-    return this.http.delete(`${environment.api}/rides/${rideId}`, requestOptions)
+    return this.http.delete(`${this.settingsService.api}/rides/${rideId}`, requestOptions)
         .map((response: Response) => new Ride(response.json().ride))
         .toPromise(); // Todo: Add error handling.
   }

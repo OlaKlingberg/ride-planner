@@ -34,7 +34,7 @@ export class CuesheetService {
   createCue(cuesheetId: any, cue: any, insertBeforeId: string) {
     const requestOptions = this.setHeaders();
 
-    return this.http.post(`${environment.api}/cuesheets/cues`, { cuesheetId, cue, insertBeforeId }, requestOptions)
+    return this.http.post(`${this.settingsService.api}/cuesheets/cues`, { cuesheetId, cue, insertBeforeId }, requestOptions)
         .map((response: Response) => {
           return new Cue(response.json());
         }).toPromise();
@@ -44,7 +44,7 @@ export class CuesheetService {
     if ( this.user ) model._creator = this.user._id;   // Todo: User *should* exist here, but what if not?
     const requestOptions = this.setHeaders();
 
-    return this.http.post(`${environment.api}/cuesheets`, model, requestOptions)
+    return this.http.post(`${this.settingsService.api}/cuesheets`, model, requestOptions)
         .map((response: Response) => {
           return new Cuesheet(response.json());
         });
@@ -53,7 +53,7 @@ export class CuesheetService {
   deleteCue(cuesheetId: any, cueId: any) {
     const requestOptions = this.setHeaders();
 
-    return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}/cues/${cueId}`, requestOptions)
+    return this.http.delete(`${this.settingsService.api}/cuesheets/${cuesheetId}/cues/${cueId}`, requestOptions)
         .map((response: Response) => {
           return new Cue(response.json());
         }).toPromise();
@@ -62,7 +62,7 @@ export class CuesheetService {
   deleteCuesheet(cuesheetId: any) {
     const requestOptions = this.setHeaders();
 
-    return this.http.delete(`${environment.api}/cuesheets/${cuesheetId}`, requestOptions)
+    return this.http.delete(`${this.settingsService.api}/cuesheets/${cuesheetId}`, requestOptions)
         .map((response: Response) => new Cuesheet(response.json().cuesheet))
         .toPromise(); // Todo: Add error handling.
   }
@@ -70,7 +70,7 @@ export class CuesheetService {
   getCuesheetList () {
     const requestOptions = this.setHeaders();
 
-    return this.http.get(`${environment.api}/cuesheets`, requestOptions)
+    return this.http.get(`${this.settingsService.api}/cuesheets`, requestOptions)
         .map((response: Response) => {
           return response.json().cuesheets.map(cuesheet => new Cuesheet(cuesheet));
         });
@@ -79,7 +79,7 @@ export class CuesheetService {
   getCuesheet(_id) {
     const requestOptions = this.setHeaders();
 
-    return this.http.get(`${environment.api}/cuesheets/${_id}`, requestOptions)
+    return this.http.get(`${this.settingsService.api}/cuesheets/${_id}`, requestOptions)
         .map((response: Response) => new Cuesheet(response.json().cuesheet))
         .toPromise();
   }
@@ -101,7 +101,7 @@ export class CuesheetService {
   updateCue(_id: string, cue: any) {
     const requestOptions = this.setHeaders();
 
-    return this.http.patch(`${environment.api}/cuesheets/cues/${_id}`, cue, requestOptions)
+    return this.http.patch(`${this.settingsService.api}/cuesheets/cues/${_id}`, cue, requestOptions)
         .map((response: Response) => {
           return new Cue(response.json());
         }).toPromise();
@@ -110,7 +110,7 @@ export class CuesheetService {
   updateCuesheet(_id: string, cuesheet: any) {
     const requestOptions = this.setHeaders();
 
-    return this.http.patch(`${environment.api}/cuesheets/${_id}`, cuesheet, requestOptions)
+    return this.http.patch(`${this.settingsService.api}/cuesheets/${_id}`, cuesheet, requestOptions)
         .map((response: Response) => new Cuesheet(response.json().cuesheet))
         .toPromise();
   }

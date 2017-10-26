@@ -68,7 +68,7 @@ export class CuesheetDemoService {
         if ( cuesheet.cues.length >= 1 && !cuesheet.cues[ 0 ].turn ) {
           const requestOptions = this.setHeaders();
 
-          return this.http.get(`${environment.api}/cuesheets/${_id}`, requestOptions)
+          return this.http.get(`${this.settingsService.api}/cuesheets/${_id}`, requestOptions)
               .map((response: Response) => new Cuesheet(response.json().cuesheet))
               .do((cuesheet: Cuesheet) => {
                 cuesheets = cuesheets.filter(oldCuesheet => oldCuesheet._id !== cuesheet._id);

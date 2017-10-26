@@ -28,8 +28,6 @@ export class RiderService {
   }
 
   addDummyRiders(callback) {
-    // console.log("Number of members:", this.userService.userList$.value);
-
     const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     this.socket.emit('addDummyRiders', this.user, token, callback);
   }

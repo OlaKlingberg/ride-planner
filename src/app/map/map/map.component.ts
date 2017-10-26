@@ -87,11 +87,11 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   addDummyRiders() {
-    this.riderService.addDummyRiders(msg => {
-      // if (msg) {
-        console.log("addDummyRiders. msg from backend:", msg);
-        // return;
-      // }
+    this.riderService.addDummyRiders(err => {
+      if (err) {
+        console.log("addDummyRiders. Error:", err);
+        return;
+      }
       this.dummyRidersNotice = true;
       setTimeout(() => {
         this.dummyRidersNotice = false;

@@ -39,6 +39,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
+#Local environment
+src/environments/environment.ts
+
 #Ola's files
 OLAS-NOTES.txt
 credentials.txt

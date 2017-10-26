@@ -44,15 +44,6 @@ export class SettingsService {
       this.demoMode = settings.demoMode === 'yes';
     }
 
-    // if (environment.production) this.demoMode = environment.demoMode;
-    //
-    // if (environment.demoMode === null) {
-    //   this.demoMode = settings.demoMode === 'yes';
-    // } else {
-    //   this.demoMode = environment.demoMode;
-    //   settings.demoMode = environment.demoMode ? 'yes' : 'no';
-    // }
-
     this.dummyPos = settings.dummyPos === 'yes';
     this.dummyPosAddLat = settings.dummyPosAdd;
     this.dummyPosAddLng = settings.dummyPosAdd;

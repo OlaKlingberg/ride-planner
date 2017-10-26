@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import Socket = SocketIOClient.Socket;
 
 import { environment } from '../../environments/environment';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable()
 export class SocketService {
   socket: Socket;
 
-  constructor() {
-    this.socket = io(environment.api);  // io is made available through import into index.html.
+  constructor(private settingsService: SettingsService) {
+    this.socket = io(settingsService.api);  // io is made available through import into index.html.
 
     // console.log("socket:", this.socket);
     // this.listenForConnection();

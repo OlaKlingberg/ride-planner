@@ -1,4 +1,5 @@
 export class Settings {
+  // api: string;
   demoMode: string;
   dummyPos: string;
   dummyPosAddMin: number;

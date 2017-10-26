@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class SettingsService {
 
-
+  api: string;
   demoMode: boolean;
   dummyPos: boolean;
   dummyPosAddLat: number;
@@ -28,17 +28,30 @@ export class SettingsService {
 
     let settings = rpSettings === null ? new Settings({}) : new Settings(rpSettings);
 
-    // if (window.location.host === 'ride-planner.herokuapp.com') this.settings.demoMode =  'no';
-    // if (window.location.host === 'ride-planner-demo.herokuapp.com') this.settings.demoMode = 'yes';
+    if (window.location.host === 'ride-planner.herokuapp.com') {
+      this.api = 'https://ride-planner-backend.herokuapp.com';
+      this.settings.demoMode =  'no';
+
+    }
+
+    if (window.location.host === 'ride-planner-demo.herokuapp.com') {
+      this.api = 'https://ride-planner-demo-backend.herokuapp.com';
+      this.settings.demoMode = 'yes';
+    }
+
+    if (window.location.host === 'localhost:3050') {
+      this.api = 'http://localhost:3051';
+      this.demoMode = settings.demoMode === 'yes';
+    }
 
     // if (environment.production) this.demoMode = environment.demoMode;
-
-    if (environment.demoMode === null) {
-      this.demoMode = settings.demoMode === 'yes';
-    } else {
-      this.demoMode = environment.demoMode;
-      settings.demoMode = environment.demoMode ? 'yes' : 'no';
-    }
+    //
+    // if (environment.demoMode === null) {
+    //   this.demoMode = settings.demoMode === 'yes';
+    // } else {
+    //   this.demoMode = environment.demoMode;
+    //   settings.demoMode = environment.demoMode ? 'yes' : 'no';
+    // }
 
     this.dummyPos = settings.dummyPos === 'yes';
     this.dummyPosAddLat = settings.dummyPosAdd;

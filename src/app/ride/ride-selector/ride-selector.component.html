@@ -6,7 +6,7 @@
         <div>
 
           <div *ngIf="!ride">
-            <div *ngIf="availableRides">
+            <div *ngIf="availableRides?.length >= 1">
 
               <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
                 <label for="ride">Select a ride or a team</label>
@@ -28,7 +28,7 @@
 
             </div>
 
-            <div *ngIf="!availableRides">
+            <div *ngIf="availableRides?.length < 1">
               <h3>Sorry, there are currently no rides!</h3>
               <h4>Do you want to create one?</h4>
               <a class="btn btn-primary" routerLink='/ride/create'>Create new ride</a>

@@ -41,6 +41,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscribeToAvailableRides();
     this.subscribeToUser();
+    this.rideService.emitGiveMeAvailableRides();
   }
 
   deleteRide() {
@@ -68,6 +69,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
     const sub = this.rideSubjectService.availableRides$.subscribe(availableRides => {
       this.availableRides = availableRides;
     });
+    this.subscriptions.push(sub);
   }
 
   subscribeToUser() {

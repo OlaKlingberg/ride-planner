@@ -12,12 +12,14 @@ import Socket = SocketIOClient.Socket;
 import { SocketService } from '../../core/socket.service';
 import { User } from '../user';
 import { AlertService } from '../../alert/alert.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './member-list.component.html',
   styleUrls: [ './member-list.component.scss' ]
 })
 export class MemberListComponent implements OnInit {
+  demoMode: boolean;
   displayedColumns: string[];
   dataSource: MemberListDataSource | null;
   loading: boolean = false;
@@ -34,12 +36,14 @@ export class MemberListComponent implements OnInit {
   constructor(private alertService: AlertService,
               private modalService: BsModalService,
               private socketService: SocketService,
+              private settingsService: SettingsService,
               private userService: UserService) {
     this.displayColumns();
     this.socket = socketService.socket;
   }
 
   ngOnInit() {
+    this.demoMode = this.settingsService.demoMode;
     this.numberOfUsers = this.userService.userList$.value.length;
 
     // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
@@ -57,7 +61,11 @@ export class MemberListComponent implements OnInit {
 
     window.addEventListener('resize', this.displayColumns);
 
-    this.userService.requestAllUsers();
+    this.userService.requestAllUsers()
+        .then(() => {
+          this.numberOfUsers = this.userService.userList$.value.length;
+          console.log("numberOfUsers:", this.numberOfUsers);
+        });
   }
 
   addDummyMembers() {
@@ -68,22 +76,38 @@ export class MemberListComponent implements OnInit {
     this.loading = true;
     this.userService.addDummyMembers()
         .then(res => {
-          this.userService.requestAllUsers();
-          this.alertService.success('Twenty members have been added. They will be removed in an hour.');
-          this.loading = false;
+          this.userService.requestAllUsers()
+              .then(() => {
+                this.alertService.success('Twenty members have been added. They will be removed in an hour.');
+                this.loading = false;
+                this.numberOfUsers = this.userService.userList$.value.length;
+                console.log("numberOfUsers:", this.numberOfUsers);
+              });
         })
         .catch(e => {
           console.log("Error:", e);
         });
   }
 
+  deleteDummyMembers() {
+    this.userService.deleteDummyMembers()
+        .then(res => {
+          console.log("response:", res);
+          this.userService.requestAllUsers()
+              .then(() => {
+                this.alertService.success("The dummy members have been deleted.");
+                this.numberOfUsers = this.userService.userList$.value.length;
+              });
+        });
+  }
+
   displayColumns = function () {
     if ( window.innerWidth >= 1000 ) {
-      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
+      this.displayedColumns = [ 'admin', 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
     } else if ( window.innerWidth >= 800 ) {
       this.displayedColumns = [ 'leader', 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'showDetailsButton' ]
     } else if ( window.innerWidth >= 500 ) {
-        this.displayedColumns = [ 'leader', 'fullName', 'phone', 'showDetailsButton']
+      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'showDetailsButton' ]
     } else {
       this.displayedColumns = [ 'leader', 'fullName', 'showDetailsButton' ];
     }

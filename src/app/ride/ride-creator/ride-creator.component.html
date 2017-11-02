@@ -4,7 +4,7 @@
       <form name="form" (ngSubmit)="f.form.valid && createRide()" #f="ngForm" novalidate>
 
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !name.valid }">
-          <label for="name">Name of the ride</label>
+          <label for="name">Name of the ride or team</label>
           <input type="text"
                  class="form-control"
                  name="name"

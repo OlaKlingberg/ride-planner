@@ -11,6 +11,7 @@ import { Cuesheet } from '../cuesheet';
 import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 import { CuesheetService } from '../cuesheet.service';
 import { Subscription } from 'rxjs/Subscription';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './cuesheet-edit.component.html',
@@ -34,12 +35,14 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private subscription: Subscription;
 
   @ViewChild('cueForm') cueForm: NgForm;
+  @ViewChild('demoModeModal') demoModeModal: TemplateRef<any>;
 
   constructor(private alertService: AlertService,
               private cuesheetService: CuesheetService,
               private modalService: BsModalService,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private settingsService: SettingsService) {
   }
 
   ngOnInit() {
@@ -47,6 +50,8 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.checkForModalClose();
     this.getCuesheet(this.cuesheetId);
+
+    if (this.settingsService.demoMode) this.modalRef = this.modalService.show(this.demoModeModal);
   }
 
   ngAfterViewInit() {
@@ -128,6 +133,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cuesheet.cues.splice(this.cueToDelete, 1);
         this.cueToDelete = null;
         this.focusTrigger.emit(true);
+        this.setTotalDistances(this.cuesheet);
       }, 300);
     });
   }
@@ -206,10 +212,13 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
           this.cuesheetModel.cuesheetDescription = cuesheet.description;
           this.cuesheet = this.setTotalDistances(cuesheet);
 
-          if ( this.cuesheet.cues.length === 0 ) {
-            this.cueModel.distance = '0';
-            this.cueModel.turn = 'Start';
-          }
+          setTimeout(() => {
+            if ( this.cuesheet.cues.length === 0 ) {
+              this.cueModel.distance = '0';
+              this.cueModel.turn = 'Start';
+            }
+          }, 100) // Todo: Figure out why cueModel.turn is reset to null unless I set a delay here.
+
         });
   }
 
@@ -241,7 +250,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   openCuesheetDeletionModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
-
 
   saveCue($event) {
     if ( ($event && $event.keyCode === 13 ) || $event === 'saveCueButton' ) {

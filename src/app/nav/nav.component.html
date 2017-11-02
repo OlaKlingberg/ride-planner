@@ -35,7 +35,6 @@
         <li *ngIf="!user"><a routerLink='/auth/login' [routerLinkActive]="['active']">Login</a></li>
         <li *ngIf="user"><a routerLink='/auth/logout' [routerLinkActive]="['active']">Logout</a></li>
       </ul>
-      <h4 class="pull-right">{{user?.initials}}</h4>
     </div><!--/.nav-collapse -->
   </div>
 </nav>

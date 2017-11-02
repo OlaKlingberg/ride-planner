@@ -20,7 +20,7 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   ride: string = '';
   user: User = null;
 
-  private availableRides: Array<string> = null;
+  private availableRides: Array<string> = [];
   private subscriptions: Array<Subscription> = [];
 
   constructor(private positionService: PositionService,

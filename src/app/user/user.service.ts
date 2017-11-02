@@ -49,6 +49,13 @@ export class UserService {
     return this.http.post(`${this.settingsService.api}/users`, user);
   }
 
+  deleteDummyMembers() {
+    const requestOptions = this.setHeaders();
+
+    return this.http.get(`${this.settingsService.api}/users/delete-dummy-members`, requestOptions)
+        .toPromise();
+  }
+
   emitConnectedLoggedInUser() {
     this.user$.subscribe(user => {
        this.socketService.socketPromise()

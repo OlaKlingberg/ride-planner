@@ -7,8 +7,10 @@
         <div class="user-info">
           <h5 *ngIf="user">You are logged in as {{ user?.fullName || async }}</h5>
           <h5 *ngIf="ride">You are logged in to ride {{ ride }}</h5>
+          <!--
           <h5 *ngIf="latitude">Lat: {{ latitude | number:'1.4-4' }}. Lng: {{ longitude | number: '1.4-4' }}. Acc: {{
             accuracy | number: '1.0-0'}}</h5>
+            -->
         </div>
       </div>
 

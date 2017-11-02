@@ -22,6 +22,10 @@
   }
 }
 
+.container {
+  margin-bottom: 200px;
+}
+
 .pointer:hover {
   background-color: darken($rpOrange, 20%);
 }

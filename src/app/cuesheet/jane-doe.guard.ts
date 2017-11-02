@@ -20,9 +20,7 @@ export class JaneDoeGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    const demoUsers = ['jane.doe@example.com', 'kate.doe@example.com', 'lance.doe@example.com', 'marc.doe@example.com'];
-
-    if ( !demoUsers.includes(this.user.email)) return true;
+    if ( !this.user.demo ) return true;
 
     // The user is using the demo account, so should be sent to components that don't persist anything.
     const url = `${state.url}/demo`;

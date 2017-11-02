@@ -36,8 +36,22 @@
   </div>
 </ng-template>
 
+<!-- Modal for demo mode -->
+<ng-template #demoModeModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Demo Mode</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true" class="close-modal">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    This site is in demo mode. Any changes you make to the cuesheet will disappear when you close the browser window.
+  </div>
+</ng-template>
 
-<div class="container">
+
+
+<div class="container page-cuesheet-edit">
 
   <!-- Cuesheet header, with info about the cuesheet -->
   <form name="cuesheet-form" #cuesheetForm="ngForm" novalidate>
@@ -354,5 +368,4 @@
 </div>
 
 
-<ng-container>
 

@@ -66,6 +66,8 @@ export class MemberListDataSource extends DataSource<any> {
       let secondaryB: number | string = '';
 
       switch ( this._sort.active ) {
+        case 'admin':
+          [ primaryB, primaryA, secondaryA, secondaryB ] = [ a.admin, b.admin, a.lname, b.lname ];
         case 'leader':
           [ primaryB, primaryA, secondaryA, secondaryB ] = [ a.leader, b.leader, a.lname, b.lname ];
           break;

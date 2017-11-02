@@ -1,4 +1,4 @@
-import { Component, OnDestroy, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, EventEmitter, AfterViewInit, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
@@ -6,22 +6,33 @@ import { Subscription } from 'rxjs/Subscription';
 import { AlertService } from '../../alert/alert.service';
 import { Cuesheet } from '../cuesheet';
 import { CuesheetService } from '../cuesheet.service';
+import { SettingsService } from '../../settings/settings.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   templateUrl: './cuesheet-new.component.html',
   styleUrls: [ './cuesheet-new.component.scss' ]
 })
-export class CuesheetNewComponent implements OnDestroy, AfterViewInit {
+export class CuesheetNewComponent implements OnInit, OnDestroy, AfterViewInit {
   cuesheet: Cuesheet;
   focusTrigger = new EventEmitter<boolean>();
   loading: boolean = false;
+  modalRef: BsModalRef;
   model: any = {};
 
   private subscription: Subscription;
 
+  @ViewChild('demoModeModal') demoModeModal: TemplateRef<any>;
+
   constructor(private alertService: AlertService,
               private cuesheetService: CuesheetService,
-              private router: Router) {
+              private modalService: BsModalService,
+              private router: Router,
+              private settingsService: SettingsService) {
+  }
+
+  ngOnInit() {
+    if (this.settingsService.demoMode) this.modalRef = this.modalService.show(this.demoModeModal);
   }
 
   ngAfterViewInit() {

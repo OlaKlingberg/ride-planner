@@ -3,13 +3,21 @@
   <!-- Modal with member details -->
   <ng-template #memberDetails>
     <div class="modal-header">
-      <h4 class="modal-title pull-left">{{member.fname}} {{member.lname}}<span *ngIf="member.leader">, Ride Leader</span></h4>
+      <h4 class="modal-title pull-left">{{member.fname}} {{member.lname}}</h4>
       <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
       <table class="modal-table">
+        <tr *ngIf="member.admin">
+          <td>Admin</td>
+          <td><span class="glyphicon glyphicon-ok"></span></td>
+        </tr>
+        <tr *ngIf="member.leader">
+          <td>Leader</td>
+          <td><span class="glyphicon glyphicon-ok"></span></td>
+        </tr>
         <tr>
           <td>Phone</td>
           <td>{{member.phone}}</td>
@@ -31,39 +39,45 @@
   </ng-template>
   <!-- End: Modal with member details. -->
 
-  <div class="container" *ngIf="numberOfUsers <= 10">
+  <br>
+  <div class="container" *ngIf="demoMode && numberOfUsers <= 10">
     <div class="row">
       <div class="col-xs-12">
         <div class="panel panel-default padding-bottom-md">
           <div class="panel-heading">
-            <h3 class="panel-title center">Want more members?</h3>
+            <h2 class="panel-title center">Demo Mode</h2>
           </div>
           <div class="panel-body">
-            <p class="center">So far, you are the only a few members in this demo. You can add more members by clicking the
-              button.</p>
+            <p class="center">Would you like to add some more dummy members?</p>
           </div>
           <button class="btn btn-primary center-block"
                   (click)="addDummyMembers()"
-                  [disabled]="loading">Add 20 members
+                  [disabled]="loading">Add 20 Dummy Members
           </button>
         </div>
       </div>
     </div>
   </div>
-  
+
   <div class="container mat-app-background">
 
     <div class="row">
-      <div class="col-xs-12">
-        <h3 class="padding-left-md padding-right-md">
-          Members
-          <span class="float-right" *ngIf="numberOfUsers > 10">
-            <button class="btn btn-primary center-block"
-                    (click)="addDummyMembers()"
-                    [disabled]="loading">Add another 20 members
+      <div class="col-sm-8 padding-left-md">
+        <h3>Members</h3>
+        <mat-form-field floatPlaceholder="never">
+          <input matInput #filter placeholder="Filter by first or last name">
+        </mat-form-field>
+      </div>
+      <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 padding-top-sm padding-right-md margin-bottom-md">
+        <span *ngIf="numberOfUsers > 10">
+          <button class="btn btn-primary btn-block"
+                  (click)="addDummyMembers()"
+                  [disabled]="loading">Add 20 Dummy Members
           </button>
-          </span>
-        </h3>
+          <br>
+          <button class="btn btn-primary btn-block" (click)="deleteDummyMembers()">Delete All Dummy Members
+          </button>
+        </span>
       </div>
     </div>
 
@@ -72,13 +86,25 @@
 
         <div class="table-container mat-elevation-z8">
 
-          <div class="mat-header padding-left-md">
+          <!--
+          <div class="mat-header padding-left-md float-left">
+
             <mat-form-field floatPlaceholder="never">
               <input matInput #filter placeholder="Filter by first or last name">
             </mat-form-field>
+
           </div>
+        -->
 
           <mat-table #table [dataSource]="dataSource" matSort>
+
+            <!-- Admin -->
+            <ng-container matColumnDef="admin">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Admin</span>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row"><span *ngIf="row.admin" class="glyphicon glyphicon-ok"></span></mat-cell>
+            </ng-container>
 
             <!-- Leader -->
             <ng-container matColumnDef="leader">

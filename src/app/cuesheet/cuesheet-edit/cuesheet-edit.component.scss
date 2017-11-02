@@ -1,3 +1,4 @@
+@import '../../../_vars.scss';
 
 .right {
   float: right;
@@ -43,6 +44,10 @@
   }
 }
 
+.container {
+  padding-bottom: 200px;
+}
+
 .display-flex {
   display: flex;
 }
@@ -86,9 +91,33 @@
   visibility: hidden;
 }
 
-#test-div {
-  height: 100px;
-  width: 200px;
-  background-color: tomato;
+.table-striped tbody {
+  tr:nth-of-type(odd) {
+    background-color: darken(grayscale($rpLightGray), 8%);
+  }
+
+  tr:nth-of-type(even) {
+    background-color: darken(grayscale($rpGray), 8%);
+  }
 }
+
+//.table-striped {
+//  background-color: lighten($rpLightGray, 50%);
+//
+//  tbody {
+//    tr:nth-of-type(odd) {
+//      background-color: lighten($rpLightGray, 43%);
+//    }
+//
+//    tr:nth-of-type(even) {
+//      background-color: lighten($rpLightGray, 50%);
+//    }
+//  }
+//}
+
+
+
+
+
+
 

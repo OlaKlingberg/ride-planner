@@ -34,8 +34,8 @@
         <li *ngIf="user"><a routerLink='/cuesheet' [routerLinkActive]="['active']">Cuesheets</a></li>
         <li *ngIf="!user"><a routerLink='/auth/login' [routerLinkActive]="['active']">Login</a></li>
         <li *ngIf="user"><a routerLink='/auth/logout' [routerLinkActive]="['active']">Logout</a></li>
-        <li class="float-right"><a>{{deviceSize}}</a></li>
       </ul>
+      <h4 class="pull-right">{{deviceSize}}</h4>
     </div><!--/.nav-collapse -->
   </div>
 </nav>

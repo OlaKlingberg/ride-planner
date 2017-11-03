@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
+import { DeviceSizeComponent } from './device-size/device-size.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { CoreModule } from './core/core.module';
     CoreModule
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    DeviceSizeComponent
   ],
   bootstrap: [ AppComponent ]
 })

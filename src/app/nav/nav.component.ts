@@ -40,8 +40,8 @@ export class NavComponent implements OnInit {
     this.subscribeToRoute();
     this.subscribeToUser();
 
-    window.addEventListener('resize', this.setDeviceSize);
     this.deviceSize = getBootstrapDeviceSize();
+    window.addEventListener('resize', this.setDeviceSize);
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd ) {

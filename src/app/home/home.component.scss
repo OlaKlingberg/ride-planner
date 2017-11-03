@@ -3,4 +3,27 @@
   top: 0;
   left: 0;
   z-index: -1;
+  width: 100%
+}
+
+.container {
+  //position: absolute;
+
+  &.device-size- {
+    &xs {
+      top: 400px;
+    }
+    &sm {
+      top: 500px;
+    }
+    &md {
+      top: 400px;
+    }
+    &lg {
+      top: 400px;
+    }
+    &xl {
+      top: 500px;
+    }
+  }
 }

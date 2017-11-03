@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { DeviceSizeComponent } from './device-size/device-size.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { DeviceSizeComponent } from './device-size/device-size.component';
   ],
   declarations: [
     AppComponent,
-    DeviceSizeComponent
+    DeviceSizeComponent,
+    FooterComponent
   ],
   bootstrap: [ AppComponent ]
 })

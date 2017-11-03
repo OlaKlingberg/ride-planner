@@ -1,6 +1,3 @@
-<!--
-<rp-header *ngIf="location.path() !== '/map' && !(location.path().includes('cuesheet') && location.path().includes('bike'))"></rp-header>
--->
 <rp-header></rp-header>
 
 <rp-nav></rp-nav>
@@ -9,10 +6,6 @@
 
 <router-outlet></router-outlet>
 
-<div id="users-device-size">
-  <div id="xs" class="visible-xs"></div>
-  <div id="sm" class="visible-sm"></div>
-  <div id="md" class="visible-md"></div>
-  <div id="lg" class="visible-lg"></div>
-</div>
+<rp-footer></rp-footer>
 
+<rp-device-size></rp-device-size>

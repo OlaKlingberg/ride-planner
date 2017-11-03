@@ -5,14 +5,14 @@ import { UserService } from '../user/user.service';
 import { Subscription } from 'rxjs/Subscription';
 import { SettingsService } from '../settings/settings.service';
 
-import { environment } from '../../environments/environment';
+import { getBootstrapDeviceSize } from '../_lib/util';
 
 @Component({
   templateUrl: './home.component.html',
   styleUrls: [ './home.component.scss' ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  api: string;
+  deviceSize: string;
   demoMode: boolean;
   returnUrl: string;
   user: User;
@@ -38,12 +38,20 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.router.navigate([ this.returnUrl ]);
       }
+    });
 
-    })
+    this.setDeviceSize();
+    window.addEventListener('resize', this.setDeviceSize);
   }
+
+  // I can't use an arrow function here, because I need to bind "this."
+  setDeviceSize = function () {
+    this.deviceSize = getBootstrapDeviceSize();
+  }.bind(this);
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
+    window.removeEventListener('resize', this.setDeviceSize);
 
+  }
 }

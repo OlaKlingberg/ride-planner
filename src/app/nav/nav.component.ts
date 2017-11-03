@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -19,7 +19,7 @@ import { getBootstrapDeviceSize } from '../_lib/util';
   styleUrls: [ './nav.component.scss' ],
   animations: navAnimations
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
   deviceSize: string;
   display: boolean = true;
   marginBottomNone: boolean =  false;
@@ -40,7 +40,7 @@ export class NavComponent implements OnInit {
     this.subscribeToRoute();
     this.subscribeToUser();
 
-    this.deviceSize = getBootstrapDeviceSize();
+    this.setDeviceSize();
     window.addEventListener('resize', this.setDeviceSize);
 
     this.router.events.subscribe(event => {
@@ -95,5 +95,9 @@ export class NavComponent implements OnInit {
     let sub = this.userService.user$.subscribe(
         user => this.user = user
     );
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.setDeviceSize);
   }
 }

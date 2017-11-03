@@ -37,15 +37,12 @@ export class HeaderComponent implements OnInit {
   }
 
   checkWhetherToDisplay() {
-    if ( this.location.path().includes('/frame') ||
-        this.location.path().includes('/map') ||
-        ( this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) ) return this.display = false;
-
-    // if (this.location.path().includes('/map')) return this.displayHeader = false;
-
-    // if (this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) return this.displayHeader = false;
-
-    this.display = true;
+    this.display = false;
+    // if ( this.location.path().includes('/frame') ||
+    //     this.location.path().includes('/map') ||
+    //     ( this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) ) return this.display = false;
+    //
+    // this.display = true;
   }
 
   subscribeToPosition() {

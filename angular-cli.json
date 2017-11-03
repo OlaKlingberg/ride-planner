@@ -20,6 +20,7 @@
       "prefix": "app",
       "styles": [
         "../node_modules/bootswatch/superhero/bootstrap.css",
+        "_bootstrap-xl.scss",
         "styles.scss"
       ],
       "scripts": [

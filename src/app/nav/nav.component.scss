@@ -3,6 +3,15 @@
 nav {
   z-index: 10;
 
+  &.sm-up {
+    height: 80px;
+
+    .container {
+      position: absolute;
+      top: 20px;
+    }
+  }
+
   li a {
     padding-top: 10px;
     padding-bottom: 10px;

@@ -19,7 +19,7 @@
       "tsconfig": "tsconfig.json",
       "prefix": "app",
       "styles": [
-        "../node_modules/bootswatch/superhero/bootstrap.css",
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
         "_bootstrap-xl.scss",
         "styles.scss"
       ],

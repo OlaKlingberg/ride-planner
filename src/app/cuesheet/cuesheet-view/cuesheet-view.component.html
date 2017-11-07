@@ -1,35 +1,35 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-12">
       <h1>{{ cuesheet?.name }}</h1>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-12">
       <h4>{{ cuesheet?.description }}</h4>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-12">
       <p>Created by {{ cuesheet?._creator.fname }} {{ cuesheet?._creator.lname }}</p>
     </div>
   </div>
-  <div class="row margin-bottom-sm">
-    <div class="col-sm-12">
+  <div class="row mb-2">
+    <div class="col-md-12">
       <hr>
-      <a [routerLink]="[ '/cuesheet', cuesheetId, 'bike', '0' ]"
+      <button [routerLink]="[ '/cuesheet', cuesheetId, 'bike', '0' ]"
          class="btn btn-primary btn-block"
          type="button">Start
-      </a>
+      </button>
     </div>
   </div>
-  <div class="row margin-bottom-sm">
-    <div class="col-sm-12">
+  <div class="row mb-2">
+    <div class="col-md-12">
       <p>Or tap on a cue to start at that cue.</p>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-12">
 
       <table class="table table-striped table-bordered">
         <thead>
@@ -57,11 +57,11 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-6 margin-bottom-10">
+    <div class="col-md-6 mb-2">
       <a routerLink='/cuesheet' class='btn btn-primary btn-block'>Return to list of cue sheets</a>
     </div>
-    <br class="visible-xs-block">
-    <div class="col-sm-6">
+    <br class="d-block d-sm-none-block">
+    <div class="col-md-6">
       <a [routerLink]="['/cuesheet', cuesheetId, 'edit']" class='btn btn-primary btn-block'>Edit this cue sheet</a>
     </div>
   </div>

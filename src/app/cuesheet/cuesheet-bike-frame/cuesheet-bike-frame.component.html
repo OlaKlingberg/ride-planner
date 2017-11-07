@@ -1,7 +1,9 @@
 <div class="wrapper-outer">
 
   <div class="wrapper-inner">
-    <div class="col-1">
+
+
+    <div class="column-left">
       <div>This view is meant to be used on your phone while biking.</div>
       <br/>
       <div>On your phone, you would swipe up or down to go to the next or previous cue. Here, you can also use the
@@ -9,12 +11,12 @@
       </div>
     </div>
 
-    <div class="col-2">
+    <div class="column-middle">
       <img src="/assets/img/other/iphone.png" class="iphone">
       <iframe [src]="url" frameborder="0" #iframe></iframe>
     </div>
 
-    <div class="col-3">
+    <div class="column-right">
       <div class="button-wrapper">
         <button class="btn btn-block btn-primary" (click)="swipeUp()">Swipe Up</button>
         <br/>
@@ -23,7 +25,13 @@
         <button class="btn btn-block btn-primary" (click)="returnToOverview()">Return To<br/>Overview</button>
       </div>
     </div>
-  </div>
 
+
+  </div>
 </div>
+
+
+
+
+
 

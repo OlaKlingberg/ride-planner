@@ -1,15 +1,19 @@
 /** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
 @import '../../../_vars.scss';
 
-mat-table {
-  background-color: darken($rpGray, 4%);
-  border: 3px solid darken($rpGray, 8%);
-  border-top: 2px solid silver;
-}
+//mat-table {
+//  background-color: darken($rpGray, 4%);
+//  border: 3px solid darken($rpGray, 8%);
+//  border-top: 2px solid silver;
+//}
+//
+//.mat-app-background {
+//  background-color: darken($rpGray, 8%);
+//  padding: 0;
+//}
 
-.mat-app-background {
-  background-color: darken($rpGray, 8%);
-  padding: 0;
+mat-table {
+  margin-bottom: 100px;
 }
 
 .mat-column- {

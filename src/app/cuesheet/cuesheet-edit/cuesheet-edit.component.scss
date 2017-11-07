@@ -1,7 +1,7 @@
 @import '../../../_vars.scss';
 
 .right {
-  float: right;
+  //float: right;
 }
 
 .btn-circle {
@@ -18,7 +18,7 @@
   position: relative;
 }
 
-.col- {
+.column- {
   &cue {
     width: 10%;
   }
@@ -74,7 +74,7 @@
 .highlight {
   z-index: 1200;
   td {
-    background-color: #A55;
+    //background-color: #A55;
     &:not(.buttons-column) {
       z-index: 1100;
       position: relative;
@@ -93,11 +93,11 @@
 
 .table-striped tbody {
   tr:nth-of-type(odd) {
-    background-color: darken(grayscale($rpLightGray), 8%);
+    //background-color: darken(grayscale($rpLightGray), 8%);
   }
 
   tr:nth-of-type(even) {
-    background-color: darken(grayscale($rpGray), 8%);
+    //background-color: darken(grayscale($rpGray), 8%);
   }
 }
 

@@ -67,9 +67,10 @@ export class MemberListDataSource extends DataSource<any> {
 
       switch ( this._sort.active ) {
         case 'admin':
-          [ primaryB, primaryA, secondaryA, secondaryB ] = [ a.admin, b.admin, a.lname, b.lname ];
+          [ primaryB, primaryA, secondaryA, secondaryB ] = [ a.admin || false, b.admin || false, a.lname, b.lname ];
+          break;
         case 'leader':
-          [ primaryB, primaryA, secondaryA, secondaryB ] = [ a.leader, b.leader, a.lname, b.lname ];
+          [ primaryB, primaryA, secondaryA, secondaryB ] = [ a.leader || false, b.leader || false, a.lname, b.lname ];
           break;
         case 'fullName':
           [ primaryA, primaryB, secondaryA, secondaryB ] = [ a.lname, b.lname, a.fname, b.fname ];

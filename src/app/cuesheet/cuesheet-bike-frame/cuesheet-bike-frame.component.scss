@@ -16,8 +16,8 @@ iframe {
   //width: 200px;
 }
 
-.col- {
-  &1 {
+.column- {
+  &left {
     flex: 1;
     color: $rpGray;
     padding: 170px 20px 0 20px;
@@ -26,13 +26,13 @@ iframe {
 
   }
 
-  &2 {
+  &middle {
     flex: initial;
     //background-color: paleturquoise;
     width: 340px;
   }
 
-  &3 {
+  &right {
     flex: 1;
     padding: 170px 20px 0 20px;
     //background-color: palegoldenrod;

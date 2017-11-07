@@ -1,87 +1,61 @@
-<!-- Todo: Replace these two templates with one that takes dynamic content. (I couldn't make it work.) -->
+<!-- Todo: Replace these two templates with one that takes dynamic content.
+(I couldn't make it work.) -->
 <!-- Modal shown when user tries to scroll before first cue. -->
-<ng-template #firstCueModal>
+<ng-template #firstCueModal="">
   <div class="modal-header">
-    <h4 class="modal-title pull-left">This is the first cue</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
-      <span aria-hidden="true">&times;</span>
+    <h4 class="modal-title float-left">This is the first cue</h4>
+    <button type="button" class="close float-right" aria-label="Close" (click)="modalRef.hide();"> <span aria-hidden="true">x</span>
     </button>
   </div>
 </ng-template>
-
 <!-- Modal shown when user tries to scroll before first cue. -->
-<ng-template #lastCueModal>
+<ng-template #lastCueModal="">
   <div class="modal-header">
-    <h4 class="modal-title pull-left">This is the last cue</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
-      <span aria-hidden="true">&times;</span>
+    <h4 class="modal-title float-left">This is the last cue</h4>
+    <button type="button" class="close float-right" aria-label="Close" (click)="modalRef.hide();"> <span aria-hidden="true">x</span>
     </button>
   </div>
 </ng-template>
-
-
 <div id="page-cuesheet-bike">
-
   <div class="container" id="cues-container" [@cuesheetContainer]="move">
     <div class="cue">
-      <rp-cuesheet-cue *ngIf="cueNumber > 0"
-                       [cue]="cuesheet?.cues[cueNumber - 1]"
+      <rp-cuesheet-cue *ngIf="cueNumber > 0" [cue]="cuesheet?.cues[cueNumber - 1]"
                        [cueNumber]="cueNumber - 1"></rp-cuesheet-cue>
     </div>
-
-
     <div class="cue">
-      <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]"
-                       [cueNumber]="cueNumber"></rp-cuesheet-cue>
+      <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]" [cueNumber]="cueNumber"></rp-cuesheet-cue>
     </div>
-
-
     <div class="cue">
-      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1"
-                       [cue]="cuesheet?.cues[cueNumber + 1]"
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1" [cue]="cuesheet?.cues[cueNumber + 1]"
                        [cueNumber]="cueNumber + 1"></rp-cuesheet-cue>
     </div>
-
-
     <div class="cue">
-      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 2"
-                       [cue]="cuesheet?.cues[cueNumber + 2]"
+      <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 2" [cue]="cuesheet?.cues[cueNumber + 2]"
                        [cueNumber]="cueNumber + 2"></rp-cuesheet-cue>
     </div>
-
   </div>
-
-
   <div class="container">
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-12">
         <div id="next-cue-mask"></div>
-
       </div>
     </div>
     <div class="row no-padding">
-      <div id="bottom-field" class="col-xs-12">
+      <div id="bottom-field" class="col-12">
         <div class="row">
-          <div class="col-xs-6">
-            <a [routerLink]="['/cuesheet', cuesheetId ,'view']" class="btn btn-primary btn-block">Overview</a>
+          <div class="col-6"> <a [routerLink]="['/cuesheet', cuesheetId ,'view']"
+                                 class="btn btn-primary btn-block">Overview</a>
           </div>
-          <div class="col-xs-6">
-            <a routerLink="/map" class="btn btn-primary btn-block">Map</a>
+          <div class="col-6"> <a routerLink="/map" class="btn btn-primary btn-block">Map</a>
           </div>
         </div>
         <hr>
         <div class="row" id="ride-info">
-          <div class="col-xs-12">
-            <h3 class="margin-top-none center">{{ cuesheet?.name }}</h3>
+          <div class="col-12">
+            <h3 class="mt-0 text-center">{{ cuesheet?.name }}</h3>
           </div>
         </div>
-
       </div>
     </div>
   </div>
-
-
 </div>
-
-
-

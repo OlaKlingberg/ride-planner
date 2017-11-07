@@ -1,8 +1,8 @@
 <ng-container *ngIf="display">
 
-  <div class="container hidden-xs">
+  <div class="container d-none">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-md-12">
         <h1>{{title}}</h1>
         <div class="user-info">
           <h5 *ngIf="user">You are logged in as {{ user?.fullName || async }}</h5>
@@ -18,3 +18,6 @@
   </div>
 
 </ng-container>
+
+
+

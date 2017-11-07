@@ -1,7 +1,7 @@
 <ng-template #riderDetails>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">{{rider.fname}} {{rider.lname}}</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();">
+    <h4 class="modal-title float-left">{{rider.fname}} {{rider.lname}}</h4>
+    <button type="button" class="close float-right" aria-label="Close" (click)="modalRef.hide();">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -31,15 +31,15 @@
   </div>
 </ng-template>
 
-<div class="container mat-app-background page-riders">
+<div class="container page-riders">
 
-  <div [ngClass]="{'display-none': !ride}">
+  <div [ngClass]="{'d-none': !ride}">
 
-    <h3 class="padding-left-md">{{ ride }}</h3>
+    <h3>{{ ride }}</h3>
 
     <div class="table-container mat-elevation-z8">
 
-      <div class="mat-header padding-left-md">
+      <div class="mat-header">
         <mat-form-field floatPlaceholder="never">
           <input matInput #filter placeholder="Filter by first or last name">
         </mat-form-field>
@@ -98,9 +98,9 @@
 
   </div>
 
-  <div *ngIf="!ride">
-    <h3 class="margin-left-md">You have to select a ride before you can see who's in it.</h3>
-    <button type="button" class="btn btn-success margin-left-md margin-bottom-sm" routerLink="/ride/select">Go to Ride Selector</button>
+  <div *ngIf="!ride" class="py-4 text-center">
+    <h4 class="text-white mb-4">You have to select a ride before you can see who's in it.</h4>
+    <button type="button" class="btn btn-success" routerLink="/ride/select">Go to Ride Selector</button>
   </div>
 
 </div>

@@ -9,7 +9,6 @@ import { RideService } from '../ride.service';
 import { UserService } from '../../user/user.service';
 import { User } from '../../user/user';
 
-import { environment } from '../../../environments/environment';
 import { SettingsService } from '../../settings/settings.service';
 
 @Component({

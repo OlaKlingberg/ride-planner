@@ -1,55 +1,58 @@
 <div class="container">
-  <div *ngIf="!demoMode || !user?.demo" class="row">
-    <div class="col-xs-12">
-      <form name="form" (ngSubmit)="f.form.valid && createRide()" #f="ngForm" novalidate>
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <div class="card mt-4" *ngIf="!demoMode || !user?.demo">
+        <div class="card-body">
 
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !name.valid }">
-          <label for="name">Name of the ride or team</label>
-          <input type="text"
-                 class="form-control"
-                 name="name"
-                 id="name"
-                 [(ngModel)]="model.name"
-                 #name="ngModel"
-                 required>
-          <div *ngIf="f.submitted && !name.valid" class="help-block">You must give the ride a name.</div>
+          <form name="form" (ngSubmit)="f.form.valid && createRide()" #f="ngForm" novalidate>
 
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !name.valid }">
+              <label for="name">Name of the ride or team</label>
+              <input type="text"
+                     class="form-control"
+                     name="name"
+                     id="name"
+                     [(ngModel)]="model.name"
+                     #name="ngModel"
+                     required>
+              <div *ngIf="f.submitted && !name.valid" class="help-block">You must give the ride a name.</div>
+
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !description.valid }">
+              <label for="description">Description</label>
+              <input type="text"
+                     class="form-control"
+                     name="description"
+                     id="description"
+                     [(ngModel)]="model.description"
+                     #description="ngModel"
+                     required>
+              <div *ngIf="f.submitted && !description.valid" class="help-block">You must give the ride a description.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button [disabled]="loading" class="btn btn-primary">Create ride</button>
+              <img *ngIf="loading"
+                   src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+            </div>
+          </form>
         </div>
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !description.valid }">
-          <label for="description">Description</label>
-          <input type="text"
-                 class="form-control"
-                 name="description"
-                 id="description"
-                 [(ngModel)]="model.description"
-                 #description="ngModel"
-                 required>
-          <div *ngIf="f.submitted && !description.valid" class="help-block">You must give the ride a description.</div>
+
+      </div>
+
+      <div class="card mt-4" *ngIf="demoMode && user?.demo">
+        <div class="card-body">
+
+          <h2>Demo Mode</h2>
+          <h5>This site is currently in demo mode, which means that you can't create rides.</h5>
+          <h5>Please log in to one of the existing rides instead.</h5>
+          <button type="button" class="btn btn-primary btn-block" routerLink='../select'>Login to a ride</button>
         </div>
 
-        <div class="form-group">
-          <button [disabled]="loading" class="btn btn-primary">Create ride</button>
-          <img *ngIf="loading"
-               src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
-        </div>
-      </form>
-
-    </div>
-
-  </div>
-
-
-  <div *ngIf="demoMode && user?.demo" class="row">
-    <div class="col-xs-12">
-      <h2>Demo Mode</h2>
-      <h5>This site is currently in demo mode, which means that you can't create rides.</h5>
-      <h5>Please log in to one of the existing rides instead.</h5>
-    </div>
-    <div class="col-xs-4 col-md-2">
-      <button type="button" class="btn btn-primary btn-block" routerLink='../select'>Login to a ride</button>
+      </div>
     </div>
   </div>
 </div>
-
 
 

@@ -1,42 +1,43 @@
 @import "../../_vars.scss";
 
 nav {
-  //background-color: rgba(darken($rpOrange, 0%), 1);
+  background-color: rgba(darken($rpOrange, 0%), 1);
   &.sm-up {
 
     .navbar-header {
-      position: relative;
-      top: 18px;
+      //position: relative;
+      //top: 18px;
     }
 
     li {
-      display: table;
-      z-index: 10;
+      //display: table;
+      //z-index: 10;
 
       a {
-        display: table-cell;
-        font-size: larger;
-        height: 80px;
-        vertical-align: middle;
+        //display: table-cell;
+        //font-size: larger;
+        //height: 80px;
+        //vertical-align: middle;
       }
     }
   }
 }
 
+//.active {
+//  background-color: darken($rpOrange, 10%) !important;
+//}
+//
+//.no-header {
+//  position: absolute;
+//  top: 0;
+//  width: 100%;
+//}
+//
 
-
-
-
-
-
-.active {
-  background-color: darken($rpOrange, 10%) !important;
+nav {
+  z-index: 10;
 }
 
-.no-header {
-  position: absolute;
-  top: 0;
-  width: 100%;
+#size-info {
+  color: white;
 }
-
-

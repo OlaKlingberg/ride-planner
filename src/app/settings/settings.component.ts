@@ -44,6 +44,7 @@ export class SettingsComponent implements OnInit {
       keys.forEach(key => {
         const value = eval(this.currentStorage).getItem(key);
         eval(this.currentStorage).removeItem(key);
+        console.log("storage:", this.settings.storage);
         if ( value !== null && value !== 'null' ) eval(this.settings.storage).setItem(key, value);
       });
     }

@@ -11,10 +11,10 @@
 
   &.device-size- {
     &xs {
-      top: 400px;
+      top: 350px;
     }
     &sm {
-      top: 500px;
+      top: 350px;
     }
     &md {
       top: 400px;
@@ -23,6 +23,9 @@
       top: 400px;
     }
     &xl {
+      top: 350px;
+    }
+    &xxl {
       top: 500px;
     }
   }

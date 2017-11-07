@@ -1,160 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
 //@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 //@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+//@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 //@import "~@angular/material/prebuilt-themes/purple-green.css";
+//@import '~@angular/material/theming';
+//@include mat-core();
 @import "./_vars.scss";
 
-body {
+//body {
   //background-color: silver;
-}
+//}
 
-.center {
-  text-align: center;
-}
+//.center-block {
+  //margin-left: auto;
+  //margin-right: auto;
+//}
 
-.center-block {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.display-none {
-  display: none !important;
-}
+//.display-none {
+//  display: none !important;
+//}
 
 .faded {
-  //opacity: .4 !important;
   opacity: .5 !important;
-}
-
-.float- {
-  &left {
-    float: left;
-  }
-
-  &right {
-    float: right;
-  }
-}
-
-.margin- {
-  &top- {
-    &0 {
-      margin-top: 0;
-    }
-    &sm {
-      margin-top: 12px;
-    }
-    &md {
-      margin-top: 24px;
-    }
-  }
-  &right- {
-    &0 {
-      margin-right: 0;
-    }
-    &sm {
-      margin-right: 12px;
-    }
-    &md {
-      margin-right: 24px;
-    }
-  }
-  &bottom- {
-    &0 {
-      margin-bottom: 0;
-    }
-    &sm {
-      margin-bottom: 12px;
-    }
-    &md {
-      margin-bottom: 24px;
-    }
-  }
-  &left- {
-    &0 {
-      margin-left: 0;
-    }
-    &sm {
-      margin-left: 12px;
-    }
-    &md {
-      margin-left: 24px;
-    }
-  }
-}
-
-.padding- {
-  &top- {
-    &0 {
-      margin-top: 0;
-    }
-    &sm {
-      margin-top: 12px;
-    }
-    &md {
-      margin-top: 24px;
-    }
-  }
-  &right- {
-    &0 {
-      margin-right: 0;
-    }
-    &sm {
-      margin-right: 12px;
-    }
-    &md {
-      margin-right: 24px;
-    }
-  }
-  &bottom- {
-    &0 {
-      margin-bottom: 0;
-    }
-    &sm {
-      margin-bottom: 12px;
-    }
-    &md {
-      margin-bottom: 24px;
-    }
-  }
-  &left- {
-    &0 {
-      margin-left: 0;
-    }
-    &sm {
-      margin-left: 12px;
-    }
-    &md {
-      margin-left: 24px;
-    }
-  }
 }
 
 .pointer {
   cursor: pointer;
 }
 
-.text-align-center {
-  text-align: center;
-}
+//.text-align-center {
+//  text-align: center;
+//}
 
-.w-100 {
-  width: 100%;
-}
+//.w-100 {
+  //width: 100%;
+//}
 
 /** Specific pages **/
-.page-cuesheet-edit {
-  border: 2px solid $rpLightGray;
-  background-color: darken(grayscale($rpGray), 8%);
+//.page-cuesheet-edit {
+  //border: 2px solid $rpLightGray;
+  //background-color: darken(grayscale($rpGray), 8%);
 
   //background-color: lighten($rpLightGray, 50%);
   //color: $rpGray;
-}
+//}
 
-.page-map .info-window {
-  color: red !important;
-}
+//.page-map .info-window {
+  //color: red !important;
+//}
 
 .page-members, .page-riders {
   .mat-form-field-placeholder {

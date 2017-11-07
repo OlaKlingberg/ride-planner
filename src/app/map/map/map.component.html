@@ -3,7 +3,7 @@
   <!-- Map -->
   <div class="container" [ngClass]="{'visibility-hidden': !latLng}">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-lg-12">
 
         <agm-map
             #agmMap
@@ -65,9 +65,9 @@
   <!-- End Map -->
 
   <!-- While waiting for map -->
-  <div class="container" [ngClass]="{'launching-satellites': !latLng, 'display-none': latLng}">
+  <div class="container text-center" [ngClass]="{'launching-satellites': !latLng, 'display-none': latLng}">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-lg-12">
 
         <div *ngIf="!takingTooLong">
           <h3>Adjusting satellites ...</h3>
@@ -84,7 +84,8 @@
   <!-- Not-logged-in warning -->
   <div id="not-logged-in-warning"
        *ngIf="!user?.ride"
-       [@notLoggedInWarning]="+!!latLng">
+       [@notLoggedInWarning]="+!!latLng"
+       class="text-center">
     <h4>You have not selected a ride,<br> so you won't see other riders.</h4>
     <button class="btn btn-primary" routerLink="/ride/select">Select Ride</button>
   </div>
@@ -94,6 +95,7 @@
   <div id="create-dummy-riders"
        *ngIf="user && user.ride"
        [@buttons]="buttonState"
+       class="text-center"
        [ngClass]="{'visibility-hidden': !latLng}">
     <button class="btn btn-primary"
             *ngIf="riders.length < 25"
@@ -110,6 +112,7 @@
   <!-- Buttons -->
   <div *ngIf="user"
        id="map-buttons-container"
+       class="text-center"
        [@buttons]="buttonState">
     <button class="btn btn-primary btn-md btn-40"
             type="button"

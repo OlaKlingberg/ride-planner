@@ -1,51 +1,49 @@
 <div class="container">
-  <form name="form" (ngSubmit)="f.form.valid && logIntoRide()" #f="ngForm" novalidate>
-    <div class="row">
-      <div class="col-sm-6">
+  <div class="row">
+    <div class="col-md-6">
+      <form name="form" (ngSubmit)="f.form.valid && logIntoRide()" #f="ngForm" novalidate>
+        <div *ngIf="!ride" class="card mt-4">
+          <div *ngIf="availableRides?.length >= 1" class="card-body">
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
+              <label for="ride">Select a ride or a team</label>
+              <select name="ride"
+                      id="ride"
+                      class="form-control"
+                      [(ngModel)]="model.ride"
+                      #ride="ngModel"
+                      required>
+                <option *ngFor="let ride of availableRides" [value]="ride?.name">{{ride?.name}}</option>
+              </select>
 
-        <div>
-
-          <div *ngIf="!ride">
-            <div *ngIf="availableRides?.length >= 1">
-
-              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
-                <label for="ride">Select a ride or a team</label>
-                <select name="ride"
-                        id="ride"
-                        class="form-control"
-                        [(ngModel)]="model.ride"
-                        #ride="ngModel"
-                        required>
-                  <option *ngFor="let ride of availableRides" [value]="ride?.name">{{ride?.name}}</option>
-                </select>
-
-                <div *ngIf="f.submitted && !ride.valid" class="help-block">You must select a ride.</div>
-
-              </div>
-
-              <button class="btn btn-primary">Sign in to ride</button>
-              <br><a class="link" routerLink="../select-action">Create or delete a ride</a>
-
+              <div *ngIf="f.submitted && !ride.valid" class="help-block">You must select a ride.</div>
             </div>
+            <button class="btn btn-primary mb-3">Sign in to ride</button>
+            <br><a class="link" routerLink="../select-action">Create or delete a ride</a>
 
-            <div *ngIf="availableRides?.length < 1">
-              <h3>Sorry, there are currently no rides!</h3>
-              <h4>Do you want to create one?</h4>
-              <a class="btn btn-primary" routerLink='/ride/create'>Create new ride</a>
-            </div>
           </div>
 
-          <div *ngIf="ride">
-            <h3>You are logged in to the ride: {{ ride }}</h3>
-            <p>You have to log out from this ride before you can log into another ride.</p>
+          <div *ngIf="availableRides?.length < 1" class="card-body">
+            <h3 class="card-title">Sorry, there are currently no rides!</h3>
+            <h4>Do you want to create one?</h4>
+            <a class="btn btn-primary" routerLink='/ride/create'>Create new ride</a>
+          </div>
+        </div>
 
-            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride <i>{{ ride }}</i>
-            </button>
+        <div *ngIf="ride" class="card mt-4">
+          <div class="card-body">
+            <h3 class="card-title">You are logged in to the ride: {{ ride }}</h3>
+
+            <p>You have to log out from this ride before you can log into another ride.</p>
+            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride <i>{{ ride
+              }}</i></button>
           </div>
 
         </div>
 
-      </div>
+      </form>
     </div>
-  </form>
+  </div>
 </div>
+
+
+

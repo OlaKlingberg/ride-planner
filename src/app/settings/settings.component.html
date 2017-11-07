@@ -1,93 +1,101 @@
 <!-- Todo: Validation doesn't work the way I want to. -->
 <form name="form" #f="ngForm" novalidate>
 
-  <div class="container mat-app-background page-settings form-inline">
-    <mat-card>
-      <mat-card-content>
+  <div class="container page-settings">
 
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-12">
             <h2>Settings</h2>
           </div>
         </div>
 
-        <div class="row settings-row">
-
-          <div class="col-sm-4"> <!-- Column 1 -->
-
-            <section class="section-styling" *ngIf="!production">
-              <label class='margin-right-sm'>Mode</label><br>
+        <div class="row">
+          <div class="col-lg-4"> <!-- Column 1 -->
+            <div *ngIf="!production" class="mb-2">
+              <label class="mb-0">Mode</label><br>
               <mat-radio-group [(ngModel)]='settings.demoMode' name="demoMode">
-                <mat-radio-button class='margin-right-sm' value='no'>Live</mat-radio-button>
-                <mat-radio-button class='margin-right-sm' value='yes'>Demo</mat-radio-button>
+                <mat-radio-button value='no'>Live</mat-radio-button>
+                <mat-radio-button value='yes'>Demo</mat-radio-button>
               </mat-radio-group>
-            </section>
+            </div>
 
-            <section class="section-styling">
-              <label class='margin-right-sm'>Storage</label><br>
+            <!--
+            <div class="mb-2">
+              <label class="mb-0">Storage</label><br>
               <mat-radio-group [(ngModel)]='settings.storage' name="storage">
-                <mat-radio-button class='margin-right-sm' value='sessionStorage'>Session</mat-radio-button>
-                <mat-radio-button class='margin-right-sm' value='localStorage'>Local</mat-radio-button>
+                <mat-radio-button value='sessionStorage'>Session</mat-radio-button>
+                <mat-radio-button value='localStorage'>Local</mat-radio-button>
               </mat-radio-group>
-            </section>
+            </div>
+-->
 
-            <section class="section-styling">
-              <label class='margin-right-sm'>Dummy Position<br>(For user's own marker.)</label><br>
+            <div class="mb-2">
+              <label class="mb-0">Storage</label><br>
+              <input type="radio" name="storage" value="sessionStorage" [(ngModel)]="settings.storage" id="session">
+              <label for="session">Session</label>
+              <input type="radio" name="storage" value="localStorage" [(ngModel)]="settings.storage" id="local">
+              <label for="local">Local</label>
+            </div>
+
+            <div class="mb-2">
+              <label class="mb-0" class="mb-0">Dummy Position</label>
+              <p class="mb-0">(For user's own marker)</p>
               <mat-radio-group [(ngModel)]="settings.dummyPos" name="dummyPos">
-                <mat-radio-button class='margin-right-sm' value='yes'>Yes</mat-radio-button>
-                <mat-radio-button class='margin-right-sm' value='no'>No</mat-radio-button>
+                <mat-radio-button value='yes'>Yes</mat-radio-button>
+                <mat-radio-button value='no'>No</mat-radio-button>
               </mat-radio-group>
-            </section>
+            </div>
 
-            <section class="section-styling">
-              <label class='margin-right-sm'>Dummy Movements<br>(For user's own marker.)</label><br>
+            <div class="mb-2">
+              <label class="mb-0">Dummy Movements</label>
+              <p class="mb-0">(For user's own marker)</p>
               <mat-radio-group [(ngModel)]='settings.dummyMov' name="dummyMov">
-                <mat-radio-button class='margin-right-sm' value='yes'>Yes</mat-radio-button>
-                <mat-radio-button class='margin-right-sm' value='no'>No</mat-radio-button>
+                <mat-radio-button value='yes'>Yes</mat-radio-button>
+                <mat-radio-button value='no'>No</mat-radio-button>
               </mat-radio-group>
-            </section>
+            </div>
           </div> <!-- End of Column 1 -->
 
-          <div class="col-sm-8"> <!-- Column 2 -->
-
-            <section class="section-styling">
+          <div class="col-lg-8"> <!-- Column 2 -->
+            <div>
               <mat-form-field>
-                <input class="input-sm" type="number" step="1" [(ngModel)]="settings.dummyPosAddMin"
+                <input class="form-control w-25 float-left" type="number" step="1" [(ngModel)]="settings.dummyPosAddMin"
                        name="dummyPosAddMin">
-                <label class="move-down">User's dummy position: add minimum<br>(in 1/100,000 of a degree)</label>
+                <label class="mb-0">User's dummy position: add minimum</label>
+                <p class="mb-0">(in 1/100,000 of a degree)</p>
               </mat-form-field>
-            </section>
+            </div>
 
-            <section class="section-styling">
+            <div>
               <mat-form-field>
-                <input class="input-sm" type="number" step="1" [(ngModel)]="settings.dummyPosAddMax"
+                <input class="form-control-sm" type="number" step="1" [(ngModel)]="settings.dummyPosAddMax"
                        name="dummyPosAddMax">
                 <label class="move-down">User's dummy position: add maximum<br>(in 1/100,000 of a degree)</label>
               </mat-form-field>
-            </section>
+            </div>
 
-            <section class="section-styling">
+            <div>
               <mat-form-field>
-                <input class="input-sm" type="number" step="1" [(ngModel)]="settings.dummyMovIncMin"
+                <input class="form-control-sm" type="number" step="1" [(ngModel)]="settings.dummyMovIncMin"
                        name="dummyMovIncMin">
                 <label class="move-down">User's dummy movement: minumum increment<br>(in 1/100,000 of a
                   degree)</label><br>
               </mat-form-field>
-            </section>
+            </div>
 
-            <section class="section-styling">
+            <div>
               <mat-form-field>
-                <input class="input-sm" type="number" step="1" [(ngModel)]="settings.dummyMovIncMax"
+                <input class="form-control-sm" type="number" step="1" [(ngModel)]="settings.dummyMovIncMax"
                        name="dummyMovIncMax">
                 <label class="move-down">User's dummy movement: maximum increment<br>(in 1/100,000 of a
                   degree)</label><br>
               </mat-form-field>
-            </section>
+            </div>
 
-            <section class="section-styling">
+            <div>
               <mat-form-field>
                 <input matInput
-                       class="input-sm"
+                       class="form-control-sm"
                        type="number"
                        step=".5"
                        min=".5"
@@ -97,45 +105,50 @@
                        #dummyUpdateFreq="ngModel">
                 <label class="move-down">User's dummy position update frequency<br>(in seconds, minimum .5s)</label>
               </mat-form-field>
-            </section>
+            </div>
 
-            <section class="section-styling">
+            <div>
               <mat-form-field>
-                <input class="input-sm" type="number" step="1" [(ngModel)]='settings.removeLongDisconnectedRiders'
+                <input class="form-control-sm" type="number" step="1" [(ngModel)]='settings.removeLongDisconnectedRiders'
                        name="removeLongDisconnectedRiders">
                 <label class="move-down">Remove riders who have been disconnected for ...<br>(in minutes)</label><br>
               </mat-form-field>
-            </section>
+            </div>
 
-            <section class="section-styling">
+            <div>
               <mat-form-field>
-                <input type="number" class="input-sm" step="1" [(ngModel)]=settings.fadeNav name="fadeNav">
+                <input type="number" class="form-control-sm" step="1" [(ngModel)]=settings.fadeNav name="fadeNav">
                 <label class="move-down">Fade nav bar on map after ...<br>(in seconds)</label><br>
               </mat-form-field>
-            </section>
+            </div>
 
-            <section class="section-styling">
+            <div>
               <mat-form-field>
-                <input type="number" class="input-sm" step=".5" [(ngModel)]=settings.refreshMapPage
+                <input type="number" class="form-control-sm" step=".5" [(ngModel)]=settings.refreshMapPage
                        name="refreshMapPage">
                 <label class="move-down">Refresh map every ...<br>(in minutes)</label><br>
               </mat-form-field>
-            </section>
+            </div>
 
-            <section class="section-styling">
+            <div>
               <mat-form-field>
-                <input type="number" class="input-sm" step="1" [(ngModel)]=settings.refreshOnNavigationAfter
+                <input type="number" class="form-control-sm" step="1" [(ngModel)]=settings.refreshOnNavigationAfter
                        name="refreshOnNavigationAfter">
                 <label class="move-down">Refresh on navigation after ...<br>(in minutes)</label><br>
               </mat-form-field>
-            </section>
+            </div>
 
           </div> <!-- End of Column 2 -->
 
         </div>
 
+
+
+
+
+
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-12">
             <div *ngIf="!f.form.pristine && !showRefreshButton" class="buttons-container">
               <button [disabled]="!f.form.valid" type="submit" class="btn btn-primary btn-md btn-40" (click)="save()">
                 Save Changes
@@ -151,8 +164,7 @@
         </div>
 
 
-      </mat-card-content>
-    </mat-card>
+
   </div>
 
 </form>

@@ -1,91 +1,64 @@
 <div class="container">
-
-
-  <!-- Currently not reachable. A logged-in user who tries to go to the login page is sent to the home page. -->
-  <div *ngIf="user" class="row"> <!-- Already logged in. -->
-    <div class="col-xs-12">
-      <div class="col-md-6">
+  <!-- Currently not reachable. A logged-in user who tries to go to the
+  login page is sent to the home page. -->
+  <div *ngIf="user" class="row">
+    <!-- Already logged in. -->
+    <div class="col-12">
+      <div class="col-lg-6">
         <h2>{{user.fname}}, you are already logged in!</h2>
-        <a routerLink="/auth/logout">Not {{user.fname}}?</a>
+        <a routerlink="/auth/logout">Not {{user.fname}}?</a>
       </div>
     </div>
-  </div> <!-- End of: Already logged in. -->
-
-  <div *ngIf="demoMode && !user" class="row jumbotron"> <!-- demoMode -->
-    <div class="col-xs-12">
-
+  </div>
+  <!-- End of: Already logged in. -->
+  <div *ngIf="demoMode &amp;&amp; !user" class="row jumbotron">
+    <!-- demoMode -->
+    <div class="col-12">
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
           <h2>Demo Mode</h2>
           <h4>In demo mode, you can only log in with one of these currently unused demo accounts.</h4>
         </div>
       </div>
-
       <div class="row ">
-
-
-        <div class="col-xs-6">
-          <ul class="list-unstyled margin-bottom-0">
+        <div class="col-6">
+          <ul class="list-unstyled mb-0">
             <ng-container *ngFor="let email of demoUserEmails; index as i">
-              <li *ngIf="i < 4">{{email}}</li>
+              <li *ngIf="i &lt; 4">{{email}}</li>
             </ng-container>
           </ul>
         </div>
-
-
       </div>
-
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
           <h4>The password for all of them is: <i>secret</i></h4>
         </div>
       </div>
-
     </div>
-  </div> <!-- End of demoMode -->
-
-
+  </div>
+  <!-- End of demoMode -->
   <div *ngIf="!user" class="row">
-    <div class="col-xs-12">
+    <div class="col-12">
       <h2>Login</h2>
-
-      <form name="form" (ngSubmit)="syncModel() && f.form.valid && login()" #f="ngForm" novalidate>
-
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+      <form name="form" (ngSubmit)="syncModel() &amp;&amp; f.form.valid &amp;&amp; login()"
+            #f="ngForm" novalidate="">
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted &amp;&amp; !email.valid }">
           <label for="email">Email</label>
-          <input type="text" class="form-control" name="email" id="email" [(ngModel)]="model.email" #email="ngModel"
-                 required/>
-          <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
+          <input type="text" class="form-control" name="email" id="email"
+                 [(ngModel)]="model.email" #email="ngModel" required>
+          <div *ngIf="f.submitted &amp;&amp; !email.valid" class="help-block">Email is required</div>
         </div>
-
-        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted &amp;&amp; !password.valid }">
           <label for="password">Password</label>
-          <input type="password" class="form-control" name="password" id="password" [(ngModel)]="model.password"
-                 #password="ngModel" required/>
-          <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+          <input type="password" class="form-control" name="password"
+                 id="password" [(ngModel)]="model.password" #password="ngModel" required>
+          <div *ngIf="f.submitted &amp;&amp; !password.valid" class="help-block">Password is required</div>
         </div>
-
         <div class="form-group">
           <button [disabled]="loading" class="btn btn-primary">Log In</button>
-          <img *ngIf="loading"
-               src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
-          <a routerLink="/auth/login" class="btn btn-link">Cancel</a>
+          <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="> <a routerlink="/auth/login" class="btn btn-link">Cancel</a>
         </div>
-
       </form>
     </div>
   </div>
-
-
 </div>
-
-
-
-
-
-
-
-
-
-
-

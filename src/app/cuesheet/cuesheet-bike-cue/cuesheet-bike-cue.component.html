@@ -1,21 +1,21 @@
 <div class="row">
-  <div class="col-xs-6">
+  <div class="col-6">
     <span>Leg</span>
   </div>
-  <div class="col-xs-6">
-    <span class="pull-right">Total</span>
+  <div class="col-6">
+    <span class="float-right">Total</span>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-6">
+  <div class="col-6">
     <span class="bold x-large">{{ cue?.distance / 100 | number:'1.0-2' }} M</span>
   </div>
-  <div class="col-xs-6">
-    <span class="pull-right bold x-large">{{ cue?.total / 100 | number:'1.0-2'}} M</span>
+  <div class="col-6">
+    <span class="float-right bold x-large">{{ cue?.total / 100 | number:'1.0-2'}} M</span>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-4 text-align-center">
+  <div class="col-4">
     <img class="icon"
          [ngClass]="{'display-block': cue?.icon === 'left'}"
          src='assets/img/arrows/left.png'>
@@ -29,8 +29,10 @@
          [ngClass]="{'display-block': cue?.icon === 'stop'}"
          src='assets/img/arrows/stop.png'>
   </div>
-  <div class="col-xs-8">
+  <div class="col-8">
     <p class="bold x-large">{{cue?.turn}}</p>
     <p>{{cue?.description}}</p>
   </div>
 </div>
+
+

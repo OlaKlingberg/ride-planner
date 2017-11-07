@@ -11,7 +11,7 @@ export class SmallWindowGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if ( window.innerWidth < 800 ) {
+    if ( window.innerWidth < 800 ) {  // Todo: Should I set this to a bootstrap size?
       return true;
     } else {
       let urlSegments: string[] = state.url.split('/');

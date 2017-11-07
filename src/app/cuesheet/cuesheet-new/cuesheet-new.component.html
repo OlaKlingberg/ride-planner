@@ -1,8 +1,8 @@
 <!-- Modal for demo mode -->
 <ng-template #demoModeModal>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Demo Mode</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <h4 class="modal-title float-left">Demo Mode</h4>
+    <button type="button" class="close float-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true" class="close-modal">&times;</span>
     </button>
   </div>
@@ -11,7 +11,7 @@
   </div>
 </ng-template>
 
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-6 mx-md-auto">
   <h2>New Cue Sheet</h2>
   <form name="form" (ngSubmit)="f.form.valid && createCuesheet()" #f="ngForm" novalidate>
 
@@ -47,3 +47,6 @@
     </div>
   </form>
 </div>
+
+
+

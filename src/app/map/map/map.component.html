@@ -65,18 +65,11 @@
   <!-- End Map -->
 
   <!-- While waiting for map -->
-  <div class="container text-center" [ngClass]="{'launching-satellites': !latLng, 'display-none': latLng}">
-    <div class="row">
-      <div class="col-lg-12">
-
-        <div *ngIf="!takingTooLong">
-          <h3>Adjusting satellites ...</h3>
-        </div>
-        <div *ngIf="takingTooLong">
-          <h3>There was a problem locating your position.<br/>Please try again in a minute or two.</h3>
-        </div>
-
-      </div>
+  <div class="container" [ngClass]="{'launching-satellites': !latLng, 'display-none': latLng}">
+    <div class="center-in-window">
+      <h3 *ngIf="!takingTooLong">Adjusting&nbsp;satellites&nbsp;...</h3>
+      <h3 *ngIf="takingTooLong">There was a problem locating your position.<br/>Please try again in
+        a minute or two.</h3>
     </div>
   </div>
   <!-- End: While waiting for map. -->
@@ -85,9 +78,11 @@
   <div id="not-logged-in-warning"
        *ngIf="!user?.ride"
        [@notLoggedInWarning]="+!!latLng"
-       class="text-center">
-    <h4>You have not selected a ride,<br> so you won't see other riders.</h4>
-    <button class="btn btn-primary" routerLink="/ride/select">Select Ride</button>
+       class="card">
+    <div class="card-body text-center">
+      <h4 class="card-title">You have not selected a ride,<br> so you won't see other riders.</h4>
+      <button class="btn btn-primary" routerLink="/ride/select">Select Ride</button>
+    </div>
   </div>
   <!-- End: Not-logged-in warning -->
 
@@ -96,7 +91,7 @@
        *ngIf="user && user.ride"
        [@buttons]="buttonState"
        class="text-center"
-       [ngClass]="{'visibility-hidden': !latLng}">
+       [ngClass]="{'invisible': !latLng}">
     <button class="btn btn-primary"
             *ngIf="riders.length < 25"
             [ngClass]="{'btn-40': dummyRiders}"
@@ -104,14 +99,13 @@
     </button>
     <button class="btn btn-info btn-40" *ngIf="dummyRiders" (click)="removeDummyRiders()">Remove All<br>Dummy Riders
     </button>
-    <h4 *ngIf="dummyRidersNotice" class="dummy-riders-notice">The dummy riders will disappear after five minutes.</h4>
+    <h4 *ngIf="dummyRidersNotice" id="dummy-riders-notice" class="py-2 px-1 mt-2">The dummy riders will disappear after five minutes.</h4>
   </div>
   <!-- End: Create dummy riders -->
 
-
-  <!-- Buttons -->
+  <!-- Tracking options -->
   <div *ngIf="user"
-       id="map-buttons-container"
+       id="tracking-options"
        class="text-center"
        [@buttons]="buttonState">
     <button class="btn btn-primary btn-md btn-40"
@@ -124,6 +118,6 @@
             (click)="showNav(); hideNav(); calculateBounds('focusOnUser')">Track Me
     </button>
   </div>
-  <!-- End Buttons -->
+  <!-- End: Tracking options -->
 
 </div>

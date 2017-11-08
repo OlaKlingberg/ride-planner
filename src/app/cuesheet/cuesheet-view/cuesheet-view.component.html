@@ -1,31 +1,16 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col">
       <h1>{{ cuesheet?.name }}</h1>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
       <h4>{{ cuesheet?.description }}</h4>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
       <p>Created by {{ cuesheet?._creator.fname }} {{ cuesheet?._creator.lname }}</p>
-    </div>
-  </div>
-  <div class="row mb-2">
-    <div class="col-md-12">
-      <hr>
-      <button [routerLink]="[ '/cuesheet', cuesheetId, 'bike', '0' ]"
-         class="btn btn-primary btn-block"
-         type="button">Start
+      <button id="start-button"
+              [routerLink]="[ '/cuesheet', cuesheetId, 'bike', '0' ]"
+              class="btn btn-primary btn-lg mb-2"
+              type="button">Start
       </button>
-    </div>
-  </div>
-  <div class="row mb-2">
-    <div class="col-md-12">
       <p>Or tap on a cue to start at that cue.</p>
+
     </div>
   </div>
   <div class="row">
@@ -57,12 +42,12 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6 mb-2">
-      <a routerLink='/cuesheet' class='btn btn-primary btn-block'>Return to list of cue sheets</a>
+    <div class="col-6 col-md-4 col-lg-3">
+      <a routerLink='/cuesheet' class='btn btn-primary btn-block'>Return to list<br>of cue sheets</a>
     </div>
-    <br class="d-block d-sm-none-block">
-    <div class="col-md-6">
-      <a [routerLink]="['/cuesheet', cuesheetId, 'edit']" class='btn btn-primary btn-block'>Edit this cue sheet</a>
+    <!--<br class="d-block d-sm-none-block">-->
+    <div class="col-6 col-md-4 col-lg-3">
+      <a [routerLink]="['/cuesheet', cuesheetId, 'edit']" class='btn btn-primary btn-block'>Edit this<br>cue sheet</a>
     </div>
   </div>
 

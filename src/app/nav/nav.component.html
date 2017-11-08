@@ -1,45 +1,42 @@
-<ng-container *ngIf="display">
-  <nav class="navbar navbar-dark bg-dark navbar-expand-md" [@navBar]="navBarState">
-    <div class="container">
-      <button type="button" class="navbar-toggler collapsed" data-toggle="collapse"
-              data-target="#navbar" aria-expanded="false" aria-controls="navbar" id="toggle-button"> <span class="sr-only">Toggle navigation</span>
-        &#x2630;</button> <a class="navbar-brand"
-                             routerLink="/">RidePlanner</a>
-      <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav" (click)="closeAccordion()">
-          <li *ngIf="user" class="nav-item"><a routerLink="/map" [routerLinkActive]="['active']" class="nav-link">Map</a>
-          </li>
-          <li *ngIf="user" class="nav-item"><a routerLink="/ride/select" [routerLinkActive]="['active']"
-                                               class="nav-link">Select Ride</a>
-          </li>
-          <!-- <li *ngIf="user"><a routerLink='/protected' [routerLinkActive]="['active']">Protected</a></li>
+<nav *ngIf="display" class="navbar navbar-expand-lg navbar-light bg-light" (click)="closeAccordion()">
+  <a class="navbar-brand" routerLink="/">RidePlanner {{deviceSize}}</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
--->
-          <!-- <li *ngIf="user?.leader"><a routerLink='/users' [routerLinkActive]="['active']">Users</a></li>
-
--->
-          <li *ngIf="user?.leader" class="nav-item"><a routerLink="/members" [routerLinkActive]="['active']" class="nav-link">Members</a>
-          </li>
-          <li *ngIf="user?.leader" class="nav-item"><a routerLink="/riders" [routerLinkActive]="['active']" class="nav-link">Riders</a>
-          </li>
-          <!-- <li *ngIf="user?.admin"><a routerLink='/debugger' [routerLinkActive]="['active']">Debug</a></li>
-
--->
-          <li *ngIf="!user" class="nav-item"><a routerLink="/auth/register" [routerLinkActive]="['active']"
-                                                class="nav-link">Register</a>
-          </li>
-          <li *ngIf="user" class="nav-item"><a routerLink="/cuesheet" [routerLinkActive]="['active']" class="nav-link">Cuesheets</a>
-          </li>
-          <li *ngIf="!user" class="nav-item"><a routerLink="/auth/login" [routerLinkActive]="['active']"
-                                                class="nav-link">Login</a>
-          </li>
-          <li *ngIf="user" class="nav-item"><a routerLink="/auth/logout" [routerLinkActive]="['active']"
-                                               class="nav-link">Logout</a>
-          </li>
-        </ul>
-      </div> <!--/.nav-collapse -->
-      <h5 id="size-info" class="float-right">{{deviceSize}}</h5>
-
-    </div>
-  </nav>
-</ng-container>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li *ngIf="user" class="nav-item">
+        <a routerLink="/map" [routerLinkActive]="['active']"
+           class="nav-link">Map</a>
+      </li>
+      <li *ngIf="user" class="nav-item">
+        <a routerLink="/ride/select" [routerLinkActive]="['active']"
+           class="nav-link">Select Ride</a>
+      </li>
+      <li *ngIf="user?.leader" class="nav-item">
+        <a routerLink="/members" [routerLinkActive]="['active']"
+           class="nav-link">Members</a>
+      </li>
+      <li *ngIf="user?.leader" class="nav-item">
+        <a routerLink="/riders" [routerLinkActive]="['active']"
+           class="nav-link">Riders</a>
+      </li>
+      <li *ngIf="!user" class="nav-item">
+        <a routerLink="/auth/register" [routerLinkActive]="['active']"
+           class="nav-link">Register</a>
+      </li>
+      <li *ngIf="user" class="nav-item">
+        <a routerLink="/cuesheet" [routerLinkActive]="['active']" class="nav-link">Cuesheets</a>
+      </li>
+      <li *ngIf="!user" class="nav-item">
+        <a routerLink="/auth/login" [routerLinkActive]="['active']"
+           class="nav-link">Login</a>
+      </li>
+      <li *ngIf="user" class="nav-item">
+        <a routerLink="/auth/logout" [routerLinkActive]="['active']"
+           class="nav-link">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>

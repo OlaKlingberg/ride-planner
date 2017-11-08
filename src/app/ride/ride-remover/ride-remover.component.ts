@@ -23,7 +23,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   model: any = [];
   user: User = null;
 
-  private availableRides: Array<string> = null;
+  private availableRides: Ride[] = null;
   private socket: Socket;
   private subscriptions: Array<Subscription> = [];
 
@@ -66,7 +66,7 @@ export class RideRemoverComponent implements OnInit, OnDestroy {
   }
 
   subscribeToAvailableRides() {
-    const sub = this.rideSubjectService.availableRides$.subscribe(availableRides => {
+    const sub = this.rideSubjectService.availableRides$.subscribe((availableRides: Ride[]) => {
       this.availableRides = availableRides;
     });
     this.subscriptions.push(sub);

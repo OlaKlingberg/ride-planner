@@ -13,58 +13,38 @@ agm-map {
 
 #create-dummy-riders {
   position: fixed;
-  left: 0;
-  top: 46px;
+  top: 70px;
+  left: 50%;
+  transform: translate(-50%);
   z-index: 9;
-
   width: 90vw;
-  margin-left: 5vw;
-  padding-left: 10px;
-  padding-right: 10px;
-  //text-align: center;
 }
 
-#map-buttons-container {
+#tracking-options {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  z-index: 10;
-  //text-align: center;
-  button {
-    margin-bottom: 20px;
-  }
+  bottom: 20px;
+  left: 50%;
+  transform: translate(-50%);
+  width: 90vw;
+  z-index: 9;
 }
 
 #not-logged-in-warning {
   position: fixed;
-  left: 0;
-  top: 50px;
+  top: 70px;
+  left: 50%;
+  transform: translate(-50%);
   z-index: 9;
-
   width: 90vw;
-  margin-left: 5vw;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  //text-align: center;
-  background-color: $rpGray;
-
-  h4 {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    margin-bottom: 6px;
-  }
+  max-width: 500px;
 }
 
 .btn-40 {
   width: 40%;
 }
 
-.dummy-riders-notice {
-  background-color: $rpSuccess;
-  padding: 12px 6px;
-  margin-top: 6px;
+#dummy-riders-notice {
+  background-color: white;
 }
 
 .info-window {
@@ -72,29 +52,6 @@ agm-map {
 }
 
 .launching-satellites {
-  //text-align: center;
   color: chartreuse;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  div {
-    position: absolute;
-    top: 45%;
-    width: 100%;
-    h3 {
-      position: relative;
-      margin: 0 auto;
-    }
-  }
-}
-
-.visibility-hidden {
-  visibility: hidden;
-}
-
-.transparent {
-  opacity: .3;
 }
 

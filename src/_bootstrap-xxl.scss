@@ -1,8 +1,8 @@
 :root {
-  --breakpoint-xxl: 1500px;
+  --breakpoint-xxl: 1601px;
 }
 
-@media (max-width: 1499px) {
+@media (max-width: 1600px) {
   .navbar-expand-xxl > .container,
   .navbar-expand-xxl > .container-fluid {
     padding-right: 0;
@@ -10,7 +10,7 @@
   }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1601px) {
   .navbar-expand-xxl {
     -ms-flex-flow: row nowrap;
     flex-flow: row nowrap;
@@ -52,7 +52,7 @@
   }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1601px) {
   .float-xxl-left {
     float: left !important;
   }
@@ -64,7 +64,7 @@
   }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1601px) {
   .m-xxl-0 {
     margin: 0 !important;
   }
@@ -327,7 +327,7 @@
 }
 
 
-@media (min-width: 1500px) {
+@media (min-width: 1601px) {
   .container {
     max-width: 1140px;
   }
@@ -370,7 +370,7 @@
   padding-left: 15px;
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1601px) {
   .col-xxl {
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -534,7 +534,7 @@
   }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1601px) {
   .flex-xxl-row {
     -ms-flex-direction: row !important;
     flex-direction: row !important;
@@ -657,7 +657,7 @@
 
 
 
-@media (min-width: 1500px) {
+@media (min-width: 1601px) {
   .d-xxl-none {
     display: none !important;
   }

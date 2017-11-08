@@ -49,6 +49,8 @@ export class NavComponent implements OnInit, OnDestroy {
       }
     });
 
+    console.log(window.innerWidth);
+
   }
 
   // I can't use an arrow function here, because I need to bind "this."
@@ -64,7 +66,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   closeAccordion() {
-    if ( $(window).width() < 768 ) $('.navbar-toggle').click();
+    if ($('.navbar-toggler').attr('aria-expanded') === 'true') $('.navbar-toggler').click();
   }
 
   subscribeToNavBarState() {

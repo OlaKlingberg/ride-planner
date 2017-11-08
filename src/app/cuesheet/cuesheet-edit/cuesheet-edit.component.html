@@ -10,12 +10,17 @@
     Are you sure you want to delete this entire cue sheet?<br>This action cannot be undone.
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary modal-btn-dismiss" (click)="modalRef.hide()">No!!! Don't delete
-      anything!
-    </button>
-    <button type="button" class="btn btn-primary modal-btn-delete" (click)="modalRef.hide(); deleteCuesheet()">
-      Yes, delete this cue sheet
-    </button>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-secondary btn-block mb-2" (click)="modalRef.hide()">No!!!<br>Don't delete anything!</button>
+
+        </div>
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-primary btn-block" (click)="modalRef.hide(); deleteCuesheet()">Yes!<br>Delete this cue sheet</button>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>
 <!-- End: Modal for confirmation of cuesheet deletion -->
@@ -29,11 +34,16 @@
     </button>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary modal-btn-dismiss" (click)="modalRef.hide()">No, don't delete!
-    </button>
-    <button type="button" class="btn btn-primary modal-btn-delete" (click)="modalRef.hide(); deleteCue()">
-      Yes, delete this cue.
-    </button>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-secondary btn-block mb-2" (click)="modalRef.hide()">No!!!<br>Don't delete!</button>
+        </div>
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-primary btn-block" (click)="modalRef.hide(); deleteCue()">Yes!<br>Delete this cue.</button>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>
 <!-- End: Modal for confirmation of cue deletion -->
@@ -43,7 +53,7 @@
   <div class="modal-header">
     <h4 class="modal-title float-left">Demo Mode</h4>
     <button type="button" class="close float-right" aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true" class="close-modal">&times;</span>
+      <span aria-hidden="true" class="close-modal"><span class="fa fa-times"></span></span>
     </button>
   </div>
   <div class="modal-body">
@@ -57,87 +67,99 @@
 
   <!-- Cuesheet header, with info about the cuesheet -->
   <form name="cuesheet-form" #cuesheetForm="ngForm" novalidate>
+    <!--<div class="row">-->
+    <!--<div class="col">-->
 
-    <div class="row" *ngIf="!cuesheetNameInput" id="cuesheet-name-block">
-      <div class="col-md-10">
-          <span *ngIf="!cuesheetDescriptionInput"
-                (click)="editCuesheetName(cueForm.pristine && cueToInsertBefore === null && !cuesheetDescriptionInput)"
-                class="w-100">{{ cuesheetModel.cuesheetName }}
-          </span>
-        <span *ngIf="cuesheetDescriptionInput"
-              class="w-100 faded">{{ cuesheetModel.cuesheetName }}
-          </span>
+    <!-- Cuesheet name -->
+    <div *ngIf="!cuesheetNameInput" id="cuesheet-name-block" class="form-row mt-2 mt-sm-0">
+      <div class="order-2 order-md-1 col-md-8">
+        <h2 *ngIf="!cuesheetDescriptionInput"
+            (click)="editCuesheetName(cueForm.pristine && cueToInsertBefore === null && !cuesheetDescriptionInput)">
+          {{ cuesheetModel.cuesheetName }}
+        </h2>
+        <h2 *ngIf="cuesheetDescriptionInput"
+            class="faded">{{ cuesheetModel.cuesheetName }}
+        </h2>
       </div>
-      <div class="col-md-2">
+      <div class="order-1 order-md-2 col-sm-6 col-md-4">
         <button type="button"
                 id="delete-cuesheet"
                 [disabled]="!cueForm.pristine || cueToInsertBefore !== null || cuesheetDescriptionInput"
-                class="btn btn-primary"
+                class="btn btn-primary btn-block mb-2 mb-sm-0"
                 (click)="openCuesheetDeletionModal(cuesheetDeletionModal)">Delete this cuesheet
         </button>
       </div>
-
     </div>
-    <div class="row" *ngIf="cuesheetNameInput" id="cuesheet-name-input-block">
+    <!-- End: Cuesheet name -->
 
-      <div class="col-md-8">
+    <!-- Cuesheet Name Input -->
+    <div *ngIf="cuesheetNameInput" id="cuesheet-name-input-block" class="form-row">
+      <div class="col-sm-8">
         <input type="string"
-               class="form-control input-lg"
+               class="form-control input-lg mb-2"
                name="cuesheetName"
                id="cuesheetName"
                [(ngModel)]="cuesheetModel.cuesheetName"
                #cuesheetName="ngModel"
                required/>
       </div>
-      <div class="col-md-2">
+      <div class="col-6 col-sm-2">
         <button (click)="cancelCuesheetUpdate()"
-                class="btn btn-primary w-100">Cancel
+                class="btn btn-primary btn-block">Cancel
         </button>
       </div>
-      <div class="col-md-2">
+      <div class="col-6 col-sm-2">
         <button (click)="updateCuesheet()"
                 [disabled]="cuesheetName.pristine"
-                class="btn btn-primary w-100">Save Name
+                class="btn btn-primary btn-block mb-2">Save
         </button>
       </div>
     </div>
 
-    <div class="row">
-      <h4 *ngIf="!cuesheetDescriptionInput" id="cuesheet-description-block">
-        <div class="col-md-10">
-          <span *ngIf="!cuesheetNameInput"
-                (click)="editCuesheetDescription(cueForm.pristine && cueToInsertBefore === null && !cuesheetNameInput)"
-                class="w-100">{{ cuesheetModel.cuesheetDescription }}
-          </span>
-          <span *ngIf="cuesheetNameInput"
-                class="w-100 faded">{{ cuesheetModel.cuesheetDescription }}
-          </span>
-        </div>
-        <div class="col-md-2">
 
+    <!-- End: Cuesheet Name Input -->
+
+    <!-- Cuesheet Description -->
+    <div>
+      <div *ngIf="!cuesheetDescriptionInput" id="cuesheet-description-block" class="form-row">
+        <div class="col">
+          <h4 *ngIf="!cuesheetNameInput"
+              (click)="editCuesheetDescription(cueForm.pristine && cueToInsertBefore === null && !cuesheetNameInput)">
+            {{ cuesheetModel.cuesheetDescription }}
+          </h4>
+          <h4 *ngIf="cuesheetNameInput"
+              class="faded">{{ cuesheetModel.cuesheetDescription }}
+          </h4>
         </div>
-      </h4>
-      <h4 *ngIf="cuesheetDescriptionInput" id="cuesheet-description-input-block">
+      </div>
+
+      <div *ngIf="cuesheetDescriptionInput" id="cuesheet-description-input-block" class="form-row">
         <div class="col-md-8">
           <input type="string"
-                 class="form-control input"
+                 class="form-control input mb-2"
                  name="cuesheetDescription"
                  [(ngModel)]="cuesheetModel.cuesheetDescription"
                  #cuesheetDescription="ngModel"
                  required/>
         </div>
-        <div class="col-md-2">
-          <button (click)="cancelCuesheetUpdate()" class="btn btn-primary w-100">Cancel</button>
-        </div>
-        <div class="col-md-2">
-          <button (click)="updateCuesheet()"
-                  [disabled]="cuesheetDescription.pristine"
-                  class="btn btn-primary w-100">Save Description
+        <div class="col-6 col-sm-3 col-md-2">
+          <button (click)="cancelCuesheetUpdate()"
+                  class="btn btn-primary btn-block">Cancel
           </button>
         </div>
-      </h4>
-    </div>
+        <div class="col-6 col-sm-3 col-md-2">
+          <button (click)="updateCuesheet()"
+                  [disabled]="cuesheetDescription.pristine"
+                  class="btn btn-primary btn-block mb-2">Save
+          </button>
+        </div>
 
+
+      </div>
+    </div>
+    <!-- End: Cuesheet description -->
+
+    <!-- Cuesheet creator -->
     <div class="row">
       <h5>
         <div class="col-md-12">
@@ -147,14 +169,17 @@
         </div>
       </h5>
     </div>
+    <!-- End: Cuesheet creator -->
 
+
+    <!--</div>-->
+    <!--</div>-->
   </form>
   <!-- End of cuesheet header -->
 
   <!-- Cue sheet, main part -->
   <div class="row">
-    <div class="col-md-12">
-
+    <div class="col">
       <span *ngIf="cuesheet?.cues.length > 0">
         <hr>
         <p [ngClass]="{'faded': cuesheetNameInput || cuesheetDescriptionInput}">Click in any field below to edit it.</p>
@@ -353,15 +378,11 @@
           </tbody>
         </table>
 
-        <div class="row">
-          <div class="col-md-6">
-            <button type="button"
-                    [disabled]="!cueForm.pristine || cueToEdit !== null || cueToInsertBefore !== null"
-                    [routerLink]="['/cuesheet', cuesheetId, 'view']"
-                    class='btn btn-primary btn-block'>I'm done with this cue sheet for now
-            </button>
-          </div>
-        </div>
+        <button type="button"
+                [disabled]="!cueForm.pristine || cueToEdit !== null || cueToInsertBefore !== null"
+                [routerLink]="['/cuesheet', cuesheetId, 'view']"
+                class='btn btn-primary px-5'>I'm done with<br>this cuesheet for now
+        </button>
 
       </form>
     </div>

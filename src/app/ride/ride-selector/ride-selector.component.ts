@@ -10,17 +10,18 @@ import { UserService } from '../../user/user.service';
 import { RideService } from '../ride.service';
 import { PositionService } from '../../core/position.service';
 import { SettingsService } from '../../settings/settings.service';
+import { Ride } from '../ride';
 
 @Component({
   templateUrl: './ride-selector.component.html',
   styleUrls: [ './ride-selector.component.scss' ]
 })
 export class RideSelectorComponent implements OnInit, OnDestroy {
+  availableRides: Ride[] = [];
   model: any = [];
   ride: string = '';
   user: User = null;
 
-  private availableRides: Array<string> = [];
   private subscriptions: Array<Subscription> = [];
 
   constructor(private positionService: PositionService,
@@ -55,8 +56,11 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   }
 
   subscribeToAvailableRides() {
-    const sub: Subscription = this.rideSubjectService.availableRides$.subscribe((availableRides: Array<string>) => {
-      this.availableRides = availableRides;
+    const sub: Subscription = this.rideSubjectService.availableRides$.subscribe((availableRides: Ride[]) => {
+      if (availableRides) {
+        this.availableRides = availableRides.reverse();
+        this.model.ride = availableRides[0].name;
+      }
     });
     this.subscriptions.push(sub);
   }

@@ -1,7 +1,7 @@
 @import "../../_vars.scss";
 
 nav {
-  background-color: rgba(darken($rpOrange, 0%), 1);
+  //background-color: rgba(darken($rpOrange, 0%), 1);
   &.sm-up {
 
     .navbar-header {
@@ -38,6 +38,6 @@ nav {
   z-index: 10;
 }
 
-#size-info {
+.my-info {
   color: white;
 }

@@ -25,14 +25,21 @@
         </table>
       </ng-container>
 
-      <h3 class="no-cuesheets-msg" *ngIf="!cuesheets?.length">There are no cue sheets.</h3>
-
-      <a routerLink="/cuesheet/new" class="btn btn-primary">Make New Cue Sheet</a>
-
     </div>
-
-
   </div>
+
+  <div class="row">
+    <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+      <div class="card mt-4" *ngIf="!cuesheets?.length">
+        <div class="card-body">
+          <h3 class="card-title">There are no cue sheets.</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a routerLink="/cuesheet/new" class="btn btn-primary">Make New Cue Sheet</a>
+
 </div>
 
 

@@ -95,7 +95,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.dummyRidersNotice = true;
       setTimeout(() => {
         this.dummyRidersNotice = false;
-      }, 2900);
+      }, 3500);
     });
   }
 

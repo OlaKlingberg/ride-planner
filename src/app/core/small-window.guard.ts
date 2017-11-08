@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
+import { getBootstrapDeviceSize } from '../_lib/util';
+
 @Injectable()
 export class SmallWindowGuard implements CanActivate {
   constructor(private router: Router) {
@@ -11,7 +13,9 @@ export class SmallWindowGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if ( window.innerWidth < 800 ) {  // Todo: Should I set this to a bootstrap size?
+    const size = getBootstrapDeviceSize();
+
+    if ( size === 'xs' || size === 'sm' ) {
       return true;
     } else {
       let urlSegments: string[] = state.url.split('/');

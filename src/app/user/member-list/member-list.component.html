@@ -59,13 +59,13 @@
 
     <!-- Above table -->
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-7 col-lg-8 col-xl-9">
         <h3 id="members-heading">Members</h3>
         <mat-form-field floatPlaceholder="never">
           <input matInput #filter placeholder="Filter by first or last name">
         </mat-form-field>
       </div>
-      <div class="col-10 mx-auto col-md-4 mx-sm-auto">
+      <div class="col-9 col-sm-8 col-md-5 col-lg-4 col-xl-3">
         <span *ngIf="numberOfUsers > 10">
           <button class="btn btn-primary btn-block"
                   (click)="addDummyMembers()"

@@ -57,7 +57,7 @@ export class RideService {
 
   onAvailableRides() {
     console.log("RideService.onAvailableRides");
-    this.socket.on('availableRides', (availableRides: Array<string> )=> {
+    this.socket.on('availableRides', (availableRides: Ride[] )=> {
       console.log("availableRides:", availableRides);
       this.rideSubjectService.availableRides$.next(availableRides);
     })

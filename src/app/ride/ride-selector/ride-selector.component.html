@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
       <form name="form" (ngSubmit)="f.form.valid && logIntoRide()" #f="ngForm" novalidate>
         <div *ngIf="!ride" class="card mt-4">
           <div *ngIf="availableRides?.length >= 1" class="card-body">
@@ -34,8 +34,7 @@
             <h3 class="card-title">You are logged in to the ride: {{ ride }}</h3>
 
             <p>You have to log out from this ride before you can log into another ride.</p>
-            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride <i>{{ ride
-              }}</i></button>
+            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride <i>{{ ride }}</i></button>
           </div>
 
         </div>

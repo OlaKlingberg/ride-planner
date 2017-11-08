@@ -20,6 +20,13 @@
 //  display: none !important;
 //}
 
+.center-in-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+}
+
 .faded {
   opacity: .5 !important;
 }

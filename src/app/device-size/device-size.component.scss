@@ -1,0 +1,36 @@
+#window-size {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  z-index: 500;
+}
+
+.xs {
+  background-color: white;
+  border: 1px solid gray;
+}
+
+.sm {
+  background-color: yellow;
+}
+
+.md {
+  background-color: lightgreen;
+}
+
+.lg {
+  background-color: red;
+  color: white;
+}
+
+.xl {
+  background-color: blue;
+  color: white;
+}
+
+.xxl {
+  background-color: black;
+  color: white;
+}
+
+

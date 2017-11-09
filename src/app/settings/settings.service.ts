@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 export class SettingsService {
 
   api: string;
+  bootstrapScreenSize: boolean;
   demoMode: boolean;
   dummyPos: boolean;
   dummyPosAddLat: number;
@@ -44,6 +45,7 @@ export class SettingsService {
       this.demoMode = settings.demoMode === 'yes';
     }
 
+    this.bootstrapScreenSize = settings.bootstrapScreenSize === 'yes';
     this.dummyPos = settings.dummyPos === 'yes';
     this.dummyPosAddLat = settings.dummyPosAdd;
     this.dummyPosAddLng = settings.dummyPosAdd;

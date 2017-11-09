@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -10,7 +10,6 @@ import * as $ from 'jquery';
 import { RefreshService } from '../core/refresh.service';
 import Timer = NodeJS.Timer;
 
-import { getBootstrapDeviceSize } from '../_lib/util';
 
 
 @Component({
@@ -19,8 +18,7 @@ import { getBootstrapDeviceSize } from '../_lib/util';
   styleUrls: [ './nav.component.scss' ],
   animations: navAnimations
 })
-export class NavComponent implements OnInit, OnDestroy {
-  deviceSize: string;
+export class NavComponent implements OnInit {
   display: boolean = true;
   marginBottomNone: boolean =  false;
   navBarState: string = 'hide';
@@ -40,9 +38,6 @@ export class NavComponent implements OnInit, OnDestroy {
     this.subscribeToRoute();
     this.subscribeToUser();
 
-    this.setDeviceSize();
-    window.addEventListener('resize', this.setDeviceSize);
-
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd ) {
         this.checkHowToDisplay();
@@ -52,11 +47,6 @@ export class NavComponent implements OnInit, OnDestroy {
     console.log(window.innerWidth);
 
   }
-
-  // I can't use an arrow function here, because I need to bind "this."
-  setDeviceSize = function () {
-    this.deviceSize = getBootstrapDeviceSize();
-  }.bind(this);
 
   checkHowToDisplay() {
     this.display = !this.location.path().includes('/frame');
@@ -97,9 +87,5 @@ export class NavComponent implements OnInit, OnDestroy {
     let sub = this.userService.user$.subscribe(
         user => this.user = user
     );
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('resize', this.setDeviceSize);
   }
 }

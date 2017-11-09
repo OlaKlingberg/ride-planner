@@ -1,4 +1,3 @@
-
 <!--
 <div id="users-device-size">
   <div id="xs" class="visible-xs"></div>
@@ -17,3 +16,15 @@
   <div id="xl" class="d-block d-xxl-none"></div>
   <div id="xxl" class="d-block"></div>
 </div>
+
+<h6 id="window-size"
+    class="p-1"
+    [ngClass]="{
+      'xs': bootstrapSize == 'xs',
+      'sm': bootstrapSize == 'sm',
+      'md': bootstrapSize == 'md',
+      'lg': bootstrapSize == 'lg',
+      'xl': bootstrapSize == 'xl',
+      'xxl': bootstrapSize == 'xxl'
+      }"
+    *ngIf="settingsService.bootstrapScreenSize">{{bootstrapSize}}: {{innerWidth}}x{{innerHeight}}</h6>

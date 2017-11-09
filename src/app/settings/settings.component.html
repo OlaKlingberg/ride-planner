@@ -14,21 +14,21 @@
             <div *ngIf="!production" class="mb-2">
               <label class="mb-0">Mode</label><br>
               <mat-radio-group [(ngModel)]='settings.demoMode' name="demoMode">
-                <mat-radio-button value='no'>Live</mat-radio-button>
+                <mat-radio-button value='no' class="mr-4">Live</mat-radio-button>
                 <mat-radio-button value='yes'>Demo</mat-radio-button>
               </mat-radio-group>
             </div>
 
-            <!--
+
             <div class="mb-2">
               <label class="mb-0">Storage</label><br>
               <mat-radio-group [(ngModel)]='settings.storage' name="storage">
-                <mat-radio-button value='sessionStorage'>Session</mat-radio-button>
+                <mat-radio-button value='sessionStorage' class="mr-4">Session</mat-radio-button>
                 <mat-radio-button value='localStorage'>Local</mat-radio-button>
               </mat-radio-group>
             </div>
--->
 
+            <!--
             <div class="mb-2">
               <label class="mb-0">Storage</label><br>
               <input type="radio" name="storage" value="sessionStorage" [(ngModel)]="settings.storage" id="session">
@@ -36,66 +36,70 @@
               <input type="radio" name="storage" value="localStorage" [(ngModel)]="settings.storage" id="local">
               <label for="local">Local</label>
             </div>
+            -->
 
             <div class="mb-2">
-              <label class="mb-0" class="mb-0">Dummy Position</label>
-              <p class="mb-0">(For user's own marker)</p>
+              <label class="mb-0 two-lined-label">Dummy Position<br><small>(For user's own marker)</small></label><br>
               <mat-radio-group [(ngModel)]="settings.dummyPos" name="dummyPos">
-                <mat-radio-button value='yes'>Yes</mat-radio-button>
+                <mat-radio-button value='yes' class="mr-4">Yes</mat-radio-button>
                 <mat-radio-button value='no'>No</mat-radio-button>
               </mat-radio-group>
             </div>
 
             <div class="mb-2">
-              <label class="mb-0">Dummy Movements</label>
-              <p class="mb-0">(For user's own marker)</p>
+              <label class="mb-0 two-lined-label">Dummy Movements<br><small>(For user's own marker)</small></label><br>
               <mat-radio-group [(ngModel)]='settings.dummyMov' name="dummyMov">
-                <mat-radio-button value='yes'>Yes</mat-radio-button>
+                <mat-radio-button value='yes' class="mr-4">Yes</mat-radio-button>
+                <mat-radio-button value='no'>No</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="mb-2">
+              <label class="mb-0">Show Screen Size</label><br>
+              <mat-radio-group [(ngModel)]='settings.bootstrapScreenSize' name="bootstrapScreenSize">
+                <mat-radio-button value='yes' class="mr-4">Yes</mat-radio-button>
                 <mat-radio-button value='no'>No</mat-radio-button>
               </mat-radio-group>
             </div>
           </div> <!-- End of Column 1 -->
 
           <div class="col-lg-8"> <!-- Column 2 -->
-            <div>
+            <div class="mb-1">
               <mat-form-field>
-                <input class="form-control w-25 float-left" type="number" step="1" [(ngModel)]="settings.dummyPosAddMin"
+                <input class="form-control w-10 float-left mr-2" type="number" step="1" [(ngModel)]="settings.dummyPosAddMin"
                        name="dummyPosAddMin">
-                <label class="mb-0">User's dummy position: add minimum</label>
-                <p class="mb-0">(in 1/100,000 of a degree)</p>
+                <label class="two-lined-label">User's dummy position: add minimum<br><small>(in 1/100,000 of a degree)</small></label>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="mb-1">
               <mat-form-field>
-                <input class="form-control-sm" type="number" step="1" [(ngModel)]="settings.dummyPosAddMax"
+                <input class="form-control w-10 float-left mr-2" type="number" step="1" [(ngModel)]="settings.dummyPosAddMax"
                        name="dummyPosAddMax">
-                <label class="move-down">User's dummy position: add maximum<br>(in 1/100,000 of a degree)</label>
+                <label class="two-lined-label">User's dummy position: add maximum<br><small>(in 1/100,000 of a degree)</small></label>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="mb-1">
               <mat-form-field>
-                <input class="form-control-sm" type="number" step="1" [(ngModel)]="settings.dummyMovIncMin"
+                <input class="form-control w-10 float-left mr-2" type="number" step="1" [(ngModel)]="settings.dummyMovIncMin"
                        name="dummyMovIncMin">
-                <label class="move-down">User's dummy movement: minumum increment<br>(in 1/100,000 of a
-                  degree)</label><br>
+                <label class="two-lined-label">User's dummy movement: minumum increment<br><small>(in 1/100,000 of a degree)</small></label><br>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="mb-1">
               <mat-form-field>
-                <input class="form-control-sm" type="number" step="1" [(ngModel)]="settings.dummyMovIncMax"
+                <input class="form-control w-10 float-left mr-2" type="number" step="1" [(ngModel)]="settings.dummyMovIncMax"
                        name="dummyMovIncMax">
-                <label class="move-down">User's dummy movement: maximum increment<br>(in 1/100,000 of a
-                  degree)</label><br>
+                <label class="two-lined-label">User's dummy movement: maximum increment<br><small>(in 1/100,000 of a degree)</small></label><br>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="mb-1">
               <mat-form-field>
                 <input matInput
-                       class="form-control-sm"
+                       class="form-control w-10 float-left mr-2"
                        type="number"
                        step=".5"
                        min=".5"
@@ -103,38 +107,38 @@
                        name="dummyUpdateFreq"
                        id="dummyUpdateFreq"
                        #dummyUpdateFreq="ngModel">
-                <label class="move-down">User's dummy position update frequency<br>(in seconds, minimum .5s)</label>
+                <label class="two-lined-label">User's dummy position update frequency<br><small>(in seconds, minimum .5s)</small></label>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="mb-1">
               <mat-form-field>
-                <input class="form-control-sm" type="number" step="1" [(ngModel)]='settings.removeLongDisconnectedRiders'
+                <input class="form-control w-10 float-left mr-2" type="number" step="1" [(ngModel)]='settings.removeLongDisconnectedRiders'
                        name="removeLongDisconnectedRiders">
-                <label class="move-down">Remove riders who have been disconnected for ...<br>(in minutes)</label><br>
+                <label class="two-lined-label">Remove riders who have been disconnected for ...<br><small>(in minutes)</small></label><br>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="mb-1">
               <mat-form-field>
-                <input type="number" class="form-control-sm" step="1" [(ngModel)]=settings.fadeNav name="fadeNav">
-                <label class="move-down">Fade nav bar on map after ...<br>(in seconds)</label><br>
+                <input type="number" class="form-control w-10 float-left mr-2" step="1" [(ngModel)]=settings.fadeNav name="fadeNav">
+                <label class="two-lined-label">Fade nav bar on map after ...<br><small>(in seconds)</small></label><br>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="mb-1">
               <mat-form-field>
-                <input type="number" class="form-control-sm" step=".5" [(ngModel)]=settings.refreshMapPage
+                <input type="number" class="form-control w-10 float-left mr-2" step=".5" [(ngModel)]=settings.refreshMapPage
                        name="refreshMapPage">
-                <label class="move-down">Refresh map every ...<br>(in minutes)</label><br>
+                <label class="two-lined-label">Refresh map every ...<br><small>(in minutes)</small></label><br>
               </mat-form-field>
             </div>
 
-            <div>
+            <div class="mb-1">
               <mat-form-field>
-                <input type="number" class="form-control-sm" step="1" [(ngModel)]=settings.refreshOnNavigationAfter
+                <input type="number" class="form-control w-10 float-left mr-2" step="1" [(ngModel)]=settings.refreshOnNavigationAfter
                        name="refreshOnNavigationAfter">
-                <label class="move-down">Refresh on navigation after ...<br>(in minutes)</label><br>
+                <label class="two-lined-label">Refresh on navigation after ...<br><small>(in minutes)</small></label><br>
               </mat-form-field>
             </div>
 

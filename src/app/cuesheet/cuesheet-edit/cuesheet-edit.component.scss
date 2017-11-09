@@ -44,7 +44,7 @@
   }
 }
 
-.container {
+.page-cuesheet-edit {
   padding-bottom: 200px;
 }
 
@@ -63,11 +63,11 @@
 }
 
 .highlight {
-  z-index: 1200;
+  z-index: 120;
   td {
     //background-color: #A55;
     &:not(.buttons-column) {
-      z-index: 1100;
+      z-index: 110;
       position: relative;
     }
   }
@@ -76,6 +76,11 @@
 .margin-neg-5 {
   margin-top: -5px;
   margin-bottom: -5px;
+}
+
+.modal-content {
+  position: relative;
+  z-index: 130;
 }
 
 .invisible {

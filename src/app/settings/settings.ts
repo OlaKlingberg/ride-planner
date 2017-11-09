@@ -1,5 +1,6 @@
 export class Settings {
   // api: string;
+  bootstrapScreenSize: string;
   demoMode: string;
   dummyPos: string;
   dummyPosAddMin: number;
@@ -16,6 +17,7 @@ export class Settings {
   storage: 'sessionStorage' | 'localStorage';
 
   constructor(obj) {
+    this.bootstrapScreenSize = obj.bootstrapScreenSize || 'no';
     this.demoMode = obj.demoMode || 'no';
     this.dummyPos = obj.demoMode || 'no';
     this.dummyPosAddMin = obj.dummyPosAddMin || 2;

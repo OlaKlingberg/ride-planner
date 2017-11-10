@@ -43,9 +43,6 @@ export class NavComponent implements OnInit {
         this.checkHowToDisplay();
       }
     });
-
-    console.log(window.innerWidth);
-
   }
 
   checkHowToDisplay() {

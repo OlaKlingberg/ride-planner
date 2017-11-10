@@ -1,5 +1,4 @@
 /** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
-@import '../../../_vars.scss';
 
 //mat-table {
 //  background-color: darken($rpGray, 4%);
@@ -11,6 +10,8 @@
 //  background-color: darken($rpGray, 8%);
 //  padding: 0;
 //}
+
+@import '../../../bootstrap-theme.scss';
 
 mat-table {
   margin-bottom: 100px;

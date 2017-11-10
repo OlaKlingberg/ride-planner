@@ -11,16 +11,21 @@
     </div>
   </div>
   <!-- End of: Already logged in. -->
-  <div *ngIf="demoMode &amp;&amp; !user" class="row jumbotron">
+  <ng-container *ngIf="demoMode && !user">
     <!-- demoMode -->
-    <div class="col-12">
-      <div class="row">
-        <div class="col-12">
+    <div class="card my-4">
+      <div class="card-body">
+
+      <!--<div class="row">-->
+        <!--<div class="col-12">-->
           <h2>Demo Mode</h2>
-          <h4>In demo mode, you can only log in with one of these currently unused demo accounts.</h4>
-        </div>
+          <h4>Log in as with the demo credentials provided below.</h4>
+        <!--</div>-->
+      <!--</div>-->
       </div>
-      <div class="row ">
+
+      <!--
+      <div class="row">
         <div class="col-6">
           <ul class="list-unstyled mb-0">
             <ng-container *ngFor="let email of demoUserEmails; index as i">
@@ -29,13 +34,15 @@
           </ul>
         </div>
       </div>
-      <div class="row">
+      <div class="row mt-3">
         <div class="col-12">
           <h4>The password for all of them is: <i>secret</i></h4>
         </div>
       </div>
+      -->
+
     </div>
-  </div>
+  </ng-container>
   <!-- End of demoMode -->
   <div *ngIf="!user" class="row">
     <div class="col-12">

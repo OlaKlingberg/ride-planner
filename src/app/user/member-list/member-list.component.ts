@@ -48,7 +48,6 @@ export class MemberListComponent implements OnInit {
 
     // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
     this.dataSource = new MemberListDataSource(this.sort, this.userService);
-    console.log("dataSource:", this.dataSource);
 
     const keyup$ = Observable.fromEvent(this.filter.nativeElement, 'keyup')
         .debounceTime(150)
@@ -64,7 +63,6 @@ export class MemberListComponent implements OnInit {
     this.userService.requestAllUsers()
         .then(() => {
           this.numberOfUsers = this.userService.userList$.value.length;
-          console.log("numberOfUsers:", this.numberOfUsers);
         });
   }
 

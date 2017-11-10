@@ -19,10 +19,9 @@
       "tsconfig": "tsconfig.json",
       "prefix": "app",
       "styles": [
-        "../node_modules/bootstrap/dist/css/bootstrap.css",
-        "_bootstrap-xxl.scss",
-        "../node_modules/font-awesome/css/font-awesome.css",
         "mat-theme.scss",
+        "bootstrap-theme.scss",
+        "../node_modules/font-awesome/css/font-awesome.css",
         "styles.scss"
       ],
       "scripts": [

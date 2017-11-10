@@ -63,7 +63,7 @@
 <!-- End: Modal for demo mode -->
 
 
-<div class="container page-cuesheet-edit">
+<div class="container page-cuesheet-edit pt-2">
 
   <!-- Cuesheet header, with info about the cuesheet -->
   <form name="cuesheet-form" #cuesheetForm="ngForm" novalidate>
@@ -71,7 +71,7 @@
     <!--<div class="col">-->
 
     <!-- Cuesheet name -->
-    <div *ngIf="!cuesheetNameInput" id="cuesheet-name-block" class="form-row mt-2 mt-sm-0">
+    <div *ngIf="!cuesheetNameInput" id="cuesheet-name-block" class="form-row">
       <div class="order-2 order-md-1 col-md-8">
         <h2 *ngIf="!cuesheetDescriptionInput"
             (click)="editCuesheetName(cueForm.pristine && cueToInsertBefore === null && !cuesheetDescriptionInput)">

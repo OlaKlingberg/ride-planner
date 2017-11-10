@@ -1,15 +1,25 @@
-<img id="main-pic" class="img-fluid" src="/assets/img/other/bikers/bikers-{{deviceSize}}.jpg"
-     alt="bike">
-<div class="container device-size-{{deviceSize}}">
-  <div class="row">
-    <div class="col-12 card">
-      <h1>Home Page</h1>
-      <p>I need some text here that explains how to use this app.</p>
-      <p>I need some text here that explains how to use this app.</p>
-      <p>I need some text here that explains how to use this app.</p>
-      <p>I need some text here that explains how to use this app.</p>
-      <p>I need some text here that explains how to use this app.</p>
-      <p>I need some text here that explains how to use this app.</p>
+<div id="main-pic-container" [ngClass]="deviceSize">
+  <img id="main-pic" class="img-fluid" src="/assets/img/other/bikers/bikers-{{deviceSize}}.jpg" alt="bike">
+</div>
+
+<div id="outer-container">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1 id="row1" class="my-row">This is the home-page content.</h1>
+        <h1 id="row2" class="my-row">This is the home-page content.</h1>
+        <h1 id="row3" class="my-row">This is the home-page content.</h1>
+        <h1 id="row4" class="my-row">This is the home-page content.</h1>
+        <h1 id="row5" class="my-row">This is the home-page content.</h1>
+        <h1 id="row6" class="my-row">This is the home-page content.</h1>
+        <h1 id="row7" class="my-row">This is the home-page content.</h1>
+        <button class="btn btn-lg btn-primary">Button 1</button>
+        <button class="btn btn-lg btn-primary">Button 2</button>
+        <button class="btn btn-lg btn-primary">Button 3</button>
+        <button class="btn btn-lg btn-primary">Button 4</button>
+      </div>
     </div>
   </div>
+
 </div>
+

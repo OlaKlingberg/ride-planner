@@ -1,32 +1,81 @@
-#main-pic {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100%
+@import '../../bootstrap-theme';
+
+#main-pic-container {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
-.container {
-  position: relative;
+#main-pic {
+  width: 100%;
+  position: absolute;
+  display: block;
+  top: -70px;
+  left: 0;
+}
 
-  &.device-size- {
-    &xs {
-      top: 350px;
-    }
-    &sm {
-      top: 350px;
-    }
-    &md {
-      top: 400px;
-    }
-    &lg {
-      top: 400px;
-    }
-    &xl {
-      top: 350px;
-    }
-    &xxl {
-      top: 500px;
-    }
-  }
+#outer-container {
+  background-color: white;
+}
+
+.xs {
+  height: 350px;
+}
+
+.sm {
+  height: 350px;
+}
+
+.md {
+  height: 400px;
+}
+
+.lg {
+  height: 400px;
+}
+
+.xl {
+  height: 350px;
+}
+
+.xxl {
+  height: 500px;
+}
+
+.my-row {
+  //color: lightgray;
+}
+
+#row1 {
+  background-color: $rpOrange;
+  color: color-yiq($rpOrange);
+}
+
+#row2 {
+  background-color: lighten($rpOrange, 30);
+  color: color-yiq(lighten($rpOrange, 30));
+}
+
+#row3 {
+  background-color: theme-color-level(rpOrange, -7);
+}
+
+#row4 {
+  background-color: chartreuse;
+  color: color-yiq(chartreuse);
+}
+
+#row5 {
+  background-color: darken(chartreuse, 20);
+  color: color-yiq(darken(chartreuse, 20));
+}
+
+#row6 {
+  background-color: $gray-400;
+  color: color-yiq($gray-400);
+}
+
+#row7 {
+  background-color: $gray-600;
+  color: color-yiq($gray-600);
 }

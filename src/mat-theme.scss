@@ -1,5 +1,4 @@
-// I only want to iclude the basic styling the comes from mat-core() -- but there is an annoying warning message in the console if you don't include the rest. So I include it, and, luckily but strangely, it doesn't seem to affect the styling at all.
-
+// I'm not sure if it's a good idea for  me to be using Angular Material at all. I just want the functionality, such as table sorting and table filtering, and also the styling of radio buttons etc. But I don't want to use Angular Material to set my colors. I'll see if Angular Material seems to be causing problems now that I start setting the colors. Eventually, I should probably remove Angular Material and either use some other module, such as ngx-datatable, or just write my own sorting and filtering logic.
 
 @import '~@angular/material/theming';
 

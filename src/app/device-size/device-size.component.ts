@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SettingsService } from '../settings/settings.service';
 import { DeviceSizeService } from './device-size.service';
 
@@ -7,22 +7,18 @@ import { DeviceSizeService } from './device-size.service';
   templateUrl: './device-size.component.html',
   styleUrls: ['./device-size.component.scss']
 })
-export class DeviceSizeComponent implements OnInit, OnDestroy {
-  // show: boolean = true;
+export class DeviceSizeComponent {
+  temporarilyHide: boolean = false;
+  showBootstrapSize: boolean = false;
 
-  constructor(private deviceSizeService: DeviceSizeService, // Used in the template.
-              private settingsService: SettingsService) {   // Used in the template.
+  constructor(private deviceSizeService: DeviceSizeService,
+              private settingsService: SettingsService) {
+    this.showBootstrapSize = settingsService.showBootstrapSize;
+    this.temporarilyHide = deviceSizeService.temporarilyHide;
   };
 
-  ngOnInit() {
-    console.log("showBootstrapSize:", this.settingsService.showBootstrapSize);
-    console.log("show:", this.deviceSizeService.show);
-  }
-
   hide() {
-    this.deviceSizeService.show = false;
+    this.deviceSizeService.temporarilyHide = true;
   }
 
-  ngOnDestroy() {
-  }
 }

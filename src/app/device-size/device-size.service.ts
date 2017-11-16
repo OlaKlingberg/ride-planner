@@ -7,7 +7,7 @@ export class DeviceSizeService {
   bootstrapSize$: BehaviorSubject<string> = new BehaviorSubject(null);
   innerHeight$: BehaviorSubject<number> = new BehaviorSubject(null);
   innerWidth$: BehaviorSubject<number> = new BehaviorSubject(null);
-  show: boolean = true;
+  temporarilyHide: boolean = false;
 
   constructor() {
     setTimeout(() => {
@@ -22,7 +22,7 @@ export class DeviceSizeService {
     this.bootstrapSize$.next(getBootstrapDeviceSize());
     this.innerHeight$.next(window.innerHeight);
     this.innerWidth$.next(window.innerWidth);
-    this.show = true;
+    this.temporarilyHide = false;
   }.bind(this);
 
 

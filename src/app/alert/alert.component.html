@@ -1,14 +1,14 @@
-<div class="container" *ngIf="display">
-  <div class="row">
-    <div class="col-12 text" *ngIf="message" [@messageState]="message.state"
+<div class="container" *ngIf="message && display">
+  <div class="row mt-3">
+    <div class="col" [@messageState]="message.state"
          [ngClass]="{
-
       'alert': message,
-
-      'alert-success': message.type === 'success',
-
-      'alert-danger': message.type === 'error' }">
-      <button type="button" class="close float-right" (click)="close()"> <span>x</span>
-      </button>{{message.text}}</div>
+      'alert-primary': message.type === 'success',
+      'alert-complement': message.type === 'error' }">
+      <button type="button" class="close float-right" (click)="close()">
+        <span>x</span>
+      </button>
+      {{message.text}}
+    </div>
   </div>
 </div>

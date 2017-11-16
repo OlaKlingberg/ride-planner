@@ -7,9 +7,11 @@ import { RideRoutingModule } from './ride-routing.module';
 import { RideSelectorComponent } from './ride-selector/ride-selector.component';
 import { RideService } from './ride.service';
 import { SharedModule } from '../shared/shared.module';
+import { PageElementsModule } from '../page-elements/page-elements.module';
 
 @NgModule({
   imports: [
+    PageElementsModule,
     RideRoutingModule,
     SharedModule
   ],
@@ -20,7 +22,7 @@ import { SharedModule } from '../shared/shared.module';
     RideSelectorComponent
   ],
   providers: [
-      RideService
+    RideService
   ]
 })
 export class RideModule {

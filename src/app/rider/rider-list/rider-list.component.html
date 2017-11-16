@@ -1,7 +1,19 @@
-<ng-template #riderDetails>
+<!-- Modal shown while waiting for riders -->
+<!--<ng-container *ngIf="!riderService.riderList$.value">-->
+  <ng-template #gettingRiders class="modal">
+    <div class="modal-header">
+      <h1 class="modal-title my-3">Getting riders ...</h1>
+    </div>
+  </ng-template>
+<!--</ng-container>-->
+
+<!-- End: Modal shown while waiting for riders -->
+
+<!-- Modal with rider details -->
+<ng-template #riderDetails class="modal">
   <div class="modal-header">
     <h4 class="modal-title float-left">{{rider.fname}} {{rider.lname}}</h4>
-    <button type="button" class="close float-right" aria-label="Close" (click)="modalRef.hide();">
+    <button type="button" class="close float-right" aria-label="Close" (click)="riderDetailsModalRef.hide();">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -30,80 +42,114 @@
     </table>
   </div>
 </ng-template>
+<!-- End: Modal with rider details -->
 
-<div class="container page-riders">
 
-  <div [ngClass]="{'d-none': !ride}">
+<div id="wrapper">
+  <header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
 
-    <h3>{{ ride }}</h3>
+    <div class="page-riders">
 
-    <div class="table-container mat-elevation-z8">
+      <div class="container pt-3">
+        <div class="row mb-5" [ngClass]="{'d-none': !ride }">
+          <div class="col">
 
-      <div class="mat-header">
-        <mat-form-field floatPlaceholder="never">
-          <input matInput #filter placeholder="Filter by first or last name">
-        </mat-form-field>
+            <h3>{{ ride }}</h3>
+
+            <div class="mat-header">
+              <mat-form-field floatPlaceholder="never">
+                <input matInput #filter placeholder="Filter by first or last name">
+              </mat-form-field>
+            </div>
+
+            <mat-table #table [dataSource]="dataSource" matSort>
+
+              <ng-container matColumnDef="fullName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Name</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.lname }}, {{ row.fname }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="phone">
+                <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.phone }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="emergencyName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <span matTooltip="Click on header to sort."
+                            [matTooltipPosition]="'above'">Emergency Contact</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.emergencyName }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="emergencyPhone">
+                <mat-header-cell *matHeaderCellDef>Emergency Phone</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.emergencyPhone }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="disconnected">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Last heard of</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <span *ngIf="row.disconnected">{{ row.minutesSinceDisconnected }} minutes ago</span>
+                  <span *ngIf="!row.disconnected">now</span>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Show-details button -->
+              <ng-container matColumnDef="showDetailsButton">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let row" (click)="showDetails(riderDetails, row)">
+                  <button class="btn btn-secondary-1 btn-sm float-right">Details</button>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+            </mat-table>
+
+          </div>
+        </div>
+
+        <!--<div class="row mt-5" [ngClass]="{ 'd-none': dataSource.data !== null}">-->
+        <!--<div class="col col-md-6">-->
+        <!--<div class="card">-->
+        <!--<div class="card-body">-->
+        <!--<h1>Getting riders ...</h1>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <div class="row">
+          <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+            <div *ngIf="!ride" class="card mt-4">
+              <div class="card-body">
+                <h4 class="card-title">You have to select a ride before you can see who's in it.</h4>
+                <button type="button" class="btn btn-secondary-1" (click)="goToRideSelect()">Go to Ride Selector
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
-      <mat-table #table [dataSource]="dataSource" matSort>
-
-        <ng-container matColumnDef="fullName">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Name</span>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.lname }}, {{ row.fname }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="phone">
-          <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.phone }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="emergencyName">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Emergency Contact</span>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.emergencyName }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="emergencyPhone">
-          <mat-header-cell *matHeaderCellDef>Emergency Phone</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{ row.emergencyPhone }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="disconnected">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>
-            <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Last heard of</span>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <span *ngIf="row.disconnected">{{ row.minutesSinceDisconnected }} minutes ago</span>
-            <span *ngIf="!row.disconnected">now</span>
-          </mat-cell>
-        </ng-container>
-
-        <!-- Show-details button -->
-        <ng-container matColumnDef="showDetailsButton">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
-          <mat-cell *matCellDef="let row" (click)="showDetails(riderDetails, row)">
-            <button class="btn btn-primary btn-sm float-right">Details</button>
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-
-      </mat-table>
 
     </div>
 
-  </div>
-
-  <div *ngIf="!ride" class="card mt-4">
-    <div class="card-body">
-      <h4 class="card-title">You have to select a ride before you can see who's in it.</h4>
-      <button type="button" class="btn btn-primary" routerLink="/ride/select">Go to Ride Selector</button>
-    </div>
-  </div>
-
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
 </div>
 

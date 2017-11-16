@@ -19,10 +19,11 @@ export class RideLeaderGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if (this.user && this.user.leader === true) return true;
+    if (this.user && ( this.user.leader || this.user.admin ) ) return true;
 
     // User not ride leader, so redirect to home page.
-    this.router.navigate([ './' ], { queryParams: { returnUrl: state.url } });
+    // this.router.navigate([ './auth/login' ], { queryParams: { returnUrl: state.url } });
+    this.router.navigate([ '/' ]);
     return false;
   }
 }

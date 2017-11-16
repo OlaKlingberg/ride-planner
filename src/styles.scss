@@ -1,21 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'bootstrap-theme';
+
 html {
   height: 100%;
 }
 
 body {
   height: 100%;
-  //background-color: silver;
 }
 
-//.center-block {
-  //margin-left: auto;
-  //margin-right: auto;
-//}
+footer {
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+}
 
-//.display-none {
-//  display: none !important;
-//}
+#wrapper {
+  min-height: 100%;
+  position: relative;
+  background-color: $gray-800;
+  color: $white;
+  padding-bottom: 60px;
+  padding-top: 40px;
+}
+
+.lg, .xl, .xxl {
+  & ~ ng-component {
+    #wrapper {
+      padding-top: 78px;
+    }
+  }
+}
+
+.card {
+  color: $gray-800;
+}
 
 .center-in-window {
   position: fixed;
@@ -28,36 +48,15 @@ body {
   opacity: .5 !important;
 }
 
+.modal {
+  color: black;
+}
+
 .pointer {
   cursor: pointer;
 }
 
-//.text-align-center {
-//  text-align: center;
-//}
-
-//.w-100 {
-  //width: 100%;
-//}
-
-
-.w-10 {
-  //width: 10% !important;
-}
-
 /** Specific pages **/
-//.page-cuesheet-edit {
-  //border: 2px solid $rpLightGray;
-  //background-color: darken(grayscale($rpGray), 8%);
-
-  //background-color: lighten($rpLightGray, 50%);
-  //color: $rpGray;
-//}
-
-//.page-map .info-window {
-  //color: red !important;
-//}
-
 .page-members, .page-riders {
   .mat-form-field-placeholder {
     color: darkgray !important;
@@ -78,13 +77,22 @@ body {
   }
 }
 
-.page-settings {
-  .mat-slider-wrapper {
-    left: 0 !important;
+.page-riders {
+  .modal-dialog {
+    margin-top: 10rem;
   }
 }
 
+.page-settings {
+  .mat-radio-outer-circle {
+    border-color: $white;
+    background-color: $gray-800;
+  }
 
+  .mat-slider-wrapper {
+    //left: 0 !important;
+  }
+}
 
 
 

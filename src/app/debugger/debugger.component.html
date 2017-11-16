@@ -1,17 +1,31 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h3>Debug Messages {{ time }}</h3>
-      <button type="button" class="btn btn-primary" (click)="clearMessageList()">Clear</button>
+<div id="wrapper">
+  <header>
+    <rp-header></rp-header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h3>Debug Messages {{ time }}</h3>
+          <button type="button" class="btn btn-secondary-1" (click)="clearMessageList()">Clear</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <ul>
+            <li *ngFor="let message of debugMessages; let i = index">{{i}}. {{ message }}</li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <ul>
-        <li *ngFor="let message of debugMessages; let i = index">{{i}}. {{ message }}</li>
-      </ul>
-    </div>
-  </div>
+
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
 </div>
 
 

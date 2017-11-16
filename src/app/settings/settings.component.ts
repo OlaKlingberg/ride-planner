@@ -5,7 +5,6 @@ import { AlertService } from '../alert/alert.service';
 import { environment } from '../../environments/environment'
 
 @Component({
-  selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: [ './settings.component.scss' ]
 })

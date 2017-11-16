@@ -11,7 +11,7 @@ import { FocusDirective } from './focus.directive';
   imports: [],
   declarations: [
     EqualValidator,
-    FocusDirective,
+    FocusDirective
   ],
   exports: [
     CommonModule,
@@ -19,8 +19,7 @@ import { FocusDirective } from './focus.directive';
     FocusDirective,
     FormsModule,
     TooltipModule
-  ],
-  providers: []
+  ]
 })
 export class SharedModule {
 }

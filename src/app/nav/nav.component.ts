@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { navAnimations } from './nav.component.animations';
 import { NavService } from './nav.service';
@@ -9,8 +8,7 @@ import { UserService } from '../user/user.service';
 import * as $ from 'jquery';
 import { RefreshService } from '../core/refresh.service';
 import Timer = NodeJS.Timer;
-
-
+import { DeviceSizeService } from '../device-size/device-size.service';
 
 @Component({
   selector: 'rp-nav',
@@ -19,14 +17,12 @@ import Timer = NodeJS.Timer;
   animations: navAnimations
 })
 export class NavComponent implements OnInit {
-  display: boolean = true;
-  marginBottomNone: boolean =  false;
   navBarState: string = 'hide';
   user: User = null;
 
   private route: string;
 
-  constructor(public location: Location,               // Used in the template.
+  constructor(private deviceSizeService: DeviceSizeService,
               private navService: NavService,
               private refreshService: RefreshService,
               private router: Router,
@@ -38,18 +34,13 @@ export class NavComponent implements OnInit {
     this.subscribeToRoute();
     this.subscribeToUser();
 
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd ) {
-        this.checkHowToDisplay();
+    $(document).on("scroll", () => {
+      if ($(document).scrollTop() > 20) {
+        $("nav").removeClass("unscrolled");
+      } else {
+        $("nav").addClass("unscrolled");
       }
     });
-  }
-
-  checkHowToDisplay() {
-    this.display = !this.location.path().includes('/frame');
-    this.marginBottomNone = this.location.path() === '/members' ||
-        this.location.path() === '/riders' ||
-        this.location.path() === '/settings';
   }
 
   closeAccordion() {
@@ -57,7 +48,7 @@ export class NavComponent implements OnInit {
   }
 
   subscribeToNavBarState() {
-    let sub = this.navService.navBarState$.subscribe(navBarState => {
+    this.navService.navBarState$.subscribe(navBarState => {
       this.navBarState = navBarState;
     });
   }
@@ -67,7 +58,7 @@ export class NavComponent implements OnInit {
   subscribeToRoute() {
     let timer: Timer;
 
-    let sub = this.router.events.subscribe(() => {
+    this.router.events.subscribe(() => {
       clearTimeout(timer);
       timer = setTimeout(() => {
         this.route = this.router.url;
@@ -81,7 +72,7 @@ export class NavComponent implements OnInit {
   }
 
   subscribeToUser() {
-    let sub = this.userService.user$.subscribe(
+    this.userService.user$.subscribe(
         user => this.user = user
     );
   }

@@ -9,7 +9,6 @@ import { AlertService } from '../../alert/alert.service';
 import { Cue } from '../cue';
 import { Cuesheet } from '../cuesheet';
 import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
-import { CuesheetService } from '../cuesheet.service';
 import { Subscription } from 'rxjs/Subscription';
 import { CuesheetDemoService } from '../cuesheet-demo.service';
 
@@ -35,20 +34,23 @@ export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestr
   private subscription: Subscription;
 
   @ViewChild('cueForm') cueForm: NgForm;
+  @ViewChild('demoModeModal') demoModeModal: TemplateRef<any>;
 
   constructor(private alertService: AlertService,
               private cuesheetDemoService: CuesheetDemoService,
-              private cuesheetService: CuesheetService,
               private modalService: BsModalService,
               private route: ActivatedRoute,
               private router: Router) {
   }
 
   ngOnInit() {
+    console.log("CuesheetEditDemoComponent");
     this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
     this.checkForModalClose();
     this.getCuesheet(this.cuesheetId);
+
+    this.modalRef = this.modalService.show(this.demoModeModal);
   }
 
   ngAfterViewInit() {
@@ -130,7 +132,7 @@ export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestr
     setTimeout(() => {
       this.cuesheet.cues.splice(this.cueToDelete, 1);
       this.cueToDelete = null;
-      this.focusTrigger.emit(true);
+      // this.focusTrigger.emit(true);
       this.cuesheetDemoService.updateCuesheet(this.cuesheet);
     }, 300);
   }
@@ -235,7 +237,7 @@ export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestr
         this.cueToInsertBefore = i;
         setTimeout(() => {
           this.slideDownTr($('#insert-form-row'));
-          this.focusTrigger.emit(true);
+          // this.focusTrigger.emit(true);
         }, 0);
       }, 350);
     }
@@ -286,7 +288,7 @@ export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestr
         .parent()
         .find('td > div')
         .slideDown(300, () => {
-          this.focusTrigger.emit(true);
+          // this.focusTrigger.emit(true);
         });
   }
 

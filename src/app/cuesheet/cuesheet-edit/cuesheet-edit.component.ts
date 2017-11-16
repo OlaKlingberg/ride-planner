@@ -12,6 +12,7 @@ import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 import { CuesheetService } from '../cuesheet.service';
 import { Subscription } from 'rxjs/Subscription';
 import { SettingsService } from '../../settings/settings.service';
+import { UserService } from '../../user/user.service';
 
 @Component({
   templateUrl: './cuesheet-edit.component.html',
@@ -35,23 +36,25 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private subscription: Subscription;
 
   @ViewChild('cueForm') cueForm: NgForm;
-  @ViewChild('demoModeModal') demoModeModal: TemplateRef<any>;
+  // @ViewChild('demoModeModal') demoModeModal: TemplateRef<any>;
 
   constructor(private alertService: AlertService,
               private cuesheetService: CuesheetService,
               private modalService: BsModalService,
               private route: ActivatedRoute,
               private router: Router,
-              private settingsService: SettingsService) {
+              private settingsService: SettingsService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
+    console.log("CuesheetEditComponent");
     this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
     this.checkForModalClose();
     this.getCuesheet(this.cuesheetId);
 
-    if (this.settingsService.demoMode) this.modalRef = this.modalService.show(this.demoModeModal);
+    // if (this.settingsService.demoMode ) this.modalRef = this.modalService.show(this.demoModeModal);
   }
 
   ngAfterViewInit() {
@@ -132,7 +135,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
       setTimeout(() => {
         this.cuesheet.cues.splice(this.cueToDelete, 1);
         this.cueToDelete = null;
-        this.focusTrigger.emit(true);
+        // this.focusTrigger.emit(true);
         this.setTotalDistances(this.cuesheet);
       }, 300);
     });
@@ -234,7 +237,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cueToInsertBefore = i;
         setTimeout(() => {
           this.slideDownTr($('#insert-form-row'));
-          this.focusTrigger.emit(true);
+          // this.focusTrigger.emit(true);
         }, 0);
       }, 350);
     }
@@ -262,7 +265,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       this.cueForm.reset();
-      this.focusTrigger.emit(true);
+      // this.focusTrigger.emit(true);
     }
   }
 
@@ -285,7 +288,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         .parent()
         .find('td > div')
         .slideDown(300, () => {
-          this.focusTrigger.emit(true);
+          // this.focusTrigger.emit(true);
           // Todo: Figure out what the two lines below are for. The don't seem to be needed, and they throw an error.
           // const $set = $(this);
           // $set.replaceWith($set.contents());

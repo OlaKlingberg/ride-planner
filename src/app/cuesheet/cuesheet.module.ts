@@ -9,17 +9,19 @@ import { CuesheetListComponent } from './cuesheet-list/cuesheet-list.component';
 import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetRoutingModule } from './cuesheet-routing.module';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
-import { SharedModule } from '../shared/shared.module';
 import { CuesheetEditDemoComponent } from './cuesheet-edit/cuesheet-edit-demo.component';
 import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
 import { CuesheetListDemoComponent } from './cuesheet-list/cuesheet-list-demo.component';
 import { CuesheetNewDemoComponent } from './cuesheet-new/cuesheet-new-demo.component';
 import { CuesheetBikeDemoComponent } from './cuesheet-bike/cuesheet-bike-demo.component';
 import { CuesheetBikeFrameDemoComponent } from './cuesheet-bike-frame/cuesheet-bike-frame-demo.component';
+import { PageElementsModule } from '../page-elements/page-elements.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CuesheetRoutingModule,
+    PageElementsModule,
     RouterModule,
     SharedModule
   ],

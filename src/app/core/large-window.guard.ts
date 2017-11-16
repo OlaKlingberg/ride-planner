@@ -15,7 +15,7 @@ export class LargeWindowGuard implements CanActivate {
 
     const size = getBootstrapDeviceSize();
 
-    if ( size !== 'xl' && size !== 'sm' ) {
+    if ( size !== 'xs' && size !== 'sm' ) {
       return true;
     } else {
       let urlSegments: string[] = state.url.split('/').filter(segment => segment !== 'frame');

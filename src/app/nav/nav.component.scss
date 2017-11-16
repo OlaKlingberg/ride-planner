@@ -1,43 +1,44 @@
 @import "../../bootstrap-theme";
 
 nav {
-  //background-color: rgba(darken($rpOrange, 0%), 1);
-  &.sm-up {
-
-    .navbar-header {
-      //position: relative;
-      //top: 18px;
-    }
-
-    li {
-      //display: table;
-      //z-index: 10;
-
-      a {
-        //display: table-cell;
-        //font-size: larger;
-        //height: 80px;
-        //vertical-align: middle;
-      }
-    }
-  }
+  z-index: 10;
 }
 
-//.active {
-//  background-color: darken($rpOrange, 10%) !important;
-//}
-//
-//.no-header {
-//  position: absolute;
-//  top: 0;
-//  width: 100%;
-//}
-//
+.navbar-brand,
+.nav-link {
+  transition: all .5s;
+}
 
-nav {
-  z-index: 10;
+.nav-link {
+  line-height: 24px;
 }
 
 .my-info {
   color: white;
 }
+
+.unscrolled.lg,
+.unscrolled.xl,
+.unscrolled.xxl {
+  .navbar-brand {
+    transform: rotate(-26deg);
+    //line-height: 64px;
+  }
+  .nav-link {
+    line-height: 64px;
+  }
+}
+
+
+
+.nav-link {
+  &.active {
+    font-weight: 900;
+  }
+
+  &:hover {
+    background-color: darken($primary, 4%);
+  }
+}
+
+

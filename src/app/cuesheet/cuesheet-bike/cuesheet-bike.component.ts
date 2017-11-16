@@ -11,6 +11,8 @@ import { cuesheetBikeAnimations } from './cuesheet-bike.component.animations';
 import { CuesheetService } from '../cuesheet.service';
 import { Subscription } from 'rxjs/Subscription';
 
+import { getBootstrapDeviceSize} from '../../_lib/util';
+
 @Component({
   templateUrl: './cuesheet-bike.component.html',
   styleUrls: [ './cuesheet-bike.component.scss' ],
@@ -20,6 +22,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   cueNumber: number = null;
   cuesheet: Cuesheet;
   cuesheetId: string = '';
+  deviceSize: string;
   modalRef: BsModalRef;
   total: number = 0;
   move: string = 'still';
@@ -48,8 +51,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
     this.setSwipeListeners();
     this.subscribeToSwipes();
 
-    // Todo: This doesn't seem to make any difference, and I don't remember why I put it here.
-    // $('#navbar').removeClass('in'); // Todo: This is surely not the best way of doing this ...
+    this.deviceSize = getBootstrapDeviceSize();
   }
 
   getCuesheet(cuesheetId) {

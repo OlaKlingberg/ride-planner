@@ -4,7 +4,6 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import Socket = SocketIOClient.Socket;
 
-import { environment } from "../../environments/environment";
 import { PositionService } from '../core/position.service';
 import { RideSubjectService } from '../ride/ride-subject.service';
 import { SocketService } from '../core/socket.service';
@@ -73,7 +72,6 @@ export class UserService {
 
   joinRide() {
     this.rideSubjectService.ride$.subscribe(ride => {
-      // console.log("joinRide(). ride:", ride);
       if ( ride ) {
         this.userPositionPromise().then((user: User) => {
           const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
@@ -81,6 +79,7 @@ export class UserService {
             // console.log("user:", user);
             user.ride = ride;
             this.user$.next(user);
+            console.log("About to emit giveMeRiderList!");
             this.socket.emit('giveMeRiderList', ride);
           });
         })

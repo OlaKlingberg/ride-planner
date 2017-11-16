@@ -1,35 +1,77 @@
 @import '../../../bootstrap-theme';
 
+hr {
+  border-top: 1px solid $gray-500;
+}
+
+table {
+  fonts-size: 14px;
+}
+
+thead tr {
+  background-color: $primary !important;
+}
+
+th {
+  border: none !important;
+}
+
+tbody {
+  fontsize: 14px;
+  border-bottom: 1px solid $gray-700;
+}
+
+
+tr {
+  background-color: $gray-800;
+}
+
+tr:hover {
+  background-color: $secondary-2-darker !important;
+}
+
+tr:nth-of-type(odd) {
+  background-color: $gray-700;
+}
+
+td {
+  border: none !important;
+}
+
+#outer-container {
+  color: white !important;
+}
+
 #start-button {
   width: 200px;
 }
 
-.col- {
+#wrapper {
+  background-color: $gray-800;
+}
+
+.column- {
   &cue {
-    width: 10%;
+    width: 6%;
   }
 
-  &distance {
-    width: 10%;
+  &at {
+    width: 6%;
   }
 
   &turn {
-    width: 10%;
+    width: 12%;
   }
 
   &description {
-    width: 60%;
+    width: 70%;
   }
 
   &total {
-    width: 10%;
+    width: 6%;
   }
 }
 
-.container {
-  //margin-bottom: 50px;
-}
-
-.pointer:hover {
-  //background-color: darken($rpOrange, 20%);
+.td-1 {
+  padding-left: .5rem !important;
 }

@@ -12,6 +12,7 @@ import {
 } from '@angular/material';
 
 import { SharedModule } from '../shared/shared.module';
+import { PageElementsModule } from '../page-elements/page-elements.module';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { SharedModule } from '../shared/shared.module';
     MatSortModule,
     MatTableModule,
     MatTooltipModule,
+    PageElementsModule,
     SharedModule,
     RiderRoutingModule
   ],

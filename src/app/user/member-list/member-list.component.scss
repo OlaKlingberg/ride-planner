@@ -1,20 +1,27 @@
 /** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
 
-//mat-table {
-//  background-color: darken($rpGray, 4%);
-//  border: 3px solid darken($rpGray, 8%);
-//  border-top: 2px solid silver;
-//}
-//
-//.mat-app-background {
-//  background-color: darken($rpGray, 8%);
-//  padding: 0;
-//}
-
 @import '../../../bootstrap-theme.scss';
 
 mat-table {
-  margin-bottom: 100px;
+  background-color: $gray-800;
+  color: $white !important;
+}
+
+mat-row, mat-header-row {
+  min-height: 0;
+}
+
+mat-header-row {
+  background-color: $primary;
+}
+
+mat-row:nth-of-type(odd) {
+  background-color: $gray-700 !important;
+}
+
+mat-cell, mat-header-cell {
+  color: $white !important;
+  padding: .4rem 0;
 }
 
 .mat-column- {

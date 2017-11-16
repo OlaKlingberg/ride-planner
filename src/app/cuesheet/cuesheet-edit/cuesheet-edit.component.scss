@@ -1,7 +1,49 @@
 @import '../../../bootstrap-theme';
 
-.right {
-  //float: right;
+hr {
+  border-top: 1px solid $gray-500;
+  //border-bottom: 1px solid $gray-500;
+}
+
+table {
+  fonts-size: 14px;
+}
+
+thead tr {
+  background-color: $primary !important;
+  color: $white;
+}
+
+th {
+  border: none !important;
+}
+
+tbody {
+  fontsize: 14px;
+  border-bottom: 1px solid $gray-700;
+}
+
+tr {
+  background-color: $gray-300;
+  color: $black;
+}
+
+tr:hover {
+  background-color: $secondary-1-darker !important;
+  color: $white !important;
+}
+
+tr:nth-of-type(odd) {
+  background-color: $gray-200;
+  color: $black;
+}
+
+td {
+  border: none !important;
+}
+
+#cuesheet-form {
+  color: white !important;
 }
 
 .btn-circle {
@@ -20,7 +62,7 @@
 
 .column- {
   &cue {
-    width: 10%;
+    width: 6%;
   }
 
   &at {
@@ -28,54 +70,49 @@
   }
 
   &turn {
-    width: 10%;
+    width: 12%;
   }
 
   &description {
-    width: 50%;
+    width: 58%;
   }
 
   &total {
-    width: 10%;
+    width: 6%;
   }
 
   &buttons {
-    width: 10%;
+    width: 6%;
   }
 }
 
-.page-cuesheet-edit {
-  padding-bottom: 200px;
-}
-
-.display-flex {
-  display: flex;
+.delete-button {
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  transform: translate(0, -50%);
 }
 
 .insert-button-container {
   position: absolute;
-  bottom: 100%;
-  right: 20%;
+  top: -100%;
+  height: 200%;
+  right: 30px;
 }
 
 .insert-button {
-  margin-bottom: -50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
 }
 
-.highlight {
-  z-index: 120;
-  td {
-    //background-color: #A55;
-    &:not(.buttons-column) {
-      z-index: 110;
-      position: relative;
-    }
+.highlight td {
+  background-color: $complement;
+  color: $white;
+  &:not(.buttons-column) {
+    z-index: 1100;
+    position: relative;
   }
-}
-
-.margin-neg-5 {
-  margin-top: -5px;
-  margin-bottom: -5px;
 }
 
 .modal-content {
@@ -83,33 +120,11 @@
   z-index: 130;
 }
 
-.invisible {
-  visibility: hidden;
+.td-1 {
+  padding-left: .5rem !important;
 }
 
-.table-striped tbody {
-  tr:nth-of-type(odd) {
-    //background-color: darken(grayscale($rpLightGray), 8%);
-  }
 
-  tr:nth-of-type(even) {
-    //background-color: darken(grayscale($rpGray), 8%);
-  }
-}
-
-//.table-striped {
-//  background-color: lighten($rpLightGray, 50%);
-//
-//  tbody {
-//    tr:nth-of-type(odd) {
-//      background-color: lighten($rpLightGray, 43%);
-//    }
-//
-//    tr:nth-of-type(even) {
-//      background-color: lighten($rpLightGray, 50%);
-//    }
-//  }
-//}
 
 
 

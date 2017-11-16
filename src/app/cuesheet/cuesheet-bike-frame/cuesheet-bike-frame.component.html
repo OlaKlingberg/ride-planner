@@ -1,35 +1,42 @@
-<div class="wrapper-outer">
+<!-- Todo: Sort out the naming of wrapper, wrapper-outer, and wrapper-inner. -->
 
-  <div class="wrapper-inner">
+<div id="wrapper">
+  <button class="btn btn-block btn-secondary-2-darker" (click)="returnToOverview()">Leave This View</button>
 
+  <main class="pt-4">
+    <rp-alert></rp-alert>
 
-    <div class="column-left">
-      <div>This view is meant to be used on your phone while biking.</div>
-      <br/>
-      <div>On your phone, you would swipe up or down to go to the next or previous cue. Here, you can also use the
-        buttons to the right.
+    <!--<div class="wrapper-outer">-->
+
+      <div id="wrapper-inner">
+
+        <div class="column-left">
+          <p>This view is meant to be used on your phone while biking.</p>
+          <p>On your phone, you would swipe up or down to go to the next or previous cue. Here, you can also use the buttons to the right.
+          </p>
+        </div>
+
+        <div class="column-middle">
+          <img src="/assets/img/other/iphone.png" class="iphone">
+          <iframe [src]="url" frameborder="0" #iframe></iframe>
+        </div>
+
+        <div class="column-right">
+          <div class="button-wrapper">
+            <button class="btn btn-block btn-secondary-1" (click)="swipeUp()">Swipe Up</button>
+            <br/>
+            <button class="btn btn-block btn-secondary-1" (click)="swipeDown()">Swipe Down</button>
+          </div>
+        </div>
+
       </div>
-    </div>
+    <!--</div>-->
 
-    <div class="column-middle">
-      <img src="/assets/img/other/iphone.png" class="iphone">
-      <iframe [src]="url" frameborder="0" #iframe></iframe>
-    </div>
-
-    <div class="column-right">
-      <div class="button-wrapper">
-        <button class="btn btn-block btn-primary" (click)="swipeUp()">Swipe Up</button>
-        <br/>
-        <button class="btn btn-block btn-primary" (click)="swipeDown()">Swipe Down</button>
-        <hr/>
-        <button class="btn btn-block btn-primary" (click)="returnToOverview()">Return To<br/>Overview</button>
-      </div>
-    </div>
-
-
-  </div>
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
 </div>
-
 
 
 

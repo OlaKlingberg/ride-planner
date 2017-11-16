@@ -5,11 +5,13 @@ import { AuthenticationRoutingModule } from './authentication-routing.module';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { PageElementsModule } from '../page-elements/page-elements.module';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     AuthenticationRoutingModule,
+    PageElementsModule,
     RouterModule,
     SharedModule
   ],
@@ -19,4 +21,5 @@ import { SharedModule } from '../shared/shared.module';
     RegistrationComponent
   ]
 })
-export class AuthenticationModule { }
+export class AuthenticationModule {
+}

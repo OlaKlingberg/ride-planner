@@ -10,6 +10,8 @@ import { RiderService } from '../rider.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 import { PositionService } from '../../core/position.service';
+import { Router } from '@angular/router';
+import { User } from '../../user/user';
 
 @Component({
   templateUrl: './rider-list.component.html',
@@ -18,19 +20,25 @@ import { PositionService } from '../../core/position.service';
 export class RiderListComponent implements OnInit, OnDestroy {
   displayedColumns = [ 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'disconnected' ];
   dataSource: RiderListDataSource | null;
-  modalRef: BsModalRef;
+  riderDetailsModalRef: BsModalRef;
   ride: string = '';
-  rider: any;
+  rider: User;
 
-  private subscription: Subscription;
+  private gettingRidersModalRef: BsModalRef;
+  private subKeyUp: Subscription;
+  private subRiderList: Subscription;
+  private url: string;
 
   @ViewChild('filter') filter: ElementRef = null;
+  @ViewChild('gettingRiders') gettingRiders: BsModalRef;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private modalService: BsModalService,
               private positionService: PositionService,
               private riderService: RiderService,
-              private rideSubjectService: RideSubjectService) {
+              private rideSubjectService: RideSubjectService,
+              private router: Router) {
+    this.url = router.routerState.snapshot.url;
     this.displayColumns();
   }
 
@@ -42,14 +50,31 @@ export class RiderListComponent implements OnInit, OnDestroy {
 
     if ( !this.ride ) return;
 
+    // Todo: This is ugly, and I'm not even sure it will work correctly under all circumstances. The amounts for the delays are arbitrary. Can't I achieve the showing and hiding of the modal in a more straight-forward way?
+    setTimeout(() => {
+      if ( this.riderService.riderList$.value === null ) {
+        this.gettingRidersModalRef = this.modalService.show(this.gettingRiders);
+        setTimeout(() => {
+          this.riderService.riderListPromise().then(() => {
+            if ( this.gettingRidersModalRef ) this.gettingRidersModalRef.hide();
+          });
+        }, 10);
+      }
+    }, 300);
+
+
     // Todo: It seems wrong to have to include this.userService in this method call. How do I get rid of that?
     this.dataSource = new RiderListDataSource(this.sort, this.riderService);
+
 
     const keyup$ = Observable.fromEvent(this.filter.nativeElement, 'keyup')
         .debounceTime(150)
         .distinctUntilChanged();
 
-    this.subscription = keyup$.subscribe(() => {
+    // Todo: Does this create a new subscription for every keyup? In that case, I have a huge memory leak here -- but I don't think that is the case.
+    this.subKeyUp = keyup$.subscribe(() => {
+      // console.log(this.dataSource.data);
+      // console.log(typeof this.dataSource.data);
       if ( !this.dataSource ) return;
       this.dataSource.filter = this.filter.nativeElement.value;
     });
@@ -68,14 +93,19 @@ export class RiderListComponent implements OnInit, OnDestroy {
     }
   }
 
+  goToRideSelect() {
+    // console.log("url:", this.url);
+    this.router.navigate([ './ride/select' ], { queryParams: { returnUrl: this.url } });
+  }
 
   showDetails(template: TemplateRef<any>, row) {
     this.rider = row;
-    this.modalRef = this.modalService.show(template);
+    this.riderDetailsModalRef = this.modalService.show(template);
   }
 
   ngOnDestroy() {
-    if ( this.subscription ) this.subscription.unsubscribe();
+    if ( this.subKeyUp ) this.subKeyUp.unsubscribe();
+    if ( this.subRiderList ) this.subRiderList.unsubscribe();
   }
 
 }

@@ -5,7 +5,7 @@ import { UserService } from '../user/user.service';
 import { User } from '../user/user';
 
 @Injectable()
-export class JaneDoeGuard implements CanActivate {
+export class DemoGuard implements CanActivate {
   private user: User;
 
   constructor(private router: Router,
@@ -19,6 +19,7 @@ export class JaneDoeGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    console.log("DemoGuard.canActivate()");
 
     if ( !this.user.demo ) return true;
 

@@ -1,0 +1,115 @@
+// Import all the tools needed to customize the theme and extract parts of it
+@import '~@angular/material/theming';
+
+// Define a mixin that accepts a theme and outputs the color styles for the component.
+@mixin custom-theme($theme) {
+  // Extract whichever individual palettes you need from the theme.
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+
+  // Use mat-color to extract individual colors from a palette as necessary.
+  .primary-50 {
+    background-color: mat-color($primary, 50);
+  }
+
+  .primary-100 {
+    background-color: mat-color($primary, 100);
+  }
+
+  .primary-200 {
+    background-color: mat-color($primary, 200);
+  }
+
+  .primary-300 {
+    background-color: mat-color($primary, 300);
+  }
+
+  .primary-400 {
+    background-color: mat-color($primary, 400);
+  }
+
+  .primary-500 {
+    background-color: mat-color($primary, 500);
+  }
+
+  .primary-600 {
+    background-color: mat-color($primary, 600);
+  }
+
+  .primary-700 {
+    background-color: mat-color($primary, 700);
+  }
+
+  .primary-800 {
+    background-color: mat-color($primary, 800);
+  }
+
+  .primary-900 {
+    background-color: mat-color($primary, 900);
+  }
+
+  //.primary-A100 {
+  //  background-color: mat-color($primary, A100);
+  //}
+  //
+  //.primary-A200 {
+  //  background-color: mat-color($primary, A200);
+  //}
+  //
+  //.primary-A400 {
+  //  background-color: mat-color($primary, A400);
+  //}
+
+  .accent-50 {
+    background-color: mat-color($accent, 50);
+  }
+
+  .accent-100 {
+    background-color: mat-color($accent, 100);
+  }
+
+  .accent-200 {
+    background-color: mat-color($accent, 200);
+  }
+
+  .accent-300 {
+    background-color: mat-color($accent, 300);
+  }
+
+  .accent-400 {
+    background-color: mat-color($accent, 400);
+  }
+
+  .accent-500 {
+    background-color: mat-color($accent, 500);
+  }
+
+  .accent-600 {
+    background-color: mat-color($accent, 600);
+  }
+
+  .accent-700 {
+    background-color: mat-color($accent, 700);
+  }
+
+  .accent-800 {
+    background-color: mat-color($accent, 800);
+  }
+
+  .accent-900 {
+    background-color: mat-color($accent, 900);
+  }
+
+  //.accent-A100 {
+  //  background-color: mat-color($accent, A100);
+  //}
+  //
+  //.accent-A200 {
+  //  background-color: mat-color($accent, A200);
+  //}
+  //
+  //.accent-A400 {
+  //  background-color: mat-color($accent, A400);
+  //}
+
+}

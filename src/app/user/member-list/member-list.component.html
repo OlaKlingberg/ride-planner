@@ -1,161 +1,178 @@
-<div class="page-members">
+<!-- Modal with member details -->
+<ng-template #memberDetails class="modal">
+  <div class="modal-header">
+    <h4 class="modal-title float-left">{{member.fname}} {{member.lname}}</h4>
+    <button type="button" class="close float-right" aria-label="Close" (click)="modalRef.hide();">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="modal-table">
+      <tr *ngIf="member.admin">
+        <td>Admin</td>
+        <td><span class="fa fa-check"></span></td>
+      </tr>
+      <tr *ngIf="member.leader">
+        <td>Leader</td>
+        <td><span class="fa fa-check"></span></td>
+      </tr>
+      <tr>
+        <td>Phone</td>
+        <td>{{member.phone}}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{member.email}}</td>
+      </tr>
+      <tr>
+        <td>Emergency Contact</td>
+        <td>{{member.emergencyName}}</td>
+      </tr>
+      <tr>
+        <td>Emergency Phone</td>
+        <td>{{member.emergencyPhone}}</td>
+      </tr>
+    </table>
+  </div>
+</ng-template>
+<!-- End: Modal with member details. -->
 
-  <!-- Modal with member details -->
-  <ng-template #memberDetails>
-    <div class="modal-header">
-      <h4 class="modal-title float-left">{{member.fname}} {{member.lname}}</h4>
-      <button type="button" class="close float-right" aria-label="Close" (click)="modalRef.hide();">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <table class="modal-table">
-        <tr *ngIf="member.admin">
-          <td>Admin</td>
-          <td><span class="fa fa-check"></span></td>
-        </tr>
-        <tr *ngIf="member.leader">
-          <td>Leader</td>
-          <td><span class="fa fa-check"></span></td>
-        </tr>
-        <tr>
-          <td>Phone</td>
-          <td>{{member.phone}}</td>
-        </tr>
-        <tr>
-          <td>Email</td>
-          <td>{{member.email}}</td>
-        </tr>
-        <tr>
-          <td>Emergency Contact</td>
-          <td>{{member.emergencyName}}</td>
-        </tr>
-        <tr>
-          <td>Emergency Phone</td>
-          <td>{{member.emergencyPhone}}</td>
-        </tr>
-      </table>
-    </div>
-  </ng-template>
-  <!-- End: Modal with member details. -->
 
-  <div class="container pt-3">
+<div id="wrapper">
+  <header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
 
-    <!-- Add-dummy-members card -->
-    <div class="card mb-4" *ngIf="demoMode && numberOfUsers <= 10">
-      <div class="card-header">
-        <h4 class="card-title">Demo Mode</h4>
-      </div>
-      <div class="card-body">
-        <p>Click the button to add some dummy members, so you can try out the table filter and sorting
-          functionality.</p>
-        <button class="btn btn-primary"
-                (click)="addDummyMembers()"
-                [disabled]="loading">Add 20 Dummy Members
-        </button>
-      </div>
-    </div>
-    <!-- End: Add-dummy-members card -->
+    <div class="page-members">
 
-    <!-- Above table -->
-    <div class="row">
-      <div class="col-md-7 col-lg-8 col-xl-9">
-        <h3>Members</h3>
-        <mat-form-field floatPlaceholder="never">
-          <input matInput #filter placeholder="Filter by first or last name">
-        </mat-form-field>
-      </div>
-      <div class="col-9 col-sm-8 col-md-5 col-lg-4 col-xl-3">
+      <div class="container pt-3">
+        <div class="row">
+          <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-0">
+            <!-- Add-dummy-members card -->
+            <div class="card my-4" *ngIf="demoMode && numberOfUsers <= 10">
+              <!--<div class="card-header">-->
+                <!--<h4 class="card-title">Demo Mode</h4>-->
+              <!--</div>-->
+              <div class="card-body">
+                <h4 class="card-title">Demo Mode</h4>
+
+                <p>Click the button to add some dummy members, so you can try out the table filter and sorting functionality.</p>
+                <button class="btn btn-secondary-1"
+                        (click)="addDummyMembers()"
+                        [disabled]="loading">Add 20 Dummy Members
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End: Add-dummy-members card -->
+
+        <!-- Above table -->
+        <div class="row">
+          <div class="col-md-7 col-lg-8 col-xl-9">
+            <h3>Members</h3>
+            <mat-form-field floatPlaceholder="never">
+              <input matInput #filter placeholder="Filter by first or last name">
+            </mat-form-field>
+          </div>
+          <div class="col-9 col-sm-8 col-md-5 col-lg-4 col-xl-3">
         <span *ngIf="numberOfUsers > 10">
-          <button class="btn btn-primary btn-block"
+          <button class="btn btn-secondary-1 btn-block"
                   (click)="addDummyMembers()"
                   [disabled]="loading">Add 20 Dummy Members
           </button>
           <br>
-          <button class="btn btn-primary btn-block" (click)="deleteDummyMembers()">Delete All Dummy Members
+          <button class="btn btn-complement btn-block" (click)="deleteDummyMembers()">Delete Dummy Members
           </button>
         </span>
+          </div>
+        </div>
+        <!-- End: Above table -->
+
+        <div class="row mb-5">
+          <div class="col">
+
+            <!-- Table proper -->
+            <mat-table #table [dataSource]="dataSource" matSort>
+
+              <!-- Admin -->
+              <ng-container matColumnDef="admin">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Admin</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row"><span *ngIf="row.admin" class="fa fa-check"></span></mat-cell>
+              </ng-container>
+
+              <!-- Leader -->
+              <ng-container matColumnDef="leader">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Leader</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row"><span *ngIf="row.leader" class="fa fa-check"></span></mat-cell>
+              </ng-container>
+
+              <!-- Full Name Column -->
+              <ng-container matColumnDef="fullName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Name</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.lname }}, {{ row.fname }}
+                </mat-cell>
+              </ng-container>
+
+              <!-- Phone Column -->
+              <ng-container matColumnDef="phone">
+                <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.phone }}</mat-cell>
+              </ng-container>
+
+              <!-- Email Column -->
+              <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Email</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.email }}</mat-cell>
+              </ng-container>
+
+              <!-- Emergency Contact Column -->
+              <ng-container matColumnDef="emergencyName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Emergency Contact</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.emergencyName }}</mat-cell>
+              </ng-container>
+
+              <!-- Emergency Phone Column -->
+              <ng-container matColumnDef="emergencyPhone">
+                <mat-header-cell *matHeaderCellDef>Emergency Phone</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.emergencyPhone }}</mat-cell>
+              </ng-container>
+
+              <!-- Show-details button -->
+              <ng-container matColumnDef="showDetailsButton">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let row" (click)="showDetails(memberDetails, row)">
+                  <button class="btn btn-secondary-1 btn-sm float-right">Details</button>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+            </mat-table>
+            <!-- End: Table proper -->
+
+          </div>
+        </div>
+
       </div>
-    </div>
-    <!-- End: Above table -->
 
-    <div class="row">
-      <div class="col-12">
-
-        <!-- Table proper -->
-        <mat-table #table [dataSource]="dataSource" matSort>
-
-          <!-- Admin -->
-          <ng-container matColumnDef="admin">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Admin</span>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row"><span *ngIf="row.admin" class="fa fa-check"></span></mat-cell>
-          </ng-container>
-
-          <!-- Leader -->
-          <ng-container matColumnDef="leader">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Leader</span>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row"><span *ngIf="row.leader" class="fa fa-check"></span></mat-cell>
-          </ng-container>
-
-          <!-- Full Name Column -->
-          <ng-container matColumnDef="fullName">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Name</span>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row">{{ row.lname }}, {{ row.fname }}
-            </mat-cell>
-          </ng-container>
-
-          <!-- Phone Column -->
-          <ng-container matColumnDef="phone">
-            <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{ row.phone }}</mat-cell>
-          </ng-container>
-
-          <!-- Email Column -->
-          <ng-container matColumnDef="email">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Email</span>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row">{{ row.email }}</mat-cell>
-          </ng-container>
-
-          <!-- Emergency Contact Column -->
-          <ng-container matColumnDef="emergencyName">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Emergency Contact</span>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row">{{ row.emergencyName }}</mat-cell>
-          </ng-container>
-
-          <!-- Emergency Phone Column -->
-          <ng-container matColumnDef="emergencyPhone">
-            <mat-header-cell *matHeaderCellDef>Emergency Phone</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{ row.emergencyPhone }}</mat-cell>
-          </ng-container>
-
-          <!-- Show-details button -->
-          <ng-container matColumnDef="showDetailsButton">
-            <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let row" (click)="showDetails(memberDetails, row)">
-              <button class="btn btn-primary btn-sm float-right">Details</button>
-            </mat-cell>
-          </ng-container>
-
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-
-        </mat-table>
-        <!-- End: Table proper -->
-
-      </div>
     </div>
 
-  </div>
-
-
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
 </div>

@@ -18,6 +18,7 @@ export class CuesheetListDemoComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("CuesheetListDemoComponent");
     this.cuesheetDemoService.getCuesheetList().then((cuesheets: Cuesheet[]) => {
       this.cuesheets = cuesheets;
     })

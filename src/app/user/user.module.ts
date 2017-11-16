@@ -11,6 +11,7 @@ import {
 } from '@angular/material';
 import { MemberListComponent } from './member-list/member-list.component';
 import { SharedModule } from '../shared/shared.module';
+import { PageElementsModule } from '../page-elements/page-elements.module';
 
 // Todo: Replace MdAutocompleteModule with MdFormFieldModule and MdInputModule, and format the input box.
 @NgModule({
@@ -21,6 +22,7 @@ import { SharedModule } from '../shared/shared.module';
     MatSortModule,
     MatTableModule,
     MatTooltipModule,
+    PageElementsModule,
     SharedModule,
     UserRoutingModule
   ],

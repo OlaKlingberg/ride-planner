@@ -3,13 +3,14 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
+        <h4 class="modal-title" id="rideDeletionModalLabel">Are you sure you want to delete <i>{{model.ride}}</i>.
+        </h4>
         <button type="button"
-                class="close"
+                class="close float-right"
                 data-dismiss="modal"
                 aria-label="Close">
           <span aria-hidden="true" class="close-modal">&times;</span>
         </button>
-        <h4 class="modal-title" id="rideDeletionModalLabel">Are you sure you want to delete <i>{{model.ride}}</i>.</h4>
       </div>
       <div class="modal-footer">
         <button type="button"
@@ -18,7 +19,7 @@
         </button>
         <button type="button"
                 (click)="deleteRide()"
-                class="btn btn-primary modal-btn-delete width-48 float-right"
+                class="btn btn-complement-darker modal-btn-delete width-48 float-right"
                 data-dismiss="modal">Yes, delete this ride.
         </button>
       </div>
@@ -27,67 +28,84 @@
 </div>
 
 
-<!-- Main page -->
-<div class="container">
-  <div class="row">
-    <div class="col-12 col-md-6" *ngIf="!demoMode || !user?.demo">
-      <form name="form" #f="ngForm" novalidate>
+<div id="wrapper">
+  <header>
+    <rp-header></rp-header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
 
-        <div *ngIf="!user.ride" class="card mt-4">
-          <div *ngIf="availableRides" class="card-body">
+    <!-- Main page -->
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-6" *ngIf="!demoMode || !user?.demo">
+          <form name="form" #f="ngForm" novalidate>
 
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
-              <label for="ride">Select a ride to delete</label>
-              <select name="ride"
-                      id="ride"
-                      class="form-control"
-                      [(ngModel)]="model.ride"
-                      #ride="ngModel"
-                      required>
-                <option *ngFor="let ride of availableRides" [value]="ride.name">{{ride.name}}</option>
-              </select>
+            <div *ngIf="!user.ride" class="card mt-4">
+              <div *ngIf="availableRides" class="card-body">
 
-              <div *ngIf="f.submitted && !ride.valid" class="help-block">You must select a ride if you want to delete
-                it.
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
+                  <label for="ride">Select a ride to delete</label>
+                  <select name="ride"
+                          id="ride"
+                          class="form-control"
+                          [(ngModel)]="model.ride"
+                          #ride="ngModel"
+                          required>
+                    <option *ngFor="let ride of availableRides" [value]="ride.name">{{ride.name}}</option>
+                  </select>
+
+                  <div *ngIf="f.submitted && !ride.valid" class="help-block">You must select a ride if you want to
+                    delete
+                    it.
+                  </div>
+
+                </div>
+
+                <button class="btn btn-complement-darker px-5"
+                        data-target="#rideDeletionModal"
+                        data-toggle="modal">Delete ride
+                </button>
+
               </div>
 
+              <div *ngIf="!availableRides" class="card-body">
+                <h3>There's nothing to delete! There are no rides.</h3>
+                <h4>Do you want to create one?</h4>
+                <button type="button" class="btn btn-secondary-1" routerLink='../create'>Create a ride</button>
+              </div>
             </div>
 
-            <button class="btn btn-primary"
-                    data-target="#rideDeletionModal"
-                    data-toggle="modal">Delete ride
-            </button>
+            <div *ngIf="user.ride" class="card">
+              <div class="card-body">
+                <h3>You are logged in to the ride: {{ user.ride }}</h3>
+                <p>You have to log out from this ride before you can log delete rides.</p>
 
-          </div>
-
-          <div *ngIf="!availableRides" class="card-body">
-            <h3>There's nothing to delete! There are no rides.</h3>
-            <h4>Do you want to create one?</h4>
-            <button type="button" class="btn btn-primary" routerLink='../create'>Create a ride</button>
-          </div>
+                <button type="button" class="btn btn-secondary-2-darker" (click)="logOutFromRide()">Log out from ride {{ user.ride }}
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
 
-        <div *ngIf="user.ride" class="card">
-          <div class="card-body">
-            <h3>You are logged in to the ride: {{ user.ride }}</h3>
-            <p>You have to log out from this ride before you can log delete rides.</p>
-
-            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride {{ user.ride }}
-            </button>
+        <div class="col-12 col-md-6" *ngIf="demoMode && user?.demo">
+          <div class="card mt-4">
+            <div class="card-body">
+              <h2>Demo Mode</h2>
+              <h5>This site is currently in demo mode, which means that you can't delete rides.</h5>
+              <h5>You may log into a rid instead.</h5>
+              <button type="button" class="btn btn-secondary-1 btn-block" routerLink='../select'>Login to a ride
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
-    </div>
-
-    <div class="col-12 col-md-6" *ngIf="demoMode && user?.demo">
-      <div class="card mt-4">
-        <div class="card-body">
-          <h2>Demo Mode</h2>
-          <h5>This site is currently in demo mode, which means that you can't delete rides.</h5>
-          <h5>You may log into a rid instead.</h5>
-          <button type="button" class="btn btn-primary btn-block" routerLink='../select'>Login to a ride</button>
         </div>
       </div>
     </div>
-  </div>
+
+
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
 </div>

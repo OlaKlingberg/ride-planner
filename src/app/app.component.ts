@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { AuthenticationService } from "./authentication/authentication.service";
 import { Subscription } from 'rxjs/Subscription';
+import { DeviceSizeService } from './device-size/device-size.service';
 // import { EnvService } from './core/env.service';
 
 @Component({
@@ -10,11 +11,10 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit, OnDestroy {
-  // displayNavbar: boolean = true;
-
   private subscription: Subscription;
 
-  constructor(private authenticationService: AuthenticationService) {   // Needs to be injected, to be initialized.
+  constructor(private authenticationService: AuthenticationService,
+              private deviceSizeService: DeviceSizeService) {   // Needs to be injected, to be initialized.
   }
 
   ngOnInit() {

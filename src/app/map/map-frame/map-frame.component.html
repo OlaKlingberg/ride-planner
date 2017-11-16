@@ -1,20 +1,29 @@
-<div class="wrapper-outer">
+<div id="wrapper">
+  <button class="btn btn-block btn-secondary-2-darker" routerLink="/">Leave This View</button>
 
-  <div class="wrapper-inner">
-    <div class="column-left">
-      <div>This view is meant to be used on your phone while biking.</div>
-      <br/>
+
+  <main class="pt-4">
+    <rp-alert></rp-alert>
+
+    <div id="wrapper-inner">
+
+      <div class="column-left">
+        <p>This view is meant to be used on your phone while biking.</p>
+      </div>
+
+      <div class="column-middle">
+
+        <img src="/assets/img/other/iphone.png" class="iphone">
+        <iframe [src]="url" frameborder="0"></iframe>
+      </div>
+
+      <div class="column-right">
+
+      </div>
     </div>
 
-    <div class="column-middle">
-      <img src="/assets/img/other/iphone.png" class="iphone">
-      <iframe [src]="url" frameborder="0"></iframe>
-    </div>
-
-    <div class="column-right">
-      <button class="btn btn-block btn-primary" routerLink="/">Leave This View</button>
-
-    </div>
-  </div>
-
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
 </div>

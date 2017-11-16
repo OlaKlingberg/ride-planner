@@ -10,6 +10,7 @@ export class SocketService {
   socket: Socket;
 
   constructor(private settingsService: SettingsService) {
+    console.log("SocketService.constructor()");
     this.socket = io(settingsService.api);  // io is made available through import into index.html.
 
     // console.log("socket:", this.socket);

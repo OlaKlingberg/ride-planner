@@ -40,6 +40,7 @@ export class RiderService {
         if ( idx >= 0 ) {
           riderList[ idx ].disconnected = disconnectedRider.disconnected;
           this.riderList$.next(riderList);
+          // console.log("onDisconnectedRider() riderList$:", this.riderList$.value);
         }
       });
     });
@@ -59,8 +60,9 @@ export class RiderService {
           riderList = riderList.filter(rider => rider._id !== joinedRider._id); // Remove rider, if rider already exists.
           riderList.push(joinedRider);
           this.riderList$.next(riderList);
+          setInterval(() => {
+          }, 3000);
         });
-        // }
       }
     });
   }
@@ -69,13 +71,13 @@ export class RiderService {
     this.socket.on('removedRider', _id => {
       console.log("removedRider _id:", _id);
       let riders = this.riderList$.value.filter(rider => rider._id !== _id);
-
       this.riderList$.next(riders);
     });
   }
 
   onRiderList() {
     this.socket.on('riderList', riderList => {
+      console.log("on('riderList')");
       riderList = riderList.map(rider => new User(rider));
       this.riderList$.next(riderList);
     });

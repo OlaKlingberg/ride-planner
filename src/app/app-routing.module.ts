@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from "./authentication/auth.guard";
 import { RideLeaderGuard } from './ride/ride-leader.guard';
 import { SelectivePreloadingStrategy } from './core/selective-preloading-strategy';
-import { AdminGuard } from './authentication/admin.guard';
 
 const routes: Routes = [
   {
@@ -34,13 +33,13 @@ const routes: Routes = [
   },
   {
     path: 'members',
-    canActivate: [ RideLeaderGuard ],
+    canActivate: [ AuthGuard, RideLeaderGuard ],
     loadChildren: 'app/user/user.module#UserModule'
   },
   {
-    path: 'protected',
+    path: 'testing',
     canActivate: [ AuthGuard ],
-    loadChildren: 'app/protected/protected.module#ProtectedModule'
+    loadChildren: 'app/testing-area/testing-area.module#TestingAreaModule'
   },
   {
     path: 'ride',
@@ -49,7 +48,7 @@ const routes: Routes = [
   },
   {
     path: 'riders',
-    canActivate: [ RideLeaderGuard ],
+    canActivate: [ AuthGuard, RideLeaderGuard ],
     loadChildren: 'app/rider/rider.module#RiderModule'
   },
   {

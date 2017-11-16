@@ -1,6 +1,15 @@
-<nav *ngIf="display" class="navbar navbar-expand-lg navbar-light bg-light" (click)="closeAccordion()">
+<nav [ngClass]="{
+      'xs': deviceSizeService.bootstrapSize$.value === 'xs',
+      'sm': deviceSizeService.bootstrapSize$.value === 'sm',
+      'md': deviceSizeService.bootstrapSize$.value === 'md',
+      'lg': deviceSizeService.bootstrapSize$.value === 'lg',
+      'xl': deviceSizeService.bootstrapSize$.value === 'xl',
+      'xxl': deviceSizeService.bootstrapSize$.value === 'xxl'
+      }"
+     class="navbar navbar-expand-lg unscrolled fixed-top navbar-dark bg-primary" (click)="closeAccordion()">
   <a class="navbar-brand" routerLink="/">RidePlanner</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 

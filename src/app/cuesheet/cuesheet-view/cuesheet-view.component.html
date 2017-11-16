@@ -1,54 +1,74 @@
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <h1>{{ cuesheet?.name }}</h1>
-      <h4>{{ cuesheet?.description }}</h4>
-      <p>Created by {{ cuesheet?._creator.fname }} {{ cuesheet?._creator.lname }}</p>
-      <button id="start-button"
-              [routerLink]="[ '/cuesheet', cuesheetId, 'bike', '0' ]"
-              class="btn btn-primary btn-lg mb-2"
-              type="button">Start
-      </button>
-      <p>Or tap on a cue to start at that cue.</p>
+<div id="wrapper">
+  <header>
+    <rp-header></rp-header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
+
+    <div id="outer-container">
+
+      <div class="container">
+        <div class="row pt-4">
+          <div class="col">
+            <h1>{{ cuesheet?.name }}</h1>
+            <h4>{{ cuesheet?.description }}</h4>
+            <p>Created by {{ cuesheet?._creator.fname }} {{ cuesheet?._creator.lname }}</p>
+            <hr>
+            <button id="start-button"
+                    [routerLink]="[ '/cuesheet', cuesheetId, 'bike', '0' ]"
+                    class="btn btn-secondary-1 btn-lg mb-2"
+                    type="button">Start
+            </button>
+            <p>Or tap on a cue to start at that cue.</p>
+
+          </div>
+        </div>
+        <div class="row pb-4">
+          <div class="col-md-12">
+
+            <table class="table table-hover mb-0">
+              <thead>
+              <tr>
+                <th class="col-cue td-1">Cue</th>
+                <th class="col-at">Distance</th>
+                <th class="col-turn">Turn</th>
+                <th class="col-description">Description</th>
+                <th class="col-total">Total</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let cue of cuesheet?.cues; index as i"
+                  [routerLink]="[ '/cuesheet', cuesheetId, 'bike', i ]"
+                  class="pointer">
+                <td class="td-1">{{ i + 1 }}</td>
+                <td>{{ cue.distance / 100 | number:'1.0-2' }}</td>
+                <td>{{ cue.turn }}</td>
+                <td>{{ cue.description }}</td>
+                <td>{{ cue.total / 100 | number:'1.0-2'}}</td>
+              </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+        <div class="row pb-4">
+          <div class="col-6 col-md-4 col-lg-3">
+            <a routerLink='/cuesheet' class='btn btn-secondary-1 btn-block'>Return to list<br>of cue sheets</a>
+          </div>
+          <!--<br class="d-block d-sm-none-block">-->
+          <div class="col-6 col-md-4 col-lg-3">
+            <a [routerLink]="['/cuesheet', cuesheetId, 'edit']" class='btn btn-secondary-2-darker btn-block'>Edit this<br>cue
+              sheet</a>
+          </div>
+        </div>
+
+      </div>
 
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
 
-      <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-          <th class="col-cue">Cue</th>
-          <th class="col-distance">Distance</th>
-          <th class="col-turn">Turn</th>
-          <th class="col-description">Description</th>
-          <th class="col-total">Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let cue of cuesheet?.cues; index as i"
-            [routerLink]="[ '/cuesheet', cuesheetId, 'bike', i ]"
-            class="pointer">
-          <td>{{ i + 1 }}</td>
-          <td>{{ cue.distance / 100 | number:'1.0-2' }}</td>
-          <td>{{ cue.turn }}</td>
-          <td>{{ cue.description }}</td>
-          <td>{{ cue.total / 100 | number:'1.0-2'}}</td>
-        </tr>
-        </tbody>
-      </table>
-
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-6 col-md-4 col-lg-3">
-      <a routerLink='/cuesheet' class='btn btn-primary btn-block'>Return to list<br>of cue sheets</a>
-    </div>
-    <!--<br class="d-block d-sm-none-block">-->
-    <div class="col-6 col-md-4 col-lg-3">
-      <a [routerLink]="['/cuesheet', cuesheetId, 'edit']" class='btn btn-primary btn-block'>Edit this<br>cue sheet</a>
-    </div>
-  </div>
-
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
 </div>

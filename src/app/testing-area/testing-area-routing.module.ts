@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
-import { ProtectedComponent } from './protected.component';
+import { TestingAreaComponent } from './testing-area.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [RouterModule.forChild([
     {
       path: '',
-      component: ProtectedComponent
+      component: TestingAreaComponent
     }
   ])],
   exports: []
 })
-export class ProtectedRoutingModule { }
+export class TestingAreaRoutingModule { }

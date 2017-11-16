@@ -17,6 +17,7 @@ export class CuesheetListComponent implements OnInit, OnDestroy {
   constructor(private cuesheetService: CuesheetService) { }
 
   ngOnInit() {
+    console.log("CuesheetListComponent");
     this.subscription = this.cuesheetService.getCuesheetList()
         .subscribe(cuesheets => this.cuesheets = cuesheets);
   }

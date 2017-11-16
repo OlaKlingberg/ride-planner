@@ -2,9 +2,25 @@
 @import '../../../bootstrap-theme';
 
 mat-table {
-  //background-color: darken($rpGray, 4%);
-  //border: 3px solid darken($rpGray, 8%);
-  //border-top: 2px solid silver;
+  background-color: $gray-800;
+  color: $white !important;
+}
+
+mat-row, mat-header-row {
+  min-height: 0;
+}
+
+mat-header-row {
+  background-color: $primary;
+}
+
+mat-row:nth-of-type(odd) {
+  background-color: $gray-700 !important;
+}
+
+mat-cell, mat-header-cell {
+  color: $white !important;
+  padding: .4rem 0;
 }
 
 .mat-app-background {
@@ -32,6 +48,10 @@ mat-table {
   &disconnected {
     flex-grow: 2;
   }
+}
+
+.mat-form-field {
+  width: 30rem;
 }
 
 .modal-table {

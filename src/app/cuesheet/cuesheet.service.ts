@@ -68,6 +68,7 @@ export class CuesheetService {
   }
 
   getCuesheetList () {
+    console.log("CuesheetService.getCuesheetlist()");
     const requestOptions = this.setHeaders();
 
     return this.http.get(`${this.settingsService.api}/cuesheets`, requestOptions)

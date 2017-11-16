@@ -1,18 +1,13 @@
-<div id="wrapper">
-  <header>
-    <rp-header></rp-header>
-    <rp-nav></rp-nav>
-  </header>
-  <main>
-    <rp-alert></rp-alert>
-    <router-outlet></router-outlet>
-  </main>
-  <footer>
-    <rp-footer></rp-footer>
-    <rp-device-size></rp-device-size>
-  </footer>
-</div>
+<router-outlet [ngClass]="{
+      'xs': deviceSizeService.bootstrapSize$.value === 'xs',
+      'sm': deviceSizeService.bootstrapSize$.value === 'sm',
+      'md': deviceSizeService.bootstrapSize$.value === 'md',
+      'lg': deviceSizeService.bootstrapSize$.value === 'lg',
+      'xl': deviceSizeService.bootstrapSize$.value === 'xl',
+      'xxl': deviceSizeService.bootstrapSize$.value === 'xxl'
+      }"></router-outlet>
 
+<rp-device-size></rp-device-size>
 
 
 

@@ -1,48 +1,61 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-      <form name="form" (ngSubmit)="f.form.valid && logIntoRide()" #f="ngForm" novalidate>
-        <div *ngIf="!ride" class="card mt-4">
-          <div *ngIf="availableRides?.length >= 1" class="card-body">
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
-              <label for="ride">Select a ride or a team</label>
-              <select name="ride"
-                      id="ride"
-                      class="form-control"
-                      [(ngModel)]="model.ride"
-                      #ride="ngModel"
-                      required>
-                <option *ngFor="let ride of availableRides" [value]="ride?.name">{{ride?.name}}</option>
-              </select>
+<div id="wrapper">
+  <header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
 
-              <div *ngIf="f.submitted && !ride.valid" class="help-block">You must select a ride.</div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+          <form name="form" (ngSubmit)="f.form.valid && logIntoRide()" #f="ngForm" novalidate>
+            <div *ngIf="!ride" class="card mt-4">
+              <div *ngIf="availableRides?.length >= 1" class="card-body">
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
+                  <label for="ride">Select a ride or a team</label>
+                  <select name="ride"
+                          id="ride"
+                          class="form-control"
+                          [(ngModel)]="model.ride"
+                          #ride="ngModel"
+                          required>
+                    <option *ngFor="let ride of availableRides" [value]="ride?.name">{{ride?.name}}</option>
+                  </select>
+
+                  <div *ngIf="f.submitted && !ride.valid" class="help-block">You must select a ride.</div>
+                </div>
+                <button class="btn btn-secondary-1 mb-3">Sign in to ride</button>
+                <br><a class="text-secondary-2-dark" routerLink="../select-action">Create or delete a ride</a>
+
+              </div>
+
+              <div *ngIf="availableRides?.length < 1" class="card-body">
+                <h3 class="card-title">Sorry, there are currently no rides!</h3>
+                <h4>Do you want to create one?</h4>
+                <a class="btn btn-secondary-1-dark" routerLink='/ride/create'>Create new ride</a>
+              </div>
             </div>
-            <button class="btn btn-primary mb-3">Sign in to ride</button>
-            <br><a class="link" routerLink="../select-action">Create or delete a ride</a>
 
-          </div>
+            <div *ngIf="ride" class="card mt-4">
+              <div class="card-body">
+                <h3 class="card-title">You are logged in to the ride: {{ ride }}</h3>
 
-          <div *ngIf="availableRides?.length < 1" class="card-body">
-            <h3 class="card-title">Sorry, there are currently no rides!</h3>
-            <h4>Do you want to create one?</h4>
-            <a class="btn btn-primary" routerLink='/ride/create'>Create new ride</a>
-          </div>
+                <p>You have to log out from this ride before you can log into another ride.</p>
+                <button type="button" class="btn btn-secondary-2-darker" (click)="logOutFromRide()">Log out from ride <i>{{ ride
+                  }}</i></button>
+              </div>
+
+            </div>
+
+          </form>
         </div>
-
-        <div *ngIf="ride" class="card mt-4">
-          <div class="card-body">
-            <h3 class="card-title">You are logged in to the ride: {{ ride }}</h3>
-
-            <p>You have to log out from this ride before you can log into another ride.</p>
-            <button type="button" class="btn btn-danger" (click)="logOutFromRide()">Log out from ride <i>{{ ride }}</i></button>
-          </div>
-
-        </div>
-
-      </form>
+      </div>
     </div>
-  </div>
+
+
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
 </div>
-
-
 

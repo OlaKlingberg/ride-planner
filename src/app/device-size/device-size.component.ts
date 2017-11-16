@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SettingsService } from '../settings/settings.service';
-import { getBootstrapDeviceSize } from '../_lib/util';
+import { DeviceSizeService } from './device-size.service';
 
 @Component({
   selector: 'rp-device-size',
@@ -8,26 +8,21 @@ import { getBootstrapDeviceSize } from '../_lib/util';
   styleUrls: ['./device-size.component.scss']
 })
 export class DeviceSizeComponent implements OnInit, OnDestroy {
-  bootstrapSize: string;
-  innerHeight: number;
-  innerWidth: number;
+  // show: boolean = true;
 
-  constructor(private settingsService: SettingsService) {
+  constructor(private deviceSizeService: DeviceSizeService, // Used in the template.
+              private settingsService: SettingsService) {   // Used in the template.
   };
 
   ngOnInit() {
-    this.getSize();
-    window.addEventListener('resize', this.getSize);
+    console.log("showBootstrapSize:", this.settingsService.showBootstrapSize);
+    console.log("show:", this.deviceSizeService.show);
   }
 
-  // I can't use an arrow function here, because I need to bind "this."
-  getSize = function () {
-    this.bootstrapSize = getBootstrapDeviceSize();
-    this.innerHeight = window.innerHeight;
-    this.innerWidth = window.innerWidth;
-  }.bind(this);
+  hide() {
+    this.deviceSizeService.show = false;
+  }
 
   ngOnDestroy() {
-    window.removeEventListener('resize', this.getSize);
   }
 }

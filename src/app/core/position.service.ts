@@ -15,7 +15,6 @@ export class PositionService {
   private positionWatcher: any;
 
   constructor(private settingsService: SettingsService) {
-    // console.log("PositionService.constructor()");
   }
 
   // Todo: Why can't I do this with JSON.stringify() and JSON.parse()? (Have I tried?)

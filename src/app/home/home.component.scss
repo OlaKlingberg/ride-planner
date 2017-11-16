@@ -1,5 +1,10 @@
 @import '../../bootstrap-theme';
 
+main {
+  height: 100%;
+  padding-bottom: 100px;
+}
+
 #main-pic-container {
   width: 100%;
   position: relative;
@@ -14,68 +19,43 @@
   left: 0;
 }
 
-#outer-container {
-  background-color: white;
+#wrapper {
+  background-color: $white;
+  color: $gray-700;
 }
 
-.xs {
-  height: 350px;
+#main-pic-container {
+  &.xs {
+    height: 350px;
+  }
+
+  &.sm {
+    height: 350px;
+  }
+
+  &.md {
+    height: 400px;
+  }
+
+  &.lg {
+    height: 400px;
+  }
+
+  &.xl {
+    height: 350px;
+  }
+
+  &.xxl {
+    height: 500px;
+  }
 }
 
-.sm {
-  height: 350px;
+#page-home {
+  font-size: 1.4rem;
+
+  a {
+    color: $secondary-2-darker;
+  }
 }
 
-.md {
-  height: 400px;
-}
 
-.lg {
-  height: 400px;
-}
-
-.xl {
-  height: 350px;
-}
-
-.xxl {
-  height: 500px;
-}
-
-.my-row {
-  //color: lightgray;
-}
-
-#row1 {
-  background-color: $rpOrange;
-  color: color-yiq($rpOrange);
-}
-
-#row2 {
-  background-color: lighten($rpOrange, 30);
-  color: color-yiq(lighten($rpOrange, 30));
-}
-
-#row3 {
-  background-color: theme-color-level(rpOrange, -7);
-}
-
-#row4 {
-  background-color: chartreuse;
-  color: color-yiq(chartreuse);
-}
-
-#row5 {
-  background-color: darken(chartreuse, 20);
-  color: color-yiq(darken(chartreuse, 20));
-}
-
-#row6 {
-  background-color: $gray-400;
-  color: color-yiq($gray-400);
-}
-
-#row7 {
-  background-color: $gray-600;
-  color: color-yiq($gray-600);
-}

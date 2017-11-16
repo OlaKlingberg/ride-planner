@@ -9,7 +9,6 @@ import { AuthenticationService } from "../authentication.service";
 import { User } from "../../user/user";
 import { UserService } from "app/user/user.service";
 
-import { environment } from '../../../environments/environment';
 import { SettingsService } from '../../settings/settings.service';
 
 @Component({
@@ -17,7 +16,6 @@ import { SettingsService } from '../../settings/settings.service';
   styleUrls: [ './login.component.scss' ]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  // connectedLoggedInUsers: any;
   demoUserEmails: string[];
   demoMode: boolean;
   model: any = {};
@@ -37,6 +35,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // If user then go to home page.
+    // if (this.userService.user$.value !== null ) this.router.navigate(['/']);
+
+
+
     if ( this.demoMode ) this.getDemoUsers();
 
     // Get return url from route parameters or default to '/'
@@ -67,6 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     let sub = this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true, true);
+              console.log("LoginComponent.login() About to route to:", this.returnUrl);
               this.router.navigate([ this.returnUrl ]);
             },
             error => {

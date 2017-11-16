@@ -1,24 +1,36 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card mt-4">
-        <div class="card-body">
-          <h2 class="card-title">What do you want to do now?</h2>
-          <div class="row">
-            <div class="col-12 col-sm-4 col-lg-3 col-xl-2 mb-2">
-              <a routerLink='../select' class="btn btn-primary btn-block">Login to a ride</a>
-            </div>
-            <div class="col-12 col-sm-4 col-lg-3 col-xl-2 mb-2">
-              <a routerLink='../create' class="btn btn-primary btn-block">Create a ride</a>
-            </div>
-            <div class="col-12 col-sm-4 col-lg-3 col-xl-2">
-              <a routerLink='../delete' class="btn btn-primary btn-block">Delete a ride</a>
+<div id="wrapper">
+  <header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
+          <div class="card mt-4">
+            <div class="card-body">
+              <h2 class="card-title">What do you want to do now?</h2>
+              <div class="row">
+                <div class="col-sm-4 mb-2">
+                  <a routerLink='../select' class="btn btn-secondary-1 btn-block">Login to a ride</a>
+                </div>
+                <div class="col-sm-4 mb-2">
+                  <a routerLink='../create' class="btn btn-secondary-2-darker btn-block">Create a ride</a>
+                </div>
+                <div class="col-sm-4">
+                  <a routerLink='../delete' class="btn btn-complement-darker btn-block">Delete a ride</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
+</div>
 

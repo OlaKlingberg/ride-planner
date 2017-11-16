@@ -6,6 +6,7 @@ import { SettingsComponent } from './settings.component';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { MatCardModule, MatCheckboxModule, MatRadioModule, MatSliderModule } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
+import { PageElementsModule } from '../page-elements/page-elements.module';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { SharedModule } from '../shared/shared.module';
     MatCheckboxModule,
     MatRadioModule,
     MatSliderModule,
+    PageElementsModule,
     SettingsRoutingModule,
     SharedModule
   ],

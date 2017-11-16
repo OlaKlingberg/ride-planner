@@ -3,8 +3,6 @@
 iframe {
   height: 736px;
   width: 414px;
-  //width: 336px;
-  //width: 290px;
   margin: 0 auto;
   position: relative;
   top: -710px;
@@ -12,53 +10,43 @@ iframe {
   transform: scale(.7, .7);
 }
 
-.button-wrapper {
-  //width: 200px;
+#wrapper {
+  background-color: $gray-300;
+  color: $gray-800;
+  padding-top: 0 !important;
+}
+
+#wrapper-inner {
+  display: flex;
+  margin: 0 auto;
+  max-width: 960px;
 }
 
 .column- {
   &left {
     flex: 1;
-    color: $rpGray;
-    padding: 170px 20px 0 20px;
+    padding: 3rem .5rem;
     font-size: larger;
-    //background-color: silver;
+    font-weight: bold;
 
   }
 
   &middle {
     flex: initial;
-    //background-color: paleturquoise;
     width: 340px;
   }
 
   &right {
     flex: 1;
-    padding: 170px 20px 0 20px;
-    //background-color: palegoldenrod;
+    padding: 3rem .5rem;
   }
 }
 
 .iphone {
-  //height: 680px;
   width: 338px;
 }
 
-.wrapper- {
-  &inner {
-    display: flex;
-    margin: 0 auto;
-    max-width: 1000px;
-  }
-
-  &outer {
-    height: 100%;
-    display: flex;
-    height: 100vh;
-    background-color: silver;
-    padding-top: 50px;
-  }
 
 
-}
+
 

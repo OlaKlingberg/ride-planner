@@ -2,6 +2,8 @@
 
 @import '~@angular/material/theming';
 
+@import './mat-custom.scss';
+
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
@@ -10,16 +12,122 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$rp-primary: mat-palette($mat-indigo);
-$rp-accent:  mat-palette($mat-pink, A200, A100, A400);
+
+
+//$custom: #2196f3; // Blue
+//$custom: #8BC34A; // Light Green
+$custom: #2DCC72; // OutCycling Green
+$custom50: lighten($custom, 40%);
+$custom100: lighten($custom, 32%);
+$custom200: lighten($custom, 22%);
+$custom300: lighten($custom, 13%);
+$custom400: lighten($custom, 6%);
+$custom500: $custom;
+$custom600: darken($custom, 6%);
+$custom700: darken($custom, 11%);
+$custom800: darken($custom, 16%);
+$custom900: darken(saturate($custom, 100%), 27%);
+
+$custom-accent: #FFA338; // secondary-1 to OutCycling Green
+$custom-accent50: lighten($custom-accent, 40%);
+$custom-accent100: lighten($custom-accent, 32%);
+$custom-accent200: lighten($custom-accent, 22%);
+$custom-accent300: lighten($custom-accent, 13%);
+$custom-accent400: lighten($custom-accent, 6%);
+$custom-accent500: $custom-accent;
+$custom-accent600: darken($custom-accent, 6%);
+$custom-accent700: darken($custom-accent, 11%);
+$custom-accent800: darken($custom-accent, 16%);
+$custom-accent900: darken(saturate($custom-accent, 100%), 27%);
+
+$custom: (
+    50: $custom50,
+    100: $custom100,
+    200: $custom200,
+    300: $custom300,
+    400: $custom400,
+    500: $custom500,
+    600: $custom600,
+    700: $custom700,
+    800: $custom800,
+    900: $custom900,
+    A100: $custom,
+    A200: $custom,
+    A400: $custom,
+    A700: $custom,
+    contrast: (
+        50: $black-87-opacity,
+        100: $black-87-opacity,
+        200: $black-87-opacity,
+        300: $black-87-opacity,
+        400: $black-87-opacity,
+        500: white,
+        600: white,
+        700: white,
+        800: $white-87-opacity,
+        900: $white-87-opacity,
+        A100: $black-87-opacity,
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
+
+$custom-accent: (
+    50: $custom-accent50,
+    100: $custom-accent100,
+    200: $custom-accent200,
+    300: $custom-accent300,
+    400: $custom-accent400,
+    500: $custom-accent500,
+    600: $custom-accent600,
+    700: $custom-accent700,
+    800: $custom-accent800,
+    900: $custom-accent900,
+    A100: $custom-accent,
+    A200: $custom-accent,
+    A400: $custom-accent,
+    A700: $custom-accent,
+    contrast: (
+        50: $black-87-opacity,
+        100: $black-87-opacity,
+        200: $black-87-opacity,
+        300: $black-87-opacity,
+        400: $black-87-opacity,
+        500: white,
+        600: white,
+        700: white,
+        800: $white-87-opacity,
+        900: $white-87-opacity,
+        A100: $black-87-opacity,
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
+
+
+
+
+$custom: mat-palette($custom, A100, A200, A400);
+$custom-accent: mat-palette($custom-accent, A100, A200, A400);
+$blue: mat-palette($mat-light-green, A100, A200, A400);
+
+$primary: mat-palette($mat-green, A100, A200, A400);
+$accent:  mat-palette($mat-blue, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$rp-warn:    mat-palette($mat-red);
+$warn:    mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$rp-theme: mat-light-theme($rp-primary, $rp-accent, $rp-warn);
+$theme: mat-light-theme($custom, $custom-accent, $warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($rp-theme);
+@include angular-material-theme($theme);
+
+@include custom-theme($theme);
+
+
+

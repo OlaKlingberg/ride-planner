@@ -8,7 +8,7 @@ import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
 import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
 import { LargeWindowGuard } from '../core/large-window.guard';
-import { JaneDoeGuard } from './jane-doe.guard';
+import { DemoGuard } from './demo.guard';
 import { CuesheetEditDemoComponent } from './cuesheet-edit/cuesheet-edit-demo.component';
 import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
 import { CuesheetListDemoComponent } from './cuesheet-list/cuesheet-list-demo.component';
@@ -22,7 +22,7 @@ import { SmallWindowGuard } from '../core/small-window.guard';
     {
       path: '',
       component: CuesheetListComponent,
-      canActivate: [ JaneDoeGuard ]
+      canActivate: [ DemoGuard ]
     },
     {
       path: 'demo',
@@ -31,7 +31,7 @@ import { SmallWindowGuard } from '../core/small-window.guard';
     {
       path: 'new',
       component: CuesheetNewComponent,
-      canActivate: [ JaneDoeGuard ]
+      canActivate: [ DemoGuard ]
     },
     {
       path: 'new/demo',
@@ -40,7 +40,7 @@ import { SmallWindowGuard } from '../core/small-window.guard';
     {
       path: ':id/view',
       component: CuesheetViewComponent,
-      canActivate: [ JaneDoeGuard ]
+      canActivate: [ DemoGuard ]
     },
     {
       path: ':id/view/demo',
@@ -49,7 +49,7 @@ import { SmallWindowGuard } from '../core/small-window.guard';
     {
       path: ':id/edit',
       component: CuesheetEditComponent,
-      canActivate: [ JaneDoeGuard ]
+      canActivate: [ DemoGuard ]
     },
     {
       path: ':id/edit/demo',
@@ -58,7 +58,7 @@ import { SmallWindowGuard } from '../core/small-window.guard';
     {
       path: ':cuesheetId/bike/:cueNumber',
       component: CuesheetBikeComponent,
-      canActivate: [ SmallWindowGuard, JaneDoeGuard ]
+      canActivate: [ SmallWindowGuard, DemoGuard ]
     },
     {
       path: ':cuesheetId/bike/:cueNumber/demo',
@@ -68,7 +68,7 @@ import { SmallWindowGuard } from '../core/small-window.guard';
     {
       path: 'frame/:cuesheetId/bike/:cueNumber',
       component: CuesheetBikeFrameComponent,
-      canActivate: [ JaneDoeGuard, LargeWindowGuard ]
+      canActivate: [ DemoGuard, LargeWindowGuard ]
     },
     {
       path: 'frame/:cuesheetId/bike/:cueNumber/demo',
@@ -78,7 +78,7 @@ import { SmallWindowGuard } from '../core/small-window.guard';
   ]) ],
   exports: [ RouterModule ],
   providers: [
-      JaneDoeGuard,
+      DemoGuard,
       SmallWindowGuard,
       LargeWindowGuard
   ]

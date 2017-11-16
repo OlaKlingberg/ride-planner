@@ -45,6 +45,7 @@ agm-map {
 
 #dummy-riders-notice {
   background-color: white;
+  color: $gray-700;
 }
 
 .info-window {
@@ -53,5 +54,6 @@ agm-map {
 
 .launching-satellites {
   color: chartreuse;
+  //z-index: 2000;
 }
 

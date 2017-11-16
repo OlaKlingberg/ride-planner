@@ -7,11 +7,13 @@ import { MapComponent } from './map/map.component';
 import { MapRoutingModule } from './map-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { MapFrameComponent } from './map-frame/map-frame.component';
+import { PageElementsModule } from '../page-elements/page-elements.module';
 
 @NgModule({
   imports: [
     AgmCoreModule,
     MapRoutingModule,
+    PageElementsModule,
     SharedModule,
     HttpModule
   ],
@@ -20,4 +22,5 @@ import { MapFrameComponent } from './map-frame/map-frame.component';
     MapComponent
   ]
 })
-export class MapModule { }
+export class MapModule {
+}

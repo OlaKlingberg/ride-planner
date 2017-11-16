@@ -21,6 +21,6 @@ export const MapAnimations = [
       opacity: 1,
       display: "block"
     })),
-    transition("0 => 1", animate('400ms 2s')),
+    transition("0 => 1", animate('400ms 1s')),
   ])
 ];

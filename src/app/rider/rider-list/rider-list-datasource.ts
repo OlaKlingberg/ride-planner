@@ -28,6 +28,8 @@ export class RiderListDataSource extends DataSource<any> {
   constructor(private _sort: MatSort,
               private riderService: RiderService) {
     super();
+
+    console.log("RiderListDataSource riderList$:", this.riderService.riderList$.value);
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */

@@ -17,6 +17,7 @@ import { DeviceSizeService } from '../device-size/device-size.service';
   animations: navAnimations
 })
 export class NavComponent implements OnInit {
+  bootstrapSize: string;
   navBarState: string = 'hide';
   user: User = null;
 
@@ -30,6 +31,7 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.subscribeToBootstrapSize();
     this.subscribeToNavBarState();
     this.subscribeToRoute();
     this.subscribeToUser();
@@ -46,6 +48,12 @@ export class NavComponent implements OnInit {
   closeAccordion() {
     if ($('.navbar-toggler').attr('aria-expanded') === 'true') $('.navbar-toggler').click();
   }
+
+  subscribeToBootstrapSize() {
+    this.deviceSizeService.bootstrapSize$.subscribe(bootstrapSize => {
+      this.bootstrapSize = bootstrapSize;
+    });
+  };
 
   subscribeToNavBarState() {
     this.navService.navBarState$.subscribe(navBarState => {

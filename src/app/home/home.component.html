@@ -16,31 +16,52 @@
           <div class="col">
             <h1 *ngIf="!demoMode">RidePlanner Live</h1>
             <h1 *ngIf="demoMode">RidePlanner Demo</h1>
-            <h3>Purpose</h3>
-            <p>This site is meant to be used by people taking part in organized bike rides. Ride leaders can create <a
-                routerLink='/cuesheet'>cue sheets</a>, which the participants use on their phones, mounted to the
-              handlebar. There is also a <a routerLink="/map">map</a> that shows you where all the others on the ride (or in your group) is.</p>
-            <ng-container *ngIf="!demoMode">
-              <h3 class="mt-4">Live Site</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 card">
+            <div class="card-body">
+
+              <h3 class="card-title">Purpose</h3>
+              <p>This site is meant to be used by people taking part in organized bike rides. Ride leaders can create <a
+                  routerLink='/cuesheet'>cue sheets</a>, which the participants use on their phones, mounted to the
+                handlebar. There is also a <a routerLink="/map">map</a> that shows you where all the others on the ride
+                (or in your group) is.</p>
+            </div>
+
+          </div>
+          <div class="col-lg-4 card" *ngIf="!demoMode">
+            <div class="card-body">
+
+              <h3>Live Site</h3>
               <p>You are currently on the live site. If you create a cue sheet here, it will remain till you or somebody
                 else deletes it. Any changes you make to existing cue sheets will be saved. If you would like to try out
                 the site, and look at ready-made cue sheets, you may visit the demo version
                 of the site at <a href="https://ride-planner-demo.herokuapp.com/" target="_">RidePlanner Demo</a></p>
-            </ng-container>
-            <ng-container *ngIf="demoMode">
-              <h3>Demo Site</h3>
-              <p>This is the demo version of the RidePlanner site. Cue sheets you create here, or changes you make to existing cue sheets, will not be saved once you have closed the browser window. The live site is currently only available to <a href="http://www.outcycling.org/" target="_">OutCycling</a> members.</p>
-            </ng-container>
+            </div>
+          </div>
+          <div class="col-lg-4 card" *ngIf="demoMode">
+            <div class="card-body">
 
-            <h3 class="mt-4">State of Development</h3>
-            <p>This is a work in progress. It has yet to be tested in the field.</p>
+              <h3>Demo Site</h3>
+              <p>This is the demo version of the RidePlanner site. Cue sheets you create here, or changes you make to
+                existing cue sheets, will not be saved once you have closed the browser window. The live site is
+                currently only available to <a href="http://www.outcycling.org/" target="_">OutCycling</a> members.</p>
+            </div>
+
+          </div>
+          <div class="col-lg-4 card">
+            <div class="card-body">
+              <h3>State of Development</h3>
+              <p>This is a work in progress. It has yet to be tested in the field.</p>
+            </div>
+
           </div>
         </div>
       </div>
-
     </div>
-
   </main>
+
   <footer>
     <rp-footer></rp-footer>
   </footer>

@@ -1,10 +1,10 @@
 <router-outlet [ngClass]="{
-      'xs': deviceSizeService.bootstrapSize$.value === 'xs',
-      'sm': deviceSizeService.bootstrapSize$.value === 'sm',
-      'md': deviceSizeService.bootstrapSize$.value === 'md',
-      'lg': deviceSizeService.bootstrapSize$.value === 'lg',
-      'xl': deviceSizeService.bootstrapSize$.value === 'xl',
-      'xxl': deviceSizeService.bootstrapSize$.value === 'xxl'
+      'xs': bootstrapSize === 'xs',
+      'sm': bootstrapSize === 'sm',
+      'md': bootstrapSize === 'md',
+      'lg': bootstrapSize === 'lg',
+      'xl': bootstrapSize === 'xl',
+      'xxl': bootstrapSize === 'xxl'
       }"></router-outlet>
 
 <rp-device-size></rp-device-size>

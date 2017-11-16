@@ -7,16 +7,16 @@
   <div id="xxl" class="d-block"></div>
 </div>
 
-<ng-container *ngIf="settingsService.showBootstrapSize && deviceSizeService.show">
+<ng-container *ngIf="showBootstrapSize && !temporarilyHide">
   <h6 id="window-size"
       class="p-1"
       (click)="hide()"
       [ngClass]="{
-      'xs': deviceSizeService.bootstrapSize$.value == 'xs',
-      'sm': deviceSizeService.bootstrapSize$.value == 'sm',
-      'md': deviceSizeService.bootstrapSize$.value == 'md',
-      'lg': deviceSizeService.bootstrapSize$.value == 'lg',
-      'xl': deviceSizeService.bootstrapSize$.value == 'xl',
-      'xxl': deviceSizeService.bootstrapSize$.value == 'xxl'
-      }">{{deviceSizeService.bootstrapSize$.value }}: {{deviceSizeService.innerWidth$.value}}x{{deviceSizeService.innerHeight$.value}}</h6>
+      'xs': bootstrapSize === 'xs',
+      'sm': bootstrapSize === 'sm',
+      'md': bootstrapSize === 'md',
+      'lg': bootstrapSize === 'lg',
+      'xl': bootstrapSize === 'xl',
+      'xxl': bootstrapSize === 'xxl'
+      }">{{bootstrapSize }}: {{innerWidth}}x{{innerHeight}}</h6>
 </ng-container>

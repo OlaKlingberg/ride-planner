@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
 
+    console.log("LoginComponent. returnUrl:", this.returnUrl);
+
     let sub = this.userService.user$.subscribe(user => {
           if ( user ) {
             this.user = user;

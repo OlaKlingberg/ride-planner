@@ -11,8 +11,6 @@ import { Cuesheet } from '../cuesheet';
 import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 import { CuesheetService } from '../cuesheet.service';
 import { Subscription } from 'rxjs/Subscription';
-import { SettingsService } from '../../settings/settings.service';
-import { UserService } from '../../user/user.service';
 
 @Component({
   templateUrl: './cuesheet-edit.component.html',
@@ -36,15 +34,12 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private subscription: Subscription;
 
   @ViewChild('cueForm') cueForm: NgForm;
-  // @ViewChild('demoModeModal') demoModeModal: TemplateRef<any>;
 
   constructor(private alertService: AlertService,
               private cuesheetService: CuesheetService,
               private modalService: BsModalService,
               private route: ActivatedRoute,
-              private router: Router,
-              private settingsService: SettingsService,
-              private userService: UserService) {
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -265,7 +260,7 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       this.cueForm.reset();
-      // this.focusTrigger.emit(true);
+      this.focusTrigger.emit(true);
     }
   }
 

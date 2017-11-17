@@ -44,12 +44,14 @@
             <div class="card mt-4" *ngIf="!cuesheets?.length">
               <div class="card-body">
                 <h3 class="card-title">There are no cue sheets.</h3>
+                <a routerLink="/cuesheet/new" class="btn btn-secondary-1">Make A Cue Sheet</a>
+
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row pb-4">
+        <div class="row pb-4" *ngIf="cuesheets?.length">
           <div class="col">
             <a routerLink="/cuesheet/new" class="btn btn-secondary-1">Make New Cue Sheet</a>
           </div>

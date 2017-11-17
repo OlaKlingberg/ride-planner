@@ -12,9 +12,11 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { AuthGuard } from '../authentication/auth.guard';
 import { CuesheetService } from '../cuesheet/cuesheet.service';
 import { DebuggingService } from '../debugger/debugging.service';
+import { DeviceSizeService } from '../device-size/device-size.service';
 import { environment } from '../../environments/environment';
 import { NavModule } from '../nav/nav.module';
 import { NavService } from '../nav/nav.service';
+import { NotLoggedInGuard } from '../authentication/not-logged-in.guard';
 import { PositionService } from './position.service';
 import { RefreshService } from './refresh.service';
 import { RideLeaderGuard } from '../ride/ride-leader.guard';
@@ -27,8 +29,6 @@ import { RiderService } from '../rider/rider.service';
 import { HeaderModule } from '../header/header.module';
 import { CuesheetDemoService } from '../cuesheet/cuesheet-demo.service';
 import { SettingsService } from '../settings/settings.service';
-import { NotLoggedInGuard } from '../authentication/not-logged-in.guard';
-import { DeviceSizeService } from '../device-size/device-size.service';
 
 @NgModule({
   imports: [
@@ -48,10 +48,10 @@ import { DeviceSizeService } from '../device-size/device-size.service';
     NavModule
   ],
   providers: [
-    AuthGuard,
     AdminGuard,
     AlertService,
     AuthenticationService,
+    AuthGuard,
     CuesheetDemoService,
     CuesheetService,
     DebuggingService,

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CuesheetDemoService } from '../cuesheet-demo.service';
-import { Cuesheet } from '../cuesheet';
 
 @Component({
   templateUrl: './cuesheet-bike-frame.component.html',

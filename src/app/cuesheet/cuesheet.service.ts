@@ -6,7 +6,6 @@ import 'rxjs/add/operator/toPromise';
 
 import { Cue } from './cue';
 import { Cuesheet } from './cuesheet';
-import { environment } from "../../environments/environment";
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
 import { Subject } from 'rxjs/Subject';

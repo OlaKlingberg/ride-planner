@@ -35,11 +35,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // If user then go to home page.
-    // if (this.userService.user$.value !== null ) this.router.navigate(['/']);
-
-
-
     if ( this.demoMode ) this.getDemoUsers();
 
     // Get return url from route parameters or default to '/'

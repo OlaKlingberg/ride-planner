@@ -8,7 +8,7 @@ import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
 import { CuesheetBikeComponent } from './cuesheet-bike/cuesheet-bike.component';
 import { LargeWindowGuard } from '../core/large-window.guard';
-import { DemoGuard } from './demo.guard';
+import { DemoGuard } from '../core/demo.guard';
 import { CuesheetEditDemoComponent } from './cuesheet-edit/cuesheet-edit-demo.component';
 import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
 import { CuesheetListDemoComponent } from './cuesheet-list/cuesheet-list-demo.component';

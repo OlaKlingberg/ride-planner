@@ -86,7 +86,6 @@ export class CuesheetDemoService {
   };
 
   getCuesheetList(): Promise<Cuesheet[]> {
-    console.log("CuesheetService.getCuesheetDemolist()");
     return this.cuesheetListInStoragePromise().then(() => {
       return JSON.parse(sessionStorage.getItem('rpCuesheets'));
     });

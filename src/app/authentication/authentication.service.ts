@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 
 import Socket = SocketIOClient.Socket;
 
-import { environment } from "../../environments/environment";
 import { User } from "../user/user";
 import { UserService } from '../user/user.service';
 import { SocketService } from '../core/socket.service';
@@ -12,8 +11,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthenticationService {
-  connectedLoggedInUsers$: BehaviorSubject<any> = new BehaviorSubject(null);
-
   private socket: Socket;
 
   constructor(private http: Http,

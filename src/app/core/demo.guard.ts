@@ -19,9 +19,10 @@ export class DemoGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    console.log("DemoGuard.canActivate()");
 
+    console.log("DemoGuard");
     if ( !this.user.demo ) return true;
+    console.log("DemoGuard failed! The user is a demo user.");
 
     // The user is using the demo account, so should be sent to components that don't persist anything.
     const url = `${state.url}/demo`;

@@ -19,9 +19,9 @@ export class NotLoggedInGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    console.log("NotLoggedInGuard.canActivate()");
-
+    console.log("NotLoggedInGuard");
     if (!this.user) return true;
+    console.log("NotLoggedInGuard failed! The user is already logged in.");
 
     this.router.navigate(['/']);
     return false;

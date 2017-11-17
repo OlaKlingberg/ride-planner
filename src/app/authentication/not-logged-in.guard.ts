@@ -22,7 +22,7 @@ export class NotLoggedInGuard implements CanActivate {
 
     console.log("NotLoggedInGuard");
     if ( !this.user ) return true;
-    console.log("NotLoggedInGuard failed! The user is already logged in.");
+    console.log("NotLoggedInGuard failed! The user is already logged in. Will redirect to", this.returnUrl);
 
     this.router.navigate([ this.returnUrl ]);
     return false;

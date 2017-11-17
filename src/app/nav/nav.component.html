@@ -7,7 +7,7 @@
       'xxl': bootstrapSize === 'xxl'
       }"
      class="navbar navbar-expand-lg unscrolled fixed-top navbar-dark bg-primary" (click)="closeAccordion()">
-  <a class="navbar-brand" routerLink="/">RidePlanner</a>
+  <a class="navbar-brand" routerLink="/">RidePlanner<span *ngIf="demoMode"><br>Demo</span></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>

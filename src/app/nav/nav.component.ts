@@ -9,6 +9,7 @@ import * as $ from 'jquery';
 import { RefreshService } from '../core/refresh.service';
 import Timer = NodeJS.Timer;
 import { DeviceSizeService } from '../device-size/device-size.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'rp-nav',
@@ -18,6 +19,7 @@ import { DeviceSizeService } from '../device-size/device-size.service';
 })
 export class NavComponent implements OnInit {
   bootstrapSize: string;
+  demoMode: boolean;
   navBarState: string = 'hide';
   user: User = null;
 
@@ -27,6 +29,7 @@ export class NavComponent implements OnInit {
               private navService: NavService,
               private refreshService: RefreshService,
               private router: Router,
+              private settingsService: SettingsService,
               private userService: UserService) {
   }
 
@@ -35,6 +38,7 @@ export class NavComponent implements OnInit {
     this.subscribeToNavBarState();
     this.subscribeToRoute();
     this.subscribeToUser();
+    this.demoMode = this.settingsService.demoMode;
 
     $(document).on("scroll", () => {
       if ($(document).scrollTop() > 20) {

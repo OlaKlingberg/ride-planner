@@ -27,8 +27,8 @@ export class Settings {
     this.dummyMovIncMax = obj.dummyMovIncMax || 5;
     this.dummyUpdateFreq = obj.dummyUpdateFreq || 1.5;
     this.fadeNav = obj.fadeNav || 4;
-    this.refreshMapPage = obj.refreshMapPage || 1;
-    this.refreshOnNavigationAfter = obj.refreshOnNavigationAfter || 30;
+    this.refreshMapPage = obj.refreshMapPage || 10;
+    this.refreshOnNavigationAfter = obj.refreshOnNavigationAfter || 60;
     this.removeLongDisconnectedRiders = obj.removeLongDisconnectedRiders || 30;
     this.storage = obj.storage || 'sessionStorage';
   }

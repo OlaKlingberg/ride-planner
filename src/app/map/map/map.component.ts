@@ -88,7 +88,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   addDummyRiders() {
     this.riderService.addDummyRiders(err => {
-      if (err) {
+      if ( err ) {
         console.log("addDummyRiders. Error:", err);
         return;
       }
@@ -206,12 +206,13 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   setZIndexAndOpacity(riders) {
+    this.dummyRiders = false;
     let zCounter: number = 0;
     riders = riders.map(rider => {
       rider.zIndex = zCounter++;
       if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
       if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
-        this.dummyRiders = true;
+      if (rider.dummy) this.dummyRiders = true;
 
       return rider;
     });

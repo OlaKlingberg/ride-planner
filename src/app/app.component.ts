@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.refreshAfterSleep();
+    // this.refreshAfterSleep();
     this.subscribeToBootstrapSize();
   }
 

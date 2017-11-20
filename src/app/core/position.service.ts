@@ -17,7 +17,7 @@ export class PositionService {
   constructor(private settingsService: SettingsService) {
   }
 
-  // Todo: Why can't I do this with JSON.stringify() and JSON.parse()? (Have I tried?)
+  // Todo: Why can't I do this with JSON.parse(JSON.stringify())? (Did I try?)
   copyPositionObject(position) {
     return {
       coords: {

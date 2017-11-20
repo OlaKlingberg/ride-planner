@@ -1,13 +1,34 @@
 @import "../../../bootstrap-theme";
 
 iframe {
+  //height: 736px;
+  //width: 414px;
+  //margin: 0 auto;
+  //position: relative;
+  //top: -710px;
+  //left: -38px;
+  //position: fixed;
+  //transform: scale(.7, .7);
+  position: absolute;
+  top: 25px;
   height: 736px;
   width: 414px;
-  margin: 0 auto;
-  position: relative;
-  top: -710px;
   left: -38px;
   transform: scale(.7, .7);
+}
+
+
+#iphone {
+  //width: 338px;
+  position: relative;
+  margin-bottom: 50px;
+  top: 3em;
+  width: 338px;
+}
+
+#leave-this-view {
+  position: fixed;
+  z-index: 1;
 }
 
 #wrapper {
@@ -26,26 +47,24 @@ iframe {
 .column- {
   &left {
     flex: 1;
-    padding: 2.5rem .5rem;
+    padding: 6rem .5rem 0 .5rem;
     font-size: larger;
     font-weight: bold;
 
   }
 
   &middle {
+    position: relative;
     flex: initial;
     width: 340px;
   }
 
   &right {
     flex: 1;
-    padding: 3rem .5rem;
+    padding: 6rem .5rem 0 .5rem;
   }
 }
 
-.iphone {
-  width: 338px;
-}
 
 
 

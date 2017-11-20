@@ -12,6 +12,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { PositionService } from '../../core/position.service';
 import { Router } from '@angular/router';
 import { User } from '../../user/user';
+import { SocketService } from 'app/core/socket.service';
+import Socket = SocketIOClient.Socket;
 
 @Component({
   templateUrl: './rider-list.component.html',
@@ -25,6 +27,7 @@ export class RiderListComponent implements OnInit, OnDestroy {
   rider: User;
 
   private gettingRidersModalRef: BsModalRef;
+  private socket: Socket;
   private subKeyUp: Subscription;
   private subRiderList: Subscription;
   private url: string;
@@ -37,13 +40,17 @@ export class RiderListComponent implements OnInit, OnDestroy {
               private positionService: PositionService,
               private riderService: RiderService,
               private rideSubjectService: RideSubjectService,
-              private router: Router) {
+              private router: Router,
+              private socketService: SocketService) {
+    this.socket = this.socketService.socket;
     this.url = router.routerState.snapshot.url;
     this.displayColumns();
   }
 
   ngOnInit() {
-    // Todo: Refactor? The app won't request riderList until the user has a position, so I have to request a position here, in case the user enters the app on this page. But this doesn't seem like an ideal setup.
+    this.socket.emit('giveMeRiderList');
+
+    // Todo: Refactor? The app won't request availableRides until the user has a position, so I have to request a position here, in case the user enters the app on this page. But this doesn't seem like an ideal setup.
     this.positionService.getPosition();
 
     this.ride = this.rideSubjectService.ride$.value;
@@ -85,11 +92,12 @@ export class RiderListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Todo: Adjust to bootstrap sizes?
   displayColumns() {
     if ( window.innerWidth >= 700 ) {
-      this.displayedColumns = [ 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'disconnected' ];
+      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'disconnected' ];
     } else {
-      this.displayedColumns = [ 'fullName', 'phone', 'showDetailsButton' ];
+      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'showDetailsButton' ];
     }
   }
 

@@ -1,5 +1,4 @@
 /** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
-
 @import '../../../bootstrap-theme.scss';
 
 mat-table {
@@ -22,6 +21,22 @@ mat-row:nth-of-type(odd) {
 mat-cell, mat-header-cell {
   color: $white !important;
   padding: .4rem 0;
+}
+
+.mat-cell-phone-link {
+  color: lighten($secondary-1-lighter, 10%);
+
+  &:hover {
+    color: white;
+  }
+}
+
+.mat-cell-emergency-phone-link {
+  color: $complement-lighter;
+
+  &:hover {
+    color: $complement;
+  }
 }
 
 .mat-column- {
@@ -60,4 +75,24 @@ mat-cell, mat-header-cell {
 .modal-table {
   width: 100%;
 }
+
+.modal-phone-link {
+  color: $secondary-1;
+
+  &:hover {
+    font-weight: bolder;
+    color: $secondary-1-dark;
+  }
+}
+
+.modal-emergency-phone-link {
+  color: $complement-darker;
+
+  &:hover {
+    font-weight: bolder;
+    color: $complement-darker;
+  }
+}
+
+
 

@@ -99,8 +99,8 @@ export class MemberListComponent implements OnInit {
         });
   }
 
-  // Todo: Shouldn't I adjust this to the bootstrap sizes?
-  displayColumns = function () {
+  // Todo: Adjust to bootstrap sizes?
+  displayColumns = function () { // Can't use an arrow function, because I need to bind this for window to have the right value.
     if ( window.innerWidth >= 1000 ) {
       this.displayedColumns = [ 'admin', 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
     } else if ( window.innerWidth >= 800 ) {

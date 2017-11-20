@@ -18,7 +18,7 @@
       </tr>
       <tr>
         <td>Phone</td>
-        <td>{{member.phone}}</td>
+        <td><a class="modal-phone-link" href="tel:{{member.phone}}">{{member.phone}}</a></td>
       </tr>
       <tr>
         <td>Email</td>
@@ -30,7 +30,7 @@
       </tr>
       <tr>
         <td>Emergency Phone</td>
-        <td>{{member.emergencyPhone}}</td>
+        <td><a class="modal-emergency-phone-link" href="tel:{{member.emergencyPhone}}">{{member.emergencyPhone}}</a></td>
       </tr>
     </table>
   </div>
@@ -47,18 +47,19 @@
 
     <div class="page-members">
 
-      <div class="container pt-3">
+      <div class="container pt-5">
         <div class="row">
           <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-0">
             <!-- Add-dummy-members card -->
             <div class="card my-4" *ngIf="demoMode && numberOfUsers <= 10">
               <!--<div class="card-header">-->
-                <!--<h4 class="card-title">Demo Mode</h4>-->
+              <!--<h4 class="card-title">Demo Mode</h4>-->
               <!--</div>-->
               <div class="card-body">
                 <h4 class="card-title">Demo Mode</h4>
 
-                <p>Click the button to add some dummy members, so you can try out the table filter and sorting functionality.</p>
+                <p>Click the button to add some dummy members, so you can try out the table filter and sorting
+                  functionality.</p>
                 <button class="btn btn-secondary-1"
                         (click)="addDummyMembers()"
                         [disabled]="loading">Add 20 Dummy Members
@@ -78,15 +79,15 @@
             </mat-form-field>
           </div>
           <div class="col-9 col-sm-8 col-md-5 col-lg-4 col-xl-3">
-        <span *ngIf="numberOfUsers > 10">
-          <button class="btn btn-secondary-1 btn-block"
-                  (click)="addDummyMembers()"
-                  [disabled]="loading">Add 20 Dummy Members
-          </button>
-          <br>
-          <button class="btn btn-complement btn-block" (click)="deleteDummyMembers()">Delete Dummy Members
-          </button>
-        </span>
+            <span *ngIf="numberOfUsers > 10">
+              <button class="btn btn-secondary-1 btn-block"
+                      (click)="addDummyMembers()"
+                      [disabled]="loading">Add 20 Dummy Members
+              </button>
+              <br>
+              <button class="btn btn-complement btn-block mb-4" (click)="deleteDummyMembers()">Delete Dummy Members
+              </button>
+            </span>
           </div>
         </div>
         <!-- End: Above table -->
@@ -125,7 +126,7 @@
               <!-- Phone Column -->
               <ng-container matColumnDef="phone">
                 <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row.phone }}</mat-cell>
+                <mat-cell *matCellDef="let row"><a class="mat-cell-phone-link" href="tel:{{row.phone}}">{{ row.phone }}</a></mat-cell>
               </ng-container>
 
               <!-- Email Column -->
@@ -147,7 +148,7 @@
               <!-- Emergency Phone Column -->
               <ng-container matColumnDef="emergencyPhone">
                 <mat-header-cell *matHeaderCellDef>Emergency Phone</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row.emergencyPhone }}</mat-cell>
+                <mat-cell *matCellDef="let row"><a class="mat-cell-emergency-phone-link" href="tel:{{row.emergencyPhone}}">{{ row.emergencyPhone }}</a></mat-cell>
               </ng-container>
 
               <!-- Show-details button -->

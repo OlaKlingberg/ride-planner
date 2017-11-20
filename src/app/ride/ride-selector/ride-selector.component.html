@@ -10,7 +10,7 @@
         <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
           <form name="form" (ngSubmit)="f.form.valid && logIntoRide()" #f="ngForm" novalidate>
             <div *ngIf="!ride" class="card mt-4">
-              <div *ngIf="availableRides?.length >= 1" class="card-body">
+              <div *ngIf="availableRides.length >= 1" class="card-body">
                 <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ride.valid }">
                   <label for="ride">Select a ride or a team</label>
                   <select name="ride"
@@ -26,10 +26,9 @@
                 </div>
                 <button class="btn btn-secondary-1 mb-3">Sign in to ride</button>
                 <br><a class="text-secondary-2-dark" routerLink="../select-action">Create or delete a ride</a>
-
               </div>
 
-              <div *ngIf="availableRides?.length < 1" class="card-body">
+              <div *ngIf="availableRides.length < 1" class="card-body">
                 <h3 class="card-title">Sorry, there are currently no rides!</h3>
                 <h4>Do you want to create one?</h4>
                 <a class="btn btn-secondary-1-dark" routerLink='/ride/create'>Create new ride</a>

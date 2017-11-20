@@ -29,8 +29,7 @@ import { AlertService } from '../../alert/alert.service';
 export class MapComponent implements OnInit, OnDestroy {
   buttonState: string = null;
   colors: Array<string> = [ 'gray', 'red', '9E60EF', '55BFC4', '56BF62', '56C195', '69BC57', '91BA58', '98D28A', '548AC6', '4848A4', '6262ED', '917875', 'A2CACA', 'AC8F74', 'AF5E5A', 'B0F4DA', 'B2F7B5', 'B2F49D', 'B7B758', 'B27F59', 'B59B59', 'C2C6EF', 'C3DBED', 'C3E5CD', 'C3EAE9', 'C4E8DD', 'CDF29E', 'D5B0D3', 'D5C2F2', 'DAAB73', 'E05FF2', 'EEC3F4', 'EFED9E', 'F4B3A8', 'F7C4E5', 'F7D3A9', 'F9C2D5', 'F45DD1', 'FCC3CA', 'FCEE22', 'FF9FA6' ];
-
-
+  demoMode: boolean = false;
   dummyRiders: boolean = false;
   dummyRidersNotice: boolean = false;
   latLng: LatLngBoundsLiteral;
@@ -58,8 +57,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @ViewChildren('markers') markers;
   @ViewChildren('userInfoWindow') userInfoWindow;
 
-  constructor(private alertService: AlertService,
-              private location: Location,
+  constructor(private location: Location,
               private mapsAPILoader: MapsAPILoader,
               private navService: NavService,
               private refreshService: RefreshService,
@@ -72,6 +70,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.demoMode = this.settingsService.demoMode;
     this.subscribeToUser();
     this.hideButtonsOnAutoRefresh();
     this.hideNav();

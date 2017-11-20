@@ -41,6 +41,9 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // console.log("CuesheetBikeComponent.ngOnInit()");
+    // $('#cues-container').scrollTop = 0;
+
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];

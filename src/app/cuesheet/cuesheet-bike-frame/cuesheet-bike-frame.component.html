@@ -1,7 +1,7 @@
 <!-- Todo: Sort out the naming of wrapper, wrapper-outer, and wrapper-inner. -->
 
 <div id="wrapper">
-  <button class="btn btn-block btn-secondary-2-darker" (click)="returnToOverview()">Leave This View</button>
+  <button id="leave-this-view" class="btn btn-block btn-secondary-2-darker" (click)="returnToOverview()">Leave This View</button>
 
   <main class="pt-4">
     <rp-alert></rp-alert>
@@ -15,7 +15,7 @@
         </div>
 
         <div class="column-middle">
-          <img src="/assets/img/other/iphone.png" class="iphone">
+          <img src="/assets/img/other/iphone.png" id="iphone">
           <iframe [src]="url" frameborder="0" #iframe></iframe>
         </div>
 

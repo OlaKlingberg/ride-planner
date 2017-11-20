@@ -54,7 +54,7 @@
 
     <div class="page-riders">
 
-      <div class="container pt-3">
+      <div class="container pt-5">
         <div class="row mb-5" [ngClass]="{'d-none': !ride }">
           <div class="col">
 
@@ -67,6 +67,13 @@
             </div>
 
             <mat-table #table [dataSource]="dataSource" matSort>
+
+              <ng-container matColumnDef="leader">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  <span matTooltip="Click on header to sort." [matTooltipPosition]="'above'">Ride Leader</span>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row"><span *ngIf="row.leader" class="fa fa-check"></span></mat-cell>
+              </ng-container>
 
               <ng-container matColumnDef="fullName">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>

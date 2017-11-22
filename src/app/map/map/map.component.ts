@@ -83,7 +83,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.getRandomPlace();
+    // this.getRandomPlace();
 
     this.demoMode = this.settingsService.demoMode;
     this.subscribeToUser();
@@ -100,61 +100,53 @@ export class MapComponent implements OnInit, OnDestroy {
     this.positionService.getPosition();
   }
 
-  getRandomPlace() {
-    // const oneLat = this.mapService.distanceInKmBetweenCoords(40, -74, 41, -74);
-    // const oneLng = this.mapService.distanceInKmBetweenCoords(40, -74, 40, -75);
-    // console.log("oneLat:", oneLat);
-    // console.log("oneLng:", oneLng);
-
-    this.positionService.positionPromise().then((pos: Position) => {
-      const lat1 = pos.coords.latitude;
-      const lng1 = pos.coords.longitude;
-
-      let lat2;
-      let lng2;
-
-      let dist = 0;
-
-      while (dist < .7) {
-        lat2 = lat1 + Math.random() * .02 - .01;
-        lng2 = lng1 + Math.random() * .02 - .01;
-
-        dist = this.mapService.distanceInKmBetweenCoords(lat1, lng1, lat2, lng2);
-        console.log("Dist till random spot:", dist);
-      }
-
-      this.mapService.getPlace(lat2, lng2).then(place => {
-
-        console.log("Place:", place.results[0].geometry.location);
-
-        lat2 = place.results[0].geometry.location.lat;
-        lng2 = place.results[0].geometry.location.lng;
-
-        dist = this.mapService.distanceInKmBetweenCoords(lat1, lng1, lat2, lng2);
-        console.log("Dist till place:", dist);
-
-        this.mapService.getLegs(lat1, lng1, lat2, lng2).then(legs => {
-          console.log("legs:", legs);
-
-          let idx = 0;
-
-          setInterval(() => {
-            this.testMarker.lat = legs[idx].start_location.lat;
-            this.testMarker.lng = legs[idx].start_location.lng;
-
-            console.log(legs[idx].start_location.lat);
-            idx++;
-          }, 1500);
-
-
-
-
-        })
-      })
-
-    });
-
-  }
+  // getRandomPlace() {
+  //   this.positionService.positionPromise().then((pos: Position) => {
+  //     const lat1 = pos.coords.latitude;
+  //     const lng1 = pos.coords.longitude;
+  //
+  //     let lat2;
+  //     let lng2;
+  //
+  //     let dist = 0;
+  //
+  //     while (dist < .7) {
+  //       lat2 = lat1 + Math.random() * .02 - .01;
+  //       lng2 = lng1 + Math.random() * .02 - .01;
+  //
+  //       dist = this.mapService.distanceInKmBetweenCoords(lat1, lng1, lat2, lng2);
+  //       console.log("Dist till random spot:", dist);
+  //     }
+  //
+  //     this.mapService.getPlace(lat2, lng2).then(place => {
+  //
+  //       console.log("Place:", place.results[0].geometry.location);
+  //
+  //       lat2 = place.results[0].geometry.location.lat;
+  //       lng2 = place.results[0].geometry.location.lng;
+  //
+  //       dist = this.mapService.distanceInKmBetweenCoords(lat1, lng1, lat2, lng2);
+  //       console.log("Dist till place:", dist);
+  //
+  //       this.mapService.getLegs(lat1, lng1, lat2, lng2).then(legs => {
+  //         console.log("legs:", legs);
+  //
+  //         let idx = 0;
+  //
+  //         setInterval(() => {
+  //           this.testMarker.lat = legs[idx].start_location.lat;
+  //           this.testMarker.lng = legs[idx].start_location.lng;
+  //
+  //           console.log(legs[idx].start_location.lat);
+  //           idx++;
+  //         }, 1500);
+  //
+  //       })
+  //     })
+  //
+  //   });
+  //
+  // }
 
 
 
@@ -162,6 +154,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.riderService.addDummyRiders(err => {
       if ( err ) {
         console.log("addDummyRiders. Error:", err);
+        this.addDummyRiders();
         return;
       }
       this.dummyRidersNotice = true;

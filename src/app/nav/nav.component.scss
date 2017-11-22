@@ -5,7 +5,11 @@ nav {
 }
 
 .navbar-brand {
-  line-height: 1;
+  line-height: .7rem;
+
+  .demo-label {
+    font-size: .8rem;
+  }
 }
 
 .navbar-brand,

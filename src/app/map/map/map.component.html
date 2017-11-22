@@ -42,6 +42,23 @@
 
               </agm-marker>
 
+
+              <agm-marker [latitude]="testMarker.lat"
+                          [longitude]="testMarker.lng"
+                          [label]="{text: 'T', color: 'white'}"
+                          [iconUrl]="markerUrl + 'map-marker-' + 'black.png'"
+                          [zIndex]="10000"></agm-marker>
+
+              <!--<agm-polyline>-->
+                <!--<agm-polyline-point [latitude]="40.2098623" [longitude]="-74.0062748"></agm-polyline-point>-->
+                <!--<agm-polyline-point [latitude]="40.2094081" [longitude]="-74.00417899999999"></agm-polyline-point>-->
+                <!--<agm-polyline-point [latitude]="40.2104282" [longitude]="-74.0038127"></agm-polyline-point>-->
+                <!--<agm-polyline-point [latitude]="40.210352" [longitude]="-74.00347119999999"></agm-polyline-point>-->
+                <!--<agm-polyline-point [latitude]="40.2181006" [longitude]="-74.000556"></agm-polyline-point>-->
+                <!--<agm-polyline-point [latitude]="40.218234" [longitude]="-74.00121059999999"></agm-polyline-point>-->
+              <!--</agm-polyline>-->
+
+
               <agm-marker #markers
                           *ngFor="let rider of riders"
                           [latitude]="rider.position.coords.latitude"
@@ -117,7 +134,7 @@
            id="tracking-options"
            class="text-center"
            [@buttons]="buttonState">
-        <button class="btn btn-secondary-1 btn-md"
+        <button class="btn btn-secondary-1 btn-md btn-40"
                 type="button"
                 *ngIf="user.ride && riders.length > 1 && ( mapMode === 'focusOnUser' || mapMode === 'stationary' )"
                 (click)="showNav(); hideNav(); calculateBounds('showAllRiders')">Track All Riders

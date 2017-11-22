@@ -29,6 +29,7 @@ import { RiderService } from '../rider/rider.service';
 import { HeaderModule } from '../header/header.module';
 import { CuesheetDemoService } from '../cuesheet/cuesheet-demo.service';
 import { SettingsService } from '../settings/settings.service';
+import { MapService } from '../map/map.service';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { SettingsService } from '../settings/settings.service';
     CuesheetService,
     DebuggingService,
     DeviceSizeService,
+    MapService,
     NavService,
     NotLoggedInGuard,
     PositionService,

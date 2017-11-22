@@ -19,7 +19,7 @@ import { UserService } from '../../user/user.service';
 import { RefreshService } from '../../core/refresh.service';
 import { RiderService } from '../../rider/rider.service';
 import { SettingsService } from '../../settings/settings.service';
-import { AlertService } from '../../alert/alert.service';
+import { MapService } from '../map.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -51,6 +51,17 @@ export class MapComponent implements OnInit, OnDestroy {
   private socket: Socket;
   private userSub: Subscription;
 
+  testMarker = { lat: null, lng: null };
+  // testMarkerPos = [
+  //   [ 40.21424, -74.008116 ],
+  //   [ 40.214331, -74.008524999999992 ],
+  //   [ 40.214412, -74.008915 ],
+  //   [ 40.214412, -74.008915 ],
+  //   [ 40.214613, -74.008849000000012 ],
+  //   [ 40.214613, -74.008849000000012 ]
+  // ];
+
+
   @ViewChild('agmMap') agmMap;
 
   @ViewChildren('infoWindows') infoWindows;
@@ -59,6 +70,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(private location: Location,
               private mapsAPILoader: MapsAPILoader,
+              private mapService: MapService,
               private navService: NavService,
               private refreshService: RefreshService,
               private riderService: RiderService,
@@ -70,6 +82,9 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.getRandomPlace();
+
     this.demoMode = this.settingsService.demoMode;
     this.subscribeToUser();
     this.hideButtonsOnAutoRefresh();
@@ -84,6 +99,64 @@ export class MapComponent implements OnInit, OnDestroy {
     });
     this.positionService.getPosition();
   }
+
+  getRandomPlace() {
+    // const oneLat = this.mapService.distanceInKmBetweenCoords(40, -74, 41, -74);
+    // const oneLng = this.mapService.distanceInKmBetweenCoords(40, -74, 40, -75);
+    // console.log("oneLat:", oneLat);
+    // console.log("oneLng:", oneLng);
+
+    this.positionService.positionPromise().then((pos: Position) => {
+      const lat1 = pos.coords.latitude;
+      const lng1 = pos.coords.longitude;
+
+      let lat2;
+      let lng2;
+
+      let dist = 0;
+
+      while (dist < .7) {
+        lat2 = lat1 + Math.random() * .02 - .01;
+        lng2 = lng1 + Math.random() * .02 - .01;
+
+        dist = this.mapService.distanceInKmBetweenCoords(lat1, lng1, lat2, lng2);
+        console.log("Dist till random spot:", dist);
+      }
+
+      this.mapService.getPlace(lat2, lng2).then(place => {
+
+        console.log("Place:", place.results[0].geometry.location);
+
+        lat2 = place.results[0].geometry.location.lat;
+        lng2 = place.results[0].geometry.location.lng;
+
+        dist = this.mapService.distanceInKmBetweenCoords(lat1, lng1, lat2, lng2);
+        console.log("Dist till place:", dist);
+
+        this.mapService.getLegs(lat1, lng1, lat2, lng2).then(legs => {
+          console.log("legs:", legs);
+
+          let idx = 0;
+
+          setInterval(() => {
+            this.testMarker.lat = legs[idx].start_location.lat;
+            this.testMarker.lng = legs[idx].start_location.lng;
+
+            console.log(legs[idx].start_location.lat);
+            idx++;
+          }, 1500);
+
+
+
+
+        })
+      })
+
+    });
+
+  }
+
+
 
   addDummyRiders() {
     this.riderService.addDummyRiders(err => {
@@ -211,7 +284,7 @@ export class MapComponent implements OnInit, OnDestroy {
       rider.zIndex = zCounter++;
       if ( rider.leader ) rider.zIndex = rider.zIndex + 500;
       if ( rider.disconnected ) rider.zIndex = rider.zIndex * -1;
-      if (rider.dummy) this.dummyRiders = true;
+      if ( rider.dummy ) this.dummyRiders = true;
 
       return rider;
     });

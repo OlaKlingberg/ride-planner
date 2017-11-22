@@ -87,7 +87,7 @@ export class PositionService {
 
   positionPromise() {
     return new Promise((resolve, reject) => {
-      let subscription = this.position$.subscribe(pos => {
+      let subscription = this.position$.subscribe((pos: Position) => {
         if ( pos ) {
           resolve(pos);
           subscription.unsubscribe();

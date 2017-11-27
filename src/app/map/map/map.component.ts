@@ -31,9 +31,9 @@ export class MapComponent implements OnInit, OnDestroy {
   colors: Array<string> = [ 'gray', 'red', '9E60EF', '55BFC4', '56BF62', '56C195', '69BC57', '91BA58', '98D28A', '548AC6', '4848A4', '6262ED', '917875', 'A2CACA', 'AC8F74', 'AF5E5A', 'B0F4DA', 'B2F7B5', 'B2F49D', 'B7B758', 'B27F59', 'B59B59', 'C2C6EF', 'C3DBED', 'C3E5CD', 'C3EAE9', 'C4E8DD', 'CDF29E', 'D5B0D3', 'D5C2F2', 'DAAB73', 'E05FF2', 'EEC3F4', 'EFED9E', 'F4B3A8', 'F7C4E5', 'F7D3A9', 'F9C2D5', 'F45DD1', 'FCC3CA', 'FCEE22', 'FF9FA6' ];
   demoMode: boolean = false;
   dummyRiders: boolean = false;
-  dummyRidersNotice: boolean = false;
+  // dummyRidersNotice: boolean = false;
   latLng: LatLngBoundsLiteral;
-  mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'focusOnUser';
+  mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'showAllRiders';
   markerUrl: string = "assets/img/rider-markers/";
   maxZoom: number = 18;
   oneSecondPassed = null;
@@ -154,12 +154,11 @@ export class MapComponent implements OnInit, OnDestroy {
     this.riderService.addDummyRiders(err => {
       if ( err ) {
         console.log("addDummyRiders. Error:", err);
-        this.addDummyRiders();
         return;
       }
-      this.dummyRidersNotice = true;
+      // this.dummyRidersNotice = true;
       setTimeout(() => {
-        this.dummyRidersNotice = false;
+        // this.dummyRidersNotice = false;
       }, 3500);
     });
   }
@@ -250,7 +249,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.latLng = JSON.parse(eval(this.settingsService.storage).getItem('rpLatLng'));
     console.log("latLng:", this.latLng);
     eval(this.settingsService.storage).removeItem('rpLatLng');
-    this.mapMode = eval(this.settingsService.storage).getItem('rpMapMode') || 'focusOnUser';
+    this.mapMode = eval(this.settingsService.storage).getItem('rpMapMode') || 'showAllRiders';
     eval(this.settingsService.storage).removeItem('rpMapMode');
   }
 

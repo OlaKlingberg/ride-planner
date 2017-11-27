@@ -125,7 +125,7 @@
         </button>
         <button class="btn btn-secondary-2-darker" *ngIf="dummyRiders" (click)="removeDummyRiders()">Remove All<br>Dummy Riders
         </button>
-        <h4 *ngIf="dummyRidersNotice" id="dummy-riders-notice" class="py-2 px-1 mt-2">The dummy riders will disappear after five minutes.</h4>
+        <!--<h4 *ngIf="dummyRidersNotice" id="dummy-riders-notice" class="py-2 px-1 mt-2">The dummy riders will disappear after five minutes.</h4>-->
       </div>
       <!-- End: Create dummy riders -->
 
@@ -140,7 +140,7 @@
                 (click)="showNav(); hideNav(); calculateBounds('showAllRiders')">Track All Riders
         </button>
         <button class="btn btn-secondary-2-darker btn-md btn-40"
-                *ngIf="mapMode === 'showAllRiders' || mapMode === 'stationary'"
+                *ngIf="user.ride && riders.length > 1 && ( mapMode === 'showAllRiders' || mapMode === 'stationary' )"
                 (click)="showNav(); hideNav(); calculateBounds('focusOnUser')">Track Me
         </button>
       </div>

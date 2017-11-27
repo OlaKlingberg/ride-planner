@@ -48,7 +48,7 @@ export class RiderService {
 
   onJoinedRider() {
     this.socket.on('joinedRider', joinedRider => {
-      console.log('joinedRider:', joinedRider.fname, joinedRider.lname, joinedRider.phone);
+      console.log('joinedRider:', joinedRider.fname, joinedRider.lname, joinedRider.phone, joinedRider.position);
       // If the zIndices are getting too high, it's time to request the whole riderList again.
       if ( this.zCounter >= 1000 ) {
         this.zCounter = 0;
@@ -85,14 +85,19 @@ export class RiderService {
 
   onUpdatedRiderPosition() {
     this.socket.on('updatedRiderPosition', updatedRider => {
+
+    console.log(updatedRider);
+
       let riderList = this.riderList$.value;
       let idx = _.findIndex(riderList, rider => rider._id === updatedRider._id);
       if ( idx >= 0 ) {
+        console.log(`rider with idx ${idx} about to be updated!`);
         riderList[ idx ].position.timestamp = updatedRider.position.timestamp;
         riderList[ idx ].position.coords.accuracy = updatedRider.position.coords.accuracy;
         riderList[ idx ].position.coords.latitude = updatedRider.position.coords.latitude;
         riderList[ idx ].position.coords.longitude = updatedRider.position.coords.longitude;
 
+        console.log("About to call riderList$.next()");
         this.riderList$.next(riderList);
       }
     });
@@ -121,3 +126,4 @@ export class RiderService {
     });
   }
 }
+

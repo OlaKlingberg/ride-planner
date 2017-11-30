@@ -8,10 +8,6 @@ export const alertAnimations = [
       transform: 'scaleY(1)'
     })),
     state('faded', style({
-      // height: '0',   // Does not work on Firefox.
-      // padding: '0',  // Does not work on Firefox.
-      // border: '0',   // Does not work on Firefox.
-      // margin: '0',   // Does not work on Firefox.
       display: 'none',
       opacity: 0,
       transform: 'scaleY(0)'

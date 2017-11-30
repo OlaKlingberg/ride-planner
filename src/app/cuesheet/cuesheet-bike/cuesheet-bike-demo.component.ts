@@ -2,6 +2,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Subscription } from 'rxjs/Subscription';
 import * as Hammer from '../../../../node_modules/hammerjs/hammer';
 import * as $ from 'jquery';
 
@@ -9,7 +10,6 @@ import { Cue } from '../cue';
 import { Cuesheet } from '../cuesheet';
 import { cuesheetBikeAnimations } from './cuesheet-bike.component.animations';
 import { CuesheetDemoService } from '../cuesheet-demo.service';
-import { Subscription } from 'rxjs/Subscription';
 import { CuesheetService } from '../cuesheet.service';
 
 @Component({
@@ -40,10 +40,6 @@ export class CuesheetBikeDemoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // console.log("CuesheetBikeComponent.ngOnInit()");
-    // $('#cues-container').scrollTop = 0;
-    // $('document').scrollTop = 0;
-
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
@@ -53,9 +49,6 @@ export class CuesheetBikeDemoComponent implements OnInit, OnDestroy {
     this.getCuesheet(this.cuesheetId);
     this.setSwipeListeners();
     this.subscribeToSwipes();
-
-    // Todo: This doesn't seem to make any difference, and I don't remember why I put it here.
-    // $('#navbar').removeClass('in'); // Todo: This is surely not the best way of doing this ...
   }
 
   getCuesheet(cuesheetId) {

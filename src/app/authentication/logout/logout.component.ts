@@ -7,9 +7,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { AlertService } from "../../alert/alert.service";
 import { AuthenticationService } from '../authentication.service';
 import { RideSubjectService } from '../../ride/ride-subject.service';
-import { SocketService } from '../../core/socket.service';import { environment } from '../../../environments/environment';
-import { UserService } from '../../user/user.service';
 import { SettingsService } from '../../settings/settings.service';
+import { SocketService } from '../../core/socket.service';
+import { UserService } from '../../user/user.service';
 
 @Component({
   templateUrl: './logout.component.html',
@@ -32,20 +32,13 @@ export class LogoutComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.authenticationService.logout()
         .subscribe(() => {
-
               eval(this.settingsService.storage).removeItem('rpToken');
               eval(this.settingsService.storage).removeItem('rpRide');
 
               this.rideSubjectService.ride$.next(null);
-
               this.userService.user$.next(null);
-              // this.userService.makeUserPromise(); // Todo: I hate this. There has to be a better way.
-
-              // this.userService.watchWhenToUpdateUserPosition();
-              // this.userService.watchWhenToJoinRide();
 
               this.socket.emit('leaveRide');
-
 
               this.alertService.success('You have been logged out', true, true);
               this.router.navigate([ '/auth/login' ]);

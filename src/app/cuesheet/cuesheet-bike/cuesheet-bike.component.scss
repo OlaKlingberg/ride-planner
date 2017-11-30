@@ -1,24 +1,21 @@
 /** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
 @import '../../../bootstrap-theme';
 
-#wrapper {
 
-}
-
-.container {
-  max-width: 575px;
+#bottom-field {
+  position: relative;
+  top: -664px;
+  z-index: 2;
+  padding-top: 20px;
+  height: 400px;
+  width: 100%;
+  background-color: $gray-800;
 }
 
 #cues-container {
   background-color: $gray-800;
   position: relative;
   top: -200px;
-}
-
-.cue {
-  height: 200px;
-  border-bottom: 1px solid gray;
-  margin-bottom: 17px;
 }
 
 #next-cue-mask {
@@ -32,16 +29,6 @@
   opacity: .7;
 }
 
-#bottom-field {
-  position: relative;
-  top: -664px;
-  z-index: 2;
-  padding-top: 20px;
-  height: 400px;
-  width: 100%;
-  background-color: $gray-800;
-}
-
 #page-cuesheet-bike {
   position: fixed;
   max-height: 800px;
@@ -52,4 +39,16 @@
   margin-top: 20px;
   color: white;
 }
+
+.container {
+  max-width: 575px;
+}
+
+.cue {
+  height: 200px;
+  border-bottom: 1px solid gray;
+  margin-bottom: 17px;
+}
+
+
 

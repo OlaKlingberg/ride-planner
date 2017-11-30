@@ -6,20 +6,19 @@ import * as $ from 'jquery';
 
 import { AlertService } from "app/alert/alert.service";
 import { AuthenticationService } from "../authentication.service";
+import { SettingsService } from '../../settings/settings.service';
 import { User } from "../../user/user";
 import { UserService } from "app/user/user.service";
-
-import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  demoUserEmails: string[];
   demoMode: boolean;
-  model: any = {};
+  demoUserEmails: string[];
   loading = false;
+  model: any = {};
   user: User;
 
   private returnUrl: string;
@@ -37,10 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if ( this.demoMode ) this.getDemoUsers();
 
-    // Get return url from route parameters or default to '/'
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/';
-
-    console.log("LoginComponent. returnUrl:", this.returnUrl);
 
     let sub = this.userService.user$.subscribe(user => {
           if ( user ) {
@@ -54,9 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   getDemoUsers() {
     this.authenticationService.getUnusedDemoUsers().then(demoUserEmails => {
-      console.log("demoUsers:", demoUserEmails);
       this.demoUserEmails = demoUserEmails;
-
       this.model.email = demoUserEmails[0];
       this.model.password = 'secret';
     });
@@ -67,7 +61,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     let sub = this.authenticationService.login(this.model.email.toLowerCase(), this.model.password)
         .subscribe(() => {
               this.alertService.success("You have been successfully logged in!", true, true);
-              console.log("LoginComponent.login() About to route to:", this.returnUrl);
               this.router.navigate([ this.returnUrl ]);
             },
             error => {

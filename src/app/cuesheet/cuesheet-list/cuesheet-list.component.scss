@@ -18,20 +18,20 @@ tbody {
 }
 
 
-tr {
-  background-color: $gray-800;
-}
-
-tr:nth-of-type(odd) {
-  background-color: $gray-700 !important;
+td {
+  border: none !important;
 }
 
 th {
   border: none !important;
 }
 
-td {
-  border: none !important;
+tr {
+  background-color: $gray-800;
+}
+
+tr:nth-of-type(odd) {
+  background-color: $gray-700 !important;
 }
 
 #outer-container {

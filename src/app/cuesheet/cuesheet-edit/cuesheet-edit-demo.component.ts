@@ -1,16 +1,16 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, EventEmitter, OnInit, AfterViewInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Subscription } from 'rxjs/Subscription';
 import * as $ from 'jquery';
 
 import { AlertService } from '../../alert/alert.service';
 import { Cue } from '../cue';
 import { Cuesheet } from '../cuesheet';
-import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
-import { Subscription } from 'rxjs/Subscription';
 import { CuesheetDemoService } from '../cuesheet-demo.service';
+import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 
 @Component({
   templateUrl: './cuesheet-edit.component.html',
@@ -44,7 +44,6 @@ export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   ngOnInit() {
-    console.log("CuesheetEditDemoComponent");
     this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
     this.checkForModalClose();
@@ -123,8 +122,6 @@ export class CuesheetEditDemoComponent implements OnInit, AfterViewInit, OnDestr
 
       this.cuesheetDemoService.updateCuesheet(this.cuesheet);
     }
-
-
   }
 
   deleteCue() {

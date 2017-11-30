@@ -74,10 +74,8 @@ export class UserService {
         this.userPositionPromise().then((user: User) => {
           const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
           this.socket.emit('joinRide', user, ride, token, () => {
-            // console.log("user:", user);
             user.ride = ride;
             this.user$.next(user);
-            console.log("About to emit giveMeRiderList!");
             this.socket.emit('giveMeRiderList', ride);
           });
         })
@@ -116,12 +114,6 @@ export class UserService {
     return new RequestOptions({ headers });
   }
 
-  // subscribeToUser() {
-  //   this.user$.subscribe(user => {
-  //     this.user = user;
-  //   });
-  // }
-
   updateUserPositionOnNewPosition() {
     this.positionService.position$.subscribe(pos => {
       if ( pos ) {
@@ -129,7 +121,6 @@ export class UserService {
         if ( user ) {
           user.position = JSON.parse(JSON.stringify(pos));
           this.user$.next(user);
-          // console.log("user.position:", user.position);
           if ( user.ride ) this.socket.emit('updateUserPosition', user.position);
         }
       }
@@ -156,7 +147,6 @@ export class UserService {
     });
   }
 
-  // Todo: Will I be needing this?
   userPromise() {
     return new Promise((resolve, reject) => {
       const subscription = this.user$.subscribe(pos => {

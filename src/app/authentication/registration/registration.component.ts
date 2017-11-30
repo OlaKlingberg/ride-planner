@@ -1,13 +1,12 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 
-import { AlertService } from "../../alert/alert.service";
-import { User } from "../../user/user";
-import { UserService } from "../../user/user.service";
 import { Subscription } from 'rxjs/Subscription';
 
-import { environment } from '../../../environments/environment';
+import { AlertService } from "../../alert/alert.service";
 import { SettingsService } from '../../settings/settings.service';
+import { User } from "../../user/user";
+import { UserService } from "../../user/user.service";
 
 @Component({
   templateUrl: './registration.component.html',
@@ -15,14 +14,14 @@ import { SettingsService } from '../../settings/settings.service';
 })
 export class RegistrationComponent implements OnDestroy {
   demoMode: boolean;
-  model: any = {};
   loading: boolean = false;
+  model: any = {};
   user: User;
 
   private subscription: Subscription;
 
-  @ViewChild('phoneField') phoneField: ElementRef;
   @ViewChild('emergencyPhoneField') emergencyPhoneField: ElementRef;
+  @ViewChild('phoneField') phoneField: ElementRef;
 
   constructor(private alertService: AlertService,
               private router: Router,

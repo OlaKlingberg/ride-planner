@@ -19,7 +19,6 @@ import { UserService } from '../../user/user.service';
 import { RefreshService } from '../../core/refresh.service';
 import { RiderService } from '../../rider/rider.service';
 import { SettingsService } from '../../settings/settings.service';
-import { MapService } from '../map.service';
 
 @Component({
   templateUrl: './map.component.html',
@@ -31,7 +30,6 @@ export class MapComponent implements OnInit, OnDestroy {
   colors: Array<string> = [ 'gray', 'red', '9E60EF', '55BFC4', '56BF62', '56C195', '69BC57', '91BA58', '98D28A', '548AC6', '4848A4', '6262ED', '917875', 'A2CACA', 'AC8F74', 'AF5E5A', 'B0F4DA', 'B2F7B5', 'B2F49D', 'B7B758', 'B27F59', 'B59B59', 'C2C6EF', 'C3DBED', 'C3E5CD', 'C3EAE9', 'C4E8DD', 'CDF29E', 'D5B0D3', 'D5C2F2', 'DAAB73', 'E05FF2', 'EEC3F4', 'EFED9E', 'F4B3A8', 'F7C4E5', 'F7D3A9', 'F9C2D5', 'F45DD1', 'FCC3CA', 'FCEE22', 'FF9FA6' ];
   demoMode: boolean = false;
   dummyRiders: boolean = false;
-  // dummyRidersNotice: boolean = false;
   latLng: LatLngBoundsLiteral;
   mapMode: 'focusOnUser' | 'showAllRiders' | 'stationary' = 'showAllRiders';
   markerUrl: string = "assets/img/rider-markers/";
@@ -51,26 +49,13 @@ export class MapComponent implements OnInit, OnDestroy {
   private socket: Socket;
   private userSub: Subscription;
 
-  testMarker = { lat: null, lng: null };
-  // testMarkerPos = [
-  //   [ 40.21424, -74.008116 ],
-  //   [ 40.214331, -74.008524999999992 ],
-  //   [ 40.214412, -74.008915 ],
-  //   [ 40.214412, -74.008915 ],
-  //   [ 40.214613, -74.008849000000012 ],
-  //   [ 40.214613, -74.008849000000012 ]
-  // ];
-
-
   @ViewChild('agmMap') agmMap;
-
   @ViewChildren('infoWindows') infoWindows;
   @ViewChildren('markers') markers;
   @ViewChildren('userInfoWindow') userInfoWindow;
 
   constructor(private location: Location,
               private mapsAPILoader: MapsAPILoader,
-              private mapService: MapService,
               private navService: NavService,
               private refreshService: RefreshService,
               private riderService: RiderService,
@@ -82,9 +67,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    // this.getRandomPlace();
-
     this.demoMode = this.settingsService.demoMode;
     this.subscribeToUser();
     this.hideButtonsOnAutoRefresh();
@@ -100,66 +82,9 @@ export class MapComponent implements OnInit, OnDestroy {
     this.positionService.getPosition();
   }
 
-  // getRandomPlace() {
-  //   this.positionService.positionPromise().then((pos: Position) => {
-  //     const lat1 = pos.coords.latitude;
-  //     const lng1 = pos.coords.longitude;
-  //
-  //     let lat2;
-  //     let lng2;
-  //
-  //     let dist = 0;
-  //
-  //     while (dist < .7) {
-  //       lat2 = lat1 + Math.random() * .02 - .01;
-  //       lng2 = lng1 + Math.random() * .02 - .01;
-  //
-  //       dist = this.mapService.distanceInKmBetweenCoords(lat1, lng1, lat2, lng2);
-  //       console.log("Dist till random spot:", dist);
-  //     }
-  //
-  //     this.mapService.getPlace(lat2, lng2).then(place => {
-  //
-  //       console.log("Place:", place.results[0].geometry.location);
-  //
-  //       lat2 = place.results[0].geometry.location.lat;
-  //       lng2 = place.results[0].geometry.location.lng;
-  //
-  //       dist = this.mapService.distanceInKmBetweenCoords(lat1, lng1, lat2, lng2);
-  //       console.log("Dist till place:", dist);
-  //
-  //       this.mapService.getLegs(lat1, lng1, lat2, lng2).then(legs => {
-  //         console.log("legs:", legs);
-  //
-  //         let idx = 0;
-  //
-  //         setInterval(() => {
-  //           this.testMarker.lat = legs[idx].start_location.lat;
-  //           this.testMarker.lng = legs[idx].start_location.lng;
-  //
-  //           console.log(legs[idx].start_location.lat);
-  //           idx++;
-  //         }, 1500);
-  //
-  //       })
-  //     })
-  //
-  //   });
-  //
-  // }
-
-
-
   addDummyRiders() {
     this.riderService.addDummyRiders(err => {
-      if ( err ) {
-        console.log("addDummyRiders. Error:", err);
-        return;
-      }
-      // this.dummyRidersNotice = true;
-      setTimeout(() => {
-        // this.dummyRidersNotice = false;
-      }, 3500);
+      if ( err ) return;  // Todo: Handle error.
     });
   }
 
@@ -188,14 +113,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   closeInfoWindows(_id) {
-    // This actually works. Apparently, this executes, closing any open infoWindow, before a new one is opened.
     this.infoWindows.forEach(infoWindow => infoWindow.close());
     this.userInfoWindow.forEach(userInfoWindow => userInfoWindow.close());
-
-    // If the above hadn't worked, this is how I would have done it.
-    // this.infoWindows.forEach(infoWindow => {
-    //   if (infoWindow._el.nativeElement.attributes['data-index'] !== _id) infoWindow.close();
-    // });
   }
 
   getRiders() {
@@ -210,7 +129,6 @@ export class MapComponent implements OnInit, OnDestroy {
           return !rider.disconnected || (Date.now() - rider.disconnected) < this.settingsService.removeLongDisconnectedRider * 60000;
         });
         this.riders = this.setZIndexAndOpacity(riders);
-        // console.log("MapComponent.riders:", riders);
       }
 
       if ( user.position && user.position.coords && user.position.coords.latitude ) this.calculateBounds();
@@ -228,7 +146,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // Wait till the map is shown (which happens when there is a position), set timer for 4s, check that the accordion is not expanded and that the user is till on the map page, and then hide the navbar.
     this.positionService.positionPromise().then(() => {
       this.hideTimer = setTimeout(() => {
-        let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true'; // Turns string into boolean.
+        let ariaExpanded = $("[aria-expanded]").attr('aria-expanded') === 'true';
         if ( !ariaExpanded && this.location.path() === '/map' ) {
           this.navService.navBarState$.next('hide');
           this.buttonState = 'hide';
@@ -247,16 +165,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   retrieveState() {
     this.latLng = JSON.parse(eval(this.settingsService.storage).getItem('rpLatLng'));
-    console.log("latLng:", this.latLng);
     eval(this.settingsService.storage).removeItem('rpLatLng');
     this.mapMode = eval(this.settingsService.storage).getItem('rpMapMode') || 'showAllRiders';
     eval(this.settingsService.storage).removeItem('rpMapMode');
   }
 
   setRefreshTimer() {
-    console.log("setRefreshTimer(). About to set refreshTimer");
     this.refreshTimer = setTimeout(() => {
-      console.log("refreshTimer completed");
       if ( this.latLng ) eval(this.settingsService.storage).setItem('rpLatLng', JSON.stringify(this.latLng));
       eval(this.settingsService.storage).setItem('rpMapMode', this.mapMode);
       this.refreshService.refresh();
@@ -297,7 +212,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   waitOneSecond() {
     setTimeout(() => {
-      console.log("oneSecondPassed = true");
       this.oneSecondPassed = { something: 'or other' };
     }, 10000);
   }
@@ -323,7 +237,6 @@ export class MapComponent implements OnInit, OnDestroy {
       google.maps.event.clearInstanceListeners(this.infoWindows);
     }
   }
-
 }
 
 

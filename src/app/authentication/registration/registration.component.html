@@ -7,6 +7,7 @@
     <rp-alert></rp-alert>
 
     <div class="container">
+
       <!-- NOT demoMode -->
       <div class="row">
         <div *ngIf="!demoMode" class="col-md-4">
@@ -80,8 +81,9 @@
       </div>
     </div>
     <!-- End of NOT demoMode -->
+
+    <!-- demoMode -->
     <div *ngIf="demoMode" class="container">
-      <!-- demoMode -->
       <div class="row text-row">
         <div class="col-md-6">
           <h2>Demo Mode</h2>

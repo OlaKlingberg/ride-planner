@@ -8,11 +8,10 @@ import { AlertService } from '../../alert/alert.service';
 import { Ride } from '../ride';
 import { RideService } from '../ride.service';
 import { RideSubjectService } from '../ride-subject.service';
+import { SettingsService } from '../../settings/settings.service';
 import { SocketService } from '../../core/socket.service';
 import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
-import { SettingsService } from '../../settings/settings.service';
-import { environment } from '../../../environments/environment';
 
 @Component({
   templateUrl: './ride-remover.component.html',

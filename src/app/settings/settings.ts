@@ -1,5 +1,4 @@
 export class Settings {
-  // api: string;
   bootstrapScreenSize: string;
   demoMode: string;
   dummyPos: string;

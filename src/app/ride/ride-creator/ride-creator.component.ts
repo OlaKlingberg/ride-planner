@@ -6,10 +6,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { AlertService } from '../../alert/alert.service';
 import { Ride } from '../ride';
 import { RideService } from '../ride.service';
-import { UserService } from '../../user/user.service';
-import { User } from '../../user/user';
-
 import { SettingsService } from '../../settings/settings.service';
+import { User } from '../../user/user';
+import { UserService } from '../../user/user.service';
 
 @Component({
   templateUrl: './ride-creator.component.html',
@@ -35,9 +34,6 @@ export class RideCreatorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userService.userPromise().then(user => {
       this.user = new User(user);
-
-      console.log("demoMode:", this.demoMode);
-      console.log("user.demo:", this.user.demo);
     });
   }
 

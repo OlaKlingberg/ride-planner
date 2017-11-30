@@ -1,14 +1,6 @@
 @import "../../../bootstrap-theme";
 
 iframe {
-  //height: 736px;
-  //width: 414px;
-  //margin: 0 auto;
-  //position: relative;
-  //top: -710px;
-  //left: -38px;
-  //position: fixed;
-  //transform: scale(.7, .7);
   position: absolute;
   top: 25px;
   height: 736px;
@@ -17,9 +9,7 @@ iframe {
   transform: scale(.7, .7);
 }
 
-
 #iphone {
-  //width: 338px;
   position: relative;
   margin-bottom: 50px;
   top: 3em;
@@ -42,7 +32,6 @@ iframe {
   margin: 0 auto;
   width: 960px;
 }
-
 
 .column- {
   &left {

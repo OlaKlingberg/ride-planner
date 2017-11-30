@@ -9,18 +9,22 @@ table {
   fonts-size: 14px;
 }
 
+th {
+  border: none !important;
+}
+
 thead tr {
   background-color: $primary !important;
   color: $white;
 }
 
-th {
-  border: none !important;
-}
-
 tbody {
   fontsize: 14px;
   border-bottom: 1px solid $gray-700;
+}
+
+td {
+  border: none !important;
 }
 
 tr {
@@ -36,10 +40,6 @@ tr:hover {
 tr:nth-of-type(odd) {
   background-color: $gray-200;
   color: $black;
-}
-
-td {
-  border: none !important;
 }
 
 #cuesheet-form {
@@ -93,11 +93,13 @@ td {
   transform: translate(0, -50%);
 }
 
-.insert-button-container {
-  position: absolute;
-  top: -100%;
-  height: 200%;
-  right: 30px;
+.highlight td {
+  background-color: $complement;
+  color: $white;
+  &:not(.buttons-column) {
+    z-index: 1100;
+    position: relative;
+  }
 }
 
 .insert-button {
@@ -106,13 +108,11 @@ td {
   transform: translate(0, -50%);
 }
 
-.highlight td {
-  background-color: $complement;
-  color: $white;
-  &:not(.buttons-column) {
-    z-index: 1100;
-    position: relative;
-  }
+.insert-button-container {
+  position: absolute;
+  top: -100%;
+  height: 200%;
+  right: 30px;
 }
 
 .modal-content {

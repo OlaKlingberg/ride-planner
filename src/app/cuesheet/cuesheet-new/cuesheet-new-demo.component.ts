@@ -1,11 +1,10 @@
-import { Component, OnDestroy, EventEmitter, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertService } from '../../alert/alert.service';
 import { Cuesheet } from '../cuesheet';
-import { CuesheetService } from '../cuesheet.service';
 import { CuesheetDemoService } from '../cuesheet-demo.service';
 
 @Component({
@@ -30,7 +29,6 @@ export class CuesheetNewDemoComponent implements OnDestroy, AfterViewInit {
   }
 
   createCuesheet() {
-    console.log("CuesheetNewDemoComponent.createCuesheet()");
     this.loading = true;
 
     const cuesheet = this.cuesheetDemoService.createCuesheet(this.model);

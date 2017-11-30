@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SettingsService } from '../settings/settings.service';
+
 import { DeviceSizeService } from './device-size.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'rp-device-size',

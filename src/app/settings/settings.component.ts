@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { SettingsService } from './settings.service';
-import { Settings } from './settings';
+
 import { AlertService } from '../alert/alert.service';
 import { environment } from '../../environments/environment'
+import { Settings } from './settings';
+import { SettingsService } from './settings.service';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -43,13 +44,11 @@ export class SettingsComponent implements OnInit {
       keys.forEach(key => {
         const value = eval(this.currentStorage).getItem(key);
         eval(this.currentStorage).removeItem(key);
-        console.log("storage:", this.settings.storage);
         if ( value !== null && value !== 'null' ) eval(this.settings.storage).setItem(key, value);
       });
     }
 
     localStorage.setItem('rpSettings', JSON.stringify(this.settings));
-    console.log("Just saved in localStorage. rpSettings:", this.settings);
 
     this.alertService.success("Settings have been saved – but you must refresh the browser for them to take effect.", false);
 

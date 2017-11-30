@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { AuthenticationService } from "./authentication/authentication.service";
 import { Subscription } from 'rxjs/Subscription';
+
+import { AuthenticationService } from "./authentication/authentication.service";
 import { DeviceSizeService } from './device-size/device-size.service';
-// import { EnvService } from './core/env.service';
 
 @Component({
   selector: 'rp-root',
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.refreshAfterSleep();
+    this.refreshAfterSleep();
     this.subscribeToBootstrapSize();
   }
 

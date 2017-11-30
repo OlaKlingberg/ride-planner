@@ -1,4 +1,5 @@
 import { Directive, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+
 import { Subscription } from 'rxjs/Subscription';
 
 @Directive({
@@ -9,8 +10,7 @@ export class FocusDirective implements OnInit, OnDestroy {
 
   @Input('focus') focusEvent: EventEmitter<boolean>;
 
-  constructor(@Inject(ElementRef) private element: ElementRef) {
-  }
+  constructor(@Inject(ElementRef) private element: ElementRef) { }
 
   ngOnInit() {
     this.subscription = this.focusEvent.subscribe(event => {

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { CuesheetDemoService } from '../cuesheet-demo.service';
 import { Cuesheet } from '../cuesheet';
+import { CuesheetDemoService } from '../cuesheet-demo.service';
 
 @Component({
   templateUrl: './cuesheet-list.component.html',
@@ -14,8 +14,7 @@ export class CuesheetListDemoComponent implements OnInit {
 
   private subscription: Subscription;
 
-  constructor(private cuesheetDemoService: CuesheetDemoService) {
-  }
+  constructor(private cuesheetDemoService: CuesheetDemoService) { }
 
   ngOnInit() {
     this.cuesheetDemoService.getCuesheetList().then((cuesheets: Cuesheet[]) => {

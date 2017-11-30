@@ -1,14 +1,16 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { UserService } from '../user.service';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/startWith';
+
+import { UserService } from '../user.service';
 
 export class MemberListDataSource extends DataSource<any> {
   _filterChange = new BehaviorSubject('');

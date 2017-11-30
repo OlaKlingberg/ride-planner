@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { MapComponent } from './map/map.component';
 import { MapFrameComponent } from './map-frame/map-frame.component';
 import { LargeWindowGuard } from '../core/large-window.guard';
-import { MapComponent } from './map/map.component';
 import { SmallWindowGuard } from '../core/small-window.guard';
 
 @NgModule({

@@ -1,21 +1,19 @@
-import { Http, RequestOptions, Headers, Response } from "@angular/http";
+import { Headers, Http, Response, RequestOptions } from "@angular/http";
 import { Injectable } from '@angular/core';
 
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/toPromise';
-
-import { environment } from '../../environments/environment';
-import { Ride } from './ride';
-import { User } from '../user/user';
-import { UserService } from '../user/user.service';
-import { SocketService } from '../core/socket.service';
 import Socket = SocketIOClient.Socket;
+
+import { Ride } from './ride';
 import { RideSubjectService } from './ride-subject.service';
 import { SettingsService } from '../settings/settings.service';
+import { SocketService } from '../core/socket.service';
+import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class RideService {
-
   private socket: Socket;
   private user: User;
 
@@ -56,9 +54,7 @@ export class RideService {
   }
 
   onAvailableRides() {
-    console.log("RideService.onAvailableRides");
     this.socket.on('availableRides', (availableRides: Ride[] )=> {
-      console.log("availableRides:", availableRides);
       this.rideSubjectService.availableRides$.next(availableRides);
     })
   }

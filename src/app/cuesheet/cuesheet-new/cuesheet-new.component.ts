@@ -1,13 +1,13 @@
-import { Component, OnDestroy, EventEmitter, AfterViewInit, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, EventEmitter, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertService } from '../../alert/alert.service';
 import { Cuesheet } from '../cuesheet';
 import { CuesheetService } from '../cuesheet.service';
 import { SettingsService } from '../../settings/settings.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   templateUrl: './cuesheet-new.component.html',

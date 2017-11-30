@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { Settings } from './settings';
 
-import { environment } from '../../environments/environment';
 @Injectable()
 export class SettingsService {
-
   api: string;
   demoMode: boolean;
   dummyPos: boolean;

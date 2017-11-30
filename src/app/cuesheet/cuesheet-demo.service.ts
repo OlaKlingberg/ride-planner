@@ -1,14 +1,13 @@
+import { Headers, Http, Response, RequestOptions } from "@angular/http";
 import { Injectable } from '@angular/core';
-import { Cuesheet } from './cuesheet';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { CuesheetService } from './cuesheet.service';
-
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
-import { Http, RequestOptions, Headers, Response } from "@angular/http";
-
-import { environment } from "../../environments/environment";
 import { Router } from '@angular/router';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+
+import { Cuesheet } from './cuesheet';
+import { CuesheetService } from './cuesheet.service';
 import { SettingsService } from '../settings/settings.service';
 
 
@@ -105,7 +104,6 @@ export class CuesheetDemoService {
     }
   }
 
-
   setHeaders() {
     const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
@@ -126,6 +124,4 @@ export class CuesheetDemoService {
     cuesheets.unshift(updatedCuesheet);
     sessionStorage.setItem('rpCuesheets', JSON.stringify(cuesheets));
   }
-
-
 }

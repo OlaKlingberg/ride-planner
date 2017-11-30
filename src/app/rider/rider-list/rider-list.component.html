@@ -1,12 +1,9 @@
 <!-- Modal shown while waiting for riders -->
-<!--<ng-container *ngIf="!riderService.riderList$.value">-->
-  <ng-template #gettingRiders class="modal">
-    <div class="modal-header">
-      <h1 class="modal-title my-3">Getting riders ...</h1>
-    </div>
-  </ng-template>
-<!--</ng-container>-->
-
+<ng-template #gettingRiders class="modal">
+  <div class="modal-header">
+    <h1 class="modal-title my-3">Getting riders ...</h1>
+  </div>
+</ng-template>
 <!-- End: Modal shown while waiting for riders -->
 
 <!-- Modal with rider details -->
@@ -125,16 +122,6 @@
 
           </div>
         </div>
-
-        <!--<div class="row mt-5" [ngClass]="{ 'd-none': dataSource.data !== null}">-->
-        <!--<div class="col col-md-6">-->
-        <!--<div class="card">-->
-        <!--<div class="card-body">-->
-        <!--<h1>Getting riders ...</h1>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
 
         <div class="row">
           <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">

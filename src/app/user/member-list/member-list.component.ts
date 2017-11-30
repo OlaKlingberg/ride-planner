@@ -1,33 +1,39 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
-import { MemberListDataSource } from './member-list-datasource';
-import { UserService } from '../user.service';
-import { Observable } from 'rxjs/Observable';
+
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/startWith';
 import Socket = SocketIOClient.Socket;
+import { Subscription } from 'rxjs/Subscription';
+
+import { AlertService } from '../../alert/alert.service';
+import { MemberListDataSource } from './member-list-datasource';
+import { SettingsService } from '../../settings/settings.service';
 import { SocketService } from '../../core/socket.service';
 import { User } from '../user';
-import { AlertService } from '../../alert/alert.service';
-import { SettingsService } from '../../settings/settings.service';
+import { UserService } from '../user.service';
+
+import { getBootstrapDeviceSize } from '../../_lib/util';
+
 
 @Component({
   templateUrl: './member-list.component.html',
   styleUrls: [ './member-list.component.scss' ]
 })
 export class MemberListComponent implements OnInit {
+  dataSource: MemberListDataSource | null;
   demoMode: boolean;
   displayedColumns: string[];
-  dataSource: MemberListDataSource | null;
   loading: boolean = false;
   member: User;
   modalRef: BsModalRef;
   numberOfUsers: number;
   socket: Socket;
 
+  private deviceSize: string;
   private subscription: Subscription;
 
   @ViewChild('filter') filter: ElementRef;
@@ -35,8 +41,8 @@ export class MemberListComponent implements OnInit {
 
   constructor(private alertService: AlertService,
               private modalService: BsModalService,
-              private socketService: SocketService,
               private settingsService: SettingsService,
+              private socketService: SocketService,
               private userService: UserService) {
     this.displayColumns();
     this.socket = socketService.socket;
@@ -58,7 +64,7 @@ export class MemberListComponent implements OnInit {
       this.dataSource.filter = this.filter.nativeElement.value;
     });
 
-    window.addEventListener('resize', this.displayColumns);
+    window.addEventListener('resize', this.setDeviceSize);
 
     this.userService.requestAllUsers()
         .then(() => {
@@ -79,7 +85,6 @@ export class MemberListComponent implements OnInit {
                 this.alertService.success('Twenty members have been added. They will be removed in an hour.');
                 this.loading = false;
                 this.numberOfUsers = this.userService.userList$.value.length;
-                console.log("numberOfUsers:", this.numberOfUsers);
               });
         })
         .catch(e => {
@@ -90,7 +95,6 @@ export class MemberListComponent implements OnInit {
   deleteDummyMembers() {
     this.userService.deleteDummyMembers()
         .then(res => {
-          console.log("response:", res);
           this.userService.requestAllUsers()
               .then(() => {
                 this.alertService.success("The dummy members have been deleted.");
@@ -99,27 +103,32 @@ export class MemberListComponent implements OnInit {
         });
   }
 
-  // Todo: Adjust to bootstrap sizes?
-  displayColumns = function () { // Can't use ES6 syntax (is that what it is?) here, because I need to bind this for window to have the right value.
-    if ( window.innerWidth >= 1000 ) {
-      this.displayedColumns = [ 'admin', 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
-    } else if ( window.innerWidth >= 800 ) {
-      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'showDetailsButton' ]
-    } else if ( window.innerWidth >= 500 ) {
-      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'showDetailsButton' ]
-    } else {
+  displayColumns() {
+    this.deviceSize = getBootstrapDeviceSize();
+
+    if ( this.deviceSize === 'xs' ) {
       this.displayedColumns = [ 'leader', 'fullName', 'showDetailsButton' ];
+    } else if ( this.deviceSize === 'sm' ) {
+      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'showDetailsButton' ]
+    } else if ( this.deviceSize === 'md' ) {
+      this.displayedColumns = [ 'leader', 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'showDetailsButton' ]
+    } else {
+      this.displayedColumns = [ 'admin', 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
     }
+  }
+
+  setDeviceSize = function () {
+    this.deviceSize = getBootstrapDeviceSize();
+    this.displayColumns();
   }.bind(this);
 
   showDetails(template: TemplateRef<any>, row) {
-    console.log(row);
     this.member = row;
     this.modalRef = this.modalService.show(template);
   }
 
   ngOnDestroy() {
     if ( this.subscription ) this.subscription.unsubscribe();
-    window.removeEventListener('resize', this.displayColumns);
+    window.removeEventListener('resize', this.setDeviceSize);
   }
 }

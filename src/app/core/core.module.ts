@@ -10,10 +10,12 @@ import { AlertModule } from '../alert/alert.module';
 import { AlertService } from '../alert/alert.service';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { AuthGuard } from '../authentication/auth.guard';
+import { CuesheetDemoService } from '../cuesheet/cuesheet-demo.service';
 import { CuesheetService } from '../cuesheet/cuesheet.service';
 import { DebuggingService } from '../debugger/debugging.service';
 import { DeviceSizeService } from '../device-size/device-size.service';
 import { environment } from '../../environments/environment';
+import { HeaderModule } from '../header/header.module';
 import { NavModule } from '../nav/nav.module';
 import { NavService } from '../nav/nav.service';
 import { NotLoggedInGuard } from '../authentication/not-logged-in.guard';
@@ -22,14 +24,11 @@ import { RefreshService } from './refresh.service';
 import { RideLeaderGuard } from '../ride/ride-leader.guard';
 import { RideService } from '../ride/ride.service';
 import { RideSubjectService } from '../ride/ride-subject.service';
+import { RiderService } from '../rider/rider.service';
+import { SettingsService } from '../settings/settings.service';
 import { SocketService } from './socket.service';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { UserService } from '../user/user.service';
-import { RiderService } from '../rider/rider.service';
-import { HeaderModule } from '../header/header.module';
-import { CuesheetDemoService } from '../cuesheet/cuesheet-demo.service';
-import { SettingsService } from '../settings/settings.service';
-import { MapService } from '../map/map.service';
 
 @NgModule({
   imports: [
@@ -57,7 +56,6 @@ import { MapService } from '../map/map.service';
     CuesheetService,
     DebuggingService,
     DeviceSizeService,
-    MapService,
     NavService,
     NotLoggedInGuard,
     PositionService,

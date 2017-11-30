@@ -20,13 +20,9 @@ agm-map {
   width: 90vw;
 }
 
-#tracking-options {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translate(-50%);
-  width: 90vw;
-  z-index: 9;
+#dummy-riders-notice {
+  background-color: white;
+  color: $gray-700;
 }
 
 #not-logged-in-warning {
@@ -39,13 +35,17 @@ agm-map {
   max-width: 500px;
 }
 
-.btn-40 {
-  width: 40%;
+#tracking-options {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translate(-50%);
+  width: 90vw;
+  z-index: 9;
 }
 
-#dummy-riders-notice {
-  background-color: white;
-  color: $gray-700;
+.btn-40 {
+  width: 40%;
 }
 
 .info-window {

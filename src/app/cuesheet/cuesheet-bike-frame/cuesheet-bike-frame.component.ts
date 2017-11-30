@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 import { CuesheetService } from '../cuesheet.service';
 
 @Component({
@@ -29,7 +30,6 @@ export class CuesheetBikeFrameComponent implements OnInit {
 
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${window.location.origin}/cuesheet/${this.cuesheetId}/bike/${this.cueNumber}`);
     });
-
   }
 
   returnToOverview() {

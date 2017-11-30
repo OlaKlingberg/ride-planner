@@ -10,7 +10,7 @@ export class Cuesheet {
   updatedAt: Date;
 
   constructor(obj) {
-    this._creator = obj._creator;     // Todo: Is this copied by reference, and is that a problem?
+    this._creator = obj._creator;
     this._id = obj._id;
     this.createdAt = obj.createdAt;
     this.description = obj.description;

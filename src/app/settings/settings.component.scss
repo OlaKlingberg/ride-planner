@@ -1,63 +1,11 @@
 /** Some page-specific styles won't work unless applied to the whole document. See styles.scss. **/
 @import '../../bootstrap-theme';
 
-mat-card {
-  //background-color: darken($rpGray, 8%);
-}
-
 .btn-save-cancel {
   width: 10em;
-}
-
-.buttons-container {
-  //width: 400px;
-}
-
-.btn-40 {
-  //width: 40%;
-}
-
-.mat-app-background {
-  //background-color: darken($rpGray, 8%);
-  //padding: 0;
-}
-
-.input-sm {
-  //width: 60px;
-  //margin-right: 10px;
-}
-
-.move-down {
-  //position: relative;
-  //top: 6px;
-}
-
-.section-styling {
-  //margin-bottom: 10px;
-}
-
-.settings-row {
-  //margin-bottom: 30px;
 }
 
 .two-lined-label {
   line-height: 1;
 }
 
-label {
-  //font-weight: bold;
-}
-
-input[type="radio"] {
-  //box-sizing: border-box;
-  //display: inline-block;
-  //position: relative;
-  //width: 20px;
-  //height: 20px;
-  //top: 3px;
-  //flex-shrink: 0;
-}
-
-//.mat-radio-outer-circle {
-//  background-color: chartreuse;
-//}

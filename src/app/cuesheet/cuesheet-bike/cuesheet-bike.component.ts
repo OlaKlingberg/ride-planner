@@ -2,6 +2,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Subscription } from 'rxjs/Subscription';
 import * as Hammer from '../../../../node_modules/hammerjs/hammer';
 import * as $ from 'jquery';
 
@@ -9,7 +10,6 @@ import { Cue } from '../cue';
 import { Cuesheet } from '../cuesheet';
 import { cuesheetBikeAnimations } from './cuesheet-bike.component.animations';
 import { CuesheetService } from '../cuesheet.service';
-import { Subscription } from 'rxjs/Subscription';
 
 import { getBootstrapDeviceSize} from '../../_lib/util';
 
@@ -41,9 +41,6 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // console.log("CuesheetBikeComponent.ngOnInit()");
-    // $('#cues-container').scrollTop = 0;
-
     this.route.params.forEach((params: Params) => {
       this.cuesheetId = params[ 'cuesheetId' ];
       this.cueNumber = +params[ 'cueNumber' ];
@@ -118,7 +115,6 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   }
 
   swipeDown() {
-    // console.log("swipeDown(). cueNumber:", this.cueNumber);
     if ( this.cueNumber <= 0 ) {
       if (this.modalRef) this.modalRef.hide();
       this.modalRef = this.modalService.show(this.firstCueModal);
@@ -135,7 +131,6 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   }
 
   swipeUp() {
-    // console.log("swipeUp(). cueNumber:", this.cueNumber);
     if ( this.cueNumber >= this.cuesheet.cues.length - 1 ) {
       if (this.modalRef) this.modalRef.hide();
       this.modalRef = this.modalService.show(this.lastCueModal);
@@ -147,7 +142,6 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
       this.move = 'up';
       setTimeout(() => {
         this.router.navigate([ `/cuesheet/${this.cuesheetId}/bike/${this.cueNumber + 1}` ]);
-        // this.move = 'still';
       }, 500);  // Todo: The delay here has to correspond to the time specified in the animation. Can I replace with a variable?
     }
   }

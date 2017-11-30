@@ -2,9 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import Socket = SocketIOClient.Socket;
 
-import { SocketService } from '../core/socket.service';
-import { User } from '../user/user';
 import { DebuggingService } from './debugging.service';
+import { SocketService } from '../core/socket.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({

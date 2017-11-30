@@ -21,24 +21,6 @@ nav {
   line-height: 24px;
 }
 
-.my-info {
-  color: white;
-}
-
-.unscrolled.lg,
-.unscrolled.xl,
-.unscrolled.xxl {
-  .navbar-brand {
-    transform: rotate(-26deg);
-    //line-height: 64px;
-  }
-  .nav-link {
-    line-height: 64px;
-  }
-}
-
-
-
 .nav-link {
   &.active {
     font-weight: 900;
@@ -48,5 +30,17 @@ nav {
     background-color: darken($primary, 4%);
   }
 }
+
+.unscrolled.lg,
+.unscrolled.xl,
+.unscrolled.xxl {
+  .navbar-brand {
+    transform: rotate(-26deg);
+  }
+  .nav-link {
+    line-height: 64px;
+  }
+}
+
 
 

@@ -4,9 +4,9 @@ import { NgModule } from '@angular/core';
 import { RiderListComponent } from './rider-list/rider-list.component';
 import { RiderRoutingModule } from './rider-routing.module';
 import {
-  MatTooltipModule,
   MatFormFieldModule,
   MatInputModule,
+  MatTooltipModule,
   MatSortModule,
   MatTableModule
 } from '@angular/material';
@@ -23,8 +23,8 @@ import { PageElementsModule } from '../page-elements/page-elements.module';
     MatTableModule,
     MatTooltipModule,
     PageElementsModule,
-    SharedModule,
-    RiderRoutingModule
+    RiderRoutingModule,
+    SharedModule
   ],
   declarations: [
     RiderListComponent

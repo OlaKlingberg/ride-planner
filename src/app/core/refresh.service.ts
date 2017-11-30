@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-
-import { PositionService } from './position.service';
 import { Router } from '@angular/router';
-import { UserService } from '../user/user.service';
-import { User } from '../user/user';
+
 import { Subscription } from 'rxjs/Subscription';
-import { SettingsService } from '../settings/settings.service';
 import Timer = NodeJS.Timer;
 
+import { PositionService } from './position.service';
+import { SettingsService } from '../settings/settings.service';
+import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class RefreshService {

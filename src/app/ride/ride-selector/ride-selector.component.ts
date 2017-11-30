@@ -3,15 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { environment } from "../../../environments/environment";
+import { PositionService } from '../../core/position.service';
+import { Ride } from '../ride';
+import { RideService } from '../ride.service';
+import { RiderService } from '../../rider/rider.service';
 import { RideSubjectService } from '../ride-subject.service';
+import { SettingsService } from '../../settings/settings.service';
 import { User } from '../../user/user';
 import { UserService } from '../../user/user.service';
-import { RideService } from '../ride.service';
-import { PositionService } from '../../core/position.service';
-import { SettingsService } from '../../settings/settings.service';
-import { Ride } from '../ride';
-import { RiderService } from '../../rider/rider.service';
 
 @Component({
   templateUrl: './ride-selector.component.html',
@@ -29,8 +28,8 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
   constructor(private activatedRoute: ActivatedRoute,
               private positionService: PositionService,
               private rideService: RideService,
-              private rideSubjectService: RideSubjectService,
               private riderService: RiderService,       // Must be initialized here, for RiderList to work.
+              private rideSubjectService: RideSubjectService,
               private router: Router,
               private settingsService: SettingsService,
               private userService: UserService) {
@@ -38,8 +37,6 @@ export class RideSelectorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.returnUrl = this.activatedRoute.snapshot.queryParams[ 'returnUrl' ] || '/map';
-    console.log("returnUrl:", this.returnUrl);
-
     this.positionService.getPosition(); // So the app has it, when the user gets to the map.
     this.rideService.emitGiveMeAvailableRides();
     this.subscribeToAvailableRides();

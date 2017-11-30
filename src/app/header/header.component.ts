@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { UserService } from '../user/user.service';
+
 import { PositionService } from '../core/position.service';
 import { User } from '../user/user';
-import { NavigationEnd, Router } from '@angular/router';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'rp-header',
@@ -12,37 +11,19 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   accuracy: number = null;
-  display: boolean;
   latitude: number = null;
   longitude: number = null;
   ride: string;
   title: string = 'RidePlanner';
   user: User = null;
 
-  constructor(public location: Location,
-              private positionService: PositionService,
-              private router: Router,
+  constructor(private positionService: PositionService,
               private userService: UserService) {
   }
 
   ngOnInit() {
     this.subscribeToPosition();
     this.subscribeToUser();
-
-    this.router.events.subscribe(event => {
-      if ( event instanceof NavigationEnd ) {
-        this.checkWhetherToDisplay();
-      }
-    });
-  }
-
-  checkWhetherToDisplay() {
-    this.display = false;
-    // if ( this.location.path().includes('/frame') ||
-    //     this.location.path().includes('/map') ||
-    //     ( this.location.path().includes('/cuesheet/') && this.location.path().includes('/bike/')) ) return this.display = false;
-    //
-    // this.display = true;
   }
 
   subscribeToPosition() {

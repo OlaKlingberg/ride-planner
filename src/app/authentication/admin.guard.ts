@@ -12,7 +12,6 @@ export class AdminGuard implements CanActivate {
 
   constructor(private router: Router,
               private userService: UserService) {
-
     this.userService.user$.subscribe(
         user => this.user = user
     );

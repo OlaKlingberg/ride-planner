@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+
 import { Observable } from 'rxjs/Observable';
-import { UserService } from '../user/user.service';
+
 import { User } from '../user/user';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class DemoGuard implements CanActivate {
@@ -20,9 +22,7 @@ export class DemoGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    console.log("DemoGuard");
     if ( !this.user.demo ) return true;
-    console.log("DemoGuard failed! The user is a demo user.");
 
     // The user is using the demo account, so should be sent to components that don't persist anything.
     const url = `${state.url}/demo`;

@@ -22,7 +22,6 @@ export class RideLeaderGuard implements CanActivate {
     if (this.user && ( this.user.leader || this.user.admin ) ) return true;
 
     // User not ride leader, so redirect to home page.
-    // this.router.navigate([ './auth/login' ], { queryParams: { returnUrl: state.url } });
     this.router.navigate([ '/' ]);
     return false;
   }

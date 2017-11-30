@@ -1,8 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, EventEmitter, OnInit, AfterViewInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Subscription } from 'rxjs/Subscription';
 import * as $ from 'jquery';
 
 import { AlertService } from '../../alert/alert.service';
@@ -10,7 +11,6 @@ import { Cue } from '../cue';
 import { Cuesheet } from '../cuesheet';
 import { cuesheetEditAnimations } from './cuesheet-edit.component.animations'
 import { CuesheetService } from '../cuesheet.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   templateUrl: './cuesheet-edit.component.html',
@@ -43,7 +43,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("CuesheetEditComponent");
     this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
     this.checkForModalClose();
@@ -188,8 +187,8 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         .fadeIn(200, () => {
 
           // Todo: Figure out what the two lines below are for.
-          // const $set = $(this);
-          // $set.replaceWith($set.contents());
+          const $set = $(this);
+          $set.replaceWith($set.contents());
         });
   }
 
@@ -283,10 +282,9 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         .parent()
         .find('td > div')
         .slideDown(300, () => {
-          // this.focusTrigger.emit(true);
           // Todo: Figure out what the two lines below are for. The don't seem to be needed, and they throw an error.
-          // const $set = $(this);
-          // $set.replaceWith($set.contents());
+          const $set = $(this);
+          $set.replaceWith($set.contents());
         });
   }
 
@@ -298,11 +296,6 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         .slideUp(300, () => {
           $(this).parent().parent().remove();
         });
-  }
-
-  // Todo: Do I need this here? I do need it on the login-form.
-  syncModel() {
-
   }
 
   updateCue() {

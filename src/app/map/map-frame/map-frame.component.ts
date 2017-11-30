@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './map-frame.component.html',

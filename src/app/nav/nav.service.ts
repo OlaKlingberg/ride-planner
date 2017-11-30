@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { RefreshService } from '../core/refresh.service';
 
 @Injectable()

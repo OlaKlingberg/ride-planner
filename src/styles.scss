@@ -1,10 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'bootstrap-theme';
 
-html {
-  height: 100%;
-}
-
 body {
   height: 100%;
 }
@@ -16,6 +12,10 @@ footer {
   bottom: 0;
 }
 
+html {
+  height: 100%;
+}
+
 #wrapper {
   min-height: 100%;
   position: relative;
@@ -23,14 +23,6 @@ footer {
   color: $white;
   padding-bottom: 60px;
   padding-top: 40px;
-}
-
-.lg, .xl, .xxl {
-  & ~ ng-component {
-    #wrapper {
-      padding-top: 78px;
-    }
-  }
 }
 
 .card {
@@ -46,6 +38,14 @@ footer {
 
 .faded {
   opacity: .5 !important;
+}
+
+.lg, .xl, .xxl {
+  & ~ ng-component {
+    #wrapper {
+      padding-top: 78px;
+    }
+  }
 }
 
 .modal {
@@ -87,10 +87,6 @@ footer {
   .mat-radio-outer-circle {
     border-color: $white;
     background-color: $gray-800;
-  }
-
-  .mat-slider-wrapper {
-    //left: 0 !important;
   }
 }
 

@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { CuesheetService } from '../cuesheet.service';
 import { Cuesheet } from '../cuesheet';
+import { CuesheetService } from '../cuesheet.service';
 
 @Component({
   templateUrl: './cuesheet-list.component.html',
@@ -17,7 +17,6 @@ export class CuesheetListComponent implements OnInit, OnDestroy {
   constructor(private cuesheetService: CuesheetService) { }
 
   ngOnInit() {
-    console.log("CuesheetListComponent");
     this.subscription = this.cuesheetService.getCuesheetList()
         .subscribe(cuesheets => this.cuesheets = cuesheets);
   }

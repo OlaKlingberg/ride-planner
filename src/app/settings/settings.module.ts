@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-
+import { MatCardModule, MatCheckboxModule, MatRadioModule, MatSliderModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 
+import { PageElementsModule } from '../page-elements/page-elements.module';
 import { SettingsComponent } from './settings.component';
 import { SettingsRoutingModule } from './settings-routing.module';
-import { MatCardModule, MatCheckboxModule, MatRadioModule, MatSliderModule } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
-import { PageElementsModule } from '../page-elements/page-elements.module';
 
 @NgModule({
   imports: [

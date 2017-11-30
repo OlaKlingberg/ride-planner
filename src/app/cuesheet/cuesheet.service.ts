@@ -1,15 +1,15 @@
-import { Http, RequestOptions, Headers, Response } from "@angular/http";
+import { Headers, Http, Response, RequestOptions } from "@angular/http";
 import { Injectable } from '@angular/core';
 
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/toPromise';
+import { Subject } from 'rxjs/Subject';
 
 import { Cue } from './cue';
 import { Cuesheet } from './cuesheet';
+import { SettingsService } from '../settings/settings.service';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
-import { Subject } from 'rxjs/Subject';
-import { SettingsService } from '../settings/settings.service';
 
 
 @Injectable()
@@ -66,14 +66,6 @@ export class CuesheetService {
         .toPromise(); // Todo: Add error handling.
   }
 
-  getCuesheetList () {
-    const requestOptions = this.setHeaders();
-
-    return this.http.get(`${this.settingsService.api}/cuesheets`, requestOptions)
-        .map((response: Response) => {
-          return response.json().cuesheets.map(cuesheet => new Cuesheet(cuesheet));
-        });
-  }
 
   getCuesheet(_id) {
     const requestOptions = this.setHeaders();
@@ -81,6 +73,15 @@ export class CuesheetService {
     return this.http.get(`${this.settingsService.api}/cuesheets/${_id}`, requestOptions)
         .map((response: Response) => new Cuesheet(response.json().cuesheet))
         .toPromise();
+  }
+
+  getCuesheetList () {
+    const requestOptions = this.setHeaders();
+
+    return this.http.get(`${this.settingsService.api}/cuesheets`, requestOptions)
+        .map((response: Response) => {
+          return response.json().cuesheets.map(cuesheet => new Cuesheet(cuesheet));
+        });
   }
 
   setHeaders() {

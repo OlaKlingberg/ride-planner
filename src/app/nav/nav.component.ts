@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import Timer = NodeJS.Timer;
+import * as $ from 'jquery';
+
+import { DeviceSizeService } from '../device-size/device-size.service';
 import { navAnimations } from './nav.component.animations';
 import { NavService } from './nav.service';
+import { RefreshService } from '../core/refresh.service';
+import { SettingsService } from '../settings/settings.service';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
-import * as $ from 'jquery';
-import { RefreshService } from '../core/refresh.service';
-import Timer = NodeJS.Timer;
-import { DeviceSizeService } from '../device-size/device-size.service';
-import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'rp-nav',

@@ -1,13 +1,15 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material';
+
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/startWith';
+
 import { RiderService } from '../rider.service';
 
 export class RiderListDataSource extends DataSource<any> {
@@ -28,8 +30,6 @@ export class RiderListDataSource extends DataSource<any> {
   constructor(private _sort: MatSort,
               private riderService: RiderService) {
     super();
-
-    console.log("RiderListDataSource riderList$:", this.riderService.riderList$.value);
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */

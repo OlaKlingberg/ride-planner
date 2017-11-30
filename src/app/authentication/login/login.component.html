@@ -19,42 +19,23 @@
             </div>
           </div>
         </div>
+
         <!-- End of: Already logged in. -->
         <ng-container *ngIf="demoMode && !user">
           <!-- demoMode -->
           <div class="card my-4">
             <div class="card-body">
 
-              <!--<div class="row">-->
-              <!--<div class="col-12">-->
               <h2>Demo Mode</h2>
               <h4>Log in as with these demo credentials</h4>
               <p class="mb-0">Email: {{ model.email }}</p>
               <p>Password: secret</p>
-              <!--</div>-->
-              <!--</div>-->
             </div>
-
-            <!--
-            <div class="row">
-              <div class="col-6">
-                <ul class="list-unstyled mb-0">
-                  <ng-container *ngFor="let email of demoUserEmails; index as i">
-                    <li *ngIf="i &lt; 4">{{email}}</li>
-                  </ng-container>
-                </ul>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                <h4>The password for all of them is: <i>secret</i></h4>
-              </div>
-            </div>
-            -->
 
           </div>
         </ng-container>
         <!-- End of demoMode -->
+
         <div *ngIf="!user" class="row">
           <div class="col-12">
             <h2>Login</h2>

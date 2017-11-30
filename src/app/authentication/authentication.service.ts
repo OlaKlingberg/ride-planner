@@ -1,13 +1,12 @@
-import { Http, Headers, RequestOptions, Response } from "@angular/http";
+import { Headers, Http, Response, RequestOptions } from "@angular/http";
 import { Injectable } from "@angular/core";
 
 import Socket = SocketIOClient.Socket;
 
 import { User } from "../user/user";
 import { UserService } from '../user/user.service';
-import { SocketService } from '../core/socket.service';
 import { SettingsService } from '../settings/settings.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { SocketService } from '../core/socket.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -71,6 +70,7 @@ export class AuthenticationService {
   setHeaders() {
     const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
+    
     return new RequestOptions({ headers });
   }
 

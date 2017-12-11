@@ -11,6 +11,7 @@ import { UserService } from '../user/user.service';
 })
 export class HeaderComponent implements OnInit {
   accuracy: number = null;
+  display: boolean = false;
   latitude: number = null;
   longitude: number = null;
   ride: string;

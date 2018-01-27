@@ -10,7 +10,7 @@ import Timer = NodeJS.Timer;
 import * as $ from 'jquery'
 import * as Rx from 'rxjs';
 
-import { MapAnimations } from './map.component.animatins';
+import { MapAnimations } from './map.component.animations';
 import { NavService } from '../../nav/nav.service';
 import { PositionService } from '../../core/position.service';
 import { SocketService } from '../../core/socket.service';
@@ -83,6 +83,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   addDummyRiders() {
+    console.log("MapComponent.addDummyRiders()");
     this.riderService.addDummyRiders(err => {
       if ( err ) return;  // Todo: Handle error.
     });

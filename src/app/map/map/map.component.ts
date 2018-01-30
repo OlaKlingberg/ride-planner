@@ -80,11 +80,15 @@ export class MapComponent implements OnInit, OnDestroy {
       this.waitOneSecond();
     });
     this.positionService.getPosition();
+    this.socket.on('debugging', debugInfo => {
+      console.log("MapComponent. debugInfo", debugInfo);
+    })
   }
 
   addDummyRiders() {
     console.log("MapComponent.addDummyRiders()");
     this.riderService.addDummyRiders(err => {
+      console.log("MapComponent.addDummyRiders(). Callback");
       if ( err ) return;  // Todo: Handle error.
     });
   }

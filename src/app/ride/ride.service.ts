@@ -55,6 +55,7 @@ export class RideService {
 
   onAvailableRides() {
     this.socket.on('availableRides', (availableRides: Ride[] )=> {
+      console.log("onAvailableRides:", availableRides);
       this.rideSubjectService.availableRides$.next(availableRides);
     })
   }

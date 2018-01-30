@@ -30,6 +30,7 @@ export class RiderService {
   }
 
   addDummyRiders(callback) {
+    console.log("RiderService.addDummyRiders()");
     const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     this.socket.emit('addDummyRiders', this.user, token, callback);
   }

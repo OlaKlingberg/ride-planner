@@ -11,19 +11,23 @@ export class DebuggingService {
   private socket: Socket;
 
   constructor(private socketService: SocketService) {
+    console.log("DebuggingService.constructor()");
     this.socket = this.socketService.socket;
     this.onDebugMessages();
     this.watchForDebugMessages();
   }
 
   onDebugMessages() {
+    console.log("onDebugMessages");
       this.socket.on('debugging', message => {
+        console.log('debugging message:', message);
         this.debugMessages$.next(message);
       });
   }
 
   watchForDebugMessages() {
     this.debugMessages$.subscribe(debugInfo => {
+      console.log("watchForDebugMessages:", debugInfo.message);
       if (debugInfo.message) {
         this.socket.emit('debugging', debugInfo.message);
       } else {

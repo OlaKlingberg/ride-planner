@@ -32,7 +32,7 @@ export class User {
 
   constructor(obj) {
     this._id = obj._id;
-    this.admin = obj.admin;
+    this.admin = obj.admin || false;
     this.disconnected = obj.disconnected;
     this.demo = obj.demo;
     this.dummy = obj.dummy;
@@ -40,7 +40,7 @@ export class User {
     this.emergencyName = obj.emergencyName;
     this.emergencyPhone = obj.emergencyPhone;
     this.fname = obj.fname;
-    this.leader = obj.leader;
+    this.leader = obj.leader || false;
     this.lname = obj.lname;
     this.phone = obj.phone;
     this.ride = obj.ride;

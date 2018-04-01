@@ -46,7 +46,7 @@ export class EqualValidator implements Validator {
   }
 
   private get isReverse() {
-    if (!this.reverse) return false;
-    return this.reverse === 'true' ? true: false;
+    // if (!this.reverse) return false;
+    return this.reverse === 'true';
   }
 }

@@ -13,6 +13,7 @@ import { CuesheetNewComponent } from './cuesheet-new/cuesheet-new.component';
 import { CuesheetNewDemoComponent } from './cuesheet-new/cuesheet-new-demo.component';
 import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
 import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
+import { CuesheetEditGuard } from './cuesheetEdit.guard';
 import { DemoGuard } from '../core/demo.guard';
 import { LargeWindowGuard } from '../core/large-window.guard';
 import { SmallWindowGuard } from '../core/small-window.guard';
@@ -49,7 +50,7 @@ import { SmallWindowGuard } from '../core/small-window.guard';
     {
       path: ':id/edit',
       component: CuesheetEditComponent,
-      canActivate: [ DemoGuard ]
+      canActivate: [ DemoGuard, CuesheetEditGuard ]
     },
     {
       path: ':id/edit/demo',

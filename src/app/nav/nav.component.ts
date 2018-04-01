@@ -85,8 +85,6 @@ export class NavComponent implements OnInit {
   }
 
   subscribeToUser() {
-    this.userService.user$.subscribe(
-        user => this.user = user
-    );
+    this.userService.user$.subscribe(user => this.user = user);
   }
 }

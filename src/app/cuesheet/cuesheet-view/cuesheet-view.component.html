@@ -56,7 +56,7 @@
             <a routerLink='/cuesheet' class='btn btn-secondary-1 btn-block'>Return to list<br>of cue sheets</a>
           </div>
           <!--<br class="d-block d-sm-none-block">-->
-          <div class="col-6 col-md-4 col-lg-3">
+          <div *ngIf="demoMode || user?.admin || user?.leader || cuesheet?._creator?._id === user?._id"  class="col-6 col-md-4 col-lg-3">
             <a [routerLink]="['/cuesheet', cuesheetId, 'edit']" class='btn btn-secondary-2-darker btn-block'>Edit this<br>cue
               sheet</a>
           </div>

@@ -17,6 +17,7 @@ import { CuesheetViewComponent } from './cuesheet-view/cuesheet-view.component';
 import { CuesheetViewDemoComponent } from './cuesheet-view/cuesheet-view-demo.component';
 import { PageElementsModule } from '../page-elements/page-elements.module';
 import { SharedModule } from '../shared/shared.module';
+import { CuesheetEditGuard } from './cuesheetEdit.guard';
 
 @NgModule({
   imports: [
@@ -39,6 +40,9 @@ import { SharedModule } from '../shared/shared.module';
     CuesheetNewDemoComponent,
     CuesheetViewComponent,
     CuesheetViewDemoComponent
+  ],
+  providers: [
+    CuesheetEditGuard
   ]
 })
 export class CuesheetModule {

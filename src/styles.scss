@@ -57,6 +57,17 @@ html {
 }
 
 /** Specific pages **/
+.page-home > rp-alert > .container {
+  position: absolute;
+  left: 50%;
+  z-index: 10;
+}
+
+.page-home > rp-alert > .container > .row {
+  position: relative;
+  left: -50%;
+}
+
 .page-members, .page-riders {
   .mat-form-field-placeholder {
     color: darkgray !important;
@@ -89,7 +100,6 @@ html {
     background-color: $gray-800;
   }
 }
-
 
 
 

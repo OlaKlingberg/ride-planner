@@ -12,6 +12,8 @@ import {
 import { MemberListComponent } from './member-list/member-list.component';
 import { SharedModule } from '../shared/shared.module';
 import { PageElementsModule } from '../page-elements/page-elements.module';
+import { MemberProfileComponent } from './member-profile/member-profile.component';
+import { MemberProfileEditComponent } from './member-profile-edit/member-profile-edit.component';
 
 // Todo: Replace MdAutocompleteModule with MdFormFieldModule and MdInputModule, and format the input box.
 @NgModule({
@@ -27,7 +29,9 @@ import { PageElementsModule } from '../page-elements/page-elements.module';
     UserRoutingModule
   ],
   declarations: [
-    MemberListComponent
+    MemberListComponent,
+    MemberProfileComponent,
+    MemberProfileEditComponent
   ]
 })
 export class UserModule {

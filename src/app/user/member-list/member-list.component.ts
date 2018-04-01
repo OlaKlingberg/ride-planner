@@ -10,6 +10,7 @@ import Socket = SocketIOClient.Socket;
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertService } from '../../alert/alert.service';
+import { environment } from '../../../environments/environment'
 import { MemberListDataSource } from './member-list-datasource';
 import { SettingsService } from '../../settings/settings.service';
 import { SocketService } from '../../core/socket.service';
@@ -104,6 +105,7 @@ export class MemberListComponent implements OnInit {
   }
 
   displayColumns() {
+    // console.log(this.userService.user$.value.fname, this.userService.user$.value.admin);
     this.deviceSize = getBootstrapDeviceSize();
 
     if ( this.deviceSize === 'xs' ) {
@@ -112,9 +114,18 @@ export class MemberListComponent implements OnInit {
       this.displayedColumns = [ 'leader', 'fullName', 'phone', 'showDetailsButton' ]
     } else if ( this.deviceSize === 'md' ) {
       this.displayedColumns = [ 'leader', 'fullName', 'phone', 'emergencyName', 'emergencyPhone', 'showDetailsButton' ]
-    } else {
-      this.displayedColumns = [ 'admin', 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone' ];
     }
+    // else if (this.userService.user$.value.email === environment.superAdmin || this.userService.user$.value.admin || this.userService.user$.value.leader) {
+    //   this.displayedColumns = [ 'admin', 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone', 'editButton' ];
+    // }
+    else {
+      this.displayedColumns = [ 'admin', 'leader', 'fullName', 'phone', 'email', 'emergencyName', 'emergencyPhone', 'showDetailsButton' ];
+    }
+  }
+
+  editMember(_id) {
+    console.log("editMember:", _id);
+
   }
 
   setDeviceSize = function () {

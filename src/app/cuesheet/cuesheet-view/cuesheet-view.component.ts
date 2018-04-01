@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Cuesheet } from '../cuesheet';
 import { CuesheetService } from '../cuesheet.service';
+import { UserService } from '../../user/user.service';
+import { User } from '../../user/user';
 
 @Component({
   templateUrl: './cuesheet-view.component.html',
@@ -11,16 +13,20 @@ import { CuesheetService } from '../cuesheet.service';
 export class CuesheetViewComponent implements OnInit {
   cuesheet: Cuesheet;
   cuesheetId: string = '';  // routerLink in the template doesn't work with cuesheet?._id. Hence this solution.
+  demoMode = false;
   total: number = 0;
+  user: User = null;
 
   constructor(private cuesheetService: CuesheetService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private userService: UserService) {
   }
 
   ngOnInit() {
     this.cuesheetId = this.route.snapshot.paramMap.get('id');
 
     this.getCuesheet(this.cuesheetId);
+    this.subscribeToUser();
   }
 
   getCuesheet(cuesheetId) {
@@ -38,5 +44,12 @@ export class CuesheetViewComponent implements OnInit {
     });
 
     this.cuesheet = cuesheet;
+  }
+
+  subscribeToUser() {
+    this.userService.user$.subscribe(user => {
+      this.user = user;
+      // console.log(user);
+    });
   }
 }

@@ -1,0 +1,21 @@
+@import '../../../bootstrap-theme.scss';
+
+.emergency-phone-link {
+  color: $complement-lighter;
+
+  &:hover {
+    color: $complement;
+  }
+}
+
+.margin-bottom-neg-5 {
+  margin-bottom: -5px;
+}
+
+.phone-link {
+  color: lighten($secondary-1-lighter, 10%);
+
+  &:hover {
+    color: white;
+  }
+}

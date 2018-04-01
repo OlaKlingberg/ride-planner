@@ -2,10 +2,9 @@
   <header>
     <rp-nav></rp-nav>
   </header>
-  <main>
+  <main class="page-home">
     <rp-alert></rp-alert>
-
-    <div id="page-home">
+    <div>
 
       <div id="main-pic-container" [ngClass]="deviceSize">
         <img id="main-pic" class="img-fluid" src="/assets/img/other/bikers/bikers-{{deviceSize}}.jpg" alt="bike">
@@ -24,7 +23,9 @@
 
               <h3 class="card-title">Purpose</h3>
               <p>This site is meant to be used by people taking part in organized bike rides. Ride leaders can create <a
-                  routerLink='/cuesheet'>cue sheets</a>, which the participants use on their phones, mounted to the handlebar. There is also a <a routerLink="/map">map</a> that shows you where all the others on the ride (or in your group) are.</p>
+                  routerLink='/cuesheet'>cue sheets</a>, which the participants use on their phones, mounted to the
+                handlebar. There is also a <a routerLink="/map">map</a> that shows you where all the others on the ride
+                (or in your group) are.</p>
             </div>
 
           </div>
@@ -33,27 +34,33 @@
 
               <h3>Live Site</h3>
               <p>You are currently on the live site. If you create a cue sheet here, it will remain till you or somebody
-                else deletes it. Any changes you make to existing cue sheets will be saved. If you would like to try out the site, and look at ready-made cue sheets, you may visit the demo version of the site at <a href="https://ride-planner-demo.herokuapp.com/" target="_">RidePlanner Demo</a></p>
+                else deletes it. Any changes you make to existing cue sheets will be saved. If you would like to try out
+                the site, and look at ready-made cue sheets, you may visit the demo version of the site at <a
+                    href="https://ride-planner-demo.herokuapp.com/" target="_">RidePlanner Demo</a></p>
             </div>
           </div>
           <div class="col-lg-4 card" *ngIf="demoMode">
             <div class="card-body">
 
               <h3>Demo Site</h3>
-              <p>This is the demo version of the RidePlanner site. Cue sheets you create here, or changes you make to existing cue sheets, will not be saved once you have closed the browser window. The live site is currently only available to <a href="http://www.outcycling.org/" target="_">OutCycling</a> members.</p>
+              <p>This is the demo version of the RidePlanner site. Cue sheets you create here, or changes you make to
+                existing cue sheets, will not be saved once you have closed the browser window. The live site is
+                currently only available to <a href="http://www.outcycling.org/" target="_">OutCycling</a> members.</p>
             </div>
 
           </div>
           <div class="col-lg-4 card">
             <div class="card-body">
               <h3>OutCycling</h3>
-              <p><a href='http://www.outcycling.org' target="_blank">OutCycling</a> is a LGBT bicycling club located in New York City. Visit our website for more information!</p>
+              <p><a href='http://www.outcycling.org' target="_blank">OutCycling</a> is a LGBT bicycling club located in
+                New York City. Visit our website for more information!</p>
             </div>
 
           </div>
         </div>
       </div>
     </div>
+    <!--<rp-alert></rp-alert>-->
   </main>
 
   <footer>

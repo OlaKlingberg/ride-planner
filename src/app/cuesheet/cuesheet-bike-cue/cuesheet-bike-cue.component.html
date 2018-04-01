@@ -1,9 +1,18 @@
-<div class="row">
-  <div class="col-6">
-    <span>Leg</span>
+<!--<div class="row">-->
+  <!--<div class="col-12 text-center">-->
+    <!--<span class="bold x-large">{{ cueNumber }}</span>-->
+  <!--</div>-->
+<!--</div>-->
+
+<div class="row margin-bottom-neg-14">
+  <div class="col-4">
+    <p>Leg</p>
   </div>
-  <div class="col-6">
-    <span class="float-right">Total</span>
+  <div class="col-4">
+    <p class="bold x-large text-center margin-top-neg-10">Cue {{ cueNumber }}</p>
+  </div>
+  <div class="col-4">
+    <p class="float-right">Total</p>
   </div>
 </div>
 <div class="row">
@@ -15,7 +24,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-4">
+  <div class="col-4 mt-2">
     <img class="icon"
          [ngClass]="{'display-block': cue?.icon === 'left'}"
          src='assets/img/arrows/left.png'>

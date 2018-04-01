@@ -18,7 +18,8 @@ const routes: Routes = [
   {
     path: 'cuesheet',
     canActivate: [ AuthGuard ],
-    loadChildren: 'app/cuesheet/cuesheet.module#CuesheetModule'
+    loadChildren: 'app/cuesheet/cuesheet.module#CuesheetModule',
+    data: { preload: true }
   },
   {
     path: 'debugger',

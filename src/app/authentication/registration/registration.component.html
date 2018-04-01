@@ -9,7 +9,7 @@
     <div class="container">
 
       <!-- NOT demoMode -->
-      <div class="row">
+      <div class="row py-4">
         <div *ngIf="!demoMode" class="col-md-4">
           <h2>Register</h2>
           <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm"
@@ -42,22 +42,22 @@
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
               <label for="password">Password</label>
               <input type="password" class="form-control" name="password"
-                     [(ngModel)]="model.password" rpvalidateequal="confirmPassword" reverse="true"
+                     [(ngModel)]="model.password" rpValidateEqual="passwordConfirmation" reverse="true"
                      #password="ngModel" id="password" required>
               <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
             </div>
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !passwordConfirmation.valid }">
               <label for="passwordConfirmation">Retype Password</label>
               <input type="password" class="form-control" name="passwordConfirmation"
-                     [(ngModel)]="model.passwordConfirmation" rpvalidateequal="password" reverse="false"
-                     #passwordconfirmation="ngModel" id="passwordConfirmation" required>
+                     [(ngModel)]="model.passwordConfirmation" rpValidateEqual="password" reverse="false"
+                     #passwordConfirmation="ngModel" id="passwordConfirmation" required>
               <div *ngIf="f.submitted && !passwordConfirmation.valid" class="help-block">Password mismatch.</div>
             </div>
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !emergencyName.valid }">
               <label for="emergencyName">Emergency contact name</label>
               <input type="text" class="form-control"
                      name="emergencyName" id="emergencyName" [(ngModel)]="model.emergencyName"
-                     #emergencyname="ngModel" required>
+                     #emergencyName="ngModel" required>
               <div *ngIf="f.submitted && !emergencyName.valid" class="help-block">Emergency contact name is required
               </div>
             </div>

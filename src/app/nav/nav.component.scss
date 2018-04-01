@@ -4,6 +4,11 @@ nav {
   z-index: 10;
 }
 
+// I can't figure out why .nav-item is needed here, but it doesn't work without it!
+.dropdown-menu .nav-item .nav-link {
+  line-height: 8px;
+}
+
 .navbar-brand {
   line-height: .7rem;
 

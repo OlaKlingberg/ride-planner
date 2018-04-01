@@ -7,6 +7,9 @@ import { LogoutComponent } from './logout/logout.component';
 import { PageElementsModule } from '../page-elements/page-elements.module';
 import { RegistrationComponent } from './registration/registration.component';
 import { SharedModule } from '../shared/shared.module';
+import { PasswordResetRequestComponent } from './password-reset-request/password-reset-request.component';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
+// import { PasswordResetGuard } from './password-reset.guard';
 
 @NgModule({
   imports: [
@@ -18,8 +21,13 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [
     LoginComponent,
     LogoutComponent,
-    RegistrationComponent
-  ]
+    RegistrationComponent,
+    PasswordResetRequestComponent,
+    PasswordResetComponent
+  ],
+  // providers: [
+  //   PasswordResetGuard
+  // ]
 })
 export class AuthenticationModule {
 }

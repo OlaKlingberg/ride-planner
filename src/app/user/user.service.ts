@@ -108,10 +108,29 @@ export class UserService {
         .toPromise();
   }
 
+  requestUser(_id) {
+    const requestOptions = this.setHeaders();
+
+    return this.http.get(`${this.settingsService.api}/users/${_id}`, requestOptions)
+        .map((response: Response) => new User(response.json().user))
+        .toPromise();
+  }
+
   setHeaders() {
     const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });
+
     return new RequestOptions({ headers });
+  }
+
+  update(member: User) {
+    const requestOptions = this.setHeaders();
+
+    return this.http.patch(`${this.settingsService.api}/users/update`, member, requestOptions)
+        .map((response: Response) => {
+          new User(response.json());
+        })
+        .toPromise();
   }
 
   updateUserPositionOnNewPosition() {

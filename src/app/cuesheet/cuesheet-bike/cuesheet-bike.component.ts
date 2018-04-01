@@ -92,7 +92,7 @@ export class CuesheetBikeComponent implements OnInit, OnDestroy {
   }
 
   setSwipeListeners() {
-    this.cuesContainer = $('#page-cuesheet-bike').get(0); // Todo: Is it okay to use jQuery for this? (It works.) Should I use viewChild instead?
+    this.cuesContainer = $('.page-cuesheet-bike').get(0); // Todo: Is it okay to use jQuery for this? (It works.) Should I use viewChild instead?
     this.mc = Hammer(this.cuesContainer);
 
     // // mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL }); // Todo: Figure out why DIRECTION_ALL doesn't exist on Hammer.

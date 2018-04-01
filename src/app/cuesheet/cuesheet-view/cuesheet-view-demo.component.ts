@@ -11,6 +11,7 @@ import { CuesheetDemoService } from '../cuesheet-demo.service';
 export class CuesheetViewDemoComponent implements OnInit {
   cuesheet: Cuesheet;
   cuesheetId: string = '';  // routerLink in the template doesn't work with cuesheet?._id. Hence this solution.
+  demoMode = true;
   total: number = 0;
 
   constructor(private cuesheetDemoService: CuesheetDemoService,

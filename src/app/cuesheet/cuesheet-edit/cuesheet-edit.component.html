@@ -97,7 +97,7 @@
           <div class="order-1 order-md-2 col-sm-6 col-md-4">
             <button type="button"
                     id="delete-cuesheet"
-                    [disabled]="!cueForm.pristine || cueToInsertBefore !== null || cuesheetDescriptionInput"
+                    [disabled]="!cueForm.pristine || cueToEdit || cueToInsertBefore !== null || cuesheetDescriptionInput"
                     class="btn btn-complement mb-2 mb-sm-0 px-5 float-right"
                     (click)="openCuesheetDeletionModal(cuesheetDeletionModal)">Delete this cue sheet
             </button>
@@ -106,7 +106,7 @@
         <!-- End: Cuesheet name -->
 
         <!-- Cuesheet Name Input -->
-        <div *ngIf="cuesheetNameInput" id="cuesheet-name-input-block" class="form-row">
+        <div *ngIf="cuesheetNameInput" id="cuesheet-name-input-block" class="form-row pt-4 pb-2">
           <div class="col-sm-8">
             <input type="string"
                    class="form-control input-lg mb-2"
@@ -189,8 +189,8 @@
         <div class="col">
           <form name="cue-form" #cueForm="ngForm" novalidate>
 
-            <table [ngClass]="{'faded': cuesheetNameInput || cuesheetDescriptionInput}"
-                   class="table table-hover mb-0">
+            <table [ngClass]="{'faded': cuesheetNameInput || cuesheetDescriptionInput, 'table-hover': !cueToEdit}"
+                   class="table mb-0">
 
               <thead>
 
@@ -371,7 +371,7 @@
                   <button type="button"
                           (click)="saveCue('saveCueButton'); cueForm.reset()"
                           [disabled]="!cueForm.form.valid || cueForm.pristine"
-                          class="btn btn-secondary-1 btn-block btn-sm">Cue
+                          class="btn btn-secondary-1 btn-block btn-sm">Save
                   </button>
                 </td>
               </tr>

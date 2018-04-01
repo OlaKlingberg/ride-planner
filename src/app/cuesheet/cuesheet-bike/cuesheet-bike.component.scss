@@ -29,7 +29,7 @@
   opacity: .7;
 }
 
-#page-cuesheet-bike {
+.page-cuesheet-bike > div:first-child {
   position: fixed;
   max-height: 800px;
   overflow: hidden;

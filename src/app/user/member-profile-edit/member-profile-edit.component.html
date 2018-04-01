@@ -1,0 +1,159 @@
+<div id="wrapper">
+  <header>
+    <rp-header></rp-header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
+
+    <div class="container">
+      <div class="row py-4">
+        <div class="col-md-4">
+          <h2>{{ member?.fname }} {{ member?.lname }}</h2>
+
+          <form name="form" (ngSubmit)="f.form.valid && update()" #f="ngForm"
+                novalidate="">
+
+            <div *ngIf="user?.email === superAdmin" class="form-group mb-0">
+              <label class="mb-0 mr-4">Admin</label>
+              <input type="radio" name="admin" [value]="true" [(ngModel)]="member.admin"> Yes
+              <input type="radio" name="admin" [value]="false" [(ngModel)]="member.admin" class="ml-3"> No
+            </div>
+            <div *ngIf="user?.email !== superAdmin" tooltip="You are not authorized to change this." placement="left">
+              <div *ngIf="member?.admin" class="faded h6 mb-0">Admin</div>
+              <div *ngIf="!member?.admin" class="faded h6 mb-0">Not Admin</div>
+            </div>
+
+            <div *ngIf="user?.email === superAdmin || user?.admin" class="form-group">
+              <label class="mb-0 mr-4">Leader</label>
+              <input type="radio" name="leader" [value]="true" [(ngModel)]="member.leader"> Yes
+              <input type="radio" name="leader" [value]="false" [(ngModel)]="member.leader" class="ml-3"> No
+            </div>
+            <div *ngIf="user?.email !== superAdmin && !user?.admin" tooltip="You are not authorized to change this." placement="left">
+              <div *ngIf="member?.leader" class="faded h6">Leader</div>
+              <div *ngIf="!member?.leader" class="faded h6">Not Leader</div>
+            </div>
+
+            <ng-container *ngIf="user?.email === member.email">
+              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !fname.valid }">
+                <label for="fname" class="mb-0">First name</label>
+                <input type="text" class="form-control" name="fname"
+                       id="fname" [(ngModel)]="member.fname" #fname="ngModel" required>
+                <div *ngIf="f.submitted && !fname.valid" class="help-block">First name is required</div>
+              </div>
+
+              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !lname.valid }">
+                <label for="lname" class="mb-0">Last name</label>
+                <input type="text" class="form-control" name="lname"
+                       id="lname" [(ngModel)]="member.lname" #lname="ngModel" required>
+                <div *ngIf="f.submitted && !fname.valid" class="help-block">Last name is required</div>
+              </div>
+
+              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
+                <label for="phone" class="mb-0">Phone</label>
+                <input type="text" placeholder="   -   -" class="form-control"
+                       name="phone" id="phone" [ngModel]="member.phone" (ngModelChange)="formatPhone($event, 'phone')"
+                       #phone="ngModel" #phonefield="" required minlength="12">
+                <div *ngIf="f.submitted && !phone.valid" class="help-block">Phone number is required</div>
+              </div>
+
+              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                <label for="email" class="mb-0">Email</label>
+                <input type="text" class="form-control" name="email" [(ngModel)]="member.email"
+                       #email="ngModel" id="email" required>
+                <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
+              </div>
+
+              <!--<div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">-->
+              <!--<label for="password">Password</label>-->
+              <!--<input type="password" class="form-control" name="password"-->
+              <!--[(ngModel)]="member.password" rpvalidateequal="confirmPassword" reverse="true"-->
+              <!--#password="ngModel" id="password" required>-->
+              <!--<div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>-->
+              <!--</div>-->
+              <!--<div class="form-group" [ngClass]="{ 'has-error': f.submitted && !passwordConfirmation.valid }">-->
+              <!--<label for="passwordConfirmation">Retype Password</label>-->
+              <!--<input type="password" class="form-control" name="passwordConfirmation"-->
+              <!--[(ngModel)]="member.passwordConfirmation" rpvalidateequal="password" reverse="false"-->
+              <!--#passwordconfirmation="ngModel" id="passwordConfirmation" required>-->
+              <!--<div *ngIf="f.submitted && !passwordConfirmation.valid" class="help-block">Password mismatch.</div>-->
+              <!--</div>-->
+
+              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !emergencyName?.valid }">
+                <label for="emergencyName" class="mb-0">Emergency contact name</label>
+                <input type="text" class="form-control"
+                       name="emergencyName" id="emergencyName" [(ngModel)]="member.emergencyName"
+                       #emergencyname="ngModel" required>
+                <div *ngIf="f.submitted && !emergencyName?.valid" class="help-block">Emergency contact name is required
+                </div>
+              </div>
+
+              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !emergencyPhone?.valid }">
+                <label for="emergencyPhone" class="mb-0">Emergency phone number</label>
+                <input type="text" placeholder="   -   -"
+                       class="form-control" name="emergencyPhone" id="emergencyPhone" [ngModel]="member.emergencyPhone"
+                       (ngModelChange)="formatPhone($event, 'emergencyPhone')" #emergencyPhone="ngModel"
+                       #emergencyPhonefield="" required minlength="12">
+                <div *ngIf="f.submitted && !emergencyPhone.valid" class="help-block">Emergency phone number is required
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="user?.email !== member.email">
+              <div>
+                <div class="margin-bottom-neg-5">
+                  <small class="faded">First Name</small>
+                </div>
+                <div class="h4 faded" tooltip="Only the member can change this info." tooltip="Only the member can change this info." placement="left">{{ member?.fname }}</div>
+              </div>
+              <div>
+                <div class="margin-bottom-neg-5">
+                  <small class="faded">Last Name</small>
+                </div>
+                <div class="h4 faded" tooltip="Only the member can change this info." placement="left">{{ member?.lname }}</div>
+              </div>
+              <div>
+                <div class="margin-bottom-neg-5">
+                  <small class="faded">Phone</small>
+                </div>
+                <div class="h4 faded" tooltip="Only the member can change this info." placement="left"><a class="phone-link">{{ member?.phone }}</a></div>
+              </div>
+              <div>
+                <div class="margin-bottom-neg-5">
+                  <small class="faded">Email</small>
+                </div>
+                <div class="h4 faded" tooltip="Only the member can change this info." placement="left">{{ member?.email }}</div>
+              </div>
+              <div>
+                <div class="margin-bottom-neg-5">
+                  <small class="faded">Emergency Contact</small>
+                </div>
+                <div class="h4 faded" tooltip="Only the member can change this info." placement="left">{{ member?.emergencyName }}</div>
+              </div>
+              <div>
+                <div class="margin-bottom-neg-5">
+                  <small class="faded">Emergency Phone</small>
+                </div>
+                <div class="h4 faded" tooltip="Only the member can change this info." placement="left"><a class="emergency-phone-link">{{ member?.emergencyPhone }}</a>
+                </div>
+              </div>
+            </ng-container>
+
+
+            <div class="form-group mt-4">
+              <button [disabled]="loading" class="btn btn-secondary-1">Update</button>
+              <img *ngIf="loading"
+                   src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==">
+              <a [routerLink]="['/members', member._id ]" class="btn btn-link">Cancel</a>
+            </div>
+          </form>
+
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
+</div>

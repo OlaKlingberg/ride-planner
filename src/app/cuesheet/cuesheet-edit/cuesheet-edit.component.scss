@@ -32,11 +32,6 @@ tr {
   color: $black;
 }
 
-tr:hover {
-  background-color: $secondary-1-darker !important;
-  color: $white !important;
-}
-
 tr:nth-of-type(odd) {
   background-color: $gray-200;
   color: $black;
@@ -118,6 +113,11 @@ tr:nth-of-type(odd) {
 .modal-content {
   position: relative;
   z-index: 130;
+}
+
+.table-hover tr:hover{
+  background-color: $secondary-1-darker !important;
+  color: $white !important;
 }
 
 .td-1 {

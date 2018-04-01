@@ -186,9 +186,9 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         .find('td > div')
         .fadeIn(200, () => {
 
-          // Todo: Figure out what the two lines below are for.
-          const $set = $(this);
-          $set.replaceWith($set.contents());
+          // Todo: Figure out what the two lines below are for. The don't seem to be needed, and they throw an error.
+          // const $set = $(this);
+          // $set.replaceWith($set.contents());
         });
   }
 
@@ -283,8 +283,8 @@ export class CuesheetEditComponent implements OnInit, AfterViewInit, OnDestroy {
         .find('td > div')
         .slideDown(300, () => {
           // Todo: Figure out what the two lines below are for. The don't seem to be needed, and they throw an error.
-          const $set = $(this);
-          $set.replaceWith($set.contents());
+          // const $set = $(this);
+          // $set.replaceWith($set.contents());
         });
   }
 

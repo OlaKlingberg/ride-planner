@@ -1,0 +1,56 @@
+<div id="wrapper">
+  <header>
+    <rp-header></rp-header>
+    <rp-nav></rp-nav>
+  </header>
+  <main>
+    <rp-alert></rp-alert>
+
+    <div class="container">
+      <div class="row py-4">
+        <div class="col-md-12">
+          <h2 class="mb-0">{{ member?.fname }} {{ member?.lname }}</h2>
+
+          <div>
+            <div *ngIf="member?.admin" class="h6 mb-0">Admin</div>
+            <div *ngIf="!member?.admin" class="faded h6 mb-0">Not Admin</div>
+          </div>
+          <div>
+            <div *ngIf="member?.leader" class="h6">Leader</div>
+            <div *ngIf="!member?.leader" class="faded h6">Not Leader</div>
+          </div>
+          <div>
+            <div class="margin-bottom-neg-5">
+              <small>Phone</small>
+            </div>
+            <div class="h4 phone-link">{{ member?.phone }}</div>
+          </div>
+          <div>
+            <div class="margin-bottom-neg-5">
+              <small>Email</small>
+            </div>
+            <div class="h4">{{ member?.email }}</div>
+          </div>
+          <div>
+            <div class="margin-bottom-neg-5">
+              <small>Emergency Contact</small>
+            </div>
+            <div class="h4">{{ member?.emergencyName }}</div>
+          </div>
+          <div>
+            <div class="margin-bottom-neg-5">
+              <small>Emergency Phone</small>
+            </div>
+            <div class="h4 emergency-phone-link">{{ member?.emergencyPhone }}</div>
+          </div>
+          <button type="button" class="btn btn-complement px-4 mt-3" [routerLink]="['/members', member?._id, 'edit']">
+            Edit
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <rp-footer></rp-footer>
+  </footer>
+</div>

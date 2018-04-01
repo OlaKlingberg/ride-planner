@@ -18,21 +18,27 @@
       </tr>
       <tr>
         <td>Phone</td>
-        <td><a class="modal-phone-link" href="tel:{{member.phone}}">{{member.phone}}</a></td>
+        <td><a class="modal-phone-link" href="tel:{{ member.phone }}">{{ member.phone }}</a></td>
       </tr>
       <tr>
         <td>Email</td>
-        <td>{{member.email}}</td>
+        <td>{{ member.email }}</td>
       </tr>
       <tr>
         <td>Emergency Contact</td>
-        <td>{{member.emergencyName}}</td>
+        <td>{{ member.emergencyName }}</td>
       </tr>
       <tr>
         <td>Emergency Phone</td>
-        <td><a class="modal-emergency-phone-link" href="tel:{{member.emergencyPhone}}">{{member.emergencyPhone}}</a></td>
+        <td><a class="modal-emergency-phone-link" href="tel:{{ member.emergencyPhone }}">{{ member.emergencyPhone }}</a>
+        </td>
       </tr>
     </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-complement" [routerLink]="['/members', member._id, 'edit']" (click)="modalRef.hide()">
+      Edit
+    </button>
   </div>
 </ng-template>
 <!-- End: Modal with member details. -->
@@ -42,10 +48,10 @@
   <header>
     <rp-nav></rp-nav>
   </header>
-  <main>
+  <main class="page-members">
     <rp-alert></rp-alert>
 
-    <div class="page-members">
+    <div>
 
       <div class="container pt-5">
         <div class="row">
@@ -123,7 +129,8 @@
               <!-- Phone Column -->
               <ng-container matColumnDef="phone">
                 <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
-                <mat-cell *matCellDef="let row"><a class="mat-cell-phone-link" href="tel:{{row.phone}}">{{ row.phone }}</a></mat-cell>
+                <mat-cell *matCellDef="let row"><a class="mat-cell-phone-link" href="tel:{{row.phone}}">{{ row.phone
+                  }}</a></mat-cell>
               </ng-container>
 
               <!-- Email Column -->
@@ -145,8 +152,18 @@
               <!-- Emergency Phone Column -->
               <ng-container matColumnDef="emergencyPhone">
                 <mat-header-cell *matHeaderCellDef>Emergency Phone</mat-header-cell>
-                <mat-cell *matCellDef="let row"><a class="mat-cell-emergency-phone-link" href="tel:{{row.emergencyPhone}}">{{ row.emergencyPhone }}</a></mat-cell>
+                <mat-cell *matCellDef="let row"><a class="mat-cell-emergency-phone-link"
+                                                   href="tel:{{row.emergencyPhone}}">{{ row.emergencyPhone }}</a>
+                </mat-cell>
               </ng-container>
+
+              <!-- Edit button -->
+              <!--<ng-container matColumnDef="editButton">-->
+              <!--<mat-header-cell *matHeaderCellDef></mat-header-cell>-->
+              <!--<mat-cell *matCellDef="let row" (click)="showDetails(memberDetails, row)">-->
+              <!--<button class="btn btn-secondary-1 btn-sm float-right">Edit</button>-->
+              <!--</mat-cell>-->
+              <!--</ng-container>-->
 
               <!-- Show-details button -->
               <ng-container matColumnDef="showDetailsButton">

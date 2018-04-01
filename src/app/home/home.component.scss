@@ -25,6 +25,7 @@ main {
 }
 
 #main-pic-container {
+  //position: absolute;
   &.xs {
     height: 350px;
   }
@@ -50,12 +51,16 @@ main {
   }
 }
 
-#page-home {
+//#page-home {
+main {
   font-size: 1.4rem;
 
   a {
     color: $secondary-2-darker;
   }
 }
+
+
+
 
 

@@ -25,52 +25,51 @@
   <header>
     <rp-nav></rp-nav>
   </header>
-  <main>
+  <main class="page-cuesheet-bike">
     <rp-alert></rp-alert>
-
-    <div id="page-cuesheet-bike">
-      <div class="container" id="cues-container" [@cuesheetContainer]="move">
-        <div class="cue">
-          <rp-cuesheet-cue *ngIf="cueNumber > 0" [cue]="cuesheet?.cues[cueNumber - 1]"
-                           [cueNumber]="cueNumber - 1"></rp-cuesheet-cue>
-        </div>
-        <div class="cue">
-          <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]" [cueNumber]="cueNumber"></rp-cuesheet-cue>
-        </div>
-        <div class="cue">
-          <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1" [cue]="cuesheet?.cues[cueNumber + 1]"
-                           [cueNumber]="cueNumber + 1"></rp-cuesheet-cue>
-        </div>
-        <div class="cue">
-          <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 2" [cue]="cuesheet?.cues[cueNumber + 2]"
-                           [cueNumber]="cueNumber + 2"></rp-cuesheet-cue>
-        </div>
+    <!--<div>-->
+    <div class="container" id="cues-container" [@cuesheetContainer]="move">
+      <div class="cue">
+        <rp-cuesheet-cue *ngIf="cueNumber > 0" [cue]="cuesheet?.cues[cueNumber - 1]"
+                         [cueNumber]="cueNumber - 1"></rp-cuesheet-cue>
       </div>
-      <div class="container px-0">
-        <!--<div class="row">-->
-        <!--<div class="col-12">-->
-        <div id="next-cue-mask"></div>
-        <!--</div>-->
-        <!--</div>-->
-        <div class="row mx-0">
-          <div id="bottom-field" class="col-12">
-            <div class="row">
-              <div class="col-6"><a [routerLink]="['/cuesheet', cuesheetId ,'view']"
-                                    class="btn btn-secondary-1 btn-block">Overview</a>
-              </div>
-              <div class="col-6"><a routerLink="/map" class="btn btn-secondary-1 btn-block">Map</a>
-              </div>
+      <div class="cue">
+        <rp-cuesheet-cue [cue]="cuesheet?.cues[cueNumber]" [cueNumber]="cueNumber"></rp-cuesheet-cue>
+      </div>
+      <div class="cue">
+        <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 1" [cue]="cuesheet?.cues[cueNumber + 1]"
+                         [cueNumber]="cueNumber + 1"></rp-cuesheet-cue>
+      </div>
+      <div class="cue">
+        <rp-cuesheet-cue *ngIf="cueNumber < cuesheet?.cues.length - 2" [cue]="cuesheet?.cues[cueNumber + 2]"
+                         [cueNumber]="cueNumber + 2"></rp-cuesheet-cue>
+      </div>
+    </div>
+    <div class="container px-0">
+      <!--<div class="row">-->
+      <!--<div class="col-12">-->
+      <div id="next-cue-mask"></div>
+      <!--</div>-->
+      <!--</div>-->
+      <div class="row mx-0">
+        <div id="bottom-field" class="col-12">
+          <div class="row">
+            <div class="col-6"><a [routerLink]="['/cuesheet', cuesheetId ,'view']"
+                                  class="btn btn-secondary-1 btn-block">Overview</a>
             </div>
-            <hr>
-            <div class="row" id="ride-info">
-              <div class="col-12">
-                <h3 class="mt-0 text-center">{{ cuesheet?.name }}</h3>
-              </div>
+            <div class="col-6"><a routerLink="/map" class="btn btn-secondary-1 btn-block">Map</a>
+            </div>
+          </div>
+          <hr>
+          <div class="row" id="ride-info">
+            <div class="col-12">
+              <h3 class="mt-0 text-center">{{ cuesheet?.name }}</h3>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!--</div>-->
 
   </main>
   <footer>

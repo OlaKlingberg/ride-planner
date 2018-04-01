@@ -67,6 +67,21 @@ export class AuthenticationService {
     return this.http.get(`${this.settingsService.api}/users/logout`, requestOptions);
   }
 
+  resetPassword(email: string, token: string, password: string) {
+    return this.http.post(`${this.settingsService.api}/users/reset-password`, {email, token, password})
+        .map((response: Response) => {
+          return response.json().message;
+        })
+  }
+
+  sendResetPasswordRequest(email: string) {
+    const host = window.location.host;
+    return this.http.post(`${this.settingsService.api}/users/reset-password-request`, { email, host })
+        .map((response: Response) => {
+          return response.json().message;
+        });
+  }
+
   setHeaders() {
     const token = JSON.parse(eval(this.settingsService.storage).getItem('rpToken'));
     const headers = new Headers({ 'x-auth': token });

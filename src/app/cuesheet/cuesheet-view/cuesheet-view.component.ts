@@ -49,7 +49,6 @@ export class CuesheetViewComponent implements OnInit {
   subscribeToUser() {
     this.userService.user$.subscribe(user => {
       this.user = user;
-      // console.log(user);
     });
   }
 }

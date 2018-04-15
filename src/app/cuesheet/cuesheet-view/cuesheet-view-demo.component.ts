@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Cuesheet } from '../cuesheet';
 import { CuesheetDemoService } from '../cuesheet-demo.service';
+import { User } from '../../user/user';
 
 @Component({
   templateUrl: './cuesheet-view.component.html',
@@ -13,6 +14,7 @@ export class CuesheetViewDemoComponent implements OnInit {
   cuesheetId: string = '';  // routerLink in the template doesn't work with cuesheet?._id. Hence this solution.
   demoMode = true;
   total: number = 0;
+  user: User = null;
 
   constructor(private cuesheetDemoService: CuesheetDemoService,
               private route: ActivatedRoute) {

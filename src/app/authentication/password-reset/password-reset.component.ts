@@ -9,6 +9,7 @@ import { AlertService } from '../../alert/alert.service';
 })
 export class PasswordResetComponent implements OnInit {
   private email;
+  private loading = false;
   private token;
 
   model: any = {};
@@ -26,12 +27,14 @@ export class PasswordResetComponent implements OnInit {
   }
 
   resetPassword() {
+    this.loading = true;
     this.authenticationService.resetPassword(this.email, this.token, this.model.password)
         .subscribe(message => {
               this.alertService.success(message, false, true);
               this.router.navigate([ '/auth/login' ]);
             },
             error => {
+              this.loading = false;
               this.alertService.error("Something went wrong. Please try again later.", false, true);
             })
   }

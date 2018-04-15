@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: [ './password-reset-request.component.scss' ]
 })
 export class PasswordResetRequestComponent implements OnInit {
+  loading = false;
   model: any = {};
 
   constructor(private alertService: AlertService,
@@ -21,12 +22,14 @@ export class PasswordResetRequestComponent implements OnInit {
   }
 
   sendResetPasswordRequest() {
+    this.loading = true;
     this.authenticationService.sendResetPasswordRequest(this.model.email.toLowerCase())
         .subscribe(message => {
               this.alertService.success(message, false, true);
               this.router.navigate([ '/' ]);
             },
             error => {
+              this.loading = false;
               this.alertService.error("Something went wrong. Please try again later.", false, true);
             });
   }

@@ -8,12 +8,11 @@ import { AlertService } from '../../alert/alert.service';
   styleUrls: [ './password-reset.component.scss' ]
 })
 export class PasswordResetComponent implements OnInit {
-  private email;
-  private loading = false;
-  private token;
-
+  loading = false;
   model: any = {};
 
+  private email;
+  private token;
 
   constructor(private alertService: AlertService,
               private authenticationService: AuthenticationService,

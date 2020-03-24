@@ -30,7 +30,6 @@ export class SettingsService {
     if (window.location.host === 'ride-planner.herokuapp.com') {
       this.api = 'https://ride-planner-backend.herokuapp.com';
       this.demoMode =  false;
-
     }
 
     if (window.location.host === 'ride-planner-demo.herokuapp.com') {

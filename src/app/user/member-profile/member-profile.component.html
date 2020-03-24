@@ -11,6 +11,10 @@
         <div class="col-md-12">
           <h2 class="mb-0">{{ member?.fname }} {{ member?.lname }}</h2>
 
+          <div *ngIf="user?.email === superAdmin">
+            <div *ngIf="member?.demo" class="h6 mb-0">Demo user</div>
+            <div *ngIf="!member?.demo" class="faded h6 mb-0">Not Demo User</div>
+          </div>
           <div>
             <div *ngIf="member?.admin" class="h6 mb-0">Admin</div>
             <div *ngIf="!member?.admin" class="faded h6 mb-0">Not Admin</div>

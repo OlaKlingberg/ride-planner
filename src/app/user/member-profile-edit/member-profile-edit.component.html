@@ -14,6 +14,14 @@
           <form name="form" (ngSubmit)="f.form.valid && update()" #f="ngForm"
                 novalidate="">
 
+            <div *ngIf="user?.email === superAdmin" class="mb-0">
+              <div class="form-group mb-0">
+                <label class="mb-0 mr-4">Demo User</label>
+                <input type="radio" name="demo" [value]="true" [(ngModel)]="member.demo"> Yes
+                <input type="radio" name="demo" [value]="false" [(ngModel)]="member.demo" class="ml-3"> No
+              </div>
+            </div>
+
             <div *ngIf="user?.email === superAdmin" class="form-group mb-0">
               <label class="mb-0 mr-4">Admin</label>
               <input type="radio" name="admin" [value]="true" [(ngModel)]="member.admin"> Yes

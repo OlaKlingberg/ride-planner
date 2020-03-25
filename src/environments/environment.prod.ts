@@ -1,5 +1,5 @@
 export const environment = {
-  googleMapsKey: "AIzaSyDcbNgBS0ykcFj8em8xT5WcDHZbFiVL5Ok",
+  googleMapsKey: "AIzaSyAXIQOFBkozrCTGdMP7XGbKRLZx8QNB0Yk",
   production: true,
   superAdmin: 'ola@olaklingberg.com'
 };

@@ -55,6 +55,7 @@ export class AuthenticationService {
           if ( user && token ) {
             eval(this.settingsService.storage).setItem('rpToken', JSON.stringify(token));
             this.userService.user$.next(user);
+            this.socket.emit('userLogin', user);
           }
         });
   }
@@ -88,7 +89,6 @@ export class AuthenticationService {
     
     return new RequestOptions({ headers });
   }
-
 }
 
 

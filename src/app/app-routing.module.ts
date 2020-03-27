@@ -34,7 +34,7 @@ const routes: Routes = [
   },
   {
     path: 'members',
-    canActivate: [ AuthGuard, RideLeaderGuard ],
+    canActivate: [ AuthGuard ],
     loadChildren: 'app/user/user.module#UserModule'
   },
   {

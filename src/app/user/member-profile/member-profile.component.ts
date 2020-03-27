@@ -28,6 +28,8 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
   }
 
   requestMember(memberId) {
+    // console.log("MemberId: ", memberId );
+
     this.userService.requestUser(memberId)
         .then(member => this.member = member);
   }
@@ -35,6 +37,7 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
   subscribeToUser() {
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
+      // console.log("userId: ", user._id);
     });
   }
 

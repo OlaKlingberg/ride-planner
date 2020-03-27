@@ -125,7 +125,6 @@ export class MemberListComponent implements OnInit {
 
   editMember(_id) {
     console.log("editMember:", _id);
-
   }
 
   setDeviceSize = function () {

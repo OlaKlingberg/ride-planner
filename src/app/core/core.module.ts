@@ -29,6 +29,7 @@ import { SettingsService } from '../settings/settings.service';
 import { SocketService } from './socket.service';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { UserService } from '../user/user.service';
+import { AdminOrSelfGuard } from '../authentication/admin-or-self.guard';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { UserService } from '../user/user.service';
   ],
   providers: [
     AdminGuard,
+    AdminOrSelfGuard,
     AlertService,
     AuthenticationService,
     AuthGuard,

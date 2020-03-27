@@ -48,6 +48,16 @@ export class UserService {
     return this.http.post(`${this.settingsService.api}/users`, user);
   }
 
+  deleteMember(member: User) {
+    const requestOptions = this.setHeaders();
+
+    return this.http.patch(`${this.settingsService.api}/users/delete-member`, member, requestOptions)
+        .map((response: Response) => {
+          return response;
+        })
+        .toPromise();
+  }
+
   deleteDummyMembers() {
     const requestOptions = this.setHeaders();
 

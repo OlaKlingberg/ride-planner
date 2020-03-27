@@ -9,7 +9,7 @@
     <div class="container">
       <div class="row py-4">
         <div class="col-md-4">
-          <h2>{{ member?.fname }} {{ member?.lname }}</h2>
+          <h2>{{ member?.fname }} {{ member?.lname }} <button *ngIf="user?.email === superAdmin || user?.email === member.email" (click)="deleteMember()" class="btn btn-complement">Delete Member</button></h2>
 
           <form name="form" (ngSubmit)="f.form.valid && update()" #f="ngForm"
                 novalidate="">
@@ -59,9 +59,7 @@
 
               <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !phone.valid }">
                 <label for="phone" class="mb-0">Phone</label>
-                <input type="text" placeholder="   -   -" class="form-control"
-                       name="phone" id="phone" [ngModel]="member.phone" (ngModelChange)="formatPhone($event, 'phone')"
-                       #phone="ngModel" #phonefield="" required minlength="12">
+                <input type="text" class="form-control" name="phone" id="phone" [(ngModel)]="member.phone" #phone="ngModel" #phonefield="" required minlength="12">
                 <div *ngIf="f.submitted && !phone.valid" class="help-block">Phone number is required</div>
               </div>
 
@@ -98,9 +96,7 @@
 
               <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !emergencyPhone?.valid }">
                 <label for="emergencyPhone" class="mb-0">Emergency phone number</label>
-                <input type="text" placeholder="   -   -"
-                       class="form-control" name="emergencyPhone" id="emergencyPhone" [ngModel]="member.emergencyPhone"
-                       (ngModelChange)="formatPhone($event, 'emergencyPhone')" #emergencyPhone="ngModel"
+                <input type="text" class="form-control" name="emergencyPhone" id="emergencyPhone" [(ngModel)]="member.emergencyPhone" #emergencyPhone="ngModel"
                        #emergencyPhonefield="" required minlength="12">
                 <div *ngIf="f.submitted && !emergencyPhone.valid" class="help-block">Emergency phone number is required
                 </div>

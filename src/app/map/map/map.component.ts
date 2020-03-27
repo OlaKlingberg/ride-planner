@@ -89,7 +89,10 @@ export class MapComponent implements OnInit, OnDestroy {
     console.log("MapComponent.addDummyRiders()");
     this.riderService.addDummyRiders(err => {
       console.log("MapComponent.addDummyRiders(). Callback");
-      if ( err ) return;  // Todo: Handle error.
+      if ( err ) {
+        console.log(err);
+        return;
+      }
     });
   }
 

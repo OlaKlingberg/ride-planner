@@ -37,7 +37,6 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
   subscribeToUser() {
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
-      // console.log("userId: ", user._id);
     });
   }
 

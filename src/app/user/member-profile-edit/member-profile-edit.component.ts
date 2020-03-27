@@ -34,16 +34,13 @@ export class MemberProfileEditComponent implements OnInit, OnDestroy {
   }
 
   deleteMember() {
-    console.log("deleteMember() clicked!");
     this.loading = true;
     this.userService.deleteMember(this.member).then(() => {
-      console.log("About to alert that the member was deleted");
       this.alertService.success(`Member ${this.member.fname} ${this.member.lname} was deleted`, true, true);
       this.router.navigate([`/members`]);
       },
       error => {
         this.loading = false;
-        console.log("There was apparently an error deleting the member.");
         console.log(error);
       }
     )
@@ -53,8 +50,6 @@ export class MemberProfileEditComponent implements OnInit, OnDestroy {
     this.userService.requestUser(memberId)
         .then(member => {
           this.member = member;
-          console.log("typeof member.admin:", typeof member.admin);
-          console.log(member);
         });
   }
 
@@ -66,7 +61,6 @@ export class MemberProfileEditComponent implements OnInit, OnDestroy {
 
   update() {
     this.loading = true;
-    console.log(this.member);
     this.userService.update(this.member).then(() => {
           this.alertService.success('Profile updated', true, true);
           this.router.navigate([`/members/${this.member._id}`]);

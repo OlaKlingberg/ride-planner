@@ -56,6 +56,9 @@ export class MemberProfileEditComponent implements OnInit, OnDestroy {
   subscribeToUser() {
     this.userSub = this.userService.user$.subscribe(user => {
       this.user = user;
+      console.log(`User is: ${user.email}`);
+      console.log(`SuperAdmin is ${this.superAdmin}`);
+      console.log(`User is SuperAdmin: ${user.email == this.superAdmin}`);
     });
   }
 

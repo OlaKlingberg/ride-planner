@@ -3,5 +3,3 @@ export const environment = {
   production: true,
   superAdmin: 'ola@olaklingberg.com'
 };
-
-

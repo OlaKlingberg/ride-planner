@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { AuthenticationRoutingModule } from './authentication-routing.module';
 import { LoginComponent } from './login/login.component';
